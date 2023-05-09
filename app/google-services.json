@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "502732047185",
+    "project_id": "book-meeting-room-d10d9",
+    "storage_bucket": "book-meeting-room-d10d9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:502732047185:android:ae82a7dc83c591551e4970",
+        "android_client_info": {
+          "package_name": "com.amalitech.bookmeetingroom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "502732047185-shdhhu4gud8u5eb034c1ga5npfpjrvr2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1q4MvB8vmr44sBUsq0MOcBXaAGDw8BR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "502732047185-shdhhu4gud8u5eb034c1ga5npfpjrvr2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
