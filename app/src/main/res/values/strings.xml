@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Book Meeting Room</string>
+    <string name="logo">Logo</string>
+    <string name="book_or_reserve_a_room">\"Book a room\" or \"Reserve a room\"</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in volupta</string>
+    <string name="get_started">Get started</string>
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
+    <string name="log_into_account">Log into your account</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="sign_in">Sign in</string>
+    <string name="dont_have_account">Don\'t have an account yet?</string>
+    <string name="sign_up">Sign up</string>
+    <string name="error_email_not_valid">Email address not valid, please check</string>
+    <string name="error_password_is_blank">Password is blank, please provide a password</string>
 </resources>

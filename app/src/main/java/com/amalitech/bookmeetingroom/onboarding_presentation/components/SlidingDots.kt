@@ -41,7 +41,7 @@ fun Dot(
     modifier: Modifier = Modifier,
     selected: Boolean = false,
     selectedColor: Color = MaterialTheme.colorScheme.primary,
-    unSelectedColor: Color = MaterialTheme.colorScheme.tertiary,
+    unSelectedColor: Color = MaterialTheme.colorScheme.secondary,
     size: Dp = 5.dp
 ) {
     Box(

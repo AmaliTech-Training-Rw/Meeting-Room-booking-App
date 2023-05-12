@@ -3,13 +3,16 @@ package com.amalitech.bookmeetingroom
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.amalitech.bookmeetingroom.navigation.Route
+import com.amalitech.bookmeetingroom.onboarding_presentation.OnboardingScreen
+import com.amalitech.bookmeetingroom.onboarding_presentation.SplashScreen
 import com.amalitech.bookmeetingroom.ui.theme.BookMeetingRoomTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,27 +20,29 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BookMeetingRoomTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting("Android")
+                val navController = rememberNavController()
+                var currentOnboardIndex by rememberSaveable {
+                    mutableStateOf(0)
+                }
+
+                NavHost(navController = navController, startDestination = Route.ONBOARDING) {
+                    composable(Route.ONBOARDING) {
+                        OnboardingScreen(
+                            onGetStartedClick = {
+                                navController.navigate(Route.SPLASH)
+                            },
+                            onSwipe = {
+                                currentOnboardIndex = it
+                            },
+                            currentIndex = currentOnboardIndex
+                        )
+                    }
+                    composable(Route.SPLASH) {
+                        SplashScreen(onNavigate = { navController.navigate(Route.LOGIN) })
+                    }
+
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    BookMeetingRoomTheme {
-        Greeting("Android")
     }
 }
