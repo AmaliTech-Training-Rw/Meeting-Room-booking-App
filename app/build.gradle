@@ -62,4 +62,15 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
+
+    // Animation in compose
+    implementation("androidx.compose.animation:animation-graphics:$compose_ui_version")
+
+    // Navigation in compose
+    implementation("androidx.navigation:navigation-compose:2.5.3")
+
+
+    // koin
+    implementation("io.insert-koin:koin-androidx-compose:3.4.4")
+
 }
