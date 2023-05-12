@@ -10,6 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.amalitech.bookmeetingroom.login_presentation.LoginScreen
 import com.amalitech.bookmeetingroom.navigation.Route
 import com.amalitech.bookmeetingroom.onboarding_presentation.OnboardingScreen
 import com.amalitech.bookmeetingroom.onboarding_presentation.SplashScreen
@@ -39,6 +40,28 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Route.SPLASH) {
                         SplashScreen(onNavigate = { navController.navigate(Route.LOGIN) })
+                    }
+                    composable(Route.LOGIN) {
+                        LoginScreen(
+                            // TODO("update navigation to navigate to the
+                            //  corresponding screens when they are created")
+                            onNavigateToHome = {
+
+                            },
+                            onNavigateToSignUp = {
+
+                            },
+                            onNavigateToPasswordReset = {
+
+                            },
+                            onNavigateUp = {
+                                navController.navigate(Route.ONBOARDING) {
+                                    popUpTo(Route.ONBOARDING) {
+                                        inclusive = true
+                                    }
+                                }
+                            }
+                        )
                     }
 
                 }
