@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
@@ -10,6 +11,40 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/authentication" />
+            <option value="$PROJECT_DIR$/authentication/authentication_data" />
+            <option value="$PROJECT_DIR$/authentication/authentication_domain" />
+            <option value="$PROJECT_DIR$/authentication/authentication_presentation" />
+            <option value="$PROJECT_DIR$/bookings" />
+            <option value="$PROJECT_DIR$/bookings/bookings_data" />
+            <option value="$PROJECT_DIR$/bookings/bookings_domain" />
+            <option value="$PROJECT_DIR$/bookings/bookings_presentation" />
+            <option value="$PROJECT_DIR$/buildSrc" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core_ui" />
+            <option value="$PROJECT_DIR$/home" />
+            <option value="$PROJECT_DIR$/home/home_data" />
+            <option value="$PROJECT_DIR$/home/home_domain" />
+            <option value="$PROJECT_DIR$/home/home_presentation" />
+            <option value="$PROJECT_DIR$/invitations" />
+            <option value="$PROJECT_DIR$/invitations/invitations_data" />
+            <option value="$PROJECT_DIR$/invitations/invitations_domain" />
+            <option value="$PROJECT_DIR$/invitations/invitations_presentation" />
+            <option value="$PROJECT_DIR$/onboarding" />
+            <option value="$PROJECT_DIR$/onboarding/onboarding_domain" />
+            <option value="$PROJECT_DIR$/onboarding/onboarding_presentation" />
+            <option value="$PROJECT_DIR$/profile" />
+            <option value="$PROJECT_DIR$/profile/profile_data" />
+            <option value="$PROJECT_DIR$/profile/profile_domain" />
+            <option value="$PROJECT_DIR$/profile/profile_presentation" />
+            <option value="$PROJECT_DIR$/rooms" />
+            <option value="$PROJECT_DIR$/rooms/rooms_data" />
+            <option value="$PROJECT_DIR$/rooms/rooms_domain" />
+            <option value="$PROJECT_DIR$/rooms/rooms_presentation" />
+            <option value="$PROJECT_DIR$/users" />
+            <option value="$PROJECT_DIR$/users/users_data" />
+            <option value="$PROJECT_DIR$/users/users_domain" />
+            <option value="$PROJECT_DIR$/users/users_presentation" />
           </set>
         </option>
       </GradleProjectSettings>
