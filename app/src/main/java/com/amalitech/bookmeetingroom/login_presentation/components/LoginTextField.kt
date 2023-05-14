@@ -40,22 +40,21 @@ fun LoginTextField(
     )
 ) {
     val spacing = LocalSpacing.current
+    var passwordVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
 
-    if (isPassword) {
-        var passwordVisible by rememberSaveable {
-            mutableStateOf(false)
-        }
-
-        TextField(
-            value = value,
-            onValueChange = onValueChange,
-            textStyle = textStyle,
-            singleLine = true,
-            visualTransformation = if (passwordVisible)
-                VisualTransformation.None
-            else
-                PasswordVisualTransformation(),
-            trailingIcon = {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        textStyle = textStyle,
+        singleLine = true,
+        visualTransformation = if (passwordVisible)
+            VisualTransformation.None
+        else
+            PasswordVisualTransformation(),
+        trailingIcon = {
+            if (isPassword) {
                 val image = if (passwordVisible)
                     R.drawable.baseline_visibility_off_24
                 else
@@ -71,61 +70,30 @@ fun LoginTextField(
                         contentDescription = description
                     )
                 }
-            },
-            modifier = modifier
-                .padding(1.dp)
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    shape = RoundedCornerShape(spacing.extraSmall)
-                )
-                .padding(spacing.extraSmall)
-            ,
-            shape = RoundedCornerShape(spacing.extraSmall),
-            colors = TextFieldDefaults.colors(
-                focusedTextColor = MaterialTheme.colorScheme.onBackground,
-                unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-                focusedContainerColor = MaterialTheme.colorScheme.background
-            ),
-            placeholder = {
-                Text(
-                    text = placeholder,
-                    style = placeholderTextStyle
-                )
             }
-        )
-
-    } else {
-        TextField(
-            value = value,
-            onValueChange = onValueChange,
-            textStyle = textStyle,
-            singleLine = true,
-            shape = RoundedCornerShape(spacing.extraSmall),
-            modifier = modifier
-                .padding(1.dp)
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    shape = RoundedCornerShape(spacing.extraSmall)
-                )
-                .padding(spacing.extraSmall),
-            colors = TextFieldDefaults.colors(
-                focusedTextColor = MaterialTheme.colorScheme.onBackground,
-                unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-                focusedContainerColor = MaterialTheme.colorScheme.background
-            ),
-            placeholder = {
-                Text(
-                    text = placeholder,
-                    style = placeholderTextStyle
-                )
-            }
-        )
-    }
-
+        },
+        modifier = modifier
+            .padding(1.dp)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onBackground,
+                shape = RoundedCornerShape(spacing.extraSmall)
+            )
+            .padding(spacing.extraSmall),
+        shape = RoundedCornerShape(spacing.extraSmall),
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+            focusedContainerColor = MaterialTheme.colorScheme.background
+        ),
+        placeholder = {
+            Text(
+                text = placeholder,
+                style = placeholderTextStyle
+            )
+        }
+    )
 }
 
 @Preview

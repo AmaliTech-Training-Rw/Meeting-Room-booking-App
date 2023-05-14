@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amalitech.bookmeetingroom.login_domain.use_case.UseCase
+import com.amalitech.bookmeetingroom.login_domain.use_case.ValidateEmail
 import com.amalitech.bookmeetingroom.util.UiEvents
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

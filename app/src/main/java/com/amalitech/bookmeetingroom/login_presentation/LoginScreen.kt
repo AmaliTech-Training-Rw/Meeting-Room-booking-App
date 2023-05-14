@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,6 +68,7 @@ fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(spacing.medium)
+            .verticalScroll(rememberScrollState())
         ,
         contentAlignment = Alignment.Center
     ) {
@@ -126,12 +129,13 @@ fun LoginScreen(
                     }
                 )
             }
-
-            Spacer(modifier = Modifier.height(spacing.large))
             DefaultButton(
                 text = stringResource(id = R.string.sign_in),
                 onClick = { viewModel.onEvent(LoginEvent.OnLoginClick) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = spacing.large)
+                    .padding(vertical = spacing.large)
             )
         }
         val text = buildAnnotatedString {
@@ -160,7 +164,7 @@ fun LoginScreen(
             },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = spacing.large)
+                .padding(vertical = spacing.large)
         )
 
     }

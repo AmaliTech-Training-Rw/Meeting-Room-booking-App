@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -126,6 +128,7 @@ fun OnBoard(
     Box(
         Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .offset {
                 if ((offsetX <= -120f && selectedIndex < 3) || (offsetX >= 120 && selectedIndex > 0))
                     IntOffset(offsetX.roundToInt(), 0)
@@ -167,19 +170,21 @@ fun OnBoard(
                 description = stringResource(id = description),
                 painter = painter,
             )
-            Spacer(modifier = Modifier.height(spacing.large))
             SlidingDots(
-                Modifier.width(painter.intrinsicSize.width.dp),
+                Modifier
+                    .width(painter.intrinsicSize.width.dp)
+                    .padding(vertical = spacing.large)
+                    .padding(vertical = spacing.extraLarge)
+                ,
                 selectedIndex = selectedIndex
             )
-            Spacer(modifier = Modifier.height(spacing.extraLarge))
         }
         DefaultButton(
             text = stringResource(R.string.get_started),
             modifier = Modifier
                 .width(painter.intrinsicSize.width.dp)
                 .align(Alignment.BottomCenter)
-                .padding(bottom = spacing.large),
+                .padding(vertical = spacing.large),
             onClick = onGetStartedClick
         )
     }

@@ -73,4 +73,6 @@ dependencies {
     // koin
     implementation("io.insert-koin:koin-androidx-compose:3.4.4")
 
+    // Mockk
+    testImplementation "io.mockk:mockk:1.12.0"
 }
