@@ -49,10 +49,10 @@ fun LoginTextField(
         onValueChange = onValueChange,
         textStyle = textStyle,
         singleLine = true,
-        visualTransformation = if (passwordVisible)
-            VisualTransformation.None
+        visualTransformation = if (isPassword && !passwordVisible)
+            PasswordVisualTransformation()
         else
-            PasswordVisualTransformation(),
+            VisualTransformation.None,
         trailingIcon = {
             if (isPassword) {
                 val image = if (passwordVisible)
