@@ -1,4 +1,4 @@
-package com.amalitech.bookmeetingroom.authentication_presentation
+package com.amalitech.bookmeetingroom.authentication_presentation.login
 
 import com.amalitech.bookmeetingroom.util.UiText
 

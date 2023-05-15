@@ -28,7 +28,7 @@ import com.amalitech.bookmeetingroom.ui.theme.BookMeetingRoomTheme
 import com.amalitech.bookmeetingroom.ui.theme.LocalSpacing
 
 @Composable
-fun LoginTextField(
+fun AuthenticationTextField(
     placeholder: String,
     value: String,
     onValueChange: (String) -> Unit,
@@ -103,7 +103,7 @@ fun Prev() {
         var value by rememberSaveable {
             mutableStateOf("")
         }
-        LoginTextField(
+        AuthenticationTextField(
             placeholder = "password",
             value = value,
             onValueChange = { value = it },

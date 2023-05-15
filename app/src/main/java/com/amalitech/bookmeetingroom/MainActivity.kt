@@ -10,7 +10,9 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.amalitech.bookmeetingroom.login_presentation.LoginScreen
+import com.amalitech.bookmeetingroom.authentication_presentation.forgot_password.ForgotPasswordScreen
+import com.amalitech.bookmeetingroom.authentication_presentation.login.LoginScreen
+import com.amalitech.bookmeetingroom.authentication_presentation.reset_password.ResetPasswordScreen
 import com.amalitech.bookmeetingroom.navigation.Route
 import com.amalitech.bookmeetingroom.onboarding_presentation.OnboardingScreen
 import com.amalitech.bookmeetingroom.onboarding_presentation.SplashScreen
@@ -41,6 +43,23 @@ class MainActivity : ComponentActivity() {
                     composable(Route.SPLASH) {
                         SplashScreen(onNavigate = { navController.navigate(Route.LOGIN) })
                     }
+                    composable(Route.RESET_PASSWORD) {
+                        ResetPasswordScreen(onNavigateToHome = {
+                            // TODO("update navigation to navigate to the
+                            //  corresponding screens when they are created")
+                        })
+                    }
+                    composable(Route.FORGOT_PASSWORD) {
+                        ForgotPasswordScreen(
+                            onNavigateToHome = {
+                                // TODO("update navigation to navigate to the
+                                //  corresponding screens when they are created")
+                            },
+                            onNavigateToLogin = {
+                                navController.navigate(Route.LOGIN)
+                            }
+                        )
+                    }
                     composable(Route.LOGIN) {
                         LoginScreen(
                             // TODO("update navigation to navigate to the
@@ -51,8 +70,8 @@ class MainActivity : ComponentActivity() {
                             onNavigateToSignUp = {
 
                             },
-                            onNavigateToPasswordReset = {
-
+                            onNavigateToForgotPassword = {
+                                navController.navigate(Route.FORGOT_PASSWORD)
                             },
                             onNavigateUp = {
                                 navController.navigate(Route.ONBOARDING) {

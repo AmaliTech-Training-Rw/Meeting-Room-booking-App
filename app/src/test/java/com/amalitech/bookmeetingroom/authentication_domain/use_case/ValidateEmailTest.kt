@@ -1,11 +1,8 @@
-import android.text.TextUtils
 import com.amalitech.bookmeetingroom.util.UiText
 import com.amalitech.bookmeetingroom.R
-import com.amalitech.bookmeetingroom.login_domain.use_case.ValidateEmail
+import com.amalitech.bookmeetingroom.authentication_domain.use_case.ValidateEmail
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.spyk
 import org.junit.Assert.assertEquals
 import org.junit.Before

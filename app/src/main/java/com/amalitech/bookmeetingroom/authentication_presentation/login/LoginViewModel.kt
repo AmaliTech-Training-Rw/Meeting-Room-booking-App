@@ -1,17 +1,17 @@
-package com.amalitech.bookmeetingroom.authentication_presentation
+package com.amalitech.bookmeetingroom.authentication_presentation.login
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amalitech.bookmeetingroom.authentication_domain.use_case.UseCase
+import com.amalitech.bookmeetingroom.authentication_domain.use_case.AuthenticationUseCase
 import com.amalitech.bookmeetingroom.util.UiEvents
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val useCase: UseCase): ViewModel() {
+class LoginViewModel(private val authenticationUseCase: AuthenticationUseCase): ViewModel() {
     var state by mutableStateOf(
         LoginState()
     )
@@ -44,10 +44,10 @@ class LoginViewModel(private val useCase: UseCase): ViewModel() {
                 }
 
                 LoginEvent.OnLoginClick -> {
-                    val emailValidation = useCase.validateEmail(state.email)
-                    val passwordValidation = useCase.validatePassword(state.password)
+                    val emailValidation = authenticationUseCase.validateEmail(state.email)
+                    val passwordValidation = authenticationUseCase.validatePassword(state.password)
                     if (emailValidation == null && passwordValidation == null) {
-                        val result = useCase.logIn(email = state.email, password = state.password)
+                        val result = authenticationUseCase.logIn(email = state.email, password = state.password)
                         if (result != null) {
                             state = state.copy(
                                 error = result
