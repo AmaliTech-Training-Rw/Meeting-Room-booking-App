@@ -1,4 +1,4 @@
-package com.amalitech.bookmeetingroom.login_presentation
+package com.amalitech.bookmeetingroom.authentication_presentation
 
 sealed class LoginEvent {
     data class OnNewEmail(val email: String): LoginEvent()

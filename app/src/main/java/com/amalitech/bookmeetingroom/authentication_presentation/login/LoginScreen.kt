@@ -1,4 +1,4 @@
-package com.amalitech.bookmeetingroom.login_presentation
+package com.amalitech.bookmeetingroom.authentication_presentation
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -32,7 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.amalitech.bookmeetingroom.R
-import com.amalitech.bookmeetingroom.login_presentation.components.LoginTextField
+import com.amalitech.bookmeetingroom.authentication_presentation.components.AuthenticationTextField
 import com.amalitech.bookmeetingroom.onboarding_presentation.components.DefaultButton
 import com.amalitech.bookmeetingroom.ui.theme.LocalSpacing
 import com.amalitech.bookmeetingroom.util.UiEvents
@@ -96,7 +96,7 @@ fun LoginScreen(
                 )
             }
             Spacer(modifier = Modifier.height(spacing.large))
-            LoginTextField(
+            AuthenticationTextField(
                 placeholder = stringResource(R.string.email),
                 value = state.email,
                 onValueChange = {
@@ -105,7 +105,7 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(spacing.small))
-            LoginTextField(
+            AuthenticationTextField(
                 placeholder = stringResource(R.string.password),
                 value = state.password,
                 onValueChange = {

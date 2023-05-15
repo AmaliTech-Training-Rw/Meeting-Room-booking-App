@@ -1,4 +1,4 @@
-package com.amalitech.bookmeetingroom.login_presentation.components
+package com.amalitech.bookmeetingroom.authentication_presentation.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth

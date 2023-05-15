@@ -1,4 +1,4 @@
-package com.amalitech.bookmeetingroom.login_domain.use_case
+package com.amalitech.bookmeetingroom.authentication_domain.use_case
 
 data class UseCase(
     val validateEmail: ValidateEmail,
