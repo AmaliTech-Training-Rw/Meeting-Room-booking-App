@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     id ("org.jetbrains.kotlin.android")
     id ("com.google.firebase.appdistribution")
-    id ("com.google.gms.google-services")
     id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
     // TODO: refer to this discussion for kapt to dagger migration https://github.com/google/dagger/issues/2349

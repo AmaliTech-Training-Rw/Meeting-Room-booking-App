@@ -4,7 +4,6 @@ buildscript {
         classpath(Build.hiltAndroidGradlePlugin)
         classpath(Build.kotlinGradlePlugin)
         classpath(Build.appdistribution)
-        classpath(Build.googleServicesVersion)
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
