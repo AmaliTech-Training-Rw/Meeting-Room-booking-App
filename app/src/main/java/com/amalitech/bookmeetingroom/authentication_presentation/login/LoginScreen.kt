@@ -66,7 +66,7 @@ fun LoginScreen(
                     onNavigateToHome()
                 }
 
-                is UiEvents.showSnackBar -> {
+                is UiEvents.ShowSnackBar -> {
                     snackbarHostState.showSnackbar(
                         message = event.text.asString(context)
                     )

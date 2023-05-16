@@ -9,12 +9,15 @@ import com.amalitech.bookmeetingroom.R
 import com.amalitech.bookmeetingroom.authentication_domain.use_case.AuthenticationUseCase
 import com.amalitech.bookmeetingroom.util.UiEvents
 import com.amalitech.bookmeetingroom.util.UiText
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class ForgotPasswordViewModel(
-    private val authenticationUseCase: AuthenticationUseCase
+    private val authenticationUseCase: AuthenticationUseCase,
+    private val dispatchers: CoroutineDispatcher = Dispatchers.Main
 ): ViewModel() {
     var state by mutableStateOf(
         ForgotPasswordState()
@@ -35,7 +38,7 @@ class ForgotPasswordViewModel(
      * @param event an instance of LoginEvent
      */
     fun onEvent(event: ForgotPasswordEvent) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers) {
             when(event) {
                 is ForgotPasswordEvent.OnNewEmail -> {
                     state = state.copy(
@@ -43,7 +46,7 @@ class ForgotPasswordViewModel(
                     )
                 }
 
-                ForgotPasswordEvent.OnSendResetLink -> {
+                is ForgotPasswordEvent.OnSendResetLink -> {
                     state = state.copy(
                         error = authenticationUseCase.validateEmail(state.email)
                     )
@@ -51,7 +54,7 @@ class ForgotPasswordViewModel(
                         val result = authenticationUseCase.sendResetLink(state.email)
                         if (result == null) {
                             _uiEvent.send(
-                                UiEvents.showSnackBar(
+                                UiEvents.ShowSnackBar(
                                     text = UiText.StringResource(R.string.link_sent_inbox)
                                 )
                             )

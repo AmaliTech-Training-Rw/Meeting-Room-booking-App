@@ -9,12 +9,15 @@ import com.amalitech.bookmeetingroom.R
 import com.amalitech.bookmeetingroom.authentication_domain.use_case.AuthenticationUseCase
 import com.amalitech.bookmeetingroom.util.UiEvents
 import com.amalitech.bookmeetingroom.util.UiText
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class ResetPasswordViewModel(
-    private val authenticationUseCase: AuthenticationUseCase
+    private val authenticationUseCase: AuthenticationUseCase,
+    private val dispatchers: CoroutineDispatcher = Dispatchers.Main
 ): ViewModel() {
 
     var state by mutableStateOf(
@@ -36,7 +39,7 @@ class ResetPasswordViewModel(
      * @param event an instance of LoginEvent
      */
     fun onEvent(event: ResetPasswordEvent) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers) {
             when (event) {
                 is ResetPasswordEvent.OnNewPassword -> {
                     state = state.copy(
@@ -68,7 +71,7 @@ class ResetPasswordViewModel(
                             )
                         } else {
                             _uiEvent.send(
-                                UiEvents.showSnackBar(
+                                UiEvents.ShowSnackBar(
                                     UiText.StringResource(R.string.password_reset_successfully)
                                 )
                             )

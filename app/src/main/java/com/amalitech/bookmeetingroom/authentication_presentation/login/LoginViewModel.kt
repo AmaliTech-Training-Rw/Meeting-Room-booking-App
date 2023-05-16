@@ -5,13 +5,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amalitech.bookmeetingroom.R
 import com.amalitech.bookmeetingroom.authentication_domain.use_case.AuthenticationUseCase
 import com.amalitech.bookmeetingroom.util.UiEvents
+import com.amalitech.bookmeetingroom.util.UiText
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val authenticationUseCase: AuthenticationUseCase): ViewModel() {
+class LoginViewModel(
+    private val authenticationUseCase: AuthenticationUseCase,
+    private val dispatchers: CoroutineDispatcher = Dispatchers.Main
+) : ViewModel() {
     var state by mutableStateOf(
         LoginState()
     )
@@ -31,7 +38,7 @@ class LoginViewModel(private val authenticationUseCase: AuthenticationUseCase): 
      * @param event an instance of LoginEvent
      */
     fun onEvent(event: LoginEvent) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers) {
             when (event) {
                 is LoginEvent.OnNewEmail -> {
                     state = state.copy(
@@ -49,12 +56,18 @@ class LoginViewModel(private val authenticationUseCase: AuthenticationUseCase): 
                     val emailValidation = authenticationUseCase.validateEmail(state.email)
                     val passwordValidation = authenticationUseCase.validatePassword(state.password)
                     if (emailValidation == null && passwordValidation == null) {
-                        val result = authenticationUseCase.logIn(email = state.email, password = state.password)
+                        val result = authenticationUseCase.logIn(
+                            email = state.email,
+                            password = state.password
+                        )
                         if (result != null) {
                             state = state.copy(
                                 error = result
                             )
                         } else {
+                            _uiEvent.send(UiEvents.ShowSnackBar(
+                                UiText.StringResource(R.string.logged_in_successfully)
+                            ))
                             _uiEvent.send(
                                 UiEvents.NavigateToHome
                             )
