@@ -19,6 +19,11 @@ class ValidateEmail {
             UiText.StringResource(R.string.error_email_not_valid)
     }
 
+    /**
+     * Checks if an email has appropriate form
+     * @param email The email address that needs to be checked
+     * @return true if the email has appropriate form, null otherwise
+     */
     @VisibleForTesting
     fun isEmailValid(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()

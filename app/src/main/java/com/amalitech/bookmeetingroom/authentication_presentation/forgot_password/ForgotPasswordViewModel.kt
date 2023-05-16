@@ -24,6 +24,16 @@ class ForgotPasswordViewModel(
     private val _uiEvent = Channel<UiEvents>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
+    /**
+     * onEvent - Manages all events coming from the forgot password screen
+     * by sending them to the use case.
+     *
+     * If the use case returns
+     * an instance of UiText, there is a message/error that need
+     * to be displayed for the user. Otherwise, everything worked
+     * fine.
+     * @param event an instance of LoginEvent
+     */
     fun onEvent(event: ForgotPasswordEvent) {
         viewModelScope.launch {
             when(event) {
