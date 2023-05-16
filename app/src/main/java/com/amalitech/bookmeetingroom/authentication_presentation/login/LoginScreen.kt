@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -32,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -118,7 +120,10 @@ fun LoginScreen(
                     onValueChange = {
                         viewModel.onEvent(LoginEvent.OnNewEmail(it))
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    onGo = {
+                        viewModel.onEvent(LoginEvent.OnLoginClick)
+                    }
                 )
                 Spacer(modifier = Modifier.height(spacing.small))
                 AuthenticationTextField(
@@ -128,7 +133,13 @@ fun LoginScreen(
                         viewModel.onEvent(LoginEvent.OnNewPassword(it))
                     },
                     isPassword = true,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Go
+                    ),
+                    onGo = {
+                        viewModel.onEvent(LoginEvent.OnLoginClick)
+                    }
                 )
                 Spacer(modifier = Modifier.height(spacing.medium))
                 Row(

@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -24,6 +26,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.amalitech.bookmeetingroom.R
 import com.amalitech.bookmeetingroom.authentication_presentation.components.AuthenticationTextField
@@ -103,7 +106,13 @@ fun ResetPasswordScreen(
                     viewModel.onEvent(ResetPasswordEvent.OnNewPassword(it))
                 },
                 isPassword = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next
+                ),
+                onGo = {
+                    viewModel.onEvent(ResetPasswordEvent.OnSaveChangesClick)
+                }
             )
             Spacer(Modifier.height(spacing.medium))
             AuthenticationTextField(
@@ -113,7 +122,13 @@ fun ResetPasswordScreen(
                     viewModel.onEvent(ResetPasswordEvent.OnConfirmNewPassword(it))
                 },
                 isPassword = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Go
+                ),
+                onGo = {
+                    viewModel.onEvent(ResetPasswordEvent.OnSaveChangesClick)
+                }
             )
             Spacer(Modifier.height(spacing.large))
 
