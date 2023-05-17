@@ -14,3 +14,10 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Book Meeting Room"
 include ':app'
+include ':core'
+include ':ui'
+include ':ui:onboarding'
+include ':domain'
+include ':domain:onboarding'
+include ':data'
+include ':data:onboarding'
