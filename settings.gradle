@@ -16,11 +16,8 @@ rootProject.name = "Book Meeting Room"
 include ':app'
 include ':core'
 include ':ui'
-include ':ui:onboarding_ui'
+include ':ui:onboarding'
 include ':domain'
-include ':domain:onboarding_domian'
+include ':domain:onboarding'
 include ':data'
-include ':data:onboarding_data'
-
-
-
+include ':data:onboarding'
