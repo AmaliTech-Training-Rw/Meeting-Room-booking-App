@@ -5,6 +5,7 @@ import com.amalitech.bookmeetingroom.R
 import org.junit.Assert.*
 
 import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
@@ -18,6 +19,7 @@ class ValidatePasswordTest {
         validatePassword = ValidatePassword()
     }
 
+    @Test
     fun validatePassword_blankPassword_returnsUiText() {
         // GIVEN - blank password
         val password = ""
@@ -31,6 +33,7 @@ class ValidatePasswordTest {
     }
 
 
+    @Test
     fun validatePassword_notBlankPassword_returnsNull() {
         // GIVEN - a password not blank
         val password = "this is not blank"
