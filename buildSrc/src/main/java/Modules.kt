@@ -4,13 +4,13 @@ object Modules {
     const val core = ":core"
 
     const val data = ":data"
-    const val dataOnboarding = ":data:onboarding_data"
+    const val dataOnboarding = ":data:onboarding"
 
     const val domain = ":domain"
-    const val domainOnboarding = ":domain:onboarding_domain"
+    const val domainOnboarding = ":domain:onboarding"
 
     const val ui = ":ui"
-    const val uiOnboarding = ":ui:onboarding_presentation"
+    const val uiOnboarding = ":ui:onboarding"
 
     const val coreUI = ":core_ui"
 
