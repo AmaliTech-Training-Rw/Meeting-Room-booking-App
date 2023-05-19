@@ -43,8 +43,7 @@ android {
 dependencies {
    // coreLibraryDesugaring Desugaring.desugaring
 
-    kapt DaggerHilt.hiltCompiler
-    implementation DaggerHilt.hiltAndroid
+    implementation Koin.koin
 
     testImplementation Testing.junit4
     testImplementation Testing.junitAndroidExt
@@ -61,5 +60,4 @@ dependencies {
     androidTestImplementation Testing.composeUiTest
     androidTestImplementation Testing.mockk
     androidTestImplementation Testing.mockWebServer
-    androidTestImplementation Testing.hiltTesting
 }
