@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 
 android {
     compileSdk ProjectConfig.compileSdk
@@ -47,21 +46,16 @@ android {
 }
 
 dependencies {
-
-   // coreLibraryDesugaring Desugaring.desugaring
+    implementation Koin.koinCompose
 
     implementation Compose.compiler
     implementation Compose.ui
     implementation Compose.uiToolingPreview
-    implementation Compose.hiltNavigationCompose
     implementation Compose.material
     implementation Compose.runtime
     implementation Compose.navigation
     implementation Compose.viewModelCompose
     implementation Compose.activityCompose
-
-    kapt DaggerHilt.hiltCompiler
-    implementation DaggerHilt.hiltAndroid
 
     testImplementation Testing.junit4 
     testImplementation Testing.junitAndroidExt 
@@ -78,5 +72,4 @@ dependencies {
     androidTestImplementation Testing.composeUiTest
     androidTestImplementation Testing.mockk
     androidTestImplementation Testing.mockWebServer 
-    androidTestImplementation Testing.hiltTesting 
 }

@@ -2,9 +2,6 @@ plugins {
     id("com.android.application")
     id ("org.jetbrains.kotlin.android")
     id ("com.google.firebase.appdistribution")
-    id("dagger.hilt.android.plugin")
-    id("kotlin-kapt")
-    // TODO: refer to this discussion for kapt to dagger migration https://github.com/google/dagger/issues/2349
     id("com.google.devtools.ksp")
 }
 
@@ -76,20 +73,19 @@ android {
 }
 
 dependencies {
+    implementation(Koin.koinCompose)
 
     implementation(Compose.compiler)
     implementation(Compose.ui)
     implementation(Compose.uiToolingPreview)
-    implementation(Compose.hiltNavigationCompose)
     implementation(Compose.material)
     implementation(Compose.runtime)
     implementation(Compose.navigation)
     implementation(Compose.viewModelCompose)
     implementation(Compose.activityCompose)
 
-    implementation(DaggerHilt.hiltAndroid)
     implementation(Kotlin.coreKtx)
-    kapt(DaggerHilt.hiltCompiler)
+    implementation(Koin.koin)
 
     implementation(project(Modules.core))
 
@@ -127,8 +123,6 @@ dependencies {
     androidTestImplementation(Testing.composeUiTest)
     androidTestImplementation(Testing.mockkAndroid)
     androidTestImplementation(Testing.mockWebServer)
-    androidTestImplementation(Testing.hiltTesting)
-    kaptAndroidTest(DaggerHilt.hiltCompiler)
     androidTestImplementation(Testing.testRunner)
 
     //     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

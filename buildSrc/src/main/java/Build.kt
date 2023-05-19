@@ -8,7 +8,4 @@ object Build {
     const val appdistribution = "com.google.firebase:firebase-appdistribution-gradle:$appDistributionVersion"
 
     const val googleServicesVersion = "com.google.gms:google-services:4.3.15"
-
-    private const val hiltAndroidGradlePluginVersion = "2.45"
-    const val hiltAndroidGradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:$hiltAndroidGradlePluginVersion"
 }

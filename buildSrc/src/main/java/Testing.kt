@@ -20,7 +20,6 @@ object Testing {
 
     const val composeUiTest = "androidx.compose.ui:ui-test-junit4:${Compose.composeVersion}"
 
-    const val hiltTesting = "com.google.dagger:hilt-android-testing:${DaggerHilt.version}"
 
     private const val testRunnerVersion = "1.4.0"
     const val testRunner = "androidx.test:runner:$testRunnerVersion"
