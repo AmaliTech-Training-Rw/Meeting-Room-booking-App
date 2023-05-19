@@ -1,4 +1,4 @@
-package com.amalitech.bookmeetingroom.ui.theme
+package com.example.core_ui.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes

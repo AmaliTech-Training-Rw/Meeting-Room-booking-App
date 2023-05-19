@@ -1,4 +1,4 @@
-package com.amalitech.bookmeetingroom.ui.theme
+package com.example.core_ui.ui.theme
 
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.Dp

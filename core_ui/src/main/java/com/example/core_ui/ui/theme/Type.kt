@@ -1,4 +1,4 @@
-package com.amalitech.bookmeetingroom.ui.theme
+package com.example.core_ui.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
