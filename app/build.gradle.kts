@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     id ("org.jetbrains.kotlin.android")
     id ("com.google.firebase.appdistribution")
-    id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
     // TODO: refer to this discussion for kapt to dagger migration https://github.com/google/dagger/issues/2349
     id("com.google.devtools.ksp")
@@ -87,15 +86,15 @@ dependencies {
     implementation(Compose.viewModelCompose)
     implementation(Compose.activityCompose)
 
-    implementation(DaggerHilt.hiltAndroid)
+    implementation(Koin.koin)
     implementation(Kotlin.coreKtx)
-    kapt(DaggerHilt.hiltCompiler)
 
     implementation(project(Modules.core))
 
     implementation(project(Modules.dataOnboarding))
     implementation(project(Modules.domainOnboarding))
     implementation(project(Modules.uiOnboarding))
+    implementation(project(Modules.coreUI))
 
     implementation(AndroidX.coreKtx)
 
