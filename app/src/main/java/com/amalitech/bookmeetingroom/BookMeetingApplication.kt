@@ -1,22 +1,18 @@
 package com.amalitech.bookmeetingroom
 
 import android.app.Application
-import com.amalitech.core.di.appModule
-import com.amalitech.core.di.dataModule
+import com.amalitech.core.di.coreModule
 import com.amalitech.core.di.networkModule
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
+import org.koin.core.context.GlobalContext.startKoin
 
-class BookMeetingApplication : Application() {
+class BookMeetingApplication: Application() {
+
     override fun onCreate() {
         super.onCreate()
-        startKoin{
-            androidLogger()
+        startKoin {
             androidContext(this@BookMeetingApplication)
-            modules(listOf(appModule, networkModule,
-                dataModule
-            ))
+            modules(coreModule, networkModule)
         }
     }
 }

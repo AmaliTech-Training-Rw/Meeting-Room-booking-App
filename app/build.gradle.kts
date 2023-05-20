@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id ("org.jetbrains.kotlin.android")
     id ("com.google.firebase.appdistribution")
+    id("kotlin-kapt")
     id("com.google.devtools.ksp")
 }
 
@@ -85,13 +86,16 @@ dependencies {
     implementation(Compose.activityCompose)
 
     implementation(Kotlin.coreKtx)
+
     implementation(Koin.koin)
+    implementation(Kotlin.coreKtx)
 
     implementation(project(Modules.core))
 
     implementation(project(Modules.dataOnboarding))
     implementation(project(Modules.domainOnboarding))
     implementation(project(Modules.uiOnboarding))
+    implementation(project(Modules.coreUI))
 
     implementation(AndroidX.coreKtx)
 

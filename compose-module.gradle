@@ -56,6 +56,7 @@ dependencies {
     implementation Compose.navigation
     implementation Compose.viewModelCompose
     implementation Compose.activityCompose
+    implementation Koin.koin
 
     testImplementation Testing.junit4 
     testImplementation Testing.junitAndroidExt 
@@ -71,5 +72,9 @@ dependencies {
     androidTestImplementation Testing.coroutines 
     androidTestImplementation Testing.composeUiTest
     androidTestImplementation Testing.mockk
+
     androidTestImplementation Testing.mockWebServer 
+
+    androidTestImplementation Testing.mockWebServer
+
 }
