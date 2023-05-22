@@ -1,0 +1,22 @@
+## 1
+name: Build and test
+
+## Actions that will be executed when you push code currently none
+on:
+  pull_request:
+    branches:
+      - develop
+
+## 2
+jobs:
+  ## 3
+  unit_tests:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+      # 1
+      - name: Grant execute permission to gradlew
+        run: chmod +x gradlew
+      # 2
+      - name: Unit tests
+        run: ./gradlew test
