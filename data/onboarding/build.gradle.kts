@@ -12,7 +12,7 @@ dependencies {
     "implementation"(Retrofit.moshiConverter)
     "implementation"(Kotlin.coreKtx)
 
-    "kapt"(Room.roomCompiler)
+    "ksp"(Room.roomCompiler)
     "implementation"(Room.roomKtx)
     "implementation"(Room.roomRuntime)
 }

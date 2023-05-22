@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.devtools.ksp'
 
 android {
     compileSdk ProjectConfig.compileSdk
@@ -41,7 +41,6 @@ android {
 }
 
 dependencies {
-   // coreLibraryDesugaring Desugaring.desugaring
 
     implementation Koin.koin
 
