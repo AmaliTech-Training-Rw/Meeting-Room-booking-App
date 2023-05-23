@@ -9,4 +9,5 @@ dependencies {
 
     "implementation"(Coil.coilCompose)
     "implementation"(Kotlin.coreKtx)
+    "implementation"(Lifecycle.composeLifecycle)
 }
