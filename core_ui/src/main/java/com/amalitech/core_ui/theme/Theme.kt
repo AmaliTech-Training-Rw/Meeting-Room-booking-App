@@ -6,6 +6,8 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import com.amalitech.core_ui.theme.Dimensions
+import com.amalitech.core_ui.theme.LocalSpacing
 
 private val LightColors = lightColorScheme(
     primary = primary,
