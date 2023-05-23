@@ -27,8 +27,4 @@
     <string name="send_reset_link">Send reset link</string>
     <string name="new_password">New password</string>
     <string name="confirm_new_password">Confirm new password</string>
-    <string name="simple_and_direct_way_to_invite">This is a simple and direct way to invite users to book a meeting room.</string>
-    <string name="book_your_meeting_from_anywhere">Book your meeting from anywhere you are.</string>
-    <string name="invite_attendees_to_the_booked_room">Invite attendees to the booked room meeting.</string>
-    <string name="synchronize_with_google_calendar">Synchronize with google calender.</string>
 </resources>
