@@ -36,7 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.ui.authentication.R
-import com.amalitech.core_ui.theme.BookMeetingRoomTheme
+import com.example.core_ui.ui.theme.BookMeetingRoomTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable

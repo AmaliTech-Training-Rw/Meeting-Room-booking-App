@@ -1,4 +1,4 @@
-package com.example.authentication.login
+package com.amalitech.authentication.login
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -48,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.ui.authentication.R
 import com.example.authentication.components.AuthenticationTextField
+import com.example.authentication.login.LoginViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -103,7 +104,7 @@ fun LoginScreen(
                 modifier = Modifier.align(Alignment.Center)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.logo),
+                    painter = painterResource(id = com.amalitech.core.R.drawable.logo),
                     contentDescription = stringResource(R.string.logo),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
                 )

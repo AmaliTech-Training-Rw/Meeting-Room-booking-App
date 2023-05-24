@@ -1,6 +1,7 @@
-package com.example.authentication.login
+package com.example.authentication
 
 import com.amalitech.domain.authentication.R
+import com.example.authentication.login.LoginViewModel
 import com.example.authentication.use_case.LoginUseCase
 import com.example.authentication.util.UiText
 import io.mockk.every

@@ -96,6 +96,8 @@ dependencies {
     implementation(project(Modules.domainOnboarding))
     implementation(project(Modules.uiOnboarding))
     implementation(project(Modules.coreUI))
+    implementation(project(Modules.uiAuthentication))
+    implementation(project(Modules.domainAuthentication))
 
     implementation(AndroidX.coreKtx)
 
