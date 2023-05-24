@@ -2,8 +2,8 @@ package com.example.authentication.use_case
 
 import android.util.Patterns
 import androidx.annotation.VisibleForTesting
+import com.amalitech.core.util.UiText
 import com.amalitech.domain.authentication.R
-import com.example.authentication.util.UiText
 
 class ValidateEmail {
     /**

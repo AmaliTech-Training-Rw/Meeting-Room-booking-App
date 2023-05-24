@@ -1,7 +1,7 @@
 package com.example.authentication.use_case
 
+import com.amalitech.core.util.UiText
 import com.amalitech.domain.authentication.R
-import com.example.authentication.util.UiText
 
 
 class ValidatePassword {

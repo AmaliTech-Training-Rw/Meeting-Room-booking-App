@@ -1,6 +1,6 @@
 package com.example.authentication.use_case
 
-import com.example.authentication.util.UiText
+import com.amalitech.core.util.UiText
 
 class LogIn {
     /**
