@@ -1,0 +1,47 @@
+package com.example.authentication
+
+import com.amalitech.domain.authentication.R
+import com.example.authentication.use_case.ValidatePassword
+import com.example.authentication.util.UiText
+import org.junit.Assert.*
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+
+@RunWith(JUnit4::class)
+class ValidatePasswordTest {
+
+    private lateinit var validatePassword: ValidatePassword
+
+    @Before
+    fun setUp() {
+        validatePassword = ValidatePassword()
+    }
+
+    @Test
+    fun validatePassword_blankPassword_returnsUiText() {
+        // GIVEN - blank password
+        val password = ""
+
+        // WHEN - validate password is called
+        val result = validatePassword(password)
+
+        // THEN - the result is a UiText instance
+        val expectedResult = UiText.StringResource(R.string.error_password_is_blank)
+        assertEquals(expectedResult, result)
+    }
+
+
+    @Test
+    fun validatePassword_notBlankPassword_returnsNull() {
+        // GIVEN - a password not blank
+        val password = "this is not blank"
+
+        // WHEN - validate password is called
+        val result = validatePassword(password)
+
+        // THEN - the result is null
+        assertEquals(null, result)
+    }
+}
