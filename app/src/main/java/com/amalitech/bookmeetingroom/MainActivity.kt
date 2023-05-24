@@ -23,11 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginScreen(
-                        onNavigateToHome = { /*TODO*/ },
-                        onNavigateToForgotPassword = { /*TODO*/ },
-                        onNavigateToSignUp = { /*TODO*/ },
-                        onNavigateUp = { /*TODO*/ })
+                    Greeting("Android")
                 }
             }
         }
