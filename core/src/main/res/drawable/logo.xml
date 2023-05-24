@@ -1,0 +1,51 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:tint="#FFCC47"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <group
+        android:name="chevron_to_hamburger"
+        android:pivotX="12"
+        android:pivotY="12">
+        <group
+            android:pivotX="300"
+            android:pivotY="300"
+            android:name="chevron_left"
+            android:translateX="5">
+            <!-- Chevron left -->
+            <path
+                android:fillColor="@android:color/white"
+                android:pathData="M15.41,7.41L14,6l-6,6 6,6 1.41,-1.41L10.83,12z" />
+        </group>
+        <group
+            android:pivotX="300"
+            android:pivotY="300"
+            android:name="chevron_right"
+            android:translateX="-5">
+            <path
+                android:fillColor="@android:color/white"
+                android:pathData="M10,6L8.59,7.41 13.17,12l-4.58,4.59L10,18l6,-6z" />
+        </group>
+        <group
+            android:pivotX="300"
+            android:pivotY="300"
+            android:name="expand_less"
+            android:translateY="5">
+            <path
+                android:fillColor="@android:color/white"
+                android:pathData="M12,8l-6,6 1.41,1.41L12,10.83l4.59,4.58L18,14z" />
+        </group>
+        <group
+            android:pivotX="300"
+            android:pivotY="300"
+            android:name="expand_more"
+            android:translateY="-5">
+            <path
+                android:fillColor="@android:color/white"
+                android:pathData="M16.59,8.59L12,13.17 7.41,8.59 6,10l6,6 6,-6z" />
+        </group>
+    </group>
+</vector>
+
