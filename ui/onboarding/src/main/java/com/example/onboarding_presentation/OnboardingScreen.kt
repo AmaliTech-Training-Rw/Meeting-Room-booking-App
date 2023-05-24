@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core.R
+import com.amalitech.core_ui.theme.LocalSpacing
 import com.example.core_ui.ui.theme.BookMeetingRoomTheme
-import com.example.core_ui.ui.theme.LocalSpacing
 import com.example.onboarding_presentation.components.DefaultButton
 import com.example.onboarding_presentation.components.ImageWithLegend
 import com.example.onboarding_presentation.components.SlidingDots
@@ -159,12 +159,6 @@ fun OnBoard(
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .offset {
-                if ((offsetX <= -120f && selectedIndex < 3) || (offsetX >= 120 && selectedIndex > 0))
-                    IntOffset(offsetX.roundToInt(), 0)
-                else
-                    IntOffset(0, 0)
-            }
             .draggable(
                 orientation = Orientation.Horizontal,
                 state = DraggableState { delta ->
@@ -184,7 +178,14 @@ fun OnBoard(
     ) {
         Column(
             horizontalAlignment = CenterHorizontally,
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier
+                .align(Alignment.Center)
+                .offset {
+                    if ((offsetX <= -120f && selectedIndex < 3) || (offsetX >= 120 && selectedIndex > 0))
+                        IntOffset(offsetX.roundToInt(), 0)
+                    else
+                        IntOffset(0, 0)
+                }
         ) {
             if (logo != null) {
                 Image(

@@ -20,8 +20,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.amalitech.core.R
+import com.amalitech.core_ui.theme.LocalSpacing
 import com.example.core_ui.ui.theme.BookMeetingRoomTheme
-import com.example.core_ui.ui.theme.LocalSpacing
 
 @Composable
 fun DefaultButton(
