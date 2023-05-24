@@ -9,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -22,15 +23,13 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.amalitech.bookmeetingroom.R
-import com.amalitech.bookmeetingroom.ui.theme.PrimaryTextColor
-import com.amalitech.bookmeetingroom.ui.theme.seed
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashAnimation(
     onNavigate: () -> Unit,
-    backgroundColor: Color = PrimaryTextColor,
-    tintColor: Color = seed,
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
+    tintColor: Color = MaterialTheme.colorScheme.primary,
     drawable: Painter = painterResource(id = R.drawable.logo),
     canShowFadeoutAnim: MutableState<Boolean>,
     onVisibilityChange: (Boolean) -> Unit
