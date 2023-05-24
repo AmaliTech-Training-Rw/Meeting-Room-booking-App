@@ -32,24 +32,25 @@ fun SplashAnimation(
     tintColor: Color = MaterialTheme.colorScheme.primary,
     drawable: Painter = painterResource(id = R.drawable.logo),
     canShowFadeoutAnim: MutableState<Boolean>,
-    onVisibilityChange: (Boolean) -> Unit
-
+    onVisibilityChange: (Boolean) -> Unit,
+    scaleAnimationDuration: Int = 1000,
+    delayBeforeFadeOutAnimation: Int = 2000,
+    fadeOutAnimationDuration: Int = 500
 ) {
     val scale = remember {
         Animatable(15f)
     }
 
-
     LaunchedEffect(key1 = true) {
         scale.animateTo(
             1f,
             animationSpec = tween(
-                durationMillis = 1000,
+                durationMillis = scaleAnimationDuration,
             )
         )
-        delay(2000)
+        delay(delayBeforeFadeOutAnimation.toLong())
         onVisibilityChange(false)
-        delay(500)
+        delay(fadeOutAnimationDuration.toLong())
         onNavigate()
     }
 
@@ -63,7 +64,7 @@ fun SplashAnimation(
             visible = canShowFadeoutAnim.value,
             exit = fadeOut(
                 animationSpec = tween(
-                    500
+                    fadeOutAnimationDuration
                 )
             ),
             enter = EnterTransition.None
