@@ -42,5 +42,3 @@ data class BottomNavItem(
         const val INVITATION_INDEX = 3
     }
 }
-
-
