@@ -18,7 +18,7 @@ class ValidateEmailTest {
     }
 
     @Test
-    fun validateEmail_validEmail_returnsNull() {
+    fun `validate email with valid email returns null`() {
         // GIVEN - A valid email address and a mockk behavior for isEmailValid
         val email = "test@example.com"
         every { validateEmail.isEmailValid(email) } returns true
@@ -31,7 +31,7 @@ class ValidateEmailTest {
     }
 
     @Test
-    fun validateEmail_invalidEmail_returnsUiText() {
+    fun `validate email with invalid email returns UiText`() {
         // GIVEN - An invalid email address and a mockk behavior for isEmailValid
         val email = "invalid_email"
         every { validateEmail.isEmailValid(email) } returns false
@@ -45,7 +45,7 @@ class ValidateEmailTest {
     }
 
     @Test
-    fun validateEmail_emptyEmail_returnsUiText() {
+    fun `validate email with empty email address returns UiText`() {
         // GIVEN - A blank email address and a mockk behavior for isEmailValid
         val email = ""
         every { validateEmail.isEmailValid(email) } returns true

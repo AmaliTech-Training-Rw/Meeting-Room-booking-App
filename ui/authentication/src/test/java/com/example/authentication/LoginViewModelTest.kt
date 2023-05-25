@@ -38,7 +38,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun onNewEmail_anyString_stateUpdated() {
+    fun `on new email called with any string state is updated`() {
         val email = "test@email.com "
 
         viewModel.onNewEmail(email)
@@ -47,7 +47,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun onNewPassword_anyString_stateUpdated() {
+    fun `on new password called with any string state is updated`() {
         val password = "test "
 
         viewModel.onNewPassword(password)
@@ -56,14 +56,14 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun onSnackBarShowed_stateUpdated() {
+    fun `when a snackBar is shown, its value is cleared in state`() {
         viewModel.onSnackBarShown()
 
         assertEquals(null, viewModel.uiState.value.snackBarValue)
     }
 
     @Test
-    fun onLoginClick_validEmailAndValidPassword_stateUpdatedAccordingly() {
+    fun `when onLoginClick is called with valid email and password the state is updated accordingly`() {
         every {
             loginUseCase.validateEmail(any())
         } returns null
@@ -89,7 +89,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun onLoginClick_validEmailAndInvalidPassword_errorAddedToState() {
+    fun ` when onLoginClick is called with valid email and invalid password an error is added to state`() {
         every {
             loginUseCase.validateEmail(any())
         } returns null
@@ -101,13 +101,12 @@ class LoginViewModelTest {
         viewModel.onLoginClick()
 
         assertEquals(
-            UiText.StringResource(R.string.error_password_is_blank),
-            viewModel.uiState.value.error
+            UiText.StringResource(R.string.error_password_is_blank), viewModel.uiState.value.error
         )
     }
 
     @Test
-    fun onLoginClick_invalidEmailAndvalidPassword_errorAddedToState() {
+    fun `when on login click is called with invalid email and valid password an error is added to state`() {
         every {
             loginUseCase.validateEmail(any())
         } returns UiText.StringResource(R.string.error_email_not_valid)
@@ -119,13 +118,12 @@ class LoginViewModelTest {
         viewModel.onLoginClick()
 
         assertEquals(
-            UiText.StringResource(R.string.error_email_not_valid),
-            viewModel.uiState.value.error
+            UiText.StringResource(R.string.error_email_not_valid), viewModel.uiState.value.error
         )
     }
 
     @Test
-    fun onLoginClick_wrongCredentials_errorAddedToState() {
+    fun `when onLoginClick is called with wrong credentials an error is added to state`() {
         every {
             loginUseCase.validateEmail(any())
         } returns null
@@ -146,6 +144,4 @@ class LoginViewModelTest {
             viewModel.uiState.value.error
         )
     }
-
-
 }
