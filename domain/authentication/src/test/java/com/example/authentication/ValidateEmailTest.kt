@@ -1,12 +1,12 @@
-import com.amalitech.domain.authentication.R
+import com.amalitech.core.util.UiText
 import com.example.authentication.use_case.ValidateEmail
-import com.example.authentication.util.UiText
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.spyk
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import com.amalitech.core.R
 
 class ValidateEmailTest {
     @MockK

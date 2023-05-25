@@ -1,8 +1,8 @@
 package com.example.authentication
 
-import com.amalitech.domain.authentication.R
+import com.amalitech.core.util.UiText
+import com.amalitech.core.R
 import com.example.authentication.use_case.ValidatePassword
-import com.example.authentication.util.UiText
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test

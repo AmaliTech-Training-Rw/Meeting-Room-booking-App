@@ -1,6 +1,6 @@
 package com.example.authentication.login
 
-import com.example.authentication.util.UiText
+import com.amalitech.core.util.UiText
 
 data class LoginUiState(
     val email: String = "",

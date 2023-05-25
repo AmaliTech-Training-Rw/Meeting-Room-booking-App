@@ -2,8 +2,8 @@ package com.example.authentication.login
 
 import androidx.lifecycle.ViewModel
 import com.amalitech.ui.authentication.R
+import com.amalitech.core.util.UiText
 import com.example.authentication.use_case.LoginUseCase
-import com.example.authentication.util.UiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
