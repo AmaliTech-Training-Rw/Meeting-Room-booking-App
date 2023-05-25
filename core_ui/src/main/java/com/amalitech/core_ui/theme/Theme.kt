@@ -12,6 +12,7 @@ import com.amalitech.core_ui.theme.LocalSpacing
 private val LightColors = lightColorScheme(
     primary = primary,
     onPrimary = onPrimary,
+    primaryContainer = darkGray,
     secondary = secondary,
     onSecondary = onSecondary,
     tertiary = tertiary,
@@ -26,6 +27,7 @@ private val LightColors = lightColorScheme(
 private val DarkColors = darkColorScheme(
     primary = primary,
     onPrimary = onPrimary,
+    primaryContainer = darkGray,
     secondary = secondary,
     onSecondary = onSecondary,
     tertiary = tertiary,
