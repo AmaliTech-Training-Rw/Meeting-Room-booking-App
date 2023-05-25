@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
@@ -41,10 +42,14 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.ui.authentication.R
 import com.example.authentication.components.AuthenticationTextField
@@ -60,27 +65,26 @@ fun LoginScreen(
     onNavigateUp: () -> Unit,
     viewModel: LoginViewModel = koinViewModel()
 ) {
-    val loginUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     val spacing = LocalSpacing.current
     val context = LocalContext.current
     val snackbarHostState = remember {
         SnackbarHostState()
     }
-    val snackBarValue = loginUiState.snackBarValue
-    val error = loginUiState.error
+    val error = state.error
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    LaunchedEffect(key1 = snackBarValue) {
-        if (snackBarValue != null) {
+    LaunchedEffect(key1 = state) {
+        state.snackBarValue?.let {
             snackbarHostState.showSnackbar(
-                message = snackBarValue.asString(context)
+                it.asString(context = context)
             )
             viewModel.onSnackBarShown()
         }
     }
 
-    if (loginUiState.finishedLoggingIn) {
+    if (state.finishedLoggingIn) {
         onNavigateToHome()
     }
 
@@ -106,18 +110,22 @@ fun LoginScreen(
                 Image(
                     painter = painterResource(id = com.amalitech.core.R.drawable.logo),
                     contentDescription = stringResource(R.string.logo),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                    modifier = Modifier.size(
+                        spacing.spaceExtraLarge
+                    )
                 )
                 Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
                 Text(
                     text = stringResource(id = R.string.log_into_account),
                     color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    fontSize = 24.sp
                 )
-                if (error != null) {
+                state.error?.let {
                     Spacer(modifier = Modifier.height(spacing.spaceSmall))
                     Text(
-                        text = error.asString(context),
+                        text = it.asString(context),
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.bodyMedium
                     )
@@ -125,7 +133,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(spacing.spaceLarge))
                 AuthenticationTextField(
                     placeholder = stringResource(R.string.email),
-                    value = loginUiState.email,
+                    value = state.email,
                     onValueChange = {
                         viewModel.onNewEmail(it)
                     },
@@ -134,17 +142,18 @@ fun LoginScreen(
                         viewModel.onLoginClick()
                     }
                 )
-                Spacer(modifier = Modifier.height(spacing.spaceSmall))
+                Spacer(modifier = Modifier.height(spacing.spaceLarge))
                 AuthenticationTextField(
                     placeholder = stringResource(R.string.password),
-                    value = loginUiState.password,
+                    value = state.password,
                     onValueChange = {
                         viewModel.onNewPassword(it)
                     },
                     isPassword = true,
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Go
+                        imeAction = ImeAction.Go,
+                        keyboardType = KeyboardType.Password
                     ),
                     onGo = {
                         viewModel.onLoginClick()
@@ -166,13 +175,14 @@ fun LoginScreen(
                         }
                     )
                 }
+                Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
                 DefaultButton(
                     text = stringResource(id = R.string.sign_in),
                     onClick = { viewModel.onLoginClick() },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = spacing.spaceLarge)
-                        .padding(vertical = spacing.spaceLarge)
+                        .padding(bottom = spacing.spaceLarge)
+                        .padding(bottom = spacing.spaceLarge)
                 )
             }
             val text = buildAnnotatedString {
@@ -220,33 +230,4 @@ fun Prev() {
         onNavigateToSignUp = {},
         onNavigateUp = {}
     )
-}
-
-@Composable
-fun DefaultButton(
-    text: String,
-    modifier: Modifier = Modifier,
-    textColor: Color = MaterialTheme.colorScheme.onPrimary,
-    backgroundColor: Color = MaterialTheme.colorScheme.primary,
-    onClick: () -> Unit,
-    textStyle: TextStyle = MaterialTheme.typography.bodyMedium
-) {
-    val spacing = LocalSpacing.current
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(size = spacing.spaceExtraSmall))
-            .background(color = backgroundColor)
-            .clickable {
-                onClick()
-            }
-            .padding(spacing.spaceSmall),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = text,
-            style = textStyle,
-            color = textColor,
-            textAlign = TextAlign.Center,
-        )
-    }
 }

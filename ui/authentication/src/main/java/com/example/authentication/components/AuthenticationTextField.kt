@@ -3,6 +3,7 @@ package com.example.authentication.components
 import android.view.KeyEvent.ACTION_DOWN
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -22,6 +23,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
@@ -30,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,8 +53,11 @@ fun AuthenticationTextField(
     placeholderTextStyle: TextStyle = TextStyle(
         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
     ),
-    keyboardOptions: KeyboardOptions = KeyboardOptions(
+    keyboardOptions: KeyboardOptions = if (isPassword) KeyboardOptions(
         imeAction = ImeAction.Next,
+        keyboardType = KeyboardType.Password
+    ) else KeyboardOptions(
+        imeAction = ImeAction.Next
     ),
     focusManager: FocusManager = LocalFocusManager.current,
     onGo: () -> Unit = {},
@@ -98,7 +104,7 @@ fun AuthenticationTextField(
             .padding(1.dp)
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
                 shape = RoundedCornerShape(spacing.spaceExtraSmall)
             )
             .padding(spacing.spaceExtraSmall)
@@ -115,10 +121,12 @@ fun AuthenticationTextField(
             },
         shape = RoundedCornerShape(spacing.spaceExtraSmall),
         colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
             focusedTextColor = MaterialTheme.colorScheme.onBackground,
             unfocusedContainerColor = MaterialTheme.colorScheme.background,
             unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-            focusedContainerColor = MaterialTheme.colorScheme.background
+            focusedContainerColor = MaterialTheme.colorScheme.background,
         ),
         placeholder = {
             Text(

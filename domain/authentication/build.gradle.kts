@@ -4,5 +4,4 @@ apply {
 
 dependencies {
     "implementation"(project(Modules.core))
-    "implementation"(Lifecycle.composeLifecycle)
 }
