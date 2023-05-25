@@ -20,7 +20,7 @@ class ValidatePasswordTest {
     }
 
     @Test
-    fun validatePassword_blankPassword_returnsUiText() {
+    fun `validate password with blank password returns UiText`() {
         // GIVEN - blank password
         val password = ""
 
@@ -34,7 +34,7 @@ class ValidatePasswordTest {
 
 
     @Test
-    fun validatePassword_notBlankPassword_returnsNull() {
+    fun `validate password with valid password returns null`() {
         // GIVEN - a password not blank
         val password = "this is not blank"
 

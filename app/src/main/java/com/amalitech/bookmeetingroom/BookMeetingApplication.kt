@@ -10,13 +10,20 @@ import com.example.onboarding_presentation.di.onboardingPresentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 
-class BookMeetingApplication: Application() {
+class BookMeetingApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
         startKoin {
             androidContext(this@BookMeetingApplication)
-            modules(coreModule, networkModule, onboardingDataModule, onboardingPresentationModule, uiAuthenticationModule, domainAuthenticationModule)
+            modules(
+                coreModule,
+                networkModule,
+                onboardingDataModule,
+                onboardingPresentationModule,
+                uiAuthenticationModule,
+                domainAuthenticationModule
+            )
         }
     }
 }
