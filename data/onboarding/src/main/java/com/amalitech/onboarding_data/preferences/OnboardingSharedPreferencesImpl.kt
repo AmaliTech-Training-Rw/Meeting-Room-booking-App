@@ -1,7 +1,7 @@
 package com.amalitech.onboarding_data.preferences
 
 import android.content.SharedPreferences
-import com.amalitech.onboarding_domain.preferences.OnboardingSharedPreferences
+import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 
 class OnboardingSharedPreferencesImpl(
     private val sharedPreferences: SharedPreferences

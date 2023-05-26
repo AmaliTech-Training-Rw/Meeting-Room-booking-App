@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.amalitech.onboarding_presentation.login.LoginScreen
+import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 
 class MainActivity : ComponentActivity() {

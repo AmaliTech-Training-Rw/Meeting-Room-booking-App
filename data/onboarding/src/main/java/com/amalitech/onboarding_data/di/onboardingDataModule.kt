@@ -2,7 +2,7 @@ package com.amalitech.onboarding_data.di
 
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import com.amalitech.onboarding_domain.preferences.OnboardingSharedPreferences
+import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 import com.amalitech.onboarding_data.preferences.OnboardingSharedPreferencesImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
