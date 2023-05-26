@@ -57,6 +57,7 @@ dependencies {
     implementation Compose.viewModelCompose
     implementation Compose.activityCompose
     implementation Koin.koin
+    implementation Lifecycle.composeLifecycle
 
     testImplementation Testing.junit4 
     testImplementation Testing.junitAndroidExt 
