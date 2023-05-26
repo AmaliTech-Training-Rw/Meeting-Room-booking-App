@@ -3,9 +3,9 @@ package com.amalitech.bookmeetingroom
 import android.app.Application
 import com.amalitech.core.di.coreModule
 import com.amalitech.core.di.networkModule
-import com.example.oboarding_domain.di.domainOnBoardingModule
-import com.example.onboarding_data.di.onboardingDataModule
-import com.example.onboarding_presentation.di.onboardingPresentationModule
+import com.amalitech.onboarding_domain.di.onboardingDomainModule
+import com.amalitech.onboarding_data.di.onboardingDataModule
+import com.amalitech.onboarding_presentation.di.onboardingPresentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 
@@ -20,7 +20,7 @@ class BookMeetingApplication : Application() {
                 networkModule,
                 onboardingDataModule,
                 onboardingPresentationModule,
-                domainOnBoardingModule
+                onboardingDomainModule
             )
         }
     }
