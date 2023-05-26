@@ -7,5 +7,7 @@
     <string name="booking_history">Booking History</string>
     <string name="profile">Profile</string>
     <string name="dashboard">Dashboard</string>
+    <string name="invitations">Invitations</string>
     <string name="logout">Logout</string>
+    <string name="generic_error">Oops, an error has occurred …</string>
 </resources>

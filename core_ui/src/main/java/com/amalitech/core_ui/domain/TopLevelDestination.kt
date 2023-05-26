@@ -11,6 +11,7 @@ import com.amalitech.core_ui.R.string.logout
 import com.amalitech.core_ui.R.string.profile
 import com.amalitech.core_ui.R.string.rooms
 import com.amalitech.core_ui.R.string.users
+import com.amalitech.core_ui.R.string.invitations
 
 enum class TopLevelDestination(
     val icon: ImageVector,
@@ -49,6 +50,11 @@ enum class TopLevelDestination(
     DASHBOARD(
         icon = Icons.Filled.Menu,
         titleTextId = dashboard
+    ),
+
+    INVITATIONS(
+        icon = Icons.Filled.Menu,
+        titleTextId = invitations
     ),
 
     LOGOUT(

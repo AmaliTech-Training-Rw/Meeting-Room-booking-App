@@ -85,6 +85,8 @@ dependencies {
     implementation(Compose.viewModelCompose)
     implementation(Compose.activityCompose)
 
+    implementation(Accompanist.systemuiController)
+
     implementation(Kotlin.coreKtx)
 
     implementation(Koin.koin)

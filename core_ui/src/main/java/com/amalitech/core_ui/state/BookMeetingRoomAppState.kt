@@ -2,8 +2,10 @@ package com.amalitech.core_ui.state
 
 import android.content.res.AssetManager
 import android.content.res.Resources
+import android.util.Log
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
@@ -17,9 +19,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.amalitech.core_ui.domain.TopLevelDestination
+import com.amalitech.core_ui.ui.homeNavigationRoute
+import com.amalitech.core_ui.ui.invitationsNavigationRoute
+import com.amalitech.core_ui.ui.myBookingsNavigationRoute
+import com.amalitech.core_ui.ui.profileNavigationRoute
+import com.amalitech.core_ui.util.snackbar.SnackbarManager
+import com.amalitech.core_ui.util.snackbar.SnackbarMessage.Companion.toMessage
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
 
 @Composable
 fun rememberBookMeetingRoomAppState(
@@ -29,7 +39,9 @@ fun rememberBookMeetingRoomAppState(
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
     systemUiController: SystemUiController = rememberSystemUiController(),
-): MyFitnessAppState {
+    snackbarManager: SnackbarManager = SnackbarManager,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+): BookMeetingRoomAppState {
     return remember(
         navController,
         resources,
@@ -37,14 +49,18 @@ fun rememberBookMeetingRoomAppState(
         coroutineScope,
         drawerState,
         systemUiController,
+        snackbarManager,
+        snackbarHostState,
     ) {
-        MyFitnessAppState(
+        BookMeetingRoomAppState(
             navController,
             resources,
             assets,
             coroutineScope,
             drawerState,
             systemUiController,
+            snackbarManager,
+            snackbarHostState
         )
     }
 }
@@ -64,21 +80,36 @@ fun assets(): AssetManager {
 }
 
 @Stable
-class MyFitnessAppState(
+class BookMeetingRoomAppState(
     val navController: NavHostController,
     val resources: Resources,
     val assets: AssetManager,
     val coroutineScope: CoroutineScope,
     val drawerState: DrawerState,
     val systemUiController: SystemUiController,
+    val snackbarManager: SnackbarManager,
+    val snackbarHostState: SnackbarHostState,
 ) {
+
+    init {
+        coroutineScope.launch {
+            snackbarManager.snackbarMessages.filterNotNull().collect { snackbarMessage ->
+                val text = snackbarMessage.toMessage(resources)
+                snackbarHostState.showSnackbar(text)
+            }
+        }
+    }
+
     val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
-            //homeNavigationRoute -> TopLevelDestination.HOME
+            homeNavigationRoute -> TopLevelDestination.HOME
+            profileNavigationRoute -> TopLevelDestination.PROFILE
+            myBookingsNavigationRoute -> TopLevelDestination.BOOKING_REQUESTS
+            invitationsNavigationRoute -> TopLevelDestination.INVITATIONS
             else -> null
         }
 
@@ -88,6 +119,7 @@ class MyFitnessAppState(
     }
 
     fun navigate(route: String) {
+        Log.d("TAG", "navigate: route $route")
         navController.navigate(route) { launchSingleTop = true }
     }
 
