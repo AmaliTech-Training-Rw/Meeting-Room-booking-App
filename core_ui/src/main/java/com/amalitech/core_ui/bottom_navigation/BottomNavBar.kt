@@ -1,4 +1,4 @@
-package com.amalitech.bottom_navigation
+package com.amalitech.core_ui.bottom_navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,41 +19,49 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.amalitech.bottom_navigation.components.BottomNavItem
-import org.koin.androidx.compose.koinViewModel
+import androidx.compose.ui.unit.sp
+import com.amalitech.core_ui.bottom_navigation.components.BottomNavBadge
+import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
+import com.amalitech.core_ui.bottom_navigation.components.NavItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavBar(
-    viewModel: BottomNavigationViewModel = koinViewModel()
+    selectedIconColor: Color = MaterialTheme.colorScheme.primary,
+    selectedTextColor: Color = MaterialTheme.colorScheme.primary,
+    indicatorColor: Color = MaterialTheme.colorScheme.background,
+    containerColor: Color = MaterialTheme.colorScheme.background,
+    contentColor: Color = MaterialTheme.colorScheme.onBackground,
+    badgeBackgroundColor: Color = MaterialTheme.colorScheme.error,
+    badgeTextColor: Color = MaterialTheme.colorScheme.onError
 ) {
     var selectedIndex by remember {
-        mutableStateOf(0)
+        mutableStateOf(NavItem.Home.index)
     }
     val context = LocalContext.current
-    val invitations = viewModel.invitations.collectAsStateWithLifecycle()
-
+    val invitations by remember {
+        mutableStateOf(5)
+    }
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.background,
-        contentColor = MaterialTheme.colorScheme.onBackground,
+        containerColor = containerColor,
+        contentColor = contentColor,
         modifier = Modifier
             .padding(1.dp)
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
+                color = contentColor.copy(alpha = 0.3f)
             )
     ) {
         BottomNavItem.items.forEach { item ->
             var currentItem = item
-            if (currentItem.index == BottomNavItem.INVITATION_INDEX)
+            if (currentItem.index == NavItem.Invitations.index)
                 currentItem = currentItem.copy(
-                    badge = invitations.value
+                    badge = BottomNavBadge.CountBadge(invitations)
                 )
             NavigationBarItem(
                 selected = selectedIndex == currentItem.index,
@@ -68,26 +76,27 @@ fun BottomNavBar(
                 },
                 label = {
                     BadgedBox(badge = {
-                        if (currentItem.badge != null)
+                        val tmp = currentItem.badge.count
+                        if (currentItem.badge.count > 0)
                             Text(
-                                currentItem.badge.toString(),
-                                color = MaterialTheme.colorScheme.onError,
+                                currentItem.badge.count.toString(),
+                                color = badgeTextColor,
                                 modifier = Modifier
                                     .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.error)
+                                    .background(badgeBackgroundColor)
                             )
                     }) {
                         Text(
                             text = currentItem.label.asString(context),
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1
+                            maxLines = 1,
+                            fontSize = 10.sp
                         )
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                    indicatorColor = MaterialTheme.colorScheme.background
+                    selectedIconColor = selectedIconColor,
+                    selectedTextColor = selectedTextColor,
+                    indicatorColor = indicatorColor
                 )
             )
         }
