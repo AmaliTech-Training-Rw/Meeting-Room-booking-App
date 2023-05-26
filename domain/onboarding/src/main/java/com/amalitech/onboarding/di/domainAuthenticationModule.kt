@@ -1,6 +1,9 @@
 package com.amalitech.onboarding.di
 
 import com.amalitech.onboarding.login.use_case.ValidatePassword
+import com.amalitech.onboarding.reset_password.CheckPasswordsMatch
+import com.amalitech.onboarding.reset_password.ResetPassword
+import com.amalitech.onboarding.reset_password.ResetPasswordUseCase
 import org.koin.dsl.module
 
 val onboardingDomainModule = module {
@@ -22,5 +25,17 @@ val onboardingDomainModule = module {
             get(),
             get()
         )
+    }
+
+    single {
+        CheckPasswordsMatch()
+    }
+
+    single {
+        ResetPassword()
+    }
+
+    single {
+        ResetPasswordUseCase(get(), get())
     }
 }
