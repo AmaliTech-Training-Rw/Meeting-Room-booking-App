@@ -1,4 +1,4 @@
-package com.example.oboarding_domain.forgot_password.use_case
+package com.amalitech.onboarding.forgot_password.use_case
 
 import com.amalitech.core.util.UiText
 

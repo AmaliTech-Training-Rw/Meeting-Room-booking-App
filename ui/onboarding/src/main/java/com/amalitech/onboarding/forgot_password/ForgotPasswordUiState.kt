@@ -1,4 +1,4 @@
-package com.example.onboarding_presentation.forgot_password
+package com.amalitech.onboarding.forgot_password
 
 import com.amalitech.core.util.UiText
 

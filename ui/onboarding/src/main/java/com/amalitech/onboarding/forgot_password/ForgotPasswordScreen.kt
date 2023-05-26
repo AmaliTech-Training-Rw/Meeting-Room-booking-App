@@ -1,4 +1,4 @@
-package com.example.onboarding_presentation.forgot_password
+package com.amalitech.onboarding.forgot_password
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
@@ -32,10 +33,12 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
+import com.amalitech.onboarding.components.AuthenticationTextField
 import com.amalitech.ui.onboarding.R
-import com.example.onboarding_presentation.components.DefaultButton
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -82,7 +85,8 @@ fun ForgotPasswordScreen(
                 alignment = Alignment.TopCenter,
                 colorFilter = ColorFilter.tint(
                     MaterialTheme.colorScheme.primary
-                )
+                ),
+                modifier = Modifier.size(64.dp)
             )
             Spacer(modifier = Modifier.height(spacing.spaceLarge))
             Text(
@@ -98,7 +102,7 @@ fun ForgotPasswordScreen(
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
-            Spacer(modifier = Modifier.height(spacing.spaceLarge))
+            Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
 
             AuthenticationTextField(
                 placeholder = stringResource(R.string.email),
@@ -116,12 +120,14 @@ fun ForgotPasswordScreen(
                 }
             )
 
+            Spacer(modifier = Modifier.height(spacing.spaceLarge))
+
             DefaultButton(
                 text = stringResource(id = R.string.send_reset_link),
                 onClick = { viewModel.onSendResetLink() },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = spacing.spaceSmall)
+                    .padding(bottom = spacing.spaceSmall)
             )
             val text = buildAnnotatedString {
                 withStyle(style = SpanStyle(color = Color.Black)) {

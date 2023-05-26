@@ -1,9 +1,9 @@
-package com.example.onboarding_presentation.forgot_password
+package com.amalitech.onboarding.forgot_password
 
 import androidx.lifecycle.ViewModel
 import com.amalitech.core.util.UiText
 import com.amalitech.ui.onboarding.R
-import com.example.oboarding_domain.forgot_password.use_case.ForgotPasswordUseCase
+import com.amalitech.onboarding.forgot_password.use_case.ForgotPasswordUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
