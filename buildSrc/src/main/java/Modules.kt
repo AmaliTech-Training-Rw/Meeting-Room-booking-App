@@ -13,8 +13,4 @@ object Modules {
     const val uiOnboarding = ":ui:onboarding"
 
     const val coreUI = ":core_ui"
-
-    const val uiBottomNavigation = ":ui:bottom_navigation"
-    const val domainBottomNavigation = ":domain:bottom_navigation"
-
 }
