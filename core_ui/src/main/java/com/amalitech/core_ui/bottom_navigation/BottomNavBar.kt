@@ -76,7 +76,6 @@ fun BottomNavBar(
                 },
                 label = {
                     BadgedBox(badge = {
-                        val tmp = currentItem.badge.count
                         if (currentItem.badge.count > 0)
                             Text(
                                 currentItem.badge.count.toString(),
