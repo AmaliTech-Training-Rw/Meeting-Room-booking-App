@@ -2,13 +2,16 @@ package com.amalitech.core_ui.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -120,7 +123,6 @@ fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
                         )
                     )
                 }
-                Spacer(Modifier.height(12.dp))
                 // DrawerFooter()
             }
         },
@@ -133,37 +135,23 @@ fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
 
 @Composable
 fun DrawerHeader() {
-    Row(
+    Column(
         modifier = Modifier.padding(15.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val image: Painter = painterResource(id = R.drawable.user)
         Image(
             painter = image,
             contentDescription = "",
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier
+                .size(112.dp)
         )
-        Text(
-            buildAnnotatedString {
-                withStyle(
-                    style = SpanStyle(
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.W900,
-                    )
-                ) {
-                    append("My - ")
-                }
-                withStyle(
-                    style = SpanStyle(
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.W900,
-                        color = Color(0xFF4552B8)
-                    )
-                ) {
-                    append("Fitness")
-                }
-            }
+        Spacer(Modifier.height(12.dp))
+        Text("Firstname   Lastname")
+        Spacer(Modifier.height(12.dp))
+        Divider(
+            modifier = Modifier.fillMaxWidth().height(2.dp)
         )
     }
 }
