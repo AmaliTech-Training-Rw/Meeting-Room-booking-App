@@ -1,9 +1,8 @@
-package com.amalitech.core_ui.ui
+package com.amalitech.core_ui.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.input.key.Key.Companion.Home
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,6 +10,11 @@ import androidx.navigation.compose.navigation
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 
 const val mainGraphNavigationDestination = "main_destination_route"
+const val mainNavigationRoute = "main_route"
+const val homeNavigationRoute = "home_route"
+const val profileNavigationRoute = "profile_route"
+const val myBookingsNavigationRoute = "my_bookings_route"
+const val invitationsNavigationRoute = "invitations_route"
 
 @Composable
 fun BookMeetingRoomNavHost(
@@ -29,12 +33,6 @@ fun BookMeetingRoomNavHost(
         )
     }
 }
-
-const val mainNavigationRoute = "main_route"
-const val homeNavigationRoute = "home_route"
-const val profileNavigationRoute = "profile_route"
-const val myBookingsNavigationRoute = "my_bookings_route"
-const val invitationsNavigationRoute = "invitations_route"
 
 fun NavGraphBuilder.MainGraph(
     startDestination: String,

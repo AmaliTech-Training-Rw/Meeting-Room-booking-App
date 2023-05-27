@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.History
@@ -40,6 +39,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.R
+import com.amalitech.core_ui.navigation.homeNavigationRoute
+import com.amalitech.core_ui.navigation.myBookingsNavigationRoute
+import com.amalitech.core_ui.navigation.profileNavigationRoute
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
@@ -65,7 +67,6 @@ fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
         gesturesEnabled = true,
         drawerContent = {
             ModalDrawerSheet {
-                Spacer(Modifier.height(8.dp))
                 DrawerHeader()
                 drawerItems.forEach { item ->
                     NavigationItem(
@@ -146,7 +147,7 @@ fun NavigationItem(
 @Composable
 fun DrawerHeader() {
     Column(
-        modifier = Modifier.padding(15.dp),
+        modifier = Modifier.padding(8.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

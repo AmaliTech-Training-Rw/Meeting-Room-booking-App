@@ -19,10 +19,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.amalitech.core_ui.domain.TopLevelDestination
-import com.amalitech.core_ui.ui.homeNavigationRoute
-import com.amalitech.core_ui.ui.invitationsNavigationRoute
-import com.amalitech.core_ui.ui.myBookingsNavigationRoute
-import com.amalitech.core_ui.ui.profileNavigationRoute
+import com.amalitech.core_ui.navigation.homeNavigationRoute
+import com.amalitech.core_ui.navigation.invitationsNavigationRoute
+import com.amalitech.core_ui.navigation.myBookingsNavigationRoute
+import com.amalitech.core_ui.navigation.profileNavigationRoute
 import com.amalitech.core_ui.util.snackbar.SnackbarManager
 import com.amalitech.core_ui.util.snackbar.SnackbarMessage.Companion.toMessage
 import com.google.accompanist.systemuicontroller.SystemUiController
