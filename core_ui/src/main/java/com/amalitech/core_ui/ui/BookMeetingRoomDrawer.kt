@@ -78,8 +78,7 @@ fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
         },
         content = {
             BookMeetingRoomApp(appState)
-        },
-        scrimColor = Color.Transparent,
+        }
     )
 }
 
