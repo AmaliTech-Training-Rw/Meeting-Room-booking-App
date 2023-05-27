@@ -5,7 +5,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
-import com.example.core_ui.ui.theme.BookMeetingRoomTheme
+import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 
 @Composable
 fun BookMeetingRoomApp(appState: BookMeetingRoomAppState) {

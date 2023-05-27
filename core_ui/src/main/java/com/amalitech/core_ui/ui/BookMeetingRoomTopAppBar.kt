@@ -10,7 +10,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
-import com.example.core_ui.ui.theme.BookMeetingRoomTheme
+import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

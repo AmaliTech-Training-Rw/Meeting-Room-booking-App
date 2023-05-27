@@ -3,53 +3,58 @@ package com.amalitech.core_ui.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Bookmarks
+import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.PersonOutline
+import androidx.compose.material.icons.filled.Room
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
-import com.example.core_ui.ui.theme.BookMeetingRoomTheme
+import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
     val drawerItems = mapOf(
         Pair("Home", Icons.Default.Home),
-        Pair("Booking Requests", Icons.Default.Home),
-        Pair("Users", Icons.Default.Home),
-        Pair("Rooms", Icons.Default.Home),
-        Pair("Booking History", Icons.Default.Home),
-        Pair("Profile", Icons.Default.Home),
-        Pair("Dashboard", Icons.Default.Home),
+        Pair("Booking Requests", Icons.Default.Bookmarks),
+        Pair("Users", Icons.Default.People),
+        Pair("Rooms", Icons.Default.Room),
+        Pair("Booking History", Icons.Default.History),
+        Pair("Profile", Icons.Default.PersonOutline),
+        Pair("Dashboard", Icons.Default.Dashboard),
         Pair("Logout", Icons.Default.Home)
     )
 
@@ -62,68 +67,13 @@ fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
             ModalDrawerSheet {
                 Spacer(Modifier.height(8.dp))
                 DrawerHeader()
-                Spacer(Modifier.height(8.dp))
                 drawerItems.forEach { item ->
-                    NavigationDrawerItem(
-                        icon = {
-                            Icon(
-                                item.value,
-                                contentDescription = null
-                            )
-                        },
-                        label = { Text(item.key) },
-                        selected = item.key == selectedItem.value,
-                        onClick = {
-                            appState.coroutineScope.launch { appState.drawerState.close() }
-                            selectedItem.value = item.key
-                            when (item.key) {
-                                "Home" -> {
-                                    appState.navigate(homeNavigationRoute)
-                                }
-
-                                "Booking Requests" -> {
-                                    appState.navigate(myBookingsNavigationRoute)
-                                }
-
-                                "Users" -> {
-
-                                }
-
-                                "Rooms" -> {
-
-                                }
-
-                                "Booking History" -> {
-
-                                }
-
-                                "Profile" -> {
-                                    appState.navigate(profileNavigationRoute)
-                                }
-
-                                "Dashboard" -> {
-
-                                }
-
-                                "Logout" -> {
-
-                                }
-                            }
-                        },
-                        //modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
-                        colors = NavigationDrawerItemDefaults.colors(
-//                            selectedContainerColor =,
-//                            unselectedContainerColor =,
-//                            selectedIconColor =,
-//                            unselectedIconColor =,
-//                            selectedTextColor =,
-//                            unselectedTextColor =,
-//                            selectedBadgeColor =,
-//                            unselectedBadgeColor =,
-                        )
+                    NavigationItem(
+                        appState,
+                        item,
+                        selectedItem
                     )
                 }
-                // DrawerFooter()
             }
         },
         content = {
@@ -134,24 +84,88 @@ fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
 }
 
 @Composable
+fun NavigationItem(
+    appState: BookMeetingRoomAppState,
+    item: Map.Entry<String, ImageVector>,
+    selectedItem: MutableState<String>
+) {
+    NavigationDrawerItem(
+        icon = {
+            Icon(
+                item.value,
+                contentDescription = null
+            )
+        },
+        label = { Text(item.key) },
+        selected = item.key == selectedItem.value,
+        onClick = {
+            appState.coroutineScope.launch { appState.drawerState.close() }
+            selectedItem.value = item.key
+            when (item.key) {
+                "Home" -> {
+                    appState.navigate(homeNavigationRoute)
+                }
+
+                "Booking Requests" -> {
+                    appState.navigate(myBookingsNavigationRoute)
+                }
+
+                "Users" -> {
+
+                }
+
+                "Rooms" -> {
+
+                }
+
+                "Booking History" -> {
+
+                }
+
+                "Profile" -> {
+                    appState.navigate(profileNavigationRoute)
+                }
+
+                "Dashboard" -> {
+
+                }
+
+                "Logout" -> {
+
+                }
+            }
+        },
+        colors = NavigationDrawerItemDefaults.colors(
+            selectedContainerColor = Color.Transparent,
+            unselectedContainerColor = Color.Transparent,
+            selectedTextColor = MaterialTheme.colorScheme.primary,
+            selectedIconColor = MaterialTheme.colorScheme.primary,
+        )
+    )
+}
+
+@Composable
 fun DrawerHeader() {
     Column(
         modifier = Modifier.padding(15.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val image: Painter = painterResource(id = R.drawable.user)
+        val image: Painter = painterResource(id = R.drawable.drawer_user)
         Image(
             painter = image,
             contentDescription = "",
             modifier = Modifier
                 .size(112.dp)
+                .clip(CircleShape)
         )
         Spacer(Modifier.height(12.dp))
         Text("Firstname   Lastname")
         Spacer(Modifier.height(12.dp))
         Divider(
-            modifier = Modifier.fillMaxWidth().height(2.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(2.dp)
         )
     }
 }

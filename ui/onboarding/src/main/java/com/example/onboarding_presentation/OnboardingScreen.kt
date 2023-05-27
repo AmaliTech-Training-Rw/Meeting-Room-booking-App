@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core.R
 import com.amalitech.core_ui.theme.LocalSpacing
-import com.example.core_ui.ui.theme.BookMeetingRoomTheme
+import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.example.onboarding_presentation.components.DefaultButton
 import com.example.onboarding_presentation.components.ImageWithLegend
 import com.example.onboarding_presentation.components.SlidingDots
