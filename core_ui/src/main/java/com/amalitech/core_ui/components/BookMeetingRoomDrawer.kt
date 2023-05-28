@@ -1,4 +1,4 @@
-package com.amalitech.core_ui.ui
+package com.amalitech.core_ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -45,6 +45,7 @@ import com.amalitech.core_ui.navigation.profileNavigationRoute
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
+import com.amalitech.core_ui.ui.BookMeetingRoomApp
 import kotlinx.coroutines.launch
 
 @Composable

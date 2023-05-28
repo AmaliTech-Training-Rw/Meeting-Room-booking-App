@@ -1,4 +1,4 @@
-package com.amalitech.core_ui.ui
+package com.amalitech.core_ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
