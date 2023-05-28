@@ -1,13 +1,20 @@
 package com.amalitech.core_ui.ui
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.amalitech.core_ui.R
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
@@ -47,13 +54,14 @@ fun BookMeetingRoomTopAppBar(
             }
         },
         actions = {
-            IconButton(onClick = { /* doSomething() */ }) {
-                Icon(
-                    imageVector = Icons.Rounded.Search,
-                    contentDescription = "",
-                    tint = Color.White,
-                )
-            }
+            val image: Painter = painterResource(id = R.drawable.drawer_user)
+            Image(
+                painter = image,
+                contentDescription = "",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+            )
         },
         scrollBehavior = scrollBehavior
     )
