@@ -37,10 +37,12 @@ fun rememberBookMeetingRoomAppState(
     resources: Resources = resources(),
     assets: AssetManager = assets(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
+    drawerState: DrawerState = rememberDrawerState(
+        initialValue = DrawerValue.Closed
+    ),
     systemUiController: SystemUiController = rememberSystemUiController(),
     snackbarManager: SnackbarManager = SnackbarManager,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ): BookMeetingRoomAppState {
     return remember(
         navController,
@@ -119,7 +121,6 @@ class BookMeetingRoomAppState(
     }
 
     fun navigate(route: String) {
-        Log.d("TAG", "navigate: route $route")
         navController.navigate(route) { launchSingleTop = true }
     }
 

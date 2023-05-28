@@ -1,16 +1,18 @@
 package com.amalitech.core_ui.navigation
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 
-const val mainGraphNavigationDestination = "main_destination_route"
-const val mainNavigationRoute = "main_route"
 const val homeNavigationRoute = "home_route"
 const val profileNavigationRoute = "profile_route"
 const val myBookingsNavigationRoute = "my_bookings_route"
@@ -26,43 +28,22 @@ fun BookMeetingRoomNavHost(
         navController = appState.navController,
         startDestination = startDestination,
     ) {
-        MainGraph(
-            startDestination = mainGraphNavigationDestination,
-            appState = appState,
-            innerPadding = innerPadding
-        )
-    }
-}
-
-fun NavGraphBuilder.MainGraph(
-    startDestination: String,
-    appState: BookMeetingRoomAppState,
-    innerPadding: PaddingValues
-) {
-    navigation(
-        route = mainNavigationRoute,
-        startDestination = startDestination
-    ) {
         HomeGraph(
-            startDestination = homeNavigationRoute,
             appState,
             innerPadding
         )
 
         ProfileGraph(
-            startDestination = profileNavigationRoute,
             appState,
             innerPadding
         )
 
         MyBookingsGraph(
-            startDestination = myBookingsNavigationRoute,
             appState,
             innerPadding
         )
 
         InvitationsGraph(
-            startDestination = invitationsNavigationRoute,
             appState,
             innerPadding
         )
@@ -70,62 +51,56 @@ fun NavGraphBuilder.MainGraph(
 }
 
 fun NavGraphBuilder.HomeGraph(
-    startDestination: String,
     appState: BookMeetingRoomAppState,
     innerPadding: PaddingValues
 ) {
-    navigation(
-        route = mainGraphNavigationDestination,
-        startDestination = startDestination
-    ) {
-        composable(route = startDestination) {
-            Text(text = "This is home")
-        }
+    composable(route = homeNavigationRoute) {
+        TestScreen("This is home", appState, innerPadding)
     }
 }
 
 fun NavGraphBuilder.ProfileGraph(
-    startDestination: String,
     appState: BookMeetingRoomAppState,
     innerPadding: PaddingValues
 ) {
-    navigation(
-        route = mainGraphNavigationDestination,
-        startDestination = startDestination
-    ) {
-        composable(route = startDestination) {
-            Text(text = "This is profile")
-        }
+    composable(route = profileNavigationRoute) {
+        TestScreen("This is profile", appState, innerPadding)
     }
 }
 
 fun NavGraphBuilder.MyBookingsGraph(
-    startDestination: String,
     appState: BookMeetingRoomAppState,
     innerPadding: PaddingValues
 ) {
-    navigation(
-        route = mainGraphNavigationDestination,
-        startDestination = startDestination
-    ) {
-        composable(route = startDestination) {
-            Text(text = "This is my bookings")
-        }
+    composable(route = myBookingsNavigationRoute) {
+        TestScreen("This is my bookings", appState, innerPadding)
     }
 }
 
 fun NavGraphBuilder.InvitationsGraph(
-    startDestination: String,
     appState: BookMeetingRoomAppState,
     innerPadding: PaddingValues
 ) {
-    navigation(
-        route = mainGraphNavigationDestination,
-        startDestination = startDestination
+    composable(route = invitationsNavigationRoute) {
+        TestScreen("This is invitations", appState, innerPadding)
+    }
+}
+
+@Composable
+fun TestScreen(
+    text: String,
+    appState: BookMeetingRoomAppState,
+    innerPadding: PaddingValues
+) {
+    Column(
+        modifier = Modifier
+            .padding(innerPadding)
+            .fillMaxSize()
     ) {
-        composable(route = startDestination) {
-            Text(text = "This is invitations")
-        }
+        Text(
+            text = text,
+            color = Color.Black
+        )
     }
 }
 

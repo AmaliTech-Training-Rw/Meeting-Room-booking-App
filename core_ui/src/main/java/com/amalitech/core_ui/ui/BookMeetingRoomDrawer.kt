@@ -111,15 +111,15 @@ fun NavigationItem(
                 }
 
                 "Users" -> {
-
+                    appState.navigate(homeNavigationRoute)
                 }
 
                 "Rooms" -> {
-
+                    appState.navigate(homeNavigationRoute)
                 }
 
                 "Booking History" -> {
-
+                    appState.navigate(homeNavigationRoute)
                 }
 
                 "Profile" -> {
@@ -127,11 +127,11 @@ fun NavigationItem(
                 }
 
                 "Dashboard" -> {
-
+                    appState.navigate(homeNavigationRoute)
                 }
 
                 "Logout" -> {
-
+                    appState.navigate(homeNavigationRoute)
                 }
             }
         },
