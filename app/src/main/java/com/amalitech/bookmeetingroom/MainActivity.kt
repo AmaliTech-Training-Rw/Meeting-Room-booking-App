@@ -17,21 +17,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BookMeetingRoomTheme {
+                val appState = rememberBookMeetingRoomAppState()
+                BookMeetingRoomDrawer(appState)
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    LoginScreen(
-                        onNavigateToHome = { /*TODO*/ },
-                        onNavigateToForgotPassword = { /*TODO*/ },
-                        onNavigateToSignUp = { /*TODO*/ },
-                        onNavigateUp = { /*TODO*/ })
-
-                    // uncomment for drawer
-                    val appState = rememberBookMeetingRoomAppState()
-                    BookMeetingRoomDrawer(appState)
-                }
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colorScheme.background
+//                ) {
+//                    LoginScreen(
+//                        onNavigateToHome = { /*TODO*/ },
+//                        onNavigateToForgotPassword = { /*TODO*/ },
+//                        onNavigateToSignUp = { /*TODO*/ },
+//                        onNavigateUp = { /*TODO*/ })
+//                }
             }
         }
     }

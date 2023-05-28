@@ -78,7 +78,7 @@ fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
             }
         },
         content = {
-            BookMeetingRoomApp(appState)
+            BookMeetingRoomApp(appState, selectedItem.value)
         }
     )
 }

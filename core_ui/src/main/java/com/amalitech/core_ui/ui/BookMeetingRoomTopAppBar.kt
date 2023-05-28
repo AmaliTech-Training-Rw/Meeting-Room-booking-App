@@ -15,12 +15,15 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookMeetingRoomTopAppBar(appState: BookMeetingRoomAppState) {
+fun BookMeetingRoomTopAppBar(
+    appState: BookMeetingRoomAppState,
+    title: String
+) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     TopAppBar(
         title = {
             Text(
-                "Dashboard",
+                title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -61,6 +64,6 @@ fun BookMeetingRoomTopAppBar(appState: BookMeetingRoomAppState) {
 fun BookMeetingRoomTopAppBarPreview() {
     val appState = rememberBookMeetingRoomAppState()
     BookMeetingRoomTheme {
-        BookMeetingRoomTopAppBar(appState)
+        BookMeetingRoomTopAppBar(appState, "Home")
     }
 }
