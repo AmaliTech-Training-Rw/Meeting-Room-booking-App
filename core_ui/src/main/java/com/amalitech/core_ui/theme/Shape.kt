@@ -1,4 +1,4 @@
-package com.example.core_ui.ui.theme
+package com.amalitech.core_ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes

@@ -14,4 +14,6 @@ object Modules {
 
     const val coreUI = ":core_ui"
 
+    const val domainAuthentication = ":domain:authentication"
+    const val uiAuthentication = ":ui:authentication"
 }

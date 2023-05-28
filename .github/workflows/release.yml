@@ -1,0 +1,75 @@
+name: Release the test version to android
+
+## Actions that will be executed when you push code currently none
+on:
+  push:
+    branches:
+      - develop
+
+## 2
+jobs:
+  ## 3
+  unit_tests:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+      # 1
+      - name: Grant execute permission to gradlew
+        run: chmod +x gradlew
+      # 2
+      - name: Unit tests
+        run: ./gradlew test
+
+
+  build:
+    needs: [ unit_tests ]
+    runs-on: ubuntu-latest
+    steps:
+      # 1
+      - name: Checkout code
+        uses: actions/checkout@v2
+      # 2
+      - name: Grant execute permission to gradlew
+        run: chmod +x gradlew
+      # 3
+      - name: Generate Release APK
+        run: ./gradlew assembleRelease
+      # 4
+      - name: Sign APK
+        uses: r0adkll/sign-android-release@v1
+        # ID used to access action output
+        id: sign_app
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+      # 5
+      - uses: actions/upload-artifact@master
+        with:
+          name: release.apk
+          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+      # 6
+      - uses: actions/upload-artifact@master
+        with:
+          name: mapping.txt
+          path: app/build/outputs/mapping/release/mapping.txt
+
+  deploy-firebase:
+    # 1
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    steps:
+      # 2
+      - uses: actions/download-artifact@master
+        with:
+          name: release.apk
+      #3
+      - name: upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_APP_ID}}
+          token: ${{secrets.FIREBASE_TOKEN}}
+          groups: QA
+          file: app-release-unsigned-signed.apk
