@@ -1,4 +1,4 @@
-package com.amalitech.core_ui.components
+package com.amalitech.core_ui.components.drawer
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -9,14 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bookmarks
-import androidx.compose.material.icons.filled.Dashboard
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.People
-import androidx.compose.material.icons.filled.PersonOutline
-import androidx.compose.material.icons.filled.Room
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,18 +41,18 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
-    val drawerItems = mapOf(
-        Pair("Home", Icons.Default.Home),
-        Pair("Booking Requests", Icons.Default.Bookmarks),
-        Pair("Users", Icons.Default.People),
-        Pair("Rooms", Icons.Default.Room),
-        Pair("Booking History", Icons.Default.History),
-        Pair("Profile", Icons.Default.PersonOutline),
-        Pair("Dashboard", Icons.Default.Dashboard),
-        Pair("Logout", Icons.Default.Home)
+    val items = listOf(
+        DrawerItem.Home,
+        DrawerItem.BookingRequests,
+        DrawerItem.Users,
+        DrawerItem.Rooms,
+        DrawerItem.BookingHistory,
+        DrawerItem.Profile,
+        DrawerItem.Dashboard,
+        DrawerItem.Logout
     )
 
-    val selectedItem = remember { mutableStateOf(drawerItems.keys.first()) }
+    val selectedItem = remember { mutableStateOf(DrawerItem.Home.title) }
 
     ModalNavigationDrawer(
         drawerState = appState.drawerState,
@@ -69,7 +60,7 @@ fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
         drawerContent = {
             ModalDrawerSheet {
                 DrawerHeader()
-                drawerItems.forEach { item ->
+                items.forEach { item ->
                     NavigationItem(
                         appState,
                         item,
@@ -87,51 +78,51 @@ fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
 @Composable
 fun NavigationItem(
     appState: BookMeetingRoomAppState,
-    item: Map.Entry<String, ImageVector>,
+    item: DrawerItem,
     selectedItem: MutableState<String>
 ) {
     NavigationDrawerItem(
         icon = {
             Icon(
-                item.value,
+                item.icon,
                 contentDescription = null
             )
         },
-        label = { Text(item.key) },
-        selected = item.key == selectedItem.value,
+        label = { Text(item.title) },
+        selected = item.title == selectedItem.value,
         onClick = {
             appState.coroutineScope.launch { appState.drawerState.close() }
-            selectedItem.value = item.key
-            when (item.key) {
-                "Home" -> {
+            selectedItem.value = item.title
+            when (item) {
+                is DrawerItem.Home -> {
                     appState.navigate(homeNavigationRoute)
                 }
 
-                "Booking Requests" -> {
+                is DrawerItem.BookingRequests -> {
                     appState.navigate(myBookingsNavigationRoute)
                 }
 
-                "Users" -> {
+                is DrawerItem.Users -> {
                     appState.navigate(homeNavigationRoute)
                 }
 
-                "Rooms" -> {
+                is DrawerItem.Rooms -> {
                     appState.navigate(homeNavigationRoute)
                 }
 
-                "Booking History" -> {
+                is DrawerItem.BookingHistory -> {
                     appState.navigate(homeNavigationRoute)
                 }
 
-                "Profile" -> {
+                is DrawerItem.Profile -> {
                     appState.navigate(profileNavigationRoute)
                 }
 
-                "Dashboard" -> {
+                is DrawerItem.Dashboard -> {
                     appState.navigate(homeNavigationRoute)
                 }
 
-                "Logout" -> {
+                is DrawerItem.Logout -> {
                     appState.navigate(homeNavigationRoute)
                 }
             }
