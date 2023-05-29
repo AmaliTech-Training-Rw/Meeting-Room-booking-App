@@ -2,7 +2,6 @@ package com.amalitech.core_ui.state
 
 import android.content.res.AssetManager
 import android.content.res.Resources
-import android.util.Log
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.SnackbarHostState
@@ -23,13 +22,9 @@ import com.amalitech.core_ui.navigation.homeNavigationRoute
 import com.amalitech.core_ui.navigation.invitationsNavigationRoute
 import com.amalitech.core_ui.navigation.myBookingsNavigationRoute
 import com.amalitech.core_ui.navigation.profileNavigationRoute
-import com.amalitech.core_ui.util.snackbar.SnackbarManager
-import com.amalitech.core_ui.util.snackbar.SnackbarMessage.Companion.toMessage
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.launch
 
 @Composable
 fun rememberBookMeetingRoomAppState(
@@ -41,7 +36,6 @@ fun rememberBookMeetingRoomAppState(
         initialValue = DrawerValue.Closed
     ),
     systemUiController: SystemUiController = rememberSystemUiController(),
-    snackbarManager: SnackbarManager = SnackbarManager,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ): BookMeetingRoomAppState {
     return remember(
@@ -51,7 +45,6 @@ fun rememberBookMeetingRoomAppState(
         coroutineScope,
         drawerState,
         systemUiController,
-        snackbarManager,
         snackbarHostState,
     ) {
         BookMeetingRoomAppState(
@@ -61,7 +54,6 @@ fun rememberBookMeetingRoomAppState(
             coroutineScope,
             drawerState,
             systemUiController,
-            snackbarManager,
             snackbarHostState
         )
     }
@@ -89,18 +81,8 @@ class BookMeetingRoomAppState(
     val coroutineScope: CoroutineScope,
     val drawerState: DrawerState,
     val systemUiController: SystemUiController,
-    val snackbarManager: SnackbarManager,
     val snackbarHostState: SnackbarHostState,
 ) {
-
-    init {
-        coroutineScope.launch {
-            snackbarManager.snackbarMessages.filterNotNull().collect { snackbarMessage ->
-                val text = snackbarMessage.toMessage(resources)
-                snackbarHostState.showSnackbar(text)
-            }
-        }
-    }
 
     val currentDestination: NavDestination?
         @Composable get() = navController
