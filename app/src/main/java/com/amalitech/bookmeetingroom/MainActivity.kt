@@ -11,10 +11,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val appState = rememberBookMeetingRoomAppState()
-            BookMeetingRoomTheme {
-                BookMeetingRoomDrawer(appState)
-            }
+
         }
     }
 }
