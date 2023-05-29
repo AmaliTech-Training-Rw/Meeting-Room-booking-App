@@ -2,6 +2,7 @@ package com.amalitech.onboarding.login
 
 import com.amalitech.core.util.UiText
 import com.amalitech.domain.onboarding.R
+import com.amalitech.onboarding.MainDispatcherRule
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
@@ -29,14 +30,8 @@ class LoginViewModelTest {
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         loginUseCase = mockk()
         viewModel = LoginViewModel(loginUseCase)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     @Test
