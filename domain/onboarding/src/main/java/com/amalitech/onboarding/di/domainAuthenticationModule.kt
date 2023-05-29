@@ -1,5 +1,8 @@
 package com.amalitech.onboarding.di
 
+import com.amalitech.onboarding.login.use_case.LogIn
+import com.amalitech.onboarding.login.use_case.LoginUseCase
+import com.amalitech.onboarding.login.use_case.ValidateEmail
 import com.amalitech.onboarding.login.use_case.ValidatePassword
 import com.amalitech.onboarding.reset_password.CheckPasswordsMatch
 import com.amalitech.onboarding.reset_password.ResetPassword
@@ -8,11 +11,11 @@ import org.koin.dsl.module
 
 val onboardingDomainModule = module {
     single {
-        com.amalitech.onboarding.login.use_case.LogIn()
+        LogIn()
     }
 
     single {
-        com.amalitech.onboarding.login.use_case.ValidateEmail()
+        ValidateEmail()
     }
 
     single {
@@ -20,7 +23,7 @@ val onboardingDomainModule = module {
     }
 
     single {
-        com.amalitech.onboarding.login.use_case.LoginUseCase(
+        LoginUseCase(
             get(),
             get(),
             get()
