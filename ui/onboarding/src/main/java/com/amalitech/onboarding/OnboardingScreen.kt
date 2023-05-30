@@ -32,28 +32,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core.R
 import com.amalitech.core_ui.components.DefaultButton
+import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.onboarding.components.ImageWithLegend
 import com.amalitech.onboarding.components.SlidingDots
-import com.amalitech.core_ui.theme.BookMeetingRoomTheme
-import org.koin.androidx.compose.koinViewModel
 import kotlin.math.roundToInt
 
 @Composable
 fun OnboardingScreen(
     onNavigateToLogin: () -> Unit,
-    viewModel: OnboardingViewModel = koinViewModel()
 ) {
     var currentIndex by remember {
         mutableStateOf(0)
-    }
-    val savedShouldShowOnBoarding by viewModel.finishedSaving.collectAsStateWithLifecycle()
-
-    if (savedShouldShowOnBoarding) {
-        onNavigateToLogin()
     }
 
     when (currentIndex) {
@@ -68,7 +60,7 @@ fun OnboardingScreen(
                     currentIndex = it
                 },
                 onGetStartedClick = {
-                    viewModel.onGetSarted()
+                    onNavigateToLogin()
                 }
             )
         }
@@ -84,7 +76,7 @@ fun OnboardingScreen(
                     currentIndex = it
                 },
                 onGetStartedClick = {
-                    viewModel.onGetSarted()
+                    onNavigateToLogin()
                 }
             )
         }
@@ -100,7 +92,7 @@ fun OnboardingScreen(
                     currentIndex = it
                 },
                 onGetStartedClick = {
-                    viewModel.onGetSarted()
+                    onNavigateToLogin()
                 }
             )
         }
@@ -116,7 +108,7 @@ fun OnboardingScreen(
                     currentIndex = it
                 },
                 onGetStartedClick = {
-                    viewModel.onGetSarted()
+                    onNavigateToLogin()
                 }
             )
 
@@ -133,7 +125,7 @@ fun OnboardingScreen(
                     currentIndex = it
                 },
                 onGetStartedClick = {
-                    viewModel.onGetSarted()
+                    onNavigateToLogin()
                 }
             )
         }

@@ -1,15 +1,19 @@
 package com.amalitech.onboarding.di
 
+import com.amalitech.onboarding.login.use_case.IsUserAdmin
+import com.amalitech.onboarding.login.use_case.LogIn
+import com.amalitech.onboarding.login.use_case.LoginUseCase
+import com.amalitech.onboarding.login.use_case.ValidateEmail
 import com.amalitech.onboarding.login.use_case.ValidatePassword
 import org.koin.dsl.module
 
 val onboardingDomainModule = module {
     single {
-        com.amalitech.onboarding.login.use_case.LogIn()
+        LogIn()
     }
 
     single {
-        com.amalitech.onboarding.login.use_case.ValidateEmail()
+        ValidateEmail()
     }
 
     single {
@@ -17,7 +21,12 @@ val onboardingDomainModule = module {
     }
 
     single {
-        com.amalitech.onboarding.login.use_case.LoginUseCase(
+        IsUserAdmin()
+    }
+
+    single {
+        LoginUseCase(
+            get(),
             get(),
             get(),
             get()
