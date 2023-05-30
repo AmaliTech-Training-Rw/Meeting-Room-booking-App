@@ -19,4 +19,8 @@ val onboardingPresentationModule = module {
             get()
         )
     }
+
+    viewModel {
+        ResetPasswordViewModel(get())
+    }
 }
