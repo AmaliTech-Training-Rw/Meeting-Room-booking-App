@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 
 class ForgotPasswordViewModel(
     private val forgotPasswordUseCase: ForgotPasswordUseCase
-): ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(ForgotPasswordUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -46,14 +46,14 @@ class ForgotPasswordViewModel(
             if (result == null) {
                 _uiState.update { forgotPasswordUiState ->
                     forgotPasswordUiState.copy(
-                        snackBarValue =  UiText.StringResource(R.string.link_sent_inbox),
+                        snackBarValue = UiText.StringResource(R.string.link_sent_inbox),
                         linkSent = true
                     )
                 }
             } else {
                 _uiState.update { forgotPasswordUiState ->
                     forgotPasswordUiState.copy(
-                        error =  result
+                        error = result
                     )
                 }
             }
@@ -70,5 +70,4 @@ class ForgotPasswordViewModel(
             )
         }
     }
-
 }
