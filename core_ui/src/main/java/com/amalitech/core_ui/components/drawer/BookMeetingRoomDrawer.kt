@@ -30,7 +30,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hierarchy
 import com.amalitech.core_ui.R
+import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
@@ -40,18 +42,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
-    val items = listOf(
-        NavigationItem.Home,
-        NavigationItem.BookingRequests,
-        NavigationItem.Users,
-        NavigationItem.Rooms,
-        NavigationItem.BookingHistory,
-        NavigationItem.Profile,
-        NavigationItem.Dashboard,
-        NavigationItem.Logout
-    )
-
+fun BookMeetingRoomDrawer(
+    appState: BookMeetingRoomAppState,
+    onClick: (screen: NavigationItem) -> Unit
+) {
     val selectedItem = remember { mutableStateOf(NavigationItem.Home.title) }
 
     ModalNavigationDrawer(
@@ -60,11 +54,11 @@ fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
         drawerContent = {
             ModalDrawerSheet {
                 DrawerHeader()
-                items.forEach { item ->
-                    NavigationItem(
+                NavigationItem.createItems().forEach { item ->
+                    DrawerNavigationItem(
                         appState,
                         item,
-                        selectedItem
+                        onClick
                     )
                 }
             }
@@ -76,10 +70,10 @@ fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
 }
 
 @Composable
-fun NavigationItem(
+fun DrawerNavigationItem(
     appState: BookMeetingRoomAppState,
     item: NavigationItem,
-    selectedItem: MutableState<String>
+    onClick: (screen: NavigationItem) -> Unit
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     NavigationDrawerItem(
@@ -90,45 +84,12 @@ fun NavigationItem(
             )
         },
         label = { Text(item.title) },
-        selected = item.title == selectedItem.value,
+        selected = appState.currentDestination?.hierarchy?.any {
+            it.route == item.route
+        } == true,
         onClick = {
-            coroutineScope.launch { appState.drawerState.close() }
-            selectedItem.value = item.title
-            when (item) {
-                is NavigationItem.Home -> {
-                    appState.navigate(NavigationItem.Home.route)
-                }
-
-                is NavigationItem.BookingRequests -> {
-                    appState.navigate(NavigationItem.BookingRequests.route)
-                }
-
-                is NavigationItem.Users -> {
-                    appState.navigate(NavigationItem.Users.route)
-                }
-
-                is NavigationItem.Rooms -> {
-                    appState.navigate(NavigationItem.Rooms.route)
-                }
-
-                is NavigationItem.BookingHistory -> {
-                    appState.navigate(NavigationItem.BookingHistory.route)
-                }
-
-                is NavigationItem.Profile -> {
-                    appState.navigate(NavigationItem.Profile.route)
-                }
-
-                is NavigationItem.Dashboard -> {
-                    appState.navigate(NavigationItem.Dashboard.route)
-                }
-
-                is NavigationItem.Logout -> {
-                    appState.navigate(NavigationItem.Logout.route)
-                }
-
-                else -> {}
-            }
+            appState.coroutineScope.launch { appState.drawerState.close() }
+            onClick(item)
         },
         colors = NavigationDrawerItemDefaults.colors(
             selectedContainerColor = Color.Transparent,
@@ -178,6 +139,8 @@ fun DrawerHeaderPreview() {
 fun BookMeetingRoomDrawerPreview() {
     val appState = rememberBookMeetingRoomAppState()
     BookMeetingRoomTheme {
-        BookMeetingRoomDrawer(appState)
+        BookMeetingRoomDrawer(
+            appState,
+            {})
     }
 }
