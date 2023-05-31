@@ -29,8 +29,6 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun rememberBookMeetingRoomAppState(
     navController: NavHostController = rememberNavController(),
-    resources: Resources = resources(),
-    assets: AssetManager = assets(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     drawerState: DrawerState = rememberDrawerState(
         initialValue = DrawerValue.Closed
@@ -40,8 +38,6 @@ fun rememberBookMeetingRoomAppState(
 ): BookMeetingRoomAppState {
     return remember(
         navController,
-        resources,
-        assets,
         coroutineScope,
         drawerState,
         systemUiController,
@@ -49,8 +45,6 @@ fun rememberBookMeetingRoomAppState(
     ) {
         BookMeetingRoomAppState(
             navController,
-            resources,
-            assets,
             coroutineScope,
             drawerState,
             systemUiController,
@@ -59,25 +53,9 @@ fun rememberBookMeetingRoomAppState(
     }
 }
 
-@Composable
-@ReadOnlyComposable
-fun resources(): Resources {
-    LocalConfiguration.current
-    return LocalContext.current.resources
-}
-
-@Composable
-@ReadOnlyComposable
-fun assets(): AssetManager {
-    LocalConfiguration.current
-    return LocalContext.current.assets
-}
-
 @Stable
 class BookMeetingRoomAppState(
     val navController: NavHostController,
-    val resources: Resources,
-    val assets: AssetManager,
     val coroutineScope: CoroutineScope,
     val drawerState: DrawerState,
     val systemUiController: SystemUiController,
