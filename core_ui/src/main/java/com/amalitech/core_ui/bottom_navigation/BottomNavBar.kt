@@ -16,18 +16,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavBadge
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
-import com.amalitech.core_ui.bottom_navigation.components.NavItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,11 +37,10 @@ fun BottomNavBar(
     containerColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = MaterialTheme.colorScheme.onBackground,
     badgeBackgroundColor: Color = MaterialTheme.colorScheme.error,
-    badgeTextColor: Color = MaterialTheme.colorScheme.onError
+    badgeTextColor: Color = MaterialTheme.colorScheme.onError,
+    currentDestination: NavDestination?,
+    onClick: (screen: BottomNavItem) -> Unit
 ) {
-    var selectedIndex by remember {
-        mutableStateOf(NavItem.Home.index)
-    }
     val context = LocalContext.current
     val invitations by remember {
         mutableStateOf(5)
@@ -57,28 +55,26 @@ fun BottomNavBar(
                 color = contentColor.copy(alpha = 0.3f)
             )
     ) {
-        BottomNavItem.items.forEach { item ->
-            var currentItem = item
-            if (currentItem.index == NavItem.Invitations.index)
-                currentItem = currentItem.copy(
-                    badge = BottomNavBadge.CountBadge(invitations)
-                )
+        BottomNavItem.createItems().forEach { screen ->
+            if (screen.route == BottomNavItem.Invitations.route)
+                screen.badge = BottomNavBadge.CountBadge(invitations)
+
             NavigationBarItem(
-                selected = selectedIndex == currentItem.index,
-                onClick = {
-                    selectedIndex = currentItem.index
-                },
+                selected = currentDestination?.hierarchy?.any {
+                    it.route == screen.route
+                } == true,
+                onClick = { onClick(screen) },
                 icon = {
                     Icon(
-                        painter = painterResource(id = currentItem.icon),
-                        contentDescription = currentItem.label.asString(context),
+                        painter = painterResource(id = screen.icon),
+                        contentDescription = screen.label.asString(context),
                     )
                 },
                 label = {
                     BadgedBox(badge = {
-                        if (currentItem.badge.count > 0)
+                        if (screen.badge.count > 0)
                             Text(
-                                currentItem.badge.count.toString(),
+                                screen.badge.count.toString(),
                                 color = badgeTextColor,
                                 modifier = Modifier
                                     .clip(CircleShape)
@@ -86,7 +82,7 @@ fun BottomNavBar(
                             )
                     }) {
                         Text(
-                            text = currentItem.label.asString(context),
+                            text = screen.label.asString(context),
                             maxLines = 1,
                             fontSize = 10.sp
                         )
@@ -100,10 +96,4 @@ fun BottomNavBar(
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun Prev() {
-    BottomNavBar()
 }
