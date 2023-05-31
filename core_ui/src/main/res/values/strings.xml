@@ -10,4 +10,7 @@
     <string name="invitations">Invitations</string>
     <string name="logout">Logout</string>
     <string name="generic_error">Oops, an error has occurred …</string>
+    <string name="profile">Profile</string>
+    <string name="bookings">Bookings</string>
+    <string name="invitation">Invitations</string>
 </resources>
