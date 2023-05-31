@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,25 +32,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
+import com.amalitech.core_ui.state.NavigationItem
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.ui.BookMeetingRoomApp
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
     val items = listOf(
-        DrawerItem.Home,
-        DrawerItem.BookingRequests,
-        DrawerItem.Users,
-        DrawerItem.Rooms,
-        DrawerItem.BookingHistory,
-        DrawerItem.Profile,
-        DrawerItem.Dashboard,
-        DrawerItem.Logout
+        NavigationItem.Home,
+        NavigationItem.BookingRequests,
+        NavigationItem.Users,
+        NavigationItem.Rooms,
+        NavigationItem.BookingHistory,
+        NavigationItem.Profile,
+        NavigationItem.Dashboard,
+        NavigationItem.Logout
     )
 
-    val selectedItem = remember { mutableStateOf(DrawerItem.Home.title) }
+    val selectedItem = remember { mutableStateOf(NavigationItem.Home.title) }
 
     ModalNavigationDrawer(
         drawerState = appState.drawerState,
@@ -75,9 +78,10 @@ fun BookMeetingRoomDrawer(appState: BookMeetingRoomAppState) {
 @Composable
 fun NavigationItem(
     appState: BookMeetingRoomAppState,
-    item: DrawerItem,
+    item: NavigationItem,
     selectedItem: MutableState<String>
 ) {
+    val coroutineScope: CoroutineScope = rememberCoroutineScope()
     NavigationDrawerItem(
         icon = {
             Icon(
@@ -88,39 +92,39 @@ fun NavigationItem(
         label = { Text(item.title) },
         selected = item.title == selectedItem.value,
         onClick = {
-            appState.coroutineScope.launch { appState.drawerState.close() }
+            coroutineScope.launch { appState.drawerState.close() }
             selectedItem.value = item.title
             when (item) {
-                is DrawerItem.Home -> {
-                    appState.navigate(DrawerItem.Home.route)
+                is NavigationItem.Home -> {
+                    appState.navigate(NavigationItem.Home.route)
                 }
 
-                is DrawerItem.BookingRequests -> {
-                    appState.navigate(DrawerItem.BookingRequests.route)
+                is NavigationItem.BookingRequests -> {
+                    appState.navigate(NavigationItem.BookingRequests.route)
                 }
 
-                is DrawerItem.Users -> {
-                    appState.navigate(DrawerItem.Users.route)
+                is NavigationItem.Users -> {
+                    appState.navigate(NavigationItem.Users.route)
                 }
 
-                is DrawerItem.Rooms -> {
-                    appState.navigate(DrawerItem.Rooms.route)
+                is NavigationItem.Rooms -> {
+                    appState.navigate(NavigationItem.Rooms.route)
                 }
 
-                is DrawerItem.BookingHistory -> {
-                    appState.navigate(DrawerItem.BookingHistory.route)
+                is NavigationItem.BookingHistory -> {
+                    appState.navigate(NavigationItem.BookingHistory.route)
                 }
 
-                is DrawerItem.Profile -> {
-                    appState.navigate(DrawerItem.Profile.route)
+                is NavigationItem.Profile -> {
+                    appState.navigate(NavigationItem.Profile.route)
                 }
 
-                is DrawerItem.Dashboard -> {
-                    appState.navigate(DrawerItem.Dashboard.route)
+                is NavigationItem.Dashboard -> {
+                    appState.navigate(NavigationItem.Dashboard.route)
                 }
 
-                is DrawerItem.Logout -> {
-                    appState.navigate(DrawerItem.Logout.route)
+                is NavigationItem.Logout -> {
+                    appState.navigate(NavigationItem.Logout.route)
                 }
 
                 else -> {}

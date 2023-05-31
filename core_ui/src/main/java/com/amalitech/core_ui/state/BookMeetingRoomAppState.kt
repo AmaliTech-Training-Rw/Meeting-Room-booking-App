@@ -1,27 +1,17 @@
 package com.amalitech.core_ui.state
 
-import android.content.res.AssetManager
-import android.content.res.Resources
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.amalitech.core_ui.domain.TopLevelDestination
-import com.amalitech.core_ui.navigation.homeNavigationRoute
-import com.amalitech.core_ui.navigation.invitationsNavigationRoute
-import com.amalitech.core_ui.navigation.myBookingsNavigationRoute
-import com.amalitech.core_ui.navigation.profileNavigationRoute
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.CoroutineScope
@@ -66,12 +56,12 @@ class BookMeetingRoomAppState(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val currentTopLevelDestination: TopLevelDestination?
+    val currentTopLevelDestination: NavigationItem?
         @Composable get() = when (currentDestination?.route) {
-            homeNavigationRoute -> TopLevelDestination.HOME
-            profileNavigationRoute -> TopLevelDestination.PROFILE
-            myBookingsNavigationRoute -> TopLevelDestination.BOOKING_REQUESTS
-            invitationsNavigationRoute -> TopLevelDestination.INVITATIONS
+            NavigationItem.Home.route -> NavigationItem.Home
+            NavigationItem.Profile.route -> NavigationItem.Profile
+            NavigationItem.BookingRequests.route -> NavigationItem.BookingRequests
+            NavigationItem.Invitations.route -> NavigationItem.Invitations
             else -> null
         }
 

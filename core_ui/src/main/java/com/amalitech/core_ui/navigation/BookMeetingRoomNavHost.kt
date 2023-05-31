@@ -8,11 +8,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.amalitech.core_ui.components.drawer.DrawerItem
+import com.amalitech.core_ui.state.NavigationItem
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 
 @Composable
@@ -25,61 +23,22 @@ fun BookMeetingRoomNavHost(
         navController = appState.navController,
         startDestination = startDestination,
     ) {
-        HomeGraph(
-            appState,
-            innerPadding
-        )
+        composable(route = NavigationItem.Home.route) {
+            TestScreen("This is ${NavigationItem.Home.title}", appState, innerPadding)
+        }
 
-        ProfileGraph(
-            appState,
-            innerPadding
-        )
+        composable(route = NavigationItem.BookingRequests.route) {
+            TestScreen("This is ${NavigationItem.BookingRequests.title}", appState, innerPadding)
+        }
 
-        MyBookingsGraph(
-            appState,
-            innerPadding
-        )
+        composable(route = NavigationItem.Profile.route) {
+            TestScreen("This is ${NavigationItem.Profile.title}", appState, innerPadding)
+        }
 
-        InvitationsGraph(
-            appState,
-            innerPadding
-        )
-    }
-}
-
-fun NavGraphBuilder.HomeGraph(
-    appState: BookMeetingRoomAppState,
-    innerPadding: PaddingValues
-) {
-    composable(route = DrawerItem.Home.route) {
-        TestScreen("This is home", appState, innerPadding)
-    }
-}
-
-fun NavGraphBuilder.ProfileGraph(
-    appState: BookMeetingRoomAppState,
-    innerPadding: PaddingValues
-) {
-    composable(route = DrawerItem.Profile.route) {
-        TestScreen("This is profile", appState, innerPadding)
-    }
-}
-
-fun NavGraphBuilder.MyBookingsGraph(
-    appState: BookMeetingRoomAppState,
-    innerPadding: PaddingValues
-) {
-    composable(route = DrawerItem.BookingRequests.route) {
-        TestScreen("This is my bookings", appState, innerPadding)
-    }
-}
-
-fun NavGraphBuilder.InvitationsGraph(
-    appState: BookMeetingRoomAppState,
-    innerPadding: PaddingValues
-) {
-    composable(route = DrawerItem.Invitations.route) {
-        TestScreen("This is invitations", appState, innerPadding)
+        composable(route = NavigationItem.Invitations.route) {
+            TestScreen(
+                "This is ${NavigationItem.Invitations.title}", appState, innerPadding)
+        }
     }
 }
 
