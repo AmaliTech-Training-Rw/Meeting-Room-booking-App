@@ -2,6 +2,7 @@ package com.amalitech.onboarding.login
 
 import com.amalitech.core.util.UiText
 import com.amalitech.domain.onboarding.R
+import com.amalitech.onboarding.MainDispatcherRule
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
@@ -13,6 +14,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -23,16 +25,13 @@ class LoginViewModelTest {
     @MockK
     private lateinit var loginUseCase: com.amalitech.onboarding.login.use_case.LoginUseCase
 
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Before
     fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         loginUseCase = mockk()
         viewModel = LoginViewModel(loginUseCase)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     @Test
