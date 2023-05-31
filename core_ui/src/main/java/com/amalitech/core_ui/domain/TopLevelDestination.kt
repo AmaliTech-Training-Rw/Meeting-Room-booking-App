@@ -27,38 +27,13 @@ enum class TopLevelDestination(
         titleTextId = booking_requests
     ),
 
-    USERS(
-        icon = Icons.Filled.Menu,
-        titleTextId = users
-    ),
-
-    ROOMS(
-        icon = Icons.Filled.Menu,
-        titleTextId = rooms
-    ),
-
-    BOOKING_HISTORY(
-        icon = Icons.Filled.Menu,
-        titleTextId = booking_history
-    ),
-
     PROFILE(
         icon = Icons.Filled.Menu,
         titleTextId = profile
     ),
 
-    DASHBOARD(
-        icon = Icons.Filled.Menu,
-        titleTextId = dashboard
-    ),
-
     INVITATIONS(
         icon = Icons.Filled.Menu,
         titleTextId = invitations
-    ),
-
-    LOGOUT(
-        icon = Icons.Filled.Menu,
-        titleTextId = logout
     )
 }

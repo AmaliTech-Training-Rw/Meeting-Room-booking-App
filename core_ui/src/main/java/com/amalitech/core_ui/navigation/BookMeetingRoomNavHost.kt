@@ -12,12 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.amalitech.core_ui.components.drawer.DrawerItem
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
-
-const val homeNavigationRoute = "home_route"
-const val profileNavigationRoute = "profile_route"
-const val myBookingsNavigationRoute = "my_bookings_route"
-const val invitationsNavigationRoute = "invitations_route"
 
 @Composable
 fun BookMeetingRoomNavHost(
@@ -55,7 +51,7 @@ fun NavGraphBuilder.HomeGraph(
     appState: BookMeetingRoomAppState,
     innerPadding: PaddingValues
 ) {
-    composable(route = homeNavigationRoute) {
+    composable(route = DrawerItem.Home.route) {
         TestScreen("This is home", appState, innerPadding)
     }
 }
@@ -64,7 +60,7 @@ fun NavGraphBuilder.ProfileGraph(
     appState: BookMeetingRoomAppState,
     innerPadding: PaddingValues
 ) {
-    composable(route = profileNavigationRoute) {
+    composable(route = DrawerItem.Profile.route) {
         TestScreen("This is profile", appState, innerPadding)
     }
 }
@@ -73,7 +69,7 @@ fun NavGraphBuilder.MyBookingsGraph(
     appState: BookMeetingRoomAppState,
     innerPadding: PaddingValues
 ) {
-    composable(route = myBookingsNavigationRoute) {
+    composable(route = DrawerItem.BookingRequests.route) {
         TestScreen("This is my bookings", appState, innerPadding)
     }
 }
@@ -82,7 +78,7 @@ fun NavGraphBuilder.InvitationsGraph(
     appState: BookMeetingRoomAppState,
     innerPadding: PaddingValues
 ) {
-    composable(route = invitationsNavigationRoute) {
+    composable(route = DrawerItem.Invitations.route) {
         TestScreen("This is invitations", appState, innerPadding)
     }
 }

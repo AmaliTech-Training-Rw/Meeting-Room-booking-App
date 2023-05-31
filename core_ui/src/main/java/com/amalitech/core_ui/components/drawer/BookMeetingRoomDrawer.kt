@@ -30,9 +30,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.R
-import com.amalitech.core_ui.navigation.homeNavigationRoute
-import com.amalitech.core_ui.navigation.myBookingsNavigationRoute
-import com.amalitech.core_ui.navigation.profileNavigationRoute
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
@@ -95,36 +92,38 @@ fun NavigationItem(
             selectedItem.value = item.title
             when (item) {
                 is DrawerItem.Home -> {
-                    appState.navigate(homeNavigationRoute)
+                    appState.navigate(DrawerItem.Home.route)
                 }
 
                 is DrawerItem.BookingRequests -> {
-                    appState.navigate(myBookingsNavigationRoute)
+                    appState.navigate(DrawerItem.BookingRequests.route)
                 }
 
                 is DrawerItem.Users -> {
-                    appState.navigate(homeNavigationRoute)
+                    appState.navigate(DrawerItem.Users.route)
                 }
 
                 is DrawerItem.Rooms -> {
-                    appState.navigate(homeNavigationRoute)
+                    appState.navigate(DrawerItem.Rooms.route)
                 }
 
                 is DrawerItem.BookingHistory -> {
-                    appState.navigate(homeNavigationRoute)
+                    appState.navigate(DrawerItem.BookingHistory.route)
                 }
 
                 is DrawerItem.Profile -> {
-                    appState.navigate(profileNavigationRoute)
+                    appState.navigate(DrawerItem.Profile.route)
                 }
 
                 is DrawerItem.Dashboard -> {
-                    appState.navigate(homeNavigationRoute)
+                    appState.navigate(DrawerItem.Dashboard.route)
                 }
 
                 is DrawerItem.Logout -> {
-                    appState.navigate(homeNavigationRoute)
+                    appState.navigate(DrawerItem.Logout.route)
                 }
+
+                else -> {}
             }
         },
         colors = NavigationDrawerItemDefaults.colors(
