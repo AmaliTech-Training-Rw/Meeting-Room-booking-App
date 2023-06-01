@@ -96,7 +96,6 @@ dependencies {
     implementation(project(Modules.domainOnboarding))
     implementation(project(Modules.uiOnboarding))
     implementation(project(Modules.coreUI))
-
     implementation(AndroidX.coreKtx)
 
     implementation(Coil.coilCompose)

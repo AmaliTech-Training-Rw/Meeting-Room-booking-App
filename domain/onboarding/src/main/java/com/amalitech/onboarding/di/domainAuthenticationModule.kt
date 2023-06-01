@@ -1,5 +1,6 @@
 package com.amalitech.onboarding.di
 
+import com.amalitech.onboarding.forgot_password.use_case.SendResetLink
 import com.amalitech.onboarding.login.use_case.LogIn
 import com.amalitech.onboarding.login.use_case.LoginUseCase
 import com.amalitech.onboarding.login.use_case.ValidateEmail
@@ -20,6 +21,10 @@ val onboardingDomainModule = module {
 
     single {
         ValidatePassword()
+    }
+
+    single {
+        SendResetLink()
     }
 
     single {
