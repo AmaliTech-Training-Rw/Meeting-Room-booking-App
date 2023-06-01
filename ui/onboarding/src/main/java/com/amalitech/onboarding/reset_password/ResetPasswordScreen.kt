@@ -40,7 +40,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ResetPasswordScreen(
     viewModel: ResetPasswordViewModel = koinViewModel(),
-    onNavigateToHome: () -> Unit
+    onNavigateToLogin: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -52,13 +52,13 @@ fun ResetPasswordScreen(
     LaunchedEffect(key1 = state) {
         state.snackbarValue?.let {
             snackbarHostState.showSnackbar(
-                it.asString(context)
+                it.asString(context = context)
             )
             viewModel.onSnackBarShown()
         }
 
         if (state.passwordReset) {
-            onNavigateToHome()
+            onNavigateToLogin()
         }
     }
 
@@ -98,7 +98,6 @@ fun ResetPasswordScreen(
                 )
             }
             Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
-
             AuthenticationTextField(
                 placeholder = stringResource(com.amalitech.core.R.string.new_password),
                 value = state.newPassword,
@@ -131,18 +130,14 @@ fun ResetPasswordScreen(
                 }
             )
             Spacer(Modifier.height(spacing.spaceLarge))
-
             DefaultButton(
                 text = stringResource(id = com.amalitech.core.R.string.save_changes),
                 onClick = { viewModel.onResetPassword() },
                 modifier = Modifier
                     .fillMaxWidth()
             )
-
         }
-
     }
-
 }
 
 @Preview

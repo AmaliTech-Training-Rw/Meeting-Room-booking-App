@@ -44,7 +44,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ForgotPasswordScreen(
     onNavigateToLogin: () -> Unit,
-    onNavigateToHome: () -> Unit,
+    onNavigateToReset: () -> Unit,
     viewModel: ForgotPasswordViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -57,13 +57,12 @@ fun ForgotPasswordScreen(
     LaunchedEffect(key1 = state) {
         state.snackBarValue?.let {
             snackbarHostState.showSnackbar(
-                it.asString(context)
+                it.asString(context = context)
             )
             viewModel.onSnackBarShown()
         }
-
         if (state.linkSent) {
-            onNavigateToHome()
+            onNavigateToReset()
         }
     }
 
@@ -103,7 +102,6 @@ fun ForgotPasswordScreen(
                 )
             }
             Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
-
             AuthenticationTextField(
                 placeholder = stringResource(R.string.email),
                 value = state.email,
@@ -121,7 +119,6 @@ fun ForgotPasswordScreen(
             )
 
             Spacer(modifier = Modifier.height(spacing.spaceLarge))
-
             DefaultButton(
                 text = stringResource(id = R.string.send_reset_link),
                 onClick = { viewModel.onSendResetLink() },
