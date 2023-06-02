@@ -18,7 +18,6 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -44,29 +43,40 @@ fun RoomCard(
         modifier = modifier.fillMaxWidth(),
        rightContent = {
            SwipeAction(
-               backgroundColor = Color.Red,
+               backgroundColor = Color(0xFFF93844),
                icon = Icons.Filled.Delete,
                onActionClick = onDelete
            )
        },
         leftContent = {
             SwipeAction(
-                backgroundColor = Color.Red,
+                backgroundColor = Color(0xFFFFCC47),
                 icon = Icons.Filled.Edit,
                 onActionClick = onEdit
             )
         }
     ){
-        Row {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .background(Color.White)
+
+        ) {
             Image(
                 painter = painter,
-                contentDescription = "Room Image"
+                contentDescription = "Room Image",
+                modifier = Modifier
+                    .size(120.dp)
+                    .fillMaxWidth(0.4f)
+                    .clip(RoundedCornerShape(16.dp))
+
             )
 
             Column(
                 modifier = Modifier
-                    .padding(vertical = 16.dp)
                     .align(Alignment.CenterVertically)
+                        .weight(1f)
+                    .padding(vertical = 16.dp)
             ) {
                 Text(text = roomName, style = MaterialTheme.typography.labelLarge)
                 Text(text = "Up to $numberOfPeople people", style = MaterialTheme.typography.labelMedium)
@@ -85,19 +95,12 @@ private fun SwipeAction(
     icon: ImageVector,
     onActionClick: () -> Unit,
 ) {
-    val buttonSize = 60.dp
 
     Box(
         modifier = Modifier
-            .size(buttonSize)
+            .background(backgroundColor)
 
     ) {
-        Surface(
-            modifier = Modifier
-                .size(buttonSize)
-                .clip(RoundedCornerShape(8.dp))
-                .background(backgroundColor)
-        ) {
             IconButton(
                 onClick = onActionClick,
                 modifier = Modifier.fillMaxSize()
@@ -108,7 +111,7 @@ private fun SwipeAction(
                     tint = Color.White
                 )
             }
-        }
+
     }
 }
 

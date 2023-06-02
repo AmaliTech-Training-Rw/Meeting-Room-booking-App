@@ -2,7 +2,11 @@ package com.amalitech.rooms.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,6 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.amalitech.rooms.util.SwipeDirection
@@ -17,45 +23,58 @@ import com.amalitech.rooms.util.SwipeDirection
 @Composable
 fun SwipeableCardWithButtons(
     modifier: Modifier = Modifier,
-    swipeThreshold: Dp = 120.dp,
+    swipeThreshold: Float = 120f,
     leftContent: @Composable () -> Unit,
     rightContent: @Composable () -> Unit,
-    content: @Composable () -> Unit
+    cardHeight: Dp = 130.dp,
+    content: @Composable () -> Unit,
 ) {
     var leftButtonVisible by remember { mutableStateOf(false) }
     var rightButtonVisible by remember { mutableStateOf(false) }
 
     val swipeDirection = remember { mutableStateOf(SwipeDirection.None) }
 
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+    Card(
+        modifier = modifier
+            .height(cardHeight)
+            .clip(RoundedCornerShape(8.dp))
+            .padding(4.dp)
+            .shadow(elevation = 4.dp),
     ) {
-        if (leftButtonVisible) {
-            Box(
-                modifier = Modifier.weight(0.2f),
-                contentAlignment = Alignment.Center
-            ) {
-                leftContent()
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (leftButtonVisible) {
+                Box(
+                    modifier = Modifier
+                        .weight(0.2f)
+                        .fillMaxHeight()
+                ) {
+
+                        leftContent()
+                }
             }
-        }
-        Spacer(modifier = modifier.weight(0.1f))
-        SwipeableCard(
-            modifier = Modifier.weight(0.4f),
-            swipeThreshold = swipeThreshold,
-            onSwipeStart = { direction -> swipeDirection.value = direction },
-            onSwipeEnd = {
-               // swipeDirection.value = SwipeDirection.None
-            },
-            content = content
-        )
-        Spacer(modifier = modifier.weight(0.1f))
-        if (rightButtonVisible) {
-            Box(
-                modifier = Modifier.weight(0.2f),
-                contentAlignment = Alignment.Center
-            ) {
-                rightContent()
+            SwipeableCard(
+                modifier = Modifier
+                    .weight(0.6f)
+                    .fillMaxHeight(),
+                swipeThreshold = swipeThreshold,
+                onSwipeStart = { direction -> swipeDirection.value = direction },
+                onSwipeEnd = {
+                    swipeDirection.value = SwipeDirection.None
+                },
+                content = content
+            )
+            if (rightButtonVisible) {
+                Box(
+                    modifier = Modifier
+                        .weight(0.2f)
+                        .fillMaxHeight()
+                ) {
+
+                        rightContent()
+
+                }
             }
         }
     }
@@ -75,5 +94,3 @@ fun SwipeableCardWithButtons(
         }
     }
 }
-
-

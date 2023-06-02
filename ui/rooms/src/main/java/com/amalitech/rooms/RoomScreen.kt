@@ -29,7 +29,7 @@ fun RoomListScreen() {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { /* TODO: Handle floating action button click */ },
-                containerColor = Color.Yellow,
+                containerColor = Color(0xFFFFCC47),
                 shape = CircleShape
             ) {
                 Icon(
