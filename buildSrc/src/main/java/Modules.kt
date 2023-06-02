@@ -16,4 +16,5 @@ object Modules {
 
     const val domainAuthentication = ":domain:authentication"
     const val uiAuthentication = ":ui:authentication"
+    const val uiRooms = ":ui:rooms"
 }
