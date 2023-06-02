@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                         onNavigateToForgotPassword = { /*TODO*/ },
                         onNavigateToSignUp = { /*TODO*/ },
                         onNavigateUp = { /*TODO*/ })
-                  // RoomListScreen()
+                   //RoomListScreen()
                 }
             }
         }
