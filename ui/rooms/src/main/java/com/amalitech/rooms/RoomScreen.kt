@@ -50,9 +50,7 @@ fun RoomListScreen() {
                 RoomCard(
                     roomName = "Room 1",
                     numberOfPeople = 5,
-                    roomFeatures = "Features of Room 5",
-                    onDelete = {},
-                    onEdit = {},
+                    roomFeatures = "Air conditioning, Internet, Whiteboard, Natural light, Drinks",
                     painter = painterResource(id = R.drawable.room_image)
                 )
             }

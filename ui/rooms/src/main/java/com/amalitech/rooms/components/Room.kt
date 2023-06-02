@@ -33,8 +33,6 @@ fun RoomCard(
     roomName: String,
     numberOfPeople: Int,
     roomFeatures: String,
-    onDelete: () -> Unit,
-    onEdit: () -> Unit,
     painter: Painter,
     modifier: Modifier = Modifier
 ) {
@@ -45,14 +43,18 @@ fun RoomCard(
            SwipeAction(
                backgroundColor = Color(0xFFF93844),
                icon = Icons.Filled.Delete,
-               onActionClick = onDelete
+               onActionClick = {
+
+               }
            )
        },
         leftContent = {
             SwipeAction(
                 backgroundColor = Color(0xFFFFCC47),
                 icon = Icons.Filled.Edit,
-                onActionClick = onEdit
+                onActionClick = {
+
+                }
             )
         }
     ){
@@ -78,10 +80,21 @@ fun RoomCard(
                         .weight(1f)
                     .padding(vertical = 16.dp)
             ) {
-                Text(text = roomName, style = MaterialTheme.typography.labelLarge)
-                Text(text = "Up to $numberOfPeople people", style = MaterialTheme.typography.labelMedium)
+                Text(
+                    text = roomName,
+                    style = MaterialTheme.typography.titleLarge,
+
+                )
+
+                Text(
+                    text = "Up to $numberOfPeople people",
+                    style = MaterialTheme.typography.labelMedium
+                )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = roomFeatures, style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = roomFeatures,
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
     }
