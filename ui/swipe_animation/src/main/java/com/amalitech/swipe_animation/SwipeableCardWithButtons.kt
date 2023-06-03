@@ -1,4 +1,4 @@
-package com.amalitech.swipe_animation.components
+package com.amalitech.swipe_animation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.amalitech.swipe_animation.components.SwipeableCard
 import com.amalitech.swipe_animation.util.SwipeDirection
 
 @Composable
