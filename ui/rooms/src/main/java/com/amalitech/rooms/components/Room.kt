@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -36,33 +37,25 @@ fun RoomCard(
     painter: Painter,
     modifier: Modifier = Modifier
 ) {
-
     SwipeableCardWithButtons(
         modifier = modifier.fillMaxWidth(),
-       rightContent = {
-           SwipeAction(
-               backgroundColor = Color(0xFFF93844),
-               icon = Icons.Filled.Delete,
-               onActionClick = {
-
-               }
-           )
-       },
+        rightContent = {
+            SwipeAction(
+                backgroundColor = Color(0xFFF93844),
+                icon = Icons.Filled.Delete,
+                onActionClick = {}
+            )
+        },
         leftContent = {
             SwipeAction(
                 backgroundColor = Color(0xFFFFCC47),
                 icon = Icons.Filled.Edit,
-                onActionClick = {
-
-                }
+                onActionClick = {}
             )
         }
-    ){
+    ) {
         Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .background(Color.White)
-
+            modifier = modifier.fillMaxWidth().background(Color.White)
         ) {
             Image(
                 painter = painter,
@@ -71,25 +64,28 @@ fun RoomCard(
                     .size(120.dp)
                     .fillMaxWidth(0.4f)
                     .clip(RoundedCornerShape(16.dp))
-
             )
 
             Column(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                        .weight(1f)
+                    .weight(1f)
                     .padding(vertical = 16.dp)
             ) {
-                Text(
-                    text = roomName,
-                    style = MaterialTheme.typography.titleLarge,
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    VerticalLine(modifier=Modifier.height(40.dp))
+                    Column(Modifier.padding(start = 8.dp)) {
+                        Text(
+                            text = roomName,
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                        Text(
+                            text = "Up to $numberOfPeople people",
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
+                }
 
-                )
-
-                Text(
-                    text = "Up to $numberOfPeople people",
-                    style = MaterialTheme.typography.labelMedium
-                )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = roomFeatures,
@@ -98,8 +94,19 @@ fun RoomCard(
             }
         }
     }
-
 }
+
+
+@Composable
+fun VerticalLine(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .width(3.dp)
+            .background(Color(0xFFFFCC47))
+    )
+}
+
+
 
 
 @Composable
