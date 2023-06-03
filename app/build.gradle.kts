@@ -97,6 +97,7 @@ dependencies {
     implementation(project(Modules.uiOnboarding))
     implementation(project(Modules.coreUI))
     implementation(project(Modules.uiSwipe))
+    implementation(project(Modules.uiRooms))
 
     implementation(AndroidX.coreKtx)
 
