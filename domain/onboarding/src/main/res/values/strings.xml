@@ -2,4 +2,5 @@
 <resources>
     <string name="error_email_not_valid">Email address not valid, please check</string>
     <string name="error_password_is_blank">Password is blank, please provide a password</string>
+    <string name="error_passwords_dont_match">Passwords don\'t match or blank</string>
 </resources>
