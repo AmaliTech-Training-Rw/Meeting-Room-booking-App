@@ -42,14 +42,14 @@ fun RoomCard(
         modifier = modifier.fillMaxWidth(),
         rightContent = {
             SwipeAction(
-                backgroundColor = MaterialTheme.colorScheme.secondary,
+                backgroundColor = Color(0xFFF93844),
                 icon = Icons.Filled.Delete,
                 onActionClick = {}
             )
         },
         leftContent = {
             SwipeAction(
-                backgroundColor = MaterialTheme.colorScheme.primary,
+                backgroundColor = Color(0xFFFFCC47),
                 icon = Icons.Filled.Edit,
                 onActionClick = {}
             )
@@ -103,7 +103,7 @@ fun VerticalLine(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .width(3.dp)
-            .background(MaterialTheme.colorScheme.primary)
+            .background(Color(0xFFFFCC47))
     )
 }
 
@@ -122,16 +122,16 @@ private fun SwipeAction(
             .background(backgroundColor)
 
     ) {
-        IconButton(
-            onClick = onActionClick,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = Color.White
-            )
-        }
+            IconButton(
+                onClick = onActionClick,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
 
     }
 }
