@@ -111,6 +111,8 @@ dependencies {
     implementation(Room.roomKtx)
     implementation(Room.roomRuntime)
 
+    implementation(Lifecycle.composeLifecycle)
+
     testImplementation(Testing.junit4)
     testImplementation(Testing.junitAndroidExt)
     testImplementation(Testing.truth)
