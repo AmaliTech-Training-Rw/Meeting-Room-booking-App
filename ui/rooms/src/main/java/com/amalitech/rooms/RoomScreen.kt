@@ -1,8 +1,11 @@
 package com.amalitech.rooms
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -13,13 +16,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.rooms.components.RoomCard
-import com.amalitech.ui.rooms.R
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun RoomListScreen() {
+fun RoomListScreen(
+    roomViewModel: RoomViewModel =  koinViewModel()
+) {
     val spacing = LocalSpacing.current
 
     Scaffold(
@@ -47,12 +52,15 @@ fun RoomListScreen() {
                     .padding(spacing.spaceMedium),
                 contentAlignment = Alignment.Center
             ) {
-                RoomCard(
-                    roomName = "Room 1",
-                    numberOfPeople = 5,
-                    roomFeatures = "Air conditioning, Internet, Whiteboard, Natural light, Drinks",
-                    painter = painterResource(id = R.drawable.room_image)
-                )
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(vertical = 16.dp)
+                ){
+                    items(roomViewModel.rooms.value) { room ->
+                        RoomCard(room = room, modifier = Modifier.padding(bottom = 16.dp))
+                    }
+                }
+
             }
         }
     )

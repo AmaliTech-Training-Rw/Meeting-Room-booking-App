@@ -1,9 +1,8 @@
-package com.amalitech.swipe_animation.components
+package com.amalitech.swipe_animation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -16,27 +15,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.amalitech.swipe_animation.components.SwipeableCard
 import com.amalitech.swipe_animation.util.SwipeDirection
 
 @Composable
-fun SwipeableCardWithButtons(
+fun SwipeableCardSideContents(
     modifier: Modifier = Modifier,
     swipeThreshold: Float = 120f,
     leftContent: @Composable () -> Unit,
     rightContent: @Composable () -> Unit,
-    cardHeight: Dp = 130.dp,
     content: @Composable () -> Unit,
 ) {
-    var leftButtonVisible by remember { mutableStateOf(false) }
-    var rightButtonVisible by remember { mutableStateOf(false) }
-
+    var isLeftContentVisible by remember { mutableStateOf(false) }
+    var isRightContentVisible by remember { mutableStateOf(false) }
     val swipeDirection = remember { mutableStateOf(SwipeDirection.None) }
 
     Card(
         modifier = modifier
-            .height(cardHeight)
             .clip(RoundedCornerShape(8.dp))
             .padding(4.dp)
             .shadow(elevation = 4.dp),
@@ -44,7 +40,7 @@ fun SwipeableCardWithButtons(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (leftButtonVisible) {
+            if (isLeftContentVisible) {
                 Box(
                     modifier = Modifier
                         .weight(0.2f)
@@ -65,7 +61,7 @@ fun SwipeableCardWithButtons(
                 },
                 content = content
             )
-            if (rightButtonVisible) {
+            if (isRightContentVisible) {
                 Box(
                     modifier = Modifier
                         .weight(0.2f)
@@ -81,16 +77,16 @@ fun SwipeableCardWithButtons(
 
     when (swipeDirection.value) {
         SwipeDirection.Left -> {
-            leftButtonVisible = true
-            rightButtonVisible = false
+            isLeftContentVisible = true
+            isRightContentVisible = false
         }
         SwipeDirection.Right -> {
-            leftButtonVisible = false
-            rightButtonVisible = true
+            isLeftContentVisible = false
+            isRightContentVisible = true
         }
         else -> {
-            leftButtonVisible = false
-            rightButtonVisible = false
+            isLeftContentVisible = false
+            isRightContentVisible = false
         }
     }
 }

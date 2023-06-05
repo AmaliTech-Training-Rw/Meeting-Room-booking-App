@@ -99,6 +99,9 @@ dependencies {
     implementation(project(Modules.uiSwipe))
     implementation(project(Modules.uiRooms))
 
+    implementation(project(Modules.dataRoom))
+    implementation(project(Modules.domainRoom))
+
     implementation(AndroidX.coreKtx)
 
     implementation(Coil.coilCompose)

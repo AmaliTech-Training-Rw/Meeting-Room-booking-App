@@ -1,6 +1,5 @@
 package com.amalitech.rooms.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,20 +24,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.amalitech.swipe_animation.components.SwipeableCardWithButtons
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.amalitech.core.data.model.Room
+import com.amalitech.swipe_animation.SwipeableCardSideContents
 
 @Composable
 fun RoomCard(
-    roomName: String,
-    numberOfPeople: Int,
-    roomFeatures: String,
-    painter: Painter,
+    room: Room,
     modifier: Modifier = Modifier
 ) {
-    SwipeableCardWithButtons(
+    SwipeableCardSideContents(
         modifier = modifier.fillMaxWidth(),
         rightContent = {
             SwipeAction(
@@ -56,17 +56,26 @@ fun RoomCard(
         }
     ) {
         Row(
-            modifier = modifier.fillMaxWidth().background(Color.White)
+            modifier = modifier
+                .fillMaxSize()
+                .background(Color.White),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painter,
-                contentDescription = "Room Image",
+
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(room.imageUrl)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(120.dp)
                     .fillMaxWidth(0.4f)
                     .clip(RoundedCornerShape(16.dp))
-            )
 
+            )
+        Spacer(modifier = Modifier.width(16.dp))
             Column(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
@@ -77,11 +86,11 @@ fun RoomCard(
                     VerticalLine(modifier=Modifier.height(40.dp))
                     Column(Modifier.padding(start = 8.dp)) {
                         Text(
-                            text = roomName,
+                            text = room.roomName,
                             style = MaterialTheme.typography.titleLarge
                         )
                         Text(
-                            text = "Up to $numberOfPeople people",
+                            text = "Up to ${room.numberOfPeople} people",
                             style = MaterialTheme.typography.labelMedium
                         )
                     }
@@ -89,7 +98,7 @@ fun RoomCard(
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = roomFeatures,
+                    text = room.roomFeatures,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
