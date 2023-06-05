@@ -3,16 +3,14 @@ package com.amalitech.bookmeetingroom
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.components.DashboardGraph
 import com.amalitech.core_ui.components.RoomsBookedTime
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
@@ -25,21 +23,17 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .scrollable(
-                            orientation = Orientation.Vertical,
-                            state = rememberScrollState()
-                        ),
+                        .size(400.dp),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val itemsBookedTime = listOf(
-                        30f,
                         9f,
                         17f,
+                        30f,
                         20f,
                         26f,
                         29f,
-                        5f,
+                        50f,
                         4f
                     )
                     val items = (1..8).map {
@@ -49,7 +43,7 @@ class MainActivity : ComponentActivity() {
                             "room$it"
                         )
                     }
-                   DashboardGraph(items)
+                    DashboardGraph(items)
                 }
             }
         }
