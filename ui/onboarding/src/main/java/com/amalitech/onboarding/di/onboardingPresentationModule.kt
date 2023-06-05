@@ -1,18 +1,24 @@
 package com.amalitech.onboarding.di
 
-import com.amalitech.onboarding.forgot_password.ForgotPasswordViewModel
 import com.amalitech.onboarding.login.LoginViewModel
 import com.amalitech.onboarding.reset_password.ResetPasswordViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
+import com.amalitech.onboarding.splash_screen.SplashScreenViewModel
 import org.koin.dsl.module
+import com.amalitech.onboarding.forgot_password.ForgotPasswordViewModel
+import com.amalitech.onboarding.reset_password.ResetPasswordViewModel
 
 val onboardingPresentationModule = module {
-    single {
-        LoginViewModel(get())
-    }
 
     single {
-        ForgotPasswordViewModel(get())
+        LoginViewModel(get(), get())
+    }
+
+    viewModel {
+        ResetPasswordViewModel(get())
+    }
+
+    viewModel {
+        SplashScreenViewModel(get())
     }
 
     viewModel {

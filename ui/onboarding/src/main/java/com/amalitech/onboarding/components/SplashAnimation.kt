@@ -1,4 +1,4 @@
-package com.amalitech.bookmeetingroom.ui.components
+package com.amalitech.onboarding.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
@@ -22,20 +22,22 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.amalitech.bookmeetingroom.R
+import com.amalitech.core.R
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashAnimation(
+    canShowFadeoutAnim: MutableState<Boolean>,
     onNavigate: () -> Unit,
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
     tintColor: Color = MaterialTheme.colorScheme.primary,
     drawable: Painter = painterResource(id = R.drawable.logo),
-    canShowFadeoutAnim: MutableState<Boolean>,
     onVisibilityChange: (Boolean) -> Unit,
+    hasFinishedChecking: Boolean = false,
     scaleAnimationDuration: Int = 1000,
     delayBeforeFadeOutAnimation: Int = 2000,
     fadeOutAnimationDuration: Int = 500
+
 ) {
     val scale = remember {
         Animatable(15f)
@@ -48,10 +50,15 @@ fun SplashAnimation(
                 durationMillis = scaleAnimationDuration,
             )
         )
+        // This is a default delay value. After that, if the viewModel did not retrieve all
+        // the needed information, we will wait for it to finish before we navigate
         delay(delayBeforeFadeOutAnimation.toLong())
-        onVisibilityChange(false)
-        delay(fadeOutAnimationDuration.toLong())
-        onNavigate()
+
+        if (hasFinishedChecking) {
+            onVisibilityChange(false)
+            delay(fadeOutAnimationDuration.toLong())
+            onNavigate()
+        }
     }
 
     Box(
@@ -61,7 +68,7 @@ fun SplashAnimation(
         contentAlignment = Alignment.Center,
     ) {
         AnimatedVisibility(
-            visible = canShowFadeoutAnim.value,
+            visible = !canShowFadeoutAnim.value,
             exit = fadeOut(
                 animationSpec = tween(
                     fadeOutAnimationDuration
