@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home">Home</string>
+    <string name="booking_requests">Booking Requests</string>
+    <string name="users">Users</string>
+    <string name="rooms">Rooms</string>
+    <string name="booking_history">Booking History</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="invitations">Invitations</string>
+    <string name="logout">Logout</string>
+    <string name="generic_error">Oops, an error has occurred …</string>
+    <string name="profile">Profile</string>
+    <string name="bookings">Bookings</string>
+    <string name="invitation">Invitations</string>
+</resources>
