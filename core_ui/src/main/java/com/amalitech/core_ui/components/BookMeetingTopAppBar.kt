@@ -39,7 +39,7 @@ fun BookMeetingTopAppBar(
         title = {
             Text(
                 title,
-                fontSize = 24.sp,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
