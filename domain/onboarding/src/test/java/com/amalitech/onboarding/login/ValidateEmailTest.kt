@@ -57,4 +57,29 @@ class ValidateEmailTest {
         assertEquals(expectedError, result)
     }
 
+    @Test
+    fun `validate email with email starting with special character returns an error`() {
+        val email = "_test@email.com"
+        every { validateEmail.isEmailValid(email) } returns true
+
+        // WHEN - validateEmail is called
+        val result = validateEmail(email)
+
+        // THEN - the result is a UiText instance
+        val expectedError = UiText.StringResource(R.string.error_email_not_valid)
+        assertEquals(expectedError, result)
+    }
+
+    @Test
+    fun `validate email with email starting with number character returns an error`() {
+        val email = "32test@email.com"
+        every { validateEmail.isEmailValid(email) } returns true
+
+        // WHEN - validateEmail is called
+        val result = validateEmail(email)
+
+        // THEN - the result is a UiText instance
+        val expectedError = UiText.StringResource(R.string.error_email_not_valid)
+        assertEquals(expectedError, result)
+    }
 }

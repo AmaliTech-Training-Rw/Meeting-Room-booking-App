@@ -13,7 +13,8 @@ class ValidateEmail {
      * valid and null otherwise.
      */
     operator fun invoke(email: String): UiText? {
-        return if (email.isNotBlank() && isEmailValid(email))
+        val emailPattern = Regex("^[a-zA-Z]\\w*([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$")
+        return if (email.isNotBlank() && isEmailValid(email) && email.matches(emailPattern))
             null
         else
             UiText.StringResource(R.string.error_email_not_valid)
