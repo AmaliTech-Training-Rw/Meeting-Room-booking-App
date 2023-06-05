@@ -36,7 +36,6 @@
     <inspection_tool class="PreviewPickerAnnotation" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="composableFile" value="true" />
       <option name="previewFile" value="true" />
->>>>>>> 7a4ab96 (Added login screen)
     </inspection_tool>
   </profile>
 </component>

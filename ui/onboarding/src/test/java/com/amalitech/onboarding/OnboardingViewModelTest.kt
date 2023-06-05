@@ -14,6 +14,7 @@ import org.junit.After
 import org.junit.Assert.*
 
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -24,18 +25,13 @@ class OnboardingViewModelTest {
     @MockK
     private lateinit var pref: OnboardingSharedPreferences
 
-    private val unconfinedDispatcher = UnconfinedTestDispatcher()
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Before
     fun setUp() {
         pref = mockk()
-        Dispatchers.setMain(UnconfinedTestDispatcher())
         viewModel = OnboardingViewModel(pref)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     @Test
