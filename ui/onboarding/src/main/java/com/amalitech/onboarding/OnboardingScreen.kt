@@ -35,10 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core.R
 import com.amalitech.core_ui.components.DefaultButton
+import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.onboarding.components.ImageWithLegend
 import com.amalitech.onboarding.components.SlidingDots
-import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import org.koin.androidx.compose.koinViewModel
 import kotlin.math.roundToInt
 
