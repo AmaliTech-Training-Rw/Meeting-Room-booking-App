@@ -31,6 +31,7 @@ val onboardingDomainModule = module {
         LoginUseCase(
             get(),
             get(),
+            get(),
             get()
         )
     }
