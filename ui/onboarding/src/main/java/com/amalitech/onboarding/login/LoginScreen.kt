@@ -46,7 +46,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.onboarding.components.AuthenticationTextField
-import com.amalitech.ui.onboarding.R
+import com.amalitech.core.R
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -97,7 +97,7 @@ fun LoginScreen(
                 modifier = Modifier.align(Alignment.Center)
             ) {
                 Image(
-                    painter = painterResource(id = com.amalitech.core.R.drawable.logo),
+                    painter = painterResource(id = R.drawable.logo),
                     contentDescription = stringResource(R.string.logo),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                     modifier = Modifier.size(

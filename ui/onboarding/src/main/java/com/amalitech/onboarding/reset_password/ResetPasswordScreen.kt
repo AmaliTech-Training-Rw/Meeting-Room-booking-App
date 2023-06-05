@@ -34,7 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.onboarding.components.AuthenticationTextField
-import com.amalitech.ui.onboarding.R
+import com.amalitech.core.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -75,7 +75,7 @@ fun ResetPasswordScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = com.amalitech.core.R.drawable.logo),
+                painter = painterResource(id = R.drawable.logo),
                 contentDescription = stringResource(id = R.string.logo),
                 alignment = Alignment.TopCenter,
                 colorFilter = ColorFilter.tint(
@@ -85,7 +85,7 @@ fun ResetPasswordScreen(
             )
             Spacer(modifier = Modifier.height(spacing.spaceLarge))
             Text(
-                text = stringResource(id = com.amalitech.core.R.string.reset_password),
+                text = stringResource(id = R.string.reset_password),
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.titleMedium
             )
@@ -99,7 +99,7 @@ fun ResetPasswordScreen(
             }
             Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
             AuthenticationTextField(
-                placeholder = stringResource(com.amalitech.core.R.string.new_password),
+                placeholder = stringResource(R.string.new_password),
                 value = state.newPassword,
                 onValueChange = {
                     viewModel.onNewPassword(it)
@@ -115,7 +115,7 @@ fun ResetPasswordScreen(
             )
             Spacer(Modifier.height(spacing.spaceMedium))
             AuthenticationTextField(
-                placeholder = stringResource(com.amalitech.core.R.string.confirm_new_password),
+                placeholder = stringResource(R.string.confirm_new_password),
                 value = state.passwordConfirmation,
                 onValueChange = {
                     viewModel.onNewPasswordConfirmation(it)
@@ -131,7 +131,7 @@ fun ResetPasswordScreen(
             )
             Spacer(Modifier.height(spacing.spaceLarge))
             DefaultButton(
-                text = stringResource(id = com.amalitech.core.R.string.save_changes),
+                text = stringResource(id = R.string.save_changes),
                 onClick = { viewModel.onResetPassword() },
                 modifier = Modifier
                     .fillMaxWidth()

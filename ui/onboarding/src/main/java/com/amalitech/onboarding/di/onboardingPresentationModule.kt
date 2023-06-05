@@ -8,7 +8,7 @@ import org.koin.dsl.module
 
 val onboardingPresentationModule = module {
 
-    single {
+    viewModel {
         LoginViewModel(get(), get())
     }
 

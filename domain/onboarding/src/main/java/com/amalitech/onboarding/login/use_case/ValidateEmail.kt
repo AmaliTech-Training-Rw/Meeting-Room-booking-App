@@ -3,7 +3,7 @@ package com.amalitech.onboarding.login.use_case
 import android.util.Patterns
 import androidx.annotation.VisibleForTesting
 import com.amalitech.core.util.UiText
-import com.amalitech.domain.onboarding.R
+import com.amalitech.core.R
 
 class ValidateEmail {
     /**

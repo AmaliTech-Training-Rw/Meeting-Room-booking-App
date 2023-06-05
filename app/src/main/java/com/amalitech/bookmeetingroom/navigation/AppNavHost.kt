@@ -91,9 +91,17 @@ fun NavGraphBuilder.onboardingGraph(
         composable(Route.SPLASH) {
             SplashScreen(onNavigate = {isUserAdmin ->
                 if (isUserAdmin) {
-                    navController.navigate(Route.HOME_SCREENS)
+                    navController.navigate(Route.DASHBOARD_SCREENS) {
+                        popUpTo(Route.SPLASH) {
+                            inclusive = true
+                        }
+                    }
                 } else {
-                    navController.navigate(Route.DASHBOARD_SCREENS)
+                    navController.navigate(Route.HOME_SCREENS) {
+                        popUpTo(Route.SPLASH) {
+                            inclusive = true
+                        }
+                    }
                 }
             })
         }
