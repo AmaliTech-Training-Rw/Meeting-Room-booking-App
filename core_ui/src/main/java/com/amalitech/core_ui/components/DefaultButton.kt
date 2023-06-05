@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import com.amalitech.core_ui.theme.LocalSpacing
-
 @Composable
 fun DefaultButton(
     text: String,
