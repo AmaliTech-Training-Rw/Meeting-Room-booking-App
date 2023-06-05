@@ -56,5 +56,4 @@ class ValidateEmailTest {
         val expectedError = UiText.StringResource(R.string.error_email_not_valid)
         assertEquals(expectedError, result)
     }
-
 }
