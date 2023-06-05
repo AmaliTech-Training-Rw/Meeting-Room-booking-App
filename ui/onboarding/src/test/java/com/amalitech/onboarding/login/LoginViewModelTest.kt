@@ -3,15 +3,13 @@ package com.amalitech.onboarding.login
 import com.amalitech.core.util.UiText
 import com.amalitech.domain.onboarding.R
 import com.amalitech.onboarding.MainDispatcherRule
+import com.amalitech.onboarding.login.use_case.LoginUseCase
+import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.justRun
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -23,7 +21,10 @@ class LoginViewModelTest {
     private lateinit var viewModel: LoginViewModel
 
     @MockK
-    private lateinit var loginUseCase: com.amalitech.onboarding.login.use_case.LoginUseCase
+    private lateinit var loginUseCase: LoginUseCase
+
+    @MockK
+    private lateinit var sharedPreferences: OnboardingSharedPreferences
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
@@ -31,7 +32,8 @@ class LoginViewModelTest {
     @Before
     fun setUp() {
         loginUseCase = mockk()
-        viewModel = LoginViewModel(loginUseCase)
+        sharedPreferences = mockk()
+        viewModel = LoginViewModel(loginUseCase, sharedPreferences)
     }
 
     @Test
@@ -72,6 +74,17 @@ class LoginViewModelTest {
         every {
             loginUseCase.logIn(any(), any())
         } returns null
+
+        every {
+            loginUseCase.isUserAdmin()
+        } returns false
+
+        justRun {
+            sharedPreferences.saveUserType(any())
+        }
+        justRun {
+            sharedPreferences.saveShouldShowOnboarding(any())
+        }
 
         viewModel.onLoginClick()
 
