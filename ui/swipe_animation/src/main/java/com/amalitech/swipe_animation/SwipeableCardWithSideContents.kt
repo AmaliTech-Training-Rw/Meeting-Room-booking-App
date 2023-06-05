@@ -26,9 +26,12 @@ fun SwipeableCardSideContents(
     leftContent: @Composable () -> Unit,
     rightContent: @Composable () -> Unit,
     content: @Composable () -> Unit,
+
 ) {
     var isLeftContentVisible by remember { mutableStateOf(false) }
     var isRightContentVisible by remember { mutableStateOf(false) }
+
+    
     val swipeDirection = remember { mutableStateOf(SwipeDirection.None) }
 
     Card(

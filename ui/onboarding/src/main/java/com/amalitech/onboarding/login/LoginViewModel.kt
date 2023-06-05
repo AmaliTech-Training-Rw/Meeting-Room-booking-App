@@ -2,13 +2,16 @@ package com.amalitech.onboarding.login
 
 import androidx.lifecycle.ViewModel
 import com.amalitech.core.util.UiText
+import com.amalitech.onboarding.login.use_case.LoginUseCase
+import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 import com.amalitech.ui.onboarding.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class LoginViewModel(
-    private val loginUseCase: com.amalitech.onboarding.login.use_case.LoginUseCase,
+    private val loginUseCase: LoginUseCase,
+    private val sharedPreferences: OnboardingSharedPreferences
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(
         LoginUiState()
@@ -64,6 +67,9 @@ class LoginViewModel(
                     )
                 }
             } else {
+                val isAdmin = loginUseCase.isUserAdmin()
+                sharedPreferences.saveShouldShowOnboarding(false)
+                sharedPreferences.saveUserType(isAdmin)
                 _uiState.update { loginUiState ->
                     loginUiState.copy(
                         snackBarValue = UiText.StringResource(R.string.logged_in_successfully),

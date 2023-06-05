@@ -85,6 +85,8 @@ dependencies {
     implementation(Compose.viewModelCompose)
     implementation(Compose.activityCompose)
 
+    implementation(Accompanist.systemuiController)
+
     implementation(Kotlin.coreKtx)
 
     implementation(Koin.koin)
@@ -96,7 +98,9 @@ dependencies {
     implementation(project(Modules.domainOnboarding))
     implementation(project(Modules.uiOnboarding))
     implementation(project(Modules.coreUI))
+
     implementation(project(Modules.uiSwipe))
+
 
     implementation(AndroidX.coreKtx)
 
