@@ -32,7 +32,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.amalitech.core_ui.R
-import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
@@ -58,7 +57,8 @@ fun BookMeetingRoomDrawer(
                     DrawerNavigationItem(
                         appState,
                         item,
-                        onClick
+                        onClick,
+                        selectedItem
                     )
                 }
             }
@@ -73,7 +73,8 @@ fun BookMeetingRoomDrawer(
 fun DrawerNavigationItem(
     appState: BookMeetingRoomAppState,
     item: NavigationItem,
-    onClick: (screen: NavigationItem) -> Unit
+    onClick: (screen: NavigationItem) -> Unit,
+    selectedItem: MutableState<String>
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     NavigationDrawerItem(
@@ -88,7 +89,8 @@ fun DrawerNavigationItem(
             it.route == item.route
         } == true,
         onClick = {
-            appState.coroutineScope.launch { appState.drawerState.close() }
+            coroutineScope.launch { appState.drawerState.close() }
+            selectedItem.value = item.title
             onClick(item)
         },
         colors = NavigationDrawerItemDefaults.colors(
