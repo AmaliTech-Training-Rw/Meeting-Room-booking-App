@@ -45,7 +45,7 @@ class ValidatePasswordTest {
     }
     @Test
     fun `validate password with no special characters returns UiText`() {
-        // GIVEN - blank password
+        // GIVEN - password without special characters
         val password = "Mdjnkvvrvo14"
 
         // WHEN - validate password is called
@@ -57,7 +57,7 @@ class ValidatePasswordTest {
     }
     @Test
     fun `validate password without number characters returns UiText`() {
-        // GIVEN - blank password
+        // GIVEN - password without numbers
         val password = "Mdjnkvvrvo$"
 
         // WHEN - validate password is called
@@ -69,7 +69,7 @@ class ValidatePasswordTest {
     }
     @Test
     fun `validate password without uppercase characters returns UiText`() {
-        // GIVEN - blank password
+        // GIVEN - password without  uppercase character
         val password = "djnkvvrvo$11"
 
         // WHEN - validate password is called
@@ -81,7 +81,7 @@ class ValidatePasswordTest {
     }
     @Test
     fun `validate password without lowercase characters returns UiText`() {
-        // GIVEN - blank password
+        // GIVEN - password without lowercase characters
         val password = "DKBTROT$11"
 
         // WHEN - validate password is called
@@ -95,7 +95,7 @@ class ValidatePasswordTest {
 
     @Test
     fun `validate password with valid password returns null`() {
-        // GIVEN - a password not blank
+        // GIVEN - a valid password
         val password = "Mjuofud@\$VR44"
 
         // WHEN - validate password is called
