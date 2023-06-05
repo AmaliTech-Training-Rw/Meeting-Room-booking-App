@@ -20,6 +20,7 @@ import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.login.LoginViewModel
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordViewModel
+import com.amalitech.onboarding.splash_screen.SplashScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -88,8 +89,13 @@ fun NavGraphBuilder.onboardingGraph(
         }
 
         composable(Route.SPLASH) {
-            // TODO (ADD SPLASH SCREEN COMPOSABLE HERE)
-            Text("Splash Screen")
+            SplashScreen(onNavigate = {isUserAdmin ->
+                if (isUserAdmin) {
+                    navController.navigate(Route.HOME_SCREENS)
+                } else {
+                    navController.navigate(Route.DASHBOARD_SCREENS)
+                }
+            })
         }
 
         composable(Route.RESET_PASSWORD) {

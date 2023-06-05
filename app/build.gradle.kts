@@ -84,6 +84,7 @@ dependencies {
     implementation(Compose.navigation)
     implementation(Compose.viewModelCompose)
     implementation(Compose.activityCompose)
+    implementation(Lifecycle.composeLifecycle)
 
     implementation(Accompanist.systemuiController)
 
