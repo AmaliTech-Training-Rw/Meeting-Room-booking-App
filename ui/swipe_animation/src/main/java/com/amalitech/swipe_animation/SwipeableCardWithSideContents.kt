@@ -22,16 +22,17 @@ import com.amalitech.swipe_animation.components.SwipeableCard
 import com.amalitech.swipe_animation.util.SwipeDirection
 
 @Composable
-fun SwipeableCardWithButtons(
+fun SwipeableCardSideContents(
     modifier: Modifier = Modifier,
     swipeThreshold: Float = 120f,
     leftContent: @Composable () -> Unit,
     rightContent: @Composable () -> Unit,
     cardHeight: Dp = 130.dp,
     content: @Composable () -> Unit,
+
 ) {
-    var leftButtonVisible by remember { mutableStateOf(false) }
-    var rightButtonVisible by remember { mutableStateOf(false) }
+    var isLeftContentVisible by remember { mutableStateOf(false) }
+    var isRightContentVisible by remember { mutableStateOf(false) }
 
     val swipeDirection = remember { mutableStateOf(SwipeDirection.None) }
 
@@ -45,7 +46,7 @@ fun SwipeableCardWithButtons(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (leftButtonVisible) {
+            if (isLeftContentVisible) {
                 Box(
                     modifier = Modifier
                         .weight(0.2f)
@@ -66,7 +67,7 @@ fun SwipeableCardWithButtons(
                 },
                 content = content
             )
-            if (rightButtonVisible) {
+            if (isRightContentVisible) {
                 Box(
                     modifier = Modifier
                         .weight(0.2f)
@@ -82,16 +83,16 @@ fun SwipeableCardWithButtons(
 
     when (swipeDirection.value) {
         SwipeDirection.Left -> {
-            leftButtonVisible = true
-            rightButtonVisible = false
+            isLeftContentVisible = true
+            isRightContentVisible = false
         }
         SwipeDirection.Right -> {
-            leftButtonVisible = false
-            rightButtonVisible = true
+            isLeftContentVisible = false
+            isRightContentVisible = true
         }
         else -> {
-            leftButtonVisible = false
-            rightButtonVisible = false
+            isLeftContentVisible = false
+            isRightContentVisible = false
         }
     }
 }
