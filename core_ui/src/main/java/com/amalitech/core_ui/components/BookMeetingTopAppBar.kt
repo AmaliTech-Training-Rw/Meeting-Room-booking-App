@@ -13,10 +13,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
@@ -36,10 +39,13 @@ fun BookMeetingTopAppBar(
         title = {
             Text(
                 title,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         },
+        modifier = Modifier.shadow(elevation = 24.dp),
         navigationIcon = {
             IconButton(onClick = {
                 if (appState.drawerState.isClosed) {
@@ -63,7 +69,7 @@ fun BookMeetingTopAppBar(
                 Image(
                     painter = painterResource(id = R.drawable.drawer_user),
                     contentDescription = "user account",
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(32.dp)
                 )
             }
         }
