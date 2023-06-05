@@ -3,7 +3,6 @@ package com.amalitech.swipe_animation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -16,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.amalitech.swipe_animation.components.SwipeableCard
 import com.amalitech.swipe_animation.util.SwipeDirection
@@ -27,18 +25,14 @@ fun SwipeableCardSideContents(
     swipeThreshold: Float = 120f,
     leftContent: @Composable () -> Unit,
     rightContent: @Composable () -> Unit,
-    cardHeight: Dp = 130.dp,
     content: @Composable () -> Unit,
-
 ) {
     var isLeftContentVisible by remember { mutableStateOf(false) }
     var isRightContentVisible by remember { mutableStateOf(false) }
-
     val swipeDirection = remember { mutableStateOf(SwipeDirection.None) }
 
     Card(
         modifier = modifier
-            .height(cardHeight)
             .clip(RoundedCornerShape(8.dp))
             .padding(4.dp)
             .shadow(elevation = 4.dp),
@@ -53,7 +47,7 @@ fun SwipeableCardSideContents(
                         .fillMaxHeight()
                 ) {
 
-                        leftContent()
+                    leftContent()
                 }
             }
             SwipeableCard(
@@ -74,7 +68,7 @@ fun SwipeableCardSideContents(
                         .fillMaxHeight()
                 ) {
 
-                        rightContent()
+                    rightContent()
 
                 }
             }

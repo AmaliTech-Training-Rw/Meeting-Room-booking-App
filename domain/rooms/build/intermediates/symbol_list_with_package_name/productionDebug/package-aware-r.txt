@@ -1,0 +1,2 @@
+com.amalitech.domain.room
+string app_name

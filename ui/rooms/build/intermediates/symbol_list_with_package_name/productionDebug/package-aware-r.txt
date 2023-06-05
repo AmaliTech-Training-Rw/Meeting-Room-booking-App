@@ -1,0 +1,3 @@
+com.amalitech.ui.rooms
+drawable room_image
+string app_name

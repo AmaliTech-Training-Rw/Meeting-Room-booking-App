@@ -1,0 +1,2 @@
+com.amalitech.data.room_data
+string app_name
