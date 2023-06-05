@@ -30,10 +30,8 @@ fun SwipeableCardSideContents(
 ) {
     var isLeftContentVisible by remember { mutableStateOf(false) }
     var isRightContentVisible by remember { mutableStateOf(false) }
-
-    
     val swipeDirection = remember { mutableStateOf(SwipeDirection.None) }
-
+    
     Card(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
