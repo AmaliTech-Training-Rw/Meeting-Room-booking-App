@@ -38,6 +38,7 @@ import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.onboarding.components.ImageWithLegend
 import com.amalitech.onboarding.components.SlidingDots
+import org.koin.androidx.compose.koinViewModel
 import kotlin.math.roundToInt
 
 @Composable
