@@ -11,8 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.amalitech.core_ui.components.DashboardGraph
-import com.amalitech.core_ui.components.RoomsBookedTime
+import com.amalitech.admin.components.DashboardGraph
+import com.amalitech.admin.components.RoomsBookedTime
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 
 class MainActivity : ComponentActivity() {

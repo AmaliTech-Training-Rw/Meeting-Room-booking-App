@@ -1,4 +1,4 @@
-package com.amalitech.core_ui.components
+package com.amalitech.admin.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
