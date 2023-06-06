@@ -109,12 +109,12 @@ fun getHorizontalLineHeight(
 
 
 fun getNextMultipleOfUnit(number: Int): Int {
-    val remainder = number % 5
+    val remainder = number % unitNumber
     return if (remainder == 0) {
-        number  // Already a multiple of 5
+        number  // Already a multiple of unit
     } else {
-        number + (5 - remainder)  // Calculate the next multiple of 5
+        number + (unitNumber - remainder)  // Calculate the next multiple of unit
     }
 }
 
-const val unitNumber = 5
+const val unitNumber = 15

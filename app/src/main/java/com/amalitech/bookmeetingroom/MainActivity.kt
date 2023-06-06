@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                         20f,
                         26f,
                         29f,
-                        50f,
+                        120f,
                         4f
                     )
                     val items = (1..8).map {
