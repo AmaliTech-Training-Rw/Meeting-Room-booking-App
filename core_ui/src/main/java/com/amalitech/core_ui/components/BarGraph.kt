@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,9 +24,10 @@ fun BarGraph(
     fillColor: Color,
     numberOfHorizontalBars: Int,
     item: RoomsBookedTime,
+    linesColor: Color,
+    roomNameColor: Color
 ) {
     val spacing = LocalSpacing.current
-    val linesColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 1f)
 
     BoxWithConstraints {
         val boxMaxHeight = this.maxHeight
@@ -68,7 +68,8 @@ fun BarGraph(
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(
                     spacing.spaceSmall
-                )
+                ),
+                color = roomNameColor
             )
         }
     }
