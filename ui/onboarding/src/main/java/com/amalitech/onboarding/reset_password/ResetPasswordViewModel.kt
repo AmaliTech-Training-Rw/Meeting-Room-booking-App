@@ -2,13 +2,15 @@ package com.amalitech.onboarding.reset_password
 
 import androidx.lifecycle.ViewModel
 import com.amalitech.core.util.UiText
+import com.amalitech.onboarding.components.AuthenticationBaseViewModel
+import com.amalitech.onboarding.components.AuthenticationBasedUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class ResetPasswordViewModel(
     private val resetPasswordUseCase: ResetPasswordUseCase
-) : ViewModel() {
+) : ViewModel(), AuthenticationBaseViewModel {
 
     private val _uiState = MutableStateFlow(
         ResetPasswordUiState()
@@ -90,14 +92,6 @@ class ResetPasswordViewModel(
         }
     }
 
-    /**
-     * onSnackBarShown - Updates value of snackBar in uiState to null
-     */
-    fun onSnackBarShown() {
-        _uiState.update { resetPasswordUiState ->
-            resetPasswordUiState.copy(
-                snackbarValue = null
-            )
-        }
-    }
+    override val basedUiState: MutableStateFlow<AuthenticationBasedUiState>
+        get() = MutableStateFlow(_uiState.value.toBaseUiState())
 }

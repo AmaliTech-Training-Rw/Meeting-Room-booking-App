@@ -2,6 +2,8 @@ package com.amalitech.onboarding.forgot_password
 
 import androidx.lifecycle.ViewModel
 import com.amalitech.core.util.UiText
+import com.amalitech.onboarding.components.AuthenticationBaseViewModel
+import com.amalitech.onboarding.components.AuthenticationBasedUiState
 import com.amalitech.ui.onboarding.R
 import com.amalitech.onboarding.forgot_password.use_case.ForgotPasswordUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +12,7 @@ import kotlinx.coroutines.flow.update
 
 class ForgotPasswordViewModel(
     private val forgotPasswordUseCase: ForgotPasswordUseCase
-) : ViewModel() {
+) : ViewModel(), AuthenticationBaseViewModel {
     private val _uiState = MutableStateFlow(ForgotPasswordUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -60,14 +62,6 @@ class ForgotPasswordViewModel(
         }
     }
 
-    /**
-     * onSnackBarShown - Reset snackBarValue to null
-     */
-    fun onSnackBarShown() {
-        _uiState.update { forgotPasswordUiState ->
-            forgotPasswordUiState.copy(
-                snackBarValue = null
-            )
-        }
-    }
+    override val basedUiState: MutableStateFlow<AuthenticationBasedUiState>
+        get() = MutableStateFlow(_uiState.value.toBaseUiState())
 }

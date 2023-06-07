@@ -2,6 +2,8 @@ package com.amalitech.onboarding.login
 
 import androidx.lifecycle.ViewModel
 import com.amalitech.core.util.UiText
+import com.amalitech.onboarding.components.AuthenticationBaseViewModel
+import com.amalitech.onboarding.components.AuthenticationBasedUiState
 import com.amalitech.onboarding.login.use_case.LoginUseCase
 import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 import com.amalitech.ui.onboarding.R
@@ -12,7 +14,7 @@ import kotlinx.coroutines.flow.update
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
     private val sharedPreferences: OnboardingSharedPreferences
-) : ViewModel() {
+) : ViewModel(), AuthenticationBaseViewModel {
     private val _uiState = MutableStateFlow(
         LoginUiState()
     )
@@ -93,14 +95,6 @@ class LoginViewModel(
         }
     }
 
-    /**
-     * onSnackBarShown - Reset the snackbarvalue in our state to null
-     */
-    fun onSnackBarShown() {
-        _uiState.update { loginUiState ->
-            loginUiState.copy(
-                snackBarValue = null
-            )
-        }
-    }
+    override val basedUiState: MutableStateFlow<AuthenticationBasedUiState>
+        get() = MutableStateFlow(_uiState.value.toBaseUiState())
 }

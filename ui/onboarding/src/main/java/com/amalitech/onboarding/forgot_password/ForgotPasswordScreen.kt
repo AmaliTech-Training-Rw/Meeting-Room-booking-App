@@ -33,11 +33,14 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.onboarding.components.AuthenticationTextField
+import com.amalitech.onboarding.util.ShowError
+import com.amalitech.onboarding.util.showSnackBar
 import com.amalitech.ui.onboarding.R
 import org.koin.androidx.compose.koinViewModel
 
@@ -55,12 +58,7 @@ fun ForgotPasswordScreen(
     }
 
     LaunchedEffect(key1 = state) {
-        state.snackBarValue?.let {
-            snackbarHostState.showSnackbar(
-                it.asString(context)
-            )
-            viewModel.onSnackBarShown()
-        }
+        showSnackBar(state.toBaseUiState(), snackbarHostState, context, viewModel)
 
         if (state.linkSent) {
             onNavigateToHome()
@@ -94,14 +92,7 @@ fun ForgotPasswordScreen(
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.titleMedium
             )
-            state.error?.let {
-                Spacer(modifier = Modifier.height(spacing.spaceSmall))
-                Text(
-                    text = it.asString(context),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
+            ShowError(state = state.toBaseUiState(), spacing = spacing, context = context)
             Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
 
             AuthenticationTextField(
@@ -159,4 +150,10 @@ fun ForgotPasswordScreen(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun Preview() {
+    ForgotPasswordScreen(onNavigateToLogin = { /*TODO*/ }, onNavigateToHome = { /*TODO*/ })
 }
