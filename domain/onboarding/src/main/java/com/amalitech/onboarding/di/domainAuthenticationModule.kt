@@ -10,6 +10,12 @@ import com.amalitech.onboarding.login.use_case.ValidatePassword
 import com.amalitech.onboarding.reset_password.CheckPasswordsMatch
 import com.amalitech.onboarding.reset_password.ResetPassword
 import com.amalitech.onboarding.reset_password.ResetPasswordUseCase
+import com.amalitech.onboarding.signup.use_case.CheckValuesNotBlank
+import com.amalitech.onboarding.signup.use_case.IsEmailAvailable
+import com.amalitech.onboarding.signup.use_case.IsUsernameAvailable
+import com.amalitech.onboarding.signup.use_case.FetchOrganization
+import com.amalitech.onboarding.signup.use_case.Signup
+import com.amalitech.onboarding.signup.use_case.SignupUseCase
 import org.koin.dsl.module
 
 val onboardingDomainModule = module {
@@ -59,5 +65,38 @@ val onboardingDomainModule = module {
 
     single {
         IsUserAdmin()
+    }
+
+    single {
+        IsEmailAvailable()
+    }
+
+    single {
+        IsUsernameAvailable()
+    }
+
+    single {
+        Signup()
+    }
+
+    single {
+        FetchOrganization()
+    }
+
+    single {
+        CheckValuesNotBlank()
+    }
+
+    single {
+        SignupUseCase(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
     }
 }
