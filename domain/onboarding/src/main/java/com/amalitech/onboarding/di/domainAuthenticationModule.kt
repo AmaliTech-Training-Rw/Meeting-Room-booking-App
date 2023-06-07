@@ -13,7 +13,7 @@ import com.amalitech.onboarding.reset_password.ResetPasswordUseCase
 import com.amalitech.onboarding.signup.use_case.CheckValuesNotBlank
 import com.amalitech.onboarding.signup.use_case.IsEmailAvailable
 import com.amalitech.onboarding.signup.use_case.IsUsernameAvailable
-import com.amalitech.onboarding.signup.use_case.FetchOrganization
+import com.amalitech.onboarding.signup.use_case.FetchOrganizationsType
 import com.amalitech.onboarding.signup.use_case.Signup
 import com.amalitech.onboarding.signup.use_case.SignupUseCase
 import org.koin.dsl.module
@@ -80,7 +80,7 @@ val onboardingDomainModule = module {
     }
 
     single {
-        FetchOrganization()
+        FetchOrganizationsType()
     }
 
     single {

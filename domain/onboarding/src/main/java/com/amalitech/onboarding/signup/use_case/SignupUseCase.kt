@@ -7,7 +7,7 @@ import com.amalitech.onboarding.reset_password.CheckPasswordsMatch
 data class SignupUseCase(
     val isEmailAvailable: IsEmailAvailable,
     val isUsernameAvailable: IsUsernameAvailable,
-    val fetchOrganization: FetchOrganization,
+    val fetchOrganizationsType: FetchOrganizationsType,
     val signup: Signup,
     val validatePassword: ValidatePassword,
     val validateEmail: ValidateEmail,

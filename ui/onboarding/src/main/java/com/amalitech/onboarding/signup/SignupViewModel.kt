@@ -124,7 +124,7 @@ class SignupViewModel(
             )
         }
         viewModelScope.launch {
-            val result = signupUseCase.fetchOrganization()
+            val result = signupUseCase.fetchOrganizationsType()
             _uiState.update { signupUiState ->
                 signupUiState.copy(
                     typeOfOrganization = result

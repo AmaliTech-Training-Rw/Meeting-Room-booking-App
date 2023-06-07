@@ -33,7 +33,7 @@ class SignupViewModelTest {
     fun setUp() {
         signupUseCase = mockk()
         coEvery {
-            signupUseCase.fetchOrganization()
+            signupUseCase.fetchOrganizationsType()
         } returns Result.Success(listOf())
         viewModel = SignupViewModel(signupUseCase)
     }
@@ -132,7 +132,7 @@ class SignupViewModelTest {
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganization()
+            signupUseCase.fetchOrganizationsType()
         } returns Result.Success(listOf())
 
         viewModel.onSignupClick()
@@ -173,7 +173,7 @@ class SignupViewModelTest {
         } returns UiText.StringResource(R.string.your_account_is_created)
 
         coEvery {
-            signupUseCase.fetchOrganization()
+            signupUseCase.fetchOrganizationsType()
         } returns Result.Success(listOf())
 
         viewModel.onSignupClick()
@@ -214,7 +214,7 @@ class SignupViewModelTest {
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganization()
+            signupUseCase.fetchOrganizationsType()
         } returns Result.Success(listOf())
 
         viewModel.onSignupClick()
@@ -252,7 +252,7 @@ class SignupViewModelTest {
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganization()
+            signupUseCase.fetchOrganizationsType()
         } returns Result.Success(listOf())
 
         viewModel.onSignupClick()
@@ -289,7 +289,7 @@ class SignupViewModelTest {
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganization()
+            signupUseCase.fetchOrganizationsType()
         } returns Result.Success(listOf())
 
         viewModel.onSignupClick()
@@ -327,7 +327,7 @@ class SignupViewModelTest {
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganization()
+            signupUseCase.fetchOrganizationsType()
         } returns Result.Success(listOf())
 
         viewModel.onSignupClick()
@@ -366,7 +366,7 @@ class SignupViewModelTest {
         } returns error
 
         coEvery {
-            signupUseCase.fetchOrganization()
+            signupUseCase.fetchOrganizationsType()
         } returns Result.Success(listOf())
 
         viewModel.onSignupClick()
@@ -404,7 +404,7 @@ class SignupViewModelTest {
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganization()
+            signupUseCase.fetchOrganizationsType()
         } returns Result.Success(listOf())
 
         viewModel.onSignupClick()
@@ -442,7 +442,7 @@ class SignupViewModelTest {
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganization()
+            signupUseCase.fetchOrganizationsType()
         } returns Result.Success(listOf())
 
         viewModel.onSignupClick()
@@ -453,7 +453,7 @@ class SignupViewModelTest {
     @Test
     fun `fetchOrganizations() should update the loading status`() = runTest {
         coEvery {
-            signupUseCase.fetchOrganization()
+            signupUseCase.fetchOrganizationsType()
         } coAnswers {
             delay(1000)
             Result.Success(listOf())
