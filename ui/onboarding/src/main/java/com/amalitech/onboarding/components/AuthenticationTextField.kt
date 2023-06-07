@@ -37,7 +37,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.theme.LocalSpacing
-import com.amalitech.ui.onboarding.R
+import com.amalitech.core.R
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -83,9 +83,9 @@ fun AuthenticationTextField(
         trailingIcon = {
             if (isPassword) {
                 val image = if (passwordVisible)
-                    R.drawable.baseline_visibility_off_24
+                    com.amalitech.ui.onboarding.R.drawable.baseline_visibility_off_24
                 else
-                    R.drawable.baseline_visibility_24
+                    com.amalitech.ui.onboarding.R.drawable.baseline_visibility_24
                 val description = if (passwordVisible)
                     stringResource(id = R.string.hide_password)
                 else

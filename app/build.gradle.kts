@@ -84,6 +84,7 @@ dependencies {
     implementation(Compose.navigation)
     implementation(Compose.viewModelCompose)
     implementation(Compose.activityCompose)
+    implementation(Lifecycle.composeLifecycle)
 
     implementation(Accompanist.systemuiController)
 
@@ -112,6 +113,8 @@ dependencies {
     ksp(Room.roomCompiler)
     implementation(Room.roomKtx)
     implementation(Room.roomRuntime)
+
+    implementation(Lifecycle.composeLifecycle)
 
     testImplementation(Testing.junit4)
     testImplementation(Testing.junitAndroidExt)

@@ -13,6 +13,6 @@ class LogIn {
      */
     operator fun invoke(email: String, password: String): UiText? {
         // TODO(use the api to log into the account)
-        return UiText.DynamicString("The api is not yet available")
+        return null
     }
 }

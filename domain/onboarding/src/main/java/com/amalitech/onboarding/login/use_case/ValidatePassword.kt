@@ -1,7 +1,7 @@
 package com.amalitech.onboarding.login.use_case
 
 import com.amalitech.core.util.UiText
-import com.amalitech.domain.onboarding.R
+import com.amalitech.core.R
 
 
 class ValidatePassword {
@@ -12,9 +12,9 @@ class ValidatePassword {
      * valid and null otherwise.
      */
     operator fun invoke(password: String): UiText? {
-        val passwordPattern = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{7,}\$")
+        val passwordPattern = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#\"\'~}{|;])[A-Za-z\\d@$!%*?&]{7,}\$")
         return if (password.isBlank() || !password.matches(passwordPattern)) {
-            UiText.StringResource(R.string.error_password_is_blank)
+            UiText.StringResource(R.string.error_password_is_not_valid)
         } else
             null
     }

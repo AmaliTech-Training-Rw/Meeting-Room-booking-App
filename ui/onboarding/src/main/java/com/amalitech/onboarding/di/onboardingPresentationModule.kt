@@ -7,7 +7,8 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val onboardingPresentationModule = module {
-    single {
+
+    viewModel {
         LoginViewModel(get(), get())
     }
 
@@ -17,5 +18,9 @@ val onboardingPresentationModule = module {
 
     viewModel {
         SplashScreenViewModel(get())
+    }
+
+    viewModel {
+        ResetPasswordViewModel(get())
     }
 }

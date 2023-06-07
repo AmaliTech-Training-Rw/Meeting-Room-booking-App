@@ -112,7 +112,6 @@ fun OnboardingScreen(
                     onNavigateToLogin()
                 }
             )
-
         }
 
         else -> {
@@ -211,7 +210,6 @@ fun OnBoard(
             onClick = onGetStartedClick
         )
     }
-
 }
 
 
@@ -232,4 +230,3 @@ fun OnBoardPrev() {
         )
     }
 }
-
