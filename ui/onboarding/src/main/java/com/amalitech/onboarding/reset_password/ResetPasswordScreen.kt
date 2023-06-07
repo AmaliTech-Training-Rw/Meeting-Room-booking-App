@@ -53,7 +53,9 @@ fun ResetPasswordScreen(
     }
 
     LaunchedEffect(key1 = state) {
-        showSnackBar(state.toBaseUiState(), snackbarHostState, context, viewModel)
+        showSnackBar(state.toBaseUiState(), snackbarHostState, context) {
+            viewModel.onSnackBarShown()
+        }
 
         if (state.passwordReset) {
             onNavigateToHome()
