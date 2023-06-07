@@ -1,5 +1,6 @@
 package com.amalitech.onboarding.components
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -9,10 +10,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.amalitech.onboarding.util.Result
 import com.amalitech.core.R
+import com.amalitech.core_ui.theme.LocalSpacing
 
 
 @Composable
@@ -23,9 +26,11 @@ fun AuthenticationDropDown(
     onRetry: () -> Unit,
     onIsExpandedStateChange: (Boolean) -> Unit
 ) {
+    val spacing = LocalSpacing.current
     DropdownMenu(
         expanded = isDropDownExpanded,
         onDismissRequest = { onIsExpandedStateChange(false) },
+        modifier = Modifier.padding(spacing.spaceMedium)
     ) {
         when (items) {
             is Result.Success -> {

@@ -6,6 +6,7 @@ import com.amalitech.core.util.UiText
 import com.amalitech.onboarding.signup.model.User
 import com.amalitech.onboarding.signup.use_case.SignupUseCase
 import com.amalitech.core.R
+import com.amalitech.onboarding.util.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -117,6 +118,11 @@ class SignupViewModel(
     }
 
     fun fetchOrganizations() {
+        _uiState.update { signupUiState ->
+            signupUiState.copy(
+                typeOfOrganization = Result.Loading
+            )
+        }
         viewModelScope.launch {
             val result = signupUseCase.fetchOrganization()
             _uiState.update { signupUiState ->
