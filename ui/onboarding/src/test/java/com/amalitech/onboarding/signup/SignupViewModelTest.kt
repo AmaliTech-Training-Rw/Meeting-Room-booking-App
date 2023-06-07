@@ -1,7 +1,7 @@
 package com.amalitech.onboarding.signup
 
-import com.amalitech.core.util.UiText
 import com.amalitech.core.R
+import com.amalitech.core.util.UiText
 import com.amalitech.onboarding.MainDispatcherRule
 import com.amalitech.onboarding.signup.use_case.SignupUseCase
 import com.amalitech.onboarding.util.Result
@@ -9,17 +9,11 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.Assert.*
-
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -34,8 +28,6 @@ class SignupViewModelTest {
 
     @get:Rule
     var mainDispatcherRule = MainDispatcherRule()
-
-    private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
