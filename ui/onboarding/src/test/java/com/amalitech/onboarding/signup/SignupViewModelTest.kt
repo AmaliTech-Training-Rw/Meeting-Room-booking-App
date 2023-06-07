@@ -9,7 +9,15 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.Assert.*
 
 import org.junit.Before
@@ -26,6 +34,8 @@ class SignupViewModelTest {
 
     @get:Rule
     var mainDispatcherRule = MainDispatcherRule()
+
+    private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
@@ -446,5 +456,21 @@ class SignupViewModelTest {
         viewModel.onSignupClick()
 
         assertEquals(error, viewModel.uiState.value.error)
+    }
+
+    @Test
+    fun `fetchOrganizations() should update the loading status`() = runTest {
+        coEvery {
+            signupUseCase.fetchOrganization()
+        } coAnswers {
+            delay(1000)
+            Result.Success(listOf())
+        }
+
+        viewModel.fetchOrganizations()
+
+        assertEquals(Result.Loading, viewModel.uiState.value.typeOfOrganization)
+        advanceUntilIdle()
+        assertEquals(Result.Success<String>(listOf()), viewModel.uiState.value.typeOfOrganization)
     }
 }
