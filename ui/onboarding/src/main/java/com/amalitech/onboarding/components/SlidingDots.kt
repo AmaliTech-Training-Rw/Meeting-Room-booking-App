@@ -24,10 +24,10 @@ fun SlidingDots(
     selectedIndex: Int = 1
 ) {
     val spacing = LocalSpacing.current
-    Row {
+    Row(modifier = modifier) {
         (0..3).forEach {
             Dot(
-                selected = selectedIndex == it,
+                selected = selectedIndex == it
             )
             Spacer(modifier = Modifier.width(spacing.spaceSmall))
         }

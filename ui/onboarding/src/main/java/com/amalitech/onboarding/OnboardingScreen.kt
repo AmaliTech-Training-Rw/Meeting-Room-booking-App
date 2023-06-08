@@ -6,13 +6,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.DraggableState
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -21,8 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.amalitech.core.R
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
@@ -44,7 +45,7 @@ import kotlin.math.roundToInt
 fun OnboardingScreen(
     onNavigateToLogin: () -> Unit,
 ) {
-    var currentIndex by remember {
+    var currentIndex by rememberSaveable {
         mutableStateOf(0)
     }
 
@@ -146,7 +147,8 @@ fun OnBoard(
         mutableStateOf(0f)
     }
 
-    Box(
+    ConstraintLayout(
+        modifier =
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
@@ -167,10 +169,16 @@ fun OnBoard(
                 }
             )
     ) {
+        val (getStartedContent, getStartedButtonOrSlidingDots) = createRefs()
         Column(
             horizontalAlignment = CenterHorizontally,
             modifier = Modifier
-                .align(Alignment.Center)
+                .constrainAs(getStartedContent) {
+                    bottom.linkTo(getStartedButtonOrSlidingDots.top)
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
                 .offset {
                     if ((offsetX <= -120f && selectedIndex < 3) || (offsetX >= 120 && selectedIndex > 0))
                         IntOffset(offsetX.roundToInt(), 0)
@@ -182,36 +190,45 @@ fun OnBoard(
                 Image(
                     painter = painterResource(id = logo),
                     contentDescription = stringResource(id = R.string.logo),
-
+                    modifier = Modifier.size(64.dp),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
                 )
+                Spacer(modifier = Modifier.height(spacing.spaceLarge))
             }
-            Spacer(modifier = Modifier.height(spacing.spaceSmall))
             ImageWithLegend(
                 title = if (title != null) stringResource(id = title) else null,
                 description = stringResource(id = description),
                 painter = painter,
             )
-            Spacer(Modifier.height(spacing.spaceLarge))
+        }
+
+        if (selectedIndex != 3) {
             SlidingDots(
-                Modifier
-                    .width(painter.intrinsicSize.width.dp)
-                    .padding(vertical = spacing.spaceLarge)
-                    .padding(vertical = spacing.spaceExtraLarge),
+                modifier = Modifier
+                    .padding(spacing.spaceLarge)
+                    .constrainAs(getStartedButtonOrSlidingDots) {
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    },
                 selectedIndex = selectedIndex
             )
+        } else {
+            DefaultButton(
+                text = stringResource(R.string.get_started),
+                modifier = Modifier
+                    .padding(spacing.spaceLarge)
+                    .constrainAs(getStartedButtonOrSlidingDots) {
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .width(painter.intrinsicSize.width.dp),
+                onClick = onGetStartedClick
+            )
         }
-        DefaultButton(
-            text = stringResource(R.string.get_started),
-            modifier = Modifier
-                .width(painter.intrinsicSize.width.dp)
-                .align(Alignment.BottomCenter)
-                .padding(vertical = spacing.spaceLarge),
-            onClick = onGetStartedClick
-        )
     }
 }
-
 
 @Preview
 @Composable
