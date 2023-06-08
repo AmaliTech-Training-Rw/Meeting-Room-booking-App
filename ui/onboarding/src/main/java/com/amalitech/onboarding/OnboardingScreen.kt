@@ -149,10 +149,6 @@ fun OnBoard(
     Box(
         Modifier
             .fillMaxSize()
-            .padding(
-                horizontal = spacing.spaceLarge,
-                vertical = spacing.spaceSmall
-            )
             .verticalScroll(rememberScrollState())
             .draggable(
                 orientation = Orientation.Horizontal,
@@ -196,6 +192,7 @@ fun OnBoard(
                 description = stringResource(id = description),
                 painter = painter,
             )
+            Spacer(Modifier.height(spacing.spaceLarge))
             SlidingDots(
                 Modifier
                     .width(painter.intrinsicSize.width.dp)
