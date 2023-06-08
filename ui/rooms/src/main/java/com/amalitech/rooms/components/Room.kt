@@ -53,57 +53,58 @@ fun RoomCard(
                 icon = Icons.Filled.Edit,
                 onActionClick = {}
             )
-        }
-    ) {
-        Row(
-            modifier = modifier
-                .fillMaxSize()
-                .background(Color.White),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(room.imageUrl)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = "",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(120.dp)
-                    .fillMaxWidth(0.4f)
-                    .clip(RoundedCornerShape(16.dp))
-
-            )
-        Spacer(modifier = Modifier.width(16.dp))
-            Column(
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .weight(1f)
-                    .padding(vertical = 16.dp)
+        },
+        content = {
+            Row(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(Color.White),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    VerticalLine(modifier=Modifier.height(40.dp))
-                    Column(Modifier.padding(start = 8.dp)) {
-                        Text(
-                            text = room.roomName,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                        Text(
-                            text = "Up to ${room.numberOfPeople} people",
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                    }
-                }
 
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = room.roomFeatures,
-                    style = MaterialTheme.typography.bodyMedium
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(room.imageUrl)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(120.dp)
+                        .fillMaxWidth(0.4f)
+                        .clip(RoundedCornerShape(16.dp))
+
                 )
+                Spacer(modifier = Modifier.width(16.dp))
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .weight(1f)
+                        .padding(vertical = 16.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        VerticalLine(modifier=Modifier.height(40.dp))
+                        Column(Modifier.padding(start = 8.dp)) {
+                            Text(
+                                text = room.roomName,
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                            Text(
+                                text = "Up to ${room.numberOfPeople} people",
+                                style = MaterialTheme.typography.labelMedium
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = room.roomFeatures,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             }
         }
-    }
+    )
 }
 
 

@@ -26,9 +26,11 @@ fun SwipeableCardSideContents(
     leftContent: @Composable () -> Unit,
     rightContent: @Composable () -> Unit,
     content: @Composable () -> Unit,
+    isLeftVisible : Boolean = false,
+    isRightVisible : Boolean = false
 ) {
-    var isLeftContentVisible by remember { mutableStateOf(false) }
-    var isRightContentVisible by remember { mutableStateOf(false) }
+    var isLeftContentVisible by remember { mutableStateOf(isLeftVisible) }
+    var isRightContentVisible by remember { mutableStateOf(isRightVisible) }
     val swipeDirection = remember { mutableStateOf(SwipeDirection.None) }
 
     Card(
@@ -47,7 +49,7 @@ fun SwipeableCardSideContents(
                         .fillMaxHeight()
                 ) {
 
-                        leftContent()
+                    leftContent()
                 }
             }
             SwipeableCard(
@@ -68,7 +70,7 @@ fun SwipeableCardSideContents(
                         .fillMaxHeight()
                 ) {
 
-                        rightContent()
+                    rightContent()
 
                 }
             }
