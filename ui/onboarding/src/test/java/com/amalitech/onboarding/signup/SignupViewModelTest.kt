@@ -4,15 +4,12 @@ import com.amalitech.core.R
 import com.amalitech.core.util.UiText
 import com.amalitech.onboarding.MainDispatcherRule
 import com.amalitech.onboarding.signup.use_case.SignupUseCase
-import com.amalitech.onboarding.util.Result
+import com.amalitech.onboarding.util.Response
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -34,7 +31,7 @@ class SignupViewModelTest {
         signupUseCase = mockk()
         coEvery {
             signupUseCase.fetchOrganizationsType()
-        } returns Result.Success(listOf())
+        } returns Response(data = listOf())
         viewModel = SignupViewModel(signupUseCase)
     }
 
@@ -133,7 +130,7 @@ class SignupViewModelTest {
 
         coEvery {
             signupUseCase.fetchOrganizationsType()
-        } returns Result.Success(listOf())
+        } returns Response(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -174,7 +171,7 @@ class SignupViewModelTest {
 
         coEvery {
             signupUseCase.fetchOrganizationsType()
-        } returns Result.Success(listOf())
+        } returns Response(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -215,7 +212,7 @@ class SignupViewModelTest {
 
         coEvery {
             signupUseCase.fetchOrganizationsType()
-        } returns Result.Success(listOf())
+        } returns Response(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -253,7 +250,7 @@ class SignupViewModelTest {
 
         coEvery {
             signupUseCase.fetchOrganizationsType()
-        } returns Result.Success(listOf())
+        } returns Response(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -290,7 +287,7 @@ class SignupViewModelTest {
 
         coEvery {
             signupUseCase.fetchOrganizationsType()
-        } returns Result.Success(listOf())
+        } returns Response(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -328,7 +325,7 @@ class SignupViewModelTest {
 
         coEvery {
             signupUseCase.fetchOrganizationsType()
-        } returns Result.Success(listOf())
+        } returns Response(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -367,7 +364,7 @@ class SignupViewModelTest {
 
         coEvery {
             signupUseCase.fetchOrganizationsType()
-        } returns Result.Success(listOf())
+        } returns Response(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -405,7 +402,7 @@ class SignupViewModelTest {
 
         coEvery {
             signupUseCase.fetchOrganizationsType()
-        } returns Result.Success(listOf())
+        } returns Response(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -443,7 +440,7 @@ class SignupViewModelTest {
 
         coEvery {
             signupUseCase.fetchOrganizationsType()
-        } returns Result.Success(listOf())
+        } returns Response(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -451,19 +448,27 @@ class SignupViewModelTest {
     }
 
     @Test
-    fun `fetchOrganizations() should update the loading status`() = runTest {
-        coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } coAnswers {
-            delay(1000)
-            Result.Success(listOf())
-        }
+    fun `Ensure isInvitedUser works when all data are provided`() {
+        val organizationName = "name"
+        val email = "email@test.com"
+        val typeOfOrganization = "type"
+        val location = "location"
 
-        viewModel.fetchOrganizations()
+        val response = viewModel.isInvitedUser(email, organizationName, location, typeOfOrganization)
 
-        assertEquals(Result.Loading, viewModel.uiState.value.typeOfOrganization)
-        advanceUntilIdle()
-        assertEquals(Result.Success<String>(listOf()), viewModel.uiState.value.typeOfOrganization)
+        assertEquals(true, response)
+    }
+
+    @Test
+    fun `Ensure isInvitedUser works when not all data are provided`() {
+        val organizationName = ""
+        val email = ""
+        val typeOfOrganization = ""
+        val location = ""
+
+        val response = viewModel.isInvitedUser(email, organizationName, location, typeOfOrganization)
+
+        assertEquals(false, response)
     }
 
     @Test

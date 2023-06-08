@@ -2,11 +2,10 @@ package com.amalitech.onboarding.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amalitech.core.R
 import com.amalitech.core.util.UiText
 import com.amalitech.onboarding.signup.model.User
 import com.amalitech.onboarding.signup.use_case.SignupUseCase
-import com.amalitech.core.R
-import com.amalitech.onboarding.util.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -118,17 +117,27 @@ class SignupViewModel(
     }
 
     fun fetchOrganizations() {
-        _uiState.update { signupUiState ->
-            signupUiState.copy(
-                typeOfOrganization = Result.Loading
-            )
-        }
+
         viewModelScope.launch {
             val result = signupUseCase.fetchOrganizationsType()
-            _uiState.update { signupUiState ->
-                signupUiState.copy(
-                    typeOfOrganization = result
-                )
+            if (result.data != null) {
+                _uiState.update { signupUiState ->
+                    signupUiState.copy(
+                        typeOfOrganization = result.data!!
+                    )
+                }
+            } else if (result.error != null) {
+                _uiState.update { signupUiState ->
+                    signupUiState.copy(
+                        error = result.error!!
+                    )
+                }
+            } else {
+                _uiState.update { signupUiState ->
+                    signupUiState.copy(
+                        error = UiText.StringResource(R.string.error_default_message)
+                    )
+                }
             }
         }
     }
@@ -188,6 +197,7 @@ class SignupViewModel(
             _uiState.value.selectedOrganizationType.isBlank() -> updateStateWithError(
                 UiText.StringResource(R.string.error_no_organization_type_selected)
             )
+
             else -> {
                 val isEmailAvailable = signupUseCase.isEmailAvailable(_uiState.value.email)
                 val isUsernameAvailable = signupUseCase.isUsernameAvailable(_uiState.value.username)
@@ -241,5 +251,14 @@ class SignupViewModel(
             onNewOrganizationName(organizationName)
             onSelectedOrganizationType(typeOfOrganization)
         }
+    }
+
+    fun isInvitedUser(
+        email: String?,
+        organizationName: String?,
+        location: String?,
+        typeOfOrganization: String?
+    ): Boolean {
+        return !email.isNullOrBlank() || !organizationName.isNullOrBlank() || !location.isNullOrBlank() || !typeOfOrganization.isNullOrBlank()
     }
 }

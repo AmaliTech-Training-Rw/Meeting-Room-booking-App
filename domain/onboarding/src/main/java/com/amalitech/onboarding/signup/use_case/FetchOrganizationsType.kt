@@ -1,16 +1,16 @@
 package com.amalitech.onboarding.signup.use_case
 
+import com.amalitech.onboarding.util.Response
 import kotlinx.coroutines.delay
-import com.amalitech.onboarding.util.Result
 
 class FetchOrganizationsType {
 
 
-    suspend operator fun invoke(): Result<String> {
+    suspend operator fun invoke(): Response<List<String>> {
         // TODO("FETCH LIST OF ORGANIZATION FROM THE API")
         delay(3000)
-        return Result.Success(
-            listOf(
+        return Response(
+            data = listOf(
                 "Non-profit organization",
                 "Educational institution",
                 "Government agency",
