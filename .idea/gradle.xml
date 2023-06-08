@@ -21,6 +21,7 @@
             <option value="$PROJECT_DIR$/domain/onboarding" />
             <option value="$PROJECT_DIR$/ui" />
             <option value="$PROJECT_DIR$/ui/onboarding" />
+            <option value="$PROJECT_DIR$/ui/swipe_animation" />
           </set>
         </option>
       </GradleProjectSettings>

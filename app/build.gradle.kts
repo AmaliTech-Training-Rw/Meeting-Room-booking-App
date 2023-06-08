@@ -100,6 +100,7 @@ dependencies {
     implementation(project(Modules.uiOnboarding))
     implementation(project(Modules.coreUI))
     implementation(AndroidX.coreKtx)
+    implementation(project(Modules.uiSwipe))
 
     implementation(Coil.coilCompose)
 
