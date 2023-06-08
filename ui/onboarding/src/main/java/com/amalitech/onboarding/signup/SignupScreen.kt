@@ -60,6 +60,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavBackStackEntry
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.onboarding.components.AuthenticationDropDown
@@ -70,11 +71,12 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SignupScreen(
-    onNavigate: () -> Unit,
     onNavigateToLogin: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SignupViewModel = koinViewModel()
+    viewModel: SignupViewModel = koinViewModel(),
+    navBackStackEntry: NavBackStackEntry
 ) {
+    val arguments = navBackStackEntry.arguments
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val spacing = LocalSpacing.current
     val context = LocalContext.current
@@ -103,6 +105,11 @@ fun SignupScreen(
         keyboardController?.hide()
     }
 
+    val organizationName = arguments?.getString(NavArguments.organizationName)
+    val email = arguments?.getString(NavArguments.email)
+    val typeOfOrganization = arguments?.getString(NavArguments.typeOfOrganization)
+    val location = arguments?.getString(NavArguments.location)
+
     LaunchedEffect(key1 = state) {
         state.snackBarValue?.let {
             snackbarHostState.showSnackbar(
@@ -113,7 +120,7 @@ fun SignupScreen(
     }
 
     if (state.finishedSigningUp) {
-        onNavigate()
+        onNavigateToLogin()
     }
 
     Scaffold(
@@ -139,8 +146,13 @@ fun SignupScreen(
                 )
             )
             Spacer(modifier = Modifier.height(spacing.spaceLarge))
+            val header = if (arguments == null) {
+                stringResource(id = R.string.create_your_account)
+            } else {
+                stringResource(id = R.string.get_started)
+            }
             Text(
-                text = stringResource(id = R.string.create_your_account),
+                text = header,
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 24.sp
@@ -163,118 +175,127 @@ fun SignupScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(spacing.spaceSmall))
-            AuthenticationTextField(
-                onGo = { onGo() },
-                placeholder = stringResource(id = R.string.organization_name),
-                value = state.organizationName,
-                onValueChange = {
-                    viewModel.onNewOrganizationName(it)
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(spacing.spaceSmall))
-            AuthenticationTextField(
-                onGo = { onGo() },
-                placeholder = stringResource(id = R.string.email),
-                value = state.email,
-                onValueChange = {
-                    viewModel.onNewEmail(it)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.Email
-                )
-            )
-            Spacer(modifier = Modifier.height(spacing.spaceSmall))
-            Box(Modifier.wrapContentSize(Alignment.TopStart)) {
-                TextField(
-                    value = selectedItem,
+            if (arguments == null) {
+                Spacer(modifier = Modifier.height(spacing.spaceSmall))
+                AuthenticationTextField(
+                    onGo = { onGo() },
+                    placeholder = stringResource(id = R.string.organization_name),
+                    value = state.organizationName,
                     onValueChange = {
-                        selectedItem = it
+                        viewModel.onNewOrganizationName(it)
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(1.dp)
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
-                            shape = RoundedCornerShape(spacing.spaceExtraSmall)
-                        )
-                        .padding(spacing.spaceExtraSmall)
-                        .onPreviewKeyEvent {
-                            if (it.key == Key.Tab && it.nativeKeyEvent.action == KeyEvent.ACTION_DOWN) {
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(spacing.spaceSmall))
+                AuthenticationTextField(
+                    onGo = { onGo() },
+                    placeholder = stringResource(id = R.string.email),
+                    value = state.email,
+                    onValueChange = {
+                        viewModel.onNewEmail(it)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next,
+                        keyboardType = KeyboardType.Email
+                    )
+                )
+                Spacer(modifier = Modifier.height(spacing.spaceSmall))
+                Box(Modifier.wrapContentSize(Alignment.TopStart)) {
+                    TextField(
+                        value = selectedItem,
+                        onValueChange = {
+                            selectedItem = it
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(1.dp)
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
+                                shape = RoundedCornerShape(spacing.spaceExtraSmall)
+                            )
+                            .padding(spacing.spaceExtraSmall)
+                            .onPreviewKeyEvent {
+                                if (it.key == Key.Tab && it.nativeKeyEvent.action == KeyEvent.ACTION_DOWN) {
+                                    focusManager.moveFocus(FocusDirection.Down)
+                                    true
+                                } else {
+                                    false
+                                }
+                            },
+                        placeholder = {
+                            Text(stringResource(R.string.type_of_organization))
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = {
                                 focusManager.moveFocus(FocusDirection.Down)
-                                true
-                            } else {
-                                false
+                            }
+                        ),
+                        enabled = false,
+                        trailingIcon = {
+                            val image = if (isDropDownExpanded)
+                                com.amalitech.ui.onboarding.R.drawable.baseline_arrow_drop_up_24
+                            else
+                                com.amalitech.ui.onboarding.R.drawable.baseline_arrow_drop_down_24
+                            val description = if (isDropDownExpanded)
+                                stringResource(id = R.string.close_organization_type)
+                            else
+                                stringResource(id = R.string.open_organization_type)
+
+                            IconButton(onClick = { isDropDownExpanded = !isDropDownExpanded }) {
+                                Icon(
+                                    painter = painterResource(id = image),
+                                    contentDescription = description
+                                )
                             }
                         },
-                    placeholder = {
-                        Text(stringResource(R.string.type_of_organization))
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+                            focusedContainerColor = MaterialTheme.colorScheme.background,
+                            disabledTextColor = MaterialTheme.colorScheme.onBackground,
+                            disabledContainerColor = MaterialTheme.colorScheme.background,
+                            disabledIndicatorColor = Color.Transparent
+                        ),
+                    )
+                    AuthenticationDropDown(
+                        isDropDownExpanded,
+                        organizationType,
+                        onSelectedItemChange = {
+                            selectedItem = it
+                            viewModel.onSelectedOrganizationType(it)
+                        },
+                        onRetry = { viewModel.fetchOrganizations() },
+                        onIsExpandedStateChange = {
+                            isDropDownExpanded = it
                         }
-                    ),
-                    enabled = false,
-                    trailingIcon = {
-                        val image = if (isDropDownExpanded)
-                            com.amalitech.ui.onboarding.R.drawable.baseline_arrow_drop_up_24
-                        else
-                            com.amalitech.ui.onboarding.R.drawable.baseline_arrow_drop_down_24
-                        val description = if (isDropDownExpanded)
-                            stringResource(id = R.string.close_organization_type)
-                        else
-                            stringResource(id = R.string.open_organization_type)
-
-                        IconButton(onClick = { isDropDownExpanded = !isDropDownExpanded }) {
-                            Icon(
-                                painter = painterResource(id = image),
-                                contentDescription = description
-                            )
-                        }
+                    )
+                }
+                Spacer(Modifier.height(spacing.spaceSmall))
+                AuthenticationTextField(
+                    onGo = { onGo() },
+                    placeholder = stringResource(id = R.string.location),
+                    value = state.location,
+                    onValueChange = {
+                        viewModel.onNewLocation(it)
                     },
-                    colors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        focusedTextColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                        unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-                        focusedContainerColor = MaterialTheme.colorScheme.background,
-                        disabledTextColor = MaterialTheme.colorScheme.onBackground,
-                        disabledContainerColor = MaterialTheme.colorScheme.background,
-                        disabledIndicatorColor = Color.Transparent
-                    ),
+                    modifier = Modifier.fillMaxWidth(),
                 )
-                AuthenticationDropDown(
-                    isDropDownExpanded,
-                    organizationType,
-                    onSelectedItemChange = {
-                        selectedItem = it
-                        viewModel.onSelectedOrganizationType(it)
-                    },
-                    onRetry = { viewModel.fetchOrganizations() },
-                    onIsExpandedStateChange = {
-                        isDropDownExpanded = it
-                    }
+            } else {
+                viewModel.validateArguments(
+                    organizationName,
+                    typeOfOrganization,
+                    location,
+                    email
                 )
             }
-            Spacer(Modifier.height(spacing.spaceSmall))
-            AuthenticationTextField(
-                onGo = { onGo() },
-                placeholder = stringResource(id = R.string.location),
-                value = state.location,
-                onValueChange = {
-                    viewModel.onNewLocation(it)
-                },
-                modifier = Modifier.fillMaxWidth(),
-            )
             Spacer(modifier = Modifier.height(spacing.spaceSmall))
             AuthenticationTextField(
                 onGo = { onGo() },
@@ -302,40 +323,48 @@ fun SignupScreen(
                 )
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
+            val buttonText = if (arguments == null) {
+                stringResource(id = R.string.sign_up)
+            } else {
+                stringResource(id = R.string.set_up)
+            }
             DefaultButton(
-                text = stringResource(R.string.sign_up),
+                text = buttonText,
                 onClick = { onGo() },
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(spacing.spaceSmall))
-            val text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = Color.Black)) {
-                    append(stringResource(id = R.string.question_already_have_an_account))
-                    append(" ")
-                }
-                pushStringAnnotation(
-                    tag = "URL",
-                    annotation = stringResource(id = R.string.log_in)
-                )
-                withStyle(
-                    style = SpanStyle(
-                        color = MaterialTheme.colorScheme.outline,
-                    )
-                ) {
-                    append(stringResource(id = R.string.log_in))
-                }
-                pop()
-            }
-            ClickableText(
-                text = text,
-                onClick = { offset ->
-                    val url = text.getStringAnnotations("URL", offset, offset).firstOrNull()?.item
-                    if (!url.isNullOrEmpty()) {
-                        onNavigateToLogin()
+            if (arguments == null) {
+                Spacer(modifier = Modifier.height(spacing.spaceSmall))
+                val text = buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = Color.Black)) {
+                        append(stringResource(id = R.string.question_already_have_an_account))
+                        append(" ")
                     }
-                },
-                modifier = Modifier
-            )
+                    pushStringAnnotation(
+                        tag = "URL",
+                        annotation = stringResource(id = R.string.log_in)
+                    )
+                    withStyle(
+                        style = SpanStyle(
+                            color = MaterialTheme.colorScheme.outline,
+                        )
+                    ) {
+                        append(stringResource(id = R.string.log_in))
+                    }
+                    pop()
+                }
+                ClickableText(
+                    text = text,
+                    onClick = { offset ->
+                        val url =
+                            text.getStringAnnotations("URL", offset, offset).firstOrNull()?.item
+                        if (!url.isNullOrEmpty()) {
+                            onNavigateToLogin()
+                        }
+                    },
+                    modifier = Modifier
+                )
+            }
         }
     }
 }

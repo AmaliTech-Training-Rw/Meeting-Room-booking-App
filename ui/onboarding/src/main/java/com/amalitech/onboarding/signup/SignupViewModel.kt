@@ -222,4 +222,24 @@ class SignupViewModel(
             )
         }
     }
+
+    fun validateArguments(
+        organizationName: String?,
+        typeOfOrganization: String?,
+        location: String?,
+        email: String?
+    ) {
+        if (organizationName.isNullOrBlank() || email.isNullOrBlank() || location.isNullOrBlank() || typeOfOrganization.isNullOrBlank()) {
+            _uiState.update { signupUiState ->
+                signupUiState.copy(
+                    error = UiText.StringResource(R.string.error_the_link_doesnt_work)
+                )
+            }
+        } else {
+            onNewLocation(location)
+            onNewEmail(email)
+            onNewOrganizationName(organizationName)
+            onSelectedOrganizationType(typeOfOrganization)
+        }
+    }
 }

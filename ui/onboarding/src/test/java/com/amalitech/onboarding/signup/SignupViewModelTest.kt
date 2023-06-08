@@ -465,4 +465,74 @@ class SignupViewModelTest {
         advanceUntilIdle()
         assertEquals(Result.Success<String>(listOf()), viewModel.uiState.value.typeOfOrganization)
     }
+
+    @Test
+    fun `ensure args are validated`() {
+        val organizationName = "name"
+        val email = "email@test.com"
+        val typeOfOrganization = "type"
+        val location = "location"
+
+        viewModel.validateArguments(
+            organizationName = organizationName,
+            email = email,
+            typeOfOrganization = typeOfOrganization,
+            location = location
+        )
+
+        assertEquals(
+            email, viewModel.uiState.value.email
+        )
+        assertEquals(
+            organizationName, viewModel.uiState.value.organizationName
+        )
+        assertEquals(
+            typeOfOrganization, viewModel.uiState.value.selectedOrganizationType
+        )
+        assertEquals(
+            location, viewModel.uiState.value.location
+        )
+    }
+
+    @Test
+    fun `ensure error is thrown when any arg is null`() {
+        val organizationName = null
+        val email = "email@test.com"
+        val typeOfOrganization = "type"
+        val location = "location"
+
+        viewModel.validateArguments(
+            organizationName = organizationName,
+            email = email,
+            typeOfOrganization = typeOfOrganization,
+            location = location
+        )
+
+
+        assertEquals(
+            UiText.StringResource(R.string.error_the_link_doesnt_work),
+            viewModel.uiState.value.error
+        )
+    }
+
+    @Test
+    fun `ensure error is thrown when any arg is blank`() {
+        val organizationName = "null"
+        val email = ""
+        val typeOfOrganization = "type"
+        val location = "location"
+
+        viewModel.validateArguments(
+            organizationName = organizationName,
+            email = email,
+            typeOfOrganization = typeOfOrganization,
+            location = location
+        )
+
+
+        assertEquals(
+            UiText.StringResource(R.string.error_the_link_doesnt_work),
+            viewModel.uiState.value.error
+        )
+    }
 }

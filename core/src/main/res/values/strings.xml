@@ -44,4 +44,6 @@
     <string name="reload_organization_type">Try reloading organizations type</string>
     <string name="location">Location</string>
     <string name="error_value_is_blank">A field is blank, please provide all required values</string>
+    <string name="error_the_link_doesnt_work">There is an error with the link, please make sure you click on the right link</string>
+    <string name="set_up">Set up</string>
 </resources>
