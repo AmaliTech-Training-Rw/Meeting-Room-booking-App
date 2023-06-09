@@ -1,4 +1,5 @@
 package com.amalitech.swip_animation.components
+
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState

@@ -26,13 +26,12 @@ fun SwipeableCardSideContents(
     leftContent: @Composable () -> Unit,
     rightContent: @Composable () -> Unit,
     content: @Composable () -> Unit,
-    isLeftVisible : Boolean = false,
-    isRightVisible : Boolean = false
+    isLeftVisible: Boolean = false,
+    isRightVisible: Boolean = false
 ) {
     var isLeftContentVisible by remember { mutableStateOf(isLeftVisible) }
     var isRightContentVisible by remember { mutableStateOf(isRightVisible) }
     val swipeDirection = remember { mutableStateOf(SwipeDirection.None) }
-
     Card(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
@@ -76,16 +75,17 @@ fun SwipeableCardSideContents(
             }
         }
     }
-
     when (swipeDirection.value) {
         SwipeDirection.Left -> {
             isLeftContentVisible = true
             isRightContentVisible = false
         }
+
         SwipeDirection.Right -> {
             isLeftContentVisible = false
             isRightContentVisible = true
         }
+
         else -> {
             isLeftContentVisible = false
             isRightContentVisible = false
