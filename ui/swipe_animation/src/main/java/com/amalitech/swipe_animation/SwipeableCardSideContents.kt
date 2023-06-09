@@ -26,8 +26,9 @@ fun SwipeableCardSideContents(
     leftContent: @Composable () -> Unit,
     rightContent: @Composable () -> Unit,
     content: @Composable () -> Unit,
-    isLeftVisible : Boolean = false,
-    isRightVisible : Boolean = false
+    isLeftVisible: Boolean = false,
+    isRightVisible: Boolean = false,
+
 ) {
     var isLeftContentVisible by remember { mutableStateOf(isLeftVisible) }
     var isRightContentVisible by remember { mutableStateOf(isRightVisible) }
@@ -37,41 +38,38 @@ fun SwipeableCardSideContents(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
             .padding(4.dp)
-            .shadow(elevation = 4.dp),
+            .shadow(elevation = 4.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (isLeftContentVisible) {
-                Box(
-                    modifier = Modifier
-                        .weight(0.2f)
-                        .fillMaxHeight()
-                ) {
-
-                    leftContent()
+        Box(modifier = Modifier.fillMaxHeight()) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (isLeftContentVisible) {
+                    Box(
+                        modifier = Modifier
+                            .weight(0.2f)
+                            .fillMaxHeight()
+                    ) {
+                        leftContent()
+                    }
                 }
-            }
-            SwipeableCard(
-                modifier = Modifier
-                    .weight(0.6f)
-                    .fillMaxHeight(),
-                swipeThreshold = swipeThreshold,
-                onSwipeStart = { direction -> swipeDirection.value = direction },
-                onSwipeEnd = {
-                    swipeDirection.value = SwipeDirection.None
-                },
-                content = content
-            )
-            if (isRightContentVisible) {
-                Box(
+                SwipeableCard(
                     modifier = Modifier
-                        .weight(0.2f)
-                        .fillMaxHeight()
-                ) {
-
-                    rightContent()
-
+                        .weight(0.6f)
+                        .fillMaxHeight(),
+                    swipeThreshold = swipeThreshold,
+                    onSwipeStart = { direction -> swipeDirection.value = direction },
+                    onSwipeEnd = {
+                        swipeDirection.value = SwipeDirection.None
+                    },
+                    content = content
+                )
+                if (isRightContentVisible) {
+                    Box(
+                        modifier = Modifier
+                            .weight(0.2f)
+                            .fillMaxHeight()
+                    ) {
+                        rightContent()
+                    }
                 }
             }
         }
@@ -82,10 +80,12 @@ fun SwipeableCardSideContents(
             isLeftContentVisible = true
             isRightContentVisible = false
         }
+
         SwipeDirection.Right -> {
             isLeftContentVisible = false
             isRightContentVisible = true
         }
+
         else -> {
             isLeftContentVisible = false
             isRightContentVisible = false

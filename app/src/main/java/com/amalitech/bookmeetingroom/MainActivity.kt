@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
+import com.amalitech.rooms.RoomListScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +18,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BookMeetingRoomTheme {
-                Greeting(name = "Android")
+                //Greeting(name = "Android")
+                RoomListScreen()
             }
         }
     }
