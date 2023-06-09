@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
+import com.amalitech.onboarding.maxScreens
 
 @Composable
 fun SlidingDots(
@@ -25,7 +26,7 @@ fun SlidingDots(
 ) {
     val spacing = LocalSpacing.current
     Row(modifier = modifier) {
-        (0..3).forEach {
+        (0 until maxScreens).forEach {
             Dot(
                 selected = selectedIndex == it
             )
