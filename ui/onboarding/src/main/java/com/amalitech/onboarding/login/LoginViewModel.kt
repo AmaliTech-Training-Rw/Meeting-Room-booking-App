@@ -1,15 +1,18 @@
 package com.amalitech.onboarding.login
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.amalitech.core.util.UiText
 import com.amalitech.onboarding.components.AuthenticationBaseViewModel
 import com.amalitech.onboarding.components.AuthenticationBasedUiState
 import com.amalitech.onboarding.login.use_case.LoginUseCase
 import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 import com.amalitech.core.R
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
@@ -55,46 +58,51 @@ class LoginViewModel(
      * fine.
      */
     fun onLoginClick() {
-        val emailValidation = loginUseCase.validateEmail(_uiState.value.email)
-        val passwordValidation = loginUseCase.validatePassword(_uiState.value.password)
-        if (emailValidation == null && passwordValidation == null) {
-            val result = loginUseCase.logIn(
-                email = _uiState.value.email,
-                password = _uiState.value.password
-            )
-            if (result != null) {
+        if (job?.isActive == true)
+            return
+        job = viewModelScope.launch {
+            val emailValidation = loginUseCase.validateEmail(_uiState.value.email)
+            val passwordValidation = loginUseCase.validatePassword(_uiState.value.password)
+            if (emailValidation == null && passwordValidation == null) {
+                val result = loginUseCase.logIn(
+                    email = _uiState.value.email,
+                    password = _uiState.value.password
+                )
+                if (result != null) {
+                    _uiState.update { loginUiState ->
+                        loginUiState.copy(
+                            error = result
+                        )
+                    }
+                } else {
+                    val isAdmin = loginUseCase.isUserAdmin()
+                    sharedPreferences.saveShouldShowOnboarding(false)
+                    sharedPreferences.saveUserType(isAdmin)
+                    _uiState.update { loginUiState ->
+                        loginUiState.copy(
+                            snackBarValue = UiText.StringResource(R.string.logged_in_successfully),
+                            finishedLoggingIn = true
+                        )
+                    }
+
+                }
+            } else if (emailValidation != null) {
                 _uiState.update { loginUiState ->
                     loginUiState.copy(
-                        error = result
+                        error = emailValidation
                     )
                 }
             } else {
-                val isAdmin = loginUseCase.isUserAdmin()
-                sharedPreferences.saveShouldShowOnboarding(false)
-                sharedPreferences.saveUserType(isAdmin)
                 _uiState.update { loginUiState ->
                     loginUiState.copy(
-                        snackBarValue = UiText.StringResource(R.string.logged_in_successfully),
-                        finishedLoggingIn = true
+                        error = passwordValidation
                     )
                 }
-
-            }
-        } else if (emailValidation != null) {
-            _uiState.update { loginUiState ->
-                loginUiState.copy(
-                    error = emailValidation
-                )
-            }
-        } else {
-            _uiState.update { loginUiState ->
-                loginUiState.copy(
-                    error = passwordValidation
-                )
             }
         }
     }
 
     override val basedUiState: MutableStateFlow<AuthenticationBasedUiState>
         get() = MutableStateFlow(_uiState.value.toBaseUiState())
+    override var job: Job? = null
 }
