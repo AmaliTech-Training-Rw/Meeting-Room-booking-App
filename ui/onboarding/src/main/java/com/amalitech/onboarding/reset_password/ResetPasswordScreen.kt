@@ -37,7 +37,7 @@ import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.onboarding.components.AuthenticationTextField
 import com.amalitech.onboarding.util.ShowError
 import com.amalitech.onboarding.util.showSnackBar
-import com.amalitech.ui.onboarding.R
+import com.amalitech.core.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

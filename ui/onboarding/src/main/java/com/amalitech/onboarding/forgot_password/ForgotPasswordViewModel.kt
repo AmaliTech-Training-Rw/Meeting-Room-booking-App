@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.amalitech.core.util.UiText
 import com.amalitech.onboarding.components.AuthenticationBaseViewModel
 import com.amalitech.onboarding.components.AuthenticationBasedUiState
-import com.amalitech.ui.onboarding.R
+import com.amalitech.core.R
 import com.amalitech.onboarding.forgot_password.use_case.ForgotPasswordUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
