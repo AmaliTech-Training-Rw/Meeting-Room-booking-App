@@ -159,7 +159,7 @@ fun OnBoard(
                 },
                 onDragStopped = {
                     // Make sure they really swipe
-                    if (offsetX <= -120f && selectedIndex < 3) {
+                    if (offsetX <= -120f && selectedIndex < maxScreens - 1) {
                         onSwipe(selectedIndex + 1)
                     }
                     if (offsetX >= 120 && selectedIndex > 0) {
@@ -180,7 +180,7 @@ fun OnBoard(
                     end.linkTo(parent.end)
                 }
                 .offset {
-                    if ((offsetX <= -120f && selectedIndex < 3) || (offsetX >= 120 && selectedIndex > 0))
+                    if ((offsetX <= -120f && selectedIndex < maxScreens - 1) || (offsetX >= 120 && selectedIndex > 0))
                         IntOffset(offsetX.roundToInt(), 0)
                     else
                         IntOffset(0, 0)
@@ -202,7 +202,7 @@ fun OnBoard(
             )
         }
 
-        if (selectedIndex != 3) {
+        if (selectedIndex != maxScreens - 1) {
             SlidingDots(
                 modifier = Modifier
                     .padding(spacing.spaceLarge)
@@ -247,3 +247,8 @@ fun OnBoardPrev() {
         )
     }
 }
+
+/**
+ * Number of onBoarding screens
+ */
+const val maxScreens = 4
