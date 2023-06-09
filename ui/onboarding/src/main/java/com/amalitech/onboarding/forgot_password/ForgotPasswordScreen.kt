@@ -47,7 +47,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ForgotPasswordScreen(
     onNavigateToLogin: () -> Unit,
-    onNavigateToHome: () -> Unit,
+    onNavigateToReset: () -> Unit,
     viewModel: ForgotPasswordViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -59,9 +59,8 @@ fun ForgotPasswordScreen(
 
     LaunchedEffect(key1 = state) {
         showSnackBar(state.toBaseUiState(), snackbarHostState, context) { viewModel.onSnackBarShown() }
-
         if (state.linkSent) {
-            onNavigateToHome()
+            onNavigateToReset()
         }
     }
 
@@ -78,8 +77,8 @@ fun ForgotPasswordScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = com.amalitech.core.R.drawable.logo),
-                contentDescription = stringResource(id = com.amalitech.core.R.string.logo),
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = stringResource(id = R.string.logo),
                 alignment = Alignment.TopCenter,
                 colorFilter = ColorFilter.tint(
                     MaterialTheme.colorScheme.primary
@@ -94,7 +93,6 @@ fun ForgotPasswordScreen(
             )
             ShowError(state = state.toBaseUiState(), spacing = spacing, context = context)
             Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
-
             AuthenticationTextField(
                 placeholder = stringResource(R.string.email),
                 value = state.email,
@@ -112,7 +110,6 @@ fun ForgotPasswordScreen(
             )
 
             Spacer(modifier = Modifier.height(spacing.spaceLarge))
-
             DefaultButton(
                 text = stringResource(id = R.string.send_reset_link),
                 onClick = { viewModel.onSendResetLink() },

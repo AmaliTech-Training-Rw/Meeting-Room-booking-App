@@ -1,6 +1,5 @@
 package com.amalitech.onboarding.login
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -58,29 +57,27 @@ fun LoginScreen(
     onNavigateToHome: () -> Unit,
     onNavigateToForgotPassword: () -> Unit,
     onNavigateToSignUp: () -> Unit,
-    onNavigateUp: () -> Unit,
     viewModel: LoginViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-
     val spacing = LocalSpacing.current
     val context = LocalContext.current
     val snackbarHostState = remember {
         SnackbarHostState()
     }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val onGo = {
+        viewModel.onLoginClick()
+        keyboardController?.hide()
+    }
+
     LaunchedEffect(key1 = state) {
         showSnackBar(state.toBaseUiState(), snackbarHostState, context) {
             viewModel.onSnackBarShown()
         }
-    }
-
-    if (state.finishedLoggingIn) {
-        onNavigateToHome()
-    }
-
-    BackHandler {
-        onNavigateUp()
+        if (state.finishedLoggingIn) {
+            onNavigateToHome()
+        }
     }
 
     Scaffold(
@@ -99,7 +96,7 @@ fun LoginScreen(
                 modifier = Modifier.align(Alignment.Center)
             ) {
                 Image(
-                    painter = painterResource(id = com.amalitech.core.R.drawable.logo),
+                    painter = painterResource(id = R.drawable.logo),
                     contentDescription = stringResource(R.string.logo),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                     modifier = Modifier.size(
@@ -123,7 +120,7 @@ fun LoginScreen(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     onGo = {
-                        viewModel.onLoginClick()
+                        onGo()
                     }
                 )
                 Spacer(modifier = Modifier.height(spacing.spaceLarge))
@@ -140,8 +137,7 @@ fun LoginScreen(
                         keyboardType = KeyboardType.Password
                     ),
                     onGo = {
-                        viewModel.onLoginClick()
-                        keyboardController?.hide()
+                        onGo()
                     }
                 )
                 Spacer(modifier = Modifier.height(spacing.spaceMedium))
@@ -162,7 +158,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
                 DefaultButton(
                     text = stringResource(id = R.string.sign_in),
-                    onClick = { viewModel.onLoginClick() },
+                    onClick = { onGo() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = spacing.spaceLarge)
@@ -211,7 +207,6 @@ fun Prev() {
     LoginScreen(
         onNavigateToHome = {},
         onNavigateToForgotPassword = {},
-        onNavigateToSignUp = {},
-        onNavigateUp = {}
+        onNavigateToSignUp = {}
     )
 }

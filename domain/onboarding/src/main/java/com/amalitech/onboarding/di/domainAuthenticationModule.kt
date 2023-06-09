@@ -1,6 +1,8 @@
 package com.amalitech.onboarding.di
 
+import com.amalitech.onboarding.forgot_password.use_case.ForgotPasswordUseCase
 import com.amalitech.onboarding.forgot_password.use_case.SendResetLink
+import com.amalitech.onboarding.login.use_case.IsUserAdmin
 import com.amalitech.onboarding.login.use_case.LogIn
 import com.amalitech.onboarding.login.use_case.LoginUseCase
 import com.amalitech.onboarding.login.use_case.ValidateEmail
@@ -46,5 +48,16 @@ val onboardingDomainModule = module {
 
     single {
         ResetPasswordUseCase(get(), get())
+    }
+
+    single {
+        ForgotPasswordUseCase(
+            get(),
+            get()
+        )
+    }
+
+    single {
+        IsUserAdmin()
     }
 }

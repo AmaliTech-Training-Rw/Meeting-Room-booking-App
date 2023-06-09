@@ -1,7 +1,7 @@
 package com.amalitech.onboarding.forgot_password
 
 import com.amalitech.core.util.UiText
-import com.amalitech.domain.onboarding.R
+import com.amalitech.core.R
 import com.amalitech.onboarding.forgot_password.use_case.ForgotPasswordUseCase
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -70,7 +70,7 @@ class ForgotPasswordViewModelTest {
 
         // THEN - two states are updated
         assertEquals(
-            UiText.StringResource(com.amalitech.ui.onboarding.R.string.link_sent_inbox),
+            UiText.StringResource(R.string.link_sent_inbox),
             viewModel.uiState.value.snackBarValue
         )
         assertEquals(
