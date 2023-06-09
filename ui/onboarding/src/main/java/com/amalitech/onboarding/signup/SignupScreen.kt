@@ -194,11 +194,11 @@ fun SignupScreen(
                     modifier = Modifier.fillMaxWidth(),
                 )
             } else {
-                viewModel.validateArguments(
-                    organizationName,
-                    typeOfOrganization,
-                    location,
-                    email
+                viewModel.submitValues(
+                    organizationName!!,
+                    typeOfOrganization!!,
+                    location!!,
+                    email!!
                 )
             }
             Spacer(modifier = Modifier.height(spacing.spaceSmall))

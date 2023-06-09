@@ -10,6 +10,8 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -124,7 +126,7 @@ class SignupViewModelTest {
             signupUseCase.isUsernameAvailable(any())
         } returns true
 
-        every {
+        coEvery {
             signupUseCase.signup(any())
         } returns null
 
@@ -165,7 +167,7 @@ class SignupViewModelTest {
             signupUseCase.isUsernameAvailable(any())
         } returns true
 
-        every {
+        coEvery {
             signupUseCase.signup(any())
         } returns UiText.StringResource(R.string.your_account_is_created)
 
@@ -206,7 +208,7 @@ class SignupViewModelTest {
             signupUseCase.isUsernameAvailable(any())
         } returns true
 
-        every {
+        coEvery {
             signupUseCase.signup(any())
         } returns null
 
@@ -244,7 +246,7 @@ class SignupViewModelTest {
             signupUseCase.isUsernameAvailable(any())
         } returns true
 
-        every {
+        coEvery {
             signupUseCase.signup(any())
         } returns null
 
@@ -281,7 +283,7 @@ class SignupViewModelTest {
             signupUseCase.isUsernameAvailable(any())
         } returns true
 
-        every {
+        coEvery {
             signupUseCase.signup(any())
         } returns null
 
@@ -319,7 +321,7 @@ class SignupViewModelTest {
             signupUseCase.isUsernameAvailable(any())
         } returns true
 
-        every {
+        coEvery {
             signupUseCase.signup(any())
         } returns null
 
@@ -354,7 +356,7 @@ class SignupViewModelTest {
             signupUseCase.isUsernameAvailable(any())
         } returns true
 
-        every {
+        coEvery {
             signupUseCase.signup(any())
         } returns null
 
@@ -396,7 +398,7 @@ class SignupViewModelTest {
             signupUseCase.isUsernameAvailable(any())
         } returns false
 
-        every {
+        coEvery {
             signupUseCase.signup(any())
         } returns null
 
@@ -434,7 +436,7 @@ class SignupViewModelTest {
             signupUseCase.isUsernameAvailable(any())
         } returns true
 
-        every {
+        coEvery {
             signupUseCase.signup(any())
         } returns null
 
@@ -478,7 +480,7 @@ class SignupViewModelTest {
         val typeOfOrganization = "type"
         val location = "location"
 
-        viewModel.validateArguments(
+        viewModel.submitValues(
             organizationName = organizationName,
             email = email,
             typeOfOrganization = typeOfOrganization,
@@ -500,34 +502,30 @@ class SignupViewModelTest {
     }
 
     @Test
-    fun `ensure error is thrown when any arg is null`() {
-        val organizationName = null
-        val email = "email@test.com"
-        val typeOfOrganization = "type"
-        val location = "location"
-
-        viewModel.validateArguments(
-            organizationName = organizationName,
-            email = email,
-            typeOfOrganization = typeOfOrganization,
-            location = location
-        )
-
-
-        assertEquals(
-            UiText.StringResource(R.string.error_the_link_doesnt_work),
-            viewModel.uiState.value.error
-        )
-    }
-
-    @Test
-    fun `ensure error is thrown when any arg is blank`() {
+    fun `ensure isInvitedUser returns false when any arg is blank`() {
         val organizationName = "null"
         val email = ""
         val typeOfOrganization = "type"
         val location = "location"
 
-        viewModel.validateArguments(
+        val result = viewModel.isInvitedUser(
+            organizationName = organizationName,
+            email = email,
+            typeOfOrganization = typeOfOrganization,
+            location = location
+        )
+
+        assertEquals(false, result)
+    }
+
+    @Test
+    fun `ensure isInvitedUser returns false when any arg is null`() {
+        val organizationName = null
+        val email = "yes"
+        val typeOfOrganization = "type"
+        val location = "location"
+
+        val result = viewModel.isInvitedUser(
             organizationName = organizationName,
             email = email,
             typeOfOrganization = typeOfOrganization,
@@ -536,8 +534,66 @@ class SignupViewModelTest {
 
 
         assertEquals(
-            UiText.StringResource(R.string.error_the_link_doesnt_work),
-            viewModel.uiState.value.error
+            false,
+            result
         )
+    }
+
+    @Test
+    fun `ensure isInvitedUser returns true when all args are valid`() {
+        val organizationName = "null"
+        val email = "yes"
+        val typeOfOrganization = "type"
+        val location = "location"
+
+        val result = viewModel.isInvitedUser(
+            organizationName = organizationName,
+            email = email,
+            typeOfOrganization = typeOfOrganization,
+            location = location
+        )
+
+
+        assertEquals(
+            true,
+            result
+        )
+    }
+
+    @Test
+    fun `ensure that the job is not null once onsignupclick is called`() = runTest {
+        viewModel.onSelectedOrganizationType("organization2")
+
+        every {
+            signupUseCase.checkValuesNotBlank(any(), any(), any(), any(), any(), any())
+        } returns null
+        every {
+            signupUseCase.checkPasswordsMatch(any(), any())
+        } returns null
+        every {
+            signupUseCase.validateEmail(any())
+        } returns null
+        every {
+            signupUseCase.validatePassword(any())
+        } returns null
+        every {
+            signupUseCase.isEmailAvailable(any())
+        } returns true
+        every {
+            signupUseCase.isUsernameAvailable(any())
+        } returns true
+
+        coEvery {
+            signupUseCase.signup(any())
+        } returns null
+
+        coEvery {
+            signupUseCase.fetchOrganizationsType()
+        } returns Response(data = listOf())
+
+        viewModel.onSignupClick()
+
+        advanceUntilIdle()
+        assertEquals(true, viewModel.job?.isCompleted)
     }
 }

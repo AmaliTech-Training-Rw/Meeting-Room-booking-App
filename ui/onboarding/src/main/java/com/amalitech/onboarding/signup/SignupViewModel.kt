@@ -6,6 +6,7 @@ import com.amalitech.core.R
 import com.amalitech.core.util.UiText
 import com.amalitech.onboarding.signup.model.User
 import com.amalitech.onboarding.signup.use_case.SignupUseCase
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -17,6 +18,9 @@ class SignupViewModel(
 
     private val _uiState = MutableStateFlow(SignupUiState())
     val uiState = _uiState.asStateFlow()
+
+    var job: Job? = null
+        private set
 
     init {
         fetchOrganizations()
@@ -102,7 +106,7 @@ class SignupViewModel(
                 passwordConfirmation = password.trim(),
                 error = signupUseCase.checkPasswordsMatch(
                     _uiState.value.password,
-                    _uiState.value.passwordConfirmation
+                    password.trim()
                 )
             )
         }
@@ -142,38 +146,53 @@ class SignupViewModel(
         }
     }
 
+    /**
+     * onSignupClick - Create an account for the user if there
+     * is no error after validation. If there is an error triggered during the signup process,
+     * this error is added to the state so that it can be displayed on the screen
+     */
     fun onSignupClick() {
-        validateData()
-        if (_uiState.value.error == null) {
-            val result = signupUseCase.signup(
-                user = User(
-                    _uiState.value.username,
-                    _uiState.value.organizationName,
-                    _uiState.value.email,
-                    _uiState.value.selectedOrganizationType,
-                    _uiState.value.location,
-                    _uiState.value.password,
-                    _uiState.value.passwordConfirmation,
+        if (job?.isActive == true)
+            return
+        job = viewModelScope.launch {
+            validateData()
+            if (_uiState.value.error == null) {
+                val result = signupUseCase.signup(
+                    user = User(
+                        _uiState.value.username,
+                        _uiState.value.organizationName,
+                        _uiState.value.email,
+                        _uiState.value.selectedOrganizationType,
+                        _uiState.value.location,
+                        _uiState.value.password,
+                        _uiState.value.passwordConfirmation,
+                    )
                 )
-            )
-            if (result == null) {
-                _uiState.update { signupUiState ->
-                    signupUiState.copy(
-                        snackBarValue = UiText.StringResource(R.string.your_account_is_created),
-                        finishedSigningUp = true
-                    )
-                }
-            } else {
-                _uiState.update { signupUiState ->
-                    signupUiState.copy(
-                        error = result
-                    )
+                if (result == null) {
+                    _uiState.update { signupUiState ->
+                        signupUiState.copy(
+                            snackBarValue = UiText.StringResource(R.string.your_account_is_created),
+                            finishedSigningUp = true
+                        )
+                    }
+                } else {
+                    _uiState.update { signupUiState ->
+                        signupUiState.copy(
+                            error = result
+                        )
+                    }
                 }
             }
         }
     }
 
+    /**
+     * validateData - Checks if values received by the viewModel are correct
+     * and can be used to sign to create an account for the user. If there is an error
+     * it updates the viewModel state with it.
+     */
     private fun validateData() {
+        updateStateWithError(null)
         val emailValidationResult = signupUseCase.validateEmail(_uiState.value.email)
         val passwordValidationResult = signupUseCase.validatePassword(_uiState.value.password)
         val valuesNotBlankResult = signupUseCase.checkValuesNotBlank(
@@ -214,7 +233,11 @@ class SignupViewModel(
         }
     }
 
-    private fun updateStateWithError(error: UiText) {
+    /**
+     * updateStateWithError - adds error to the state
+     * @param error The error to be added
+     */
+    private fun updateStateWithError(error: UiText?) {
         _uiState.update { signupUiState ->
             signupUiState.copy(
                 error = error
@@ -233,32 +256,41 @@ class SignupViewModel(
         }
     }
 
-    fun validateArguments(
-        organizationName: String?,
-        typeOfOrganization: String?,
-        location: String?,
-        email: String?
+    /**
+     * submitValues - Submits values received by the nav back stack entry to the viewModel
+     * @param email Value of email address received by the nav back stack entry
+     * @param organizationName Value received by the nav back stack entry
+     * @param location Value received by the nav back stack entry
+     * @param typeOfOrganization Value received by the nav back stack entry
+     */
+    fun submitValues(
+        organizationName: String,
+        typeOfOrganization: String,
+        location: String,
+        email: String
     ) {
-        if (organizationName.isNullOrBlank() || email.isNullOrBlank() || location.isNullOrBlank() || typeOfOrganization.isNullOrBlank()) {
-            _uiState.update { signupUiState ->
-                signupUiState.copy(
-                    error = UiText.StringResource(R.string.error_the_link_doesnt_work)
-                )
-            }
-        } else {
-            onNewLocation(location)
-            onNewEmail(email)
-            onNewOrganizationName(organizationName)
-            onSelectedOrganizationType(typeOfOrganization)
-        }
+        onNewLocation(location)
+        onNewEmail(email)
+        onNewOrganizationName(organizationName)
+        onSelectedOrganizationType(typeOfOrganization)
     }
 
+    /**
+     * isInvitedUser - Checks if there are all required arguments for invited users.
+     * If any of the arguments is null or blank, then it's not an invited user, because
+     * the navHost can only receive all the arguments together or none of them.
+     * @param email Value of email address received by the nav back stack entry
+     * @param organizationName Value received by the nav back stack entry
+     * @param location Value received by the nav back stack entry
+     * @param typeOfOrganization Value received by the nav back stack entry
+     * @return false if any of the params is null or blank, true otherwise
+     */
     fun isInvitedUser(
         email: String?,
         organizationName: String?,
         location: String?,
         typeOfOrganization: String?
     ): Boolean {
-        return !email.isNullOrBlank() || !organizationName.isNullOrBlank() || !location.isNullOrBlank() || !typeOfOrganization.isNullOrBlank()
+        return !email.isNullOrBlank() && !organizationName.isNullOrBlank() && !location.isNullOrBlank() && !typeOfOrganization.isNullOrBlank()
     }
 }
