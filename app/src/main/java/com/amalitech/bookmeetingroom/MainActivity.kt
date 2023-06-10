@@ -11,9 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.amalitech.admin.components.DashboardGraph
+import com.amalitech.admin.components.DashboardBarGraph
 import com.amalitech.admin.components.RoomsBookedTime
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,24 +27,15 @@ class MainActivity : ComponentActivity() {
                         .size(400.dp),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val itemsBookedTime = listOf(
-                        9f,
-                        17f,
-                        30f,
-                        20f,
-                        26f,
-                        29f,
-                        120f,
-                        4f
-                    )
-                    val items = (1..8).map {
+
+                    val items = (1..26).map {
                         RoomsBookedTime(
                             it,
-                            itemsBookedTime[it - 1],
+                            Random.nextInt(80, 150).toFloat(),
                             "room$it"
                         )
                     }
-                    DashboardGraph(items)
+                    DashboardBarGraph(items)
                 }
             }
         }
