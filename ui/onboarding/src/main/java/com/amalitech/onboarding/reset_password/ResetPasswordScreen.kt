@@ -32,12 +32,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.amalitech.core.R
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.onboarding.components.AuthenticationTextField
-import com.amalitech.onboarding.util.ShowError
+import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.util.showSnackBar
-import com.amalitech.core.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -51,14 +51,26 @@ fun ResetPasswordScreen(
     val snackbarHostState = remember {
         SnackbarHostState()
     }
+    val baseResult
+            by viewModel.publicBaseResult.collectAsStateWithLifecycle()
 
-    LaunchedEffect(key1 = state) {
-        showSnackBar(state.toBaseUiState(), snackbarHostState, context) {
-            viewModel.onSnackBarShown()
-        }
+    LaunchedEffect(key1 = baseResult) {
+        when (baseResult) {
+            is UiState.Success -> {
+                onNavigateToLogin()
+            }
 
-        if (state.passwordReset) {
-            onNavigateToLogin()
+            is UiState.Error -> {
+                showSnackBar(
+                    snackBarValue = (baseResult as UiState.Error<ResetPasswordUiState>).error,
+                    snackbarHostState = snackbarHostState,
+                    context = context
+                ) {
+                    viewModel.onSnackBarShown()
+                }
+            }
+
+            else -> {}
         }
     }
 
@@ -89,7 +101,6 @@ fun ResetPasswordScreen(
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.titleMedium
             )
-            ShowError(state = state.toBaseUiState(), spacing = spacing, context = context)
             Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
             AuthenticationTextField(
                 placeholder = stringResource(R.string.new_password),
@@ -125,7 +136,8 @@ fun ResetPasswordScreen(
                 text = stringResource(id = R.string.save_changes),
                 onClick = { viewModel.onResetPassword() },
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                enabled = baseResult !is UiState.Loading
             )
         }
     }

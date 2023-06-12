@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BookMeetingRoomTheme {
-                Greeting(name = "Android")
+                AppScaffold(shouldShowOnboarding = true)
             }
         }
     }

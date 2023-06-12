@@ -1,11 +1,8 @@
 package com.amalitech.onboarding.reset_password
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amalitech.core.util.UiText
-import com.amalitech.onboarding.components.AuthenticationBaseViewModel
-import com.amalitech.onboarding.components.AuthenticationBasedUiState
-import kotlinx.coroutines.Job
+import com.amalitech.core_ui.util.AuthenticationBaseViewModel
+import com.amalitech.core_ui.util.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -13,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class ResetPasswordViewModel(
     private val resetPasswordUseCase: ResetPasswordUseCase
-) : ViewModel(), AuthenticationBaseViewModel {
+) : AuthenticationBaseViewModel<ResetPasswordUiState>() {
 
     private val _uiState = MutableStateFlow(
         ResetPasswordUiState()
@@ -45,11 +42,18 @@ class ResetPasswordViewModel(
         _uiState.update { resetPasswordUiState ->
             resetPasswordUiState.copy(
                 passwordConfirmation = password.trim(),
-                error = resetPasswordUseCase.checkPasswordsMatch(
-                    _uiState.value.newPassword,
-                    _uiState.value.passwordConfirmation
-                )
             )
+        }
+        val passwordCheck = resetPasswordUseCase.checkPasswordsMatch(
+            _uiState.value.newPassword,
+            _uiState.value.passwordConfirmation
+        )
+        if (passwordCheck != null) {
+            baseResult.update {
+                UiState.Error(
+                    error = passwordCheck
+                )
+            }
         }
     }
 
@@ -67,39 +71,35 @@ class ResetPasswordViewModel(
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
-            _uiState.update { resetPasswordUiState ->
-                resetPasswordUiState.copy(
-                    error = resetPasswordUseCase.checkPasswordsMatch(
-                        _uiState.value.newPassword,
-                        _uiState.value.passwordConfirmation
-                    )
-                )
+            baseResult.update {
+                UiState.Loading()
             }
-            if (_uiState.value.error == null) {
-                val result = resetPasswordUseCase.resetPassword(
+            val passwordsCheck = resetPasswordUseCase.checkPasswordsMatch(
+                _uiState.value.newPassword,
+                _uiState.value.passwordConfirmation)
+
+            if (passwordsCheck == null) {
+                val apiResult = resetPasswordUseCase.resetPassword(
                     _uiState.value.newPassword,
                     _uiState.value.passwordConfirmation
                 )
 
-                if (result != null) {
-                    _uiState.update { resetPasswordUiState ->
-                        resetPasswordUiState.copy(
-                            error = result
+                if (apiResult != null) {
+                    baseResult.update {
+                        UiState.Error(
+                            error = apiResult
                         )
                     }
                 } else {
-                    _uiState.update { resetPasswordUiState ->
-                        resetPasswordUiState.copy(
-                            snackbarValue = UiText.StringResource(com.amalitech.core.R.string.password_reset_successfully),
-                            passwordReset = true
-                        )
+                    baseResult.update {
+                        UiState.Success()
                     }
+                }
+            } else {
+                baseResult.update {
+                    UiState.Error(error = passwordsCheck)
                 }
             }
         }
     }
-
-    override val basedUiState: MutableStateFlow<AuthenticationBasedUiState>
-        get() = MutableStateFlow(_uiState.value.toBaseUiState())
-    override var job: Job? = null
 }

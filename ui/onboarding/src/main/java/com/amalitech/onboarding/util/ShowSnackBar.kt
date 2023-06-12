@@ -2,15 +2,15 @@ package com.amalitech.onboarding.util
 
 import android.content.Context
 import androidx.compose.material3.SnackbarHostState
-import com.amalitech.onboarding.components.AuthenticationBasedUiState
+import com.amalitech.core.util.UiText
 
 suspend fun showSnackBar(
-    state: AuthenticationBasedUiState,
+    snackBarValue: UiText?,
     snackbarHostState: SnackbarHostState,
     context: Context,
     onSnackBarShown: () -> Unit
 ) {
-    state.snackBarValue?.let {
+    snackBarValue?.let {
         snackbarHostState.showSnackbar(
             it.asString(context = context)
         )

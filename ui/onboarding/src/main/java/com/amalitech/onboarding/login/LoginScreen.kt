@@ -43,12 +43,12 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.amalitech.core.R
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.onboarding.components.AuthenticationTextField
-import com.amalitech.onboarding.util.ShowError
+import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.util.showSnackBar
-import com.amalitech.core.R
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -70,13 +70,25 @@ fun LoginScreen(
         viewModel.onLoginClick()
         keyboardController?.hide()
     }
+    val baseResult by viewModel.publicBaseResult.collectAsStateWithLifecycle()
 
-    LaunchedEffect(key1 = state) {
-        showSnackBar(state.toBaseUiState(), snackbarHostState, context) {
-            viewModel.onSnackBarShown()
-        }
-        if (state.finishedLoggingIn) {
-            onNavigateToHome()
+    LaunchedEffect(key1 = baseResult) {
+        when (baseResult) {
+            is UiState.Success -> {
+                onNavigateToHome()
+            }
+
+            is UiState.Error -> {
+                showSnackBar(
+                    snackBarValue = (baseResult as UiState.Error<LoginUiState>).error,
+                    snackbarHostState = snackbarHostState,
+                    context = context
+                ) {
+                    viewModel.onSnackBarShown()
+                }
+            }
+
+            else -> {}
         }
     }
 
@@ -110,7 +122,6 @@ fun LoginScreen(
                     style = MaterialTheme.typography.titleMedium,
                     fontSize = 24.sp
                 )
-                ShowError(state.toBaseUiState(), spacing, context)
                 Spacer(modifier = Modifier.height(spacing.spaceLarge))
                 AuthenticationTextField(
                     placeholder = stringResource(R.string.email),
@@ -162,7 +173,8 @@ fun LoginScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = spacing.spaceLarge)
-                        .padding(bottom = spacing.spaceLarge)
+                        .padding(bottom = spacing.spaceLarge),
+                    enabled = baseResult !is UiState.Loading
                 )
             }
             val text = buildAnnotatedString {
