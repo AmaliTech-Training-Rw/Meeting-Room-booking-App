@@ -1,4 +1,4 @@
-package com.amalitech.core_ui.components
+package com.amalitech.admin.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,9 +26,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.amalitech.admin.DashboardCardItem
 import com.amalitech.core_ui.theme.LocalSpacing
 
-// TODO(Move this file into the admin module)
 @Composable
 fun DashBoardCard(
     cardItem: DashboardCardItem,
@@ -36,7 +36,7 @@ fun DashBoardCard(
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = MaterialTheme.colorScheme.onBackground,
     highlightColor: Color = MaterialTheme.colorScheme.primary,
-    highlightHeight: Dp = 3.dp,
+    highlightHeight: Dp = LocalSpacing.current.spaceSmall,
     labelTextStyle: TextStyle = MaterialTheme.typography.bodyLarge,
     countTextStyle: TextStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
     iconSize: Dp = LocalSpacing.current.spaceLarge,
