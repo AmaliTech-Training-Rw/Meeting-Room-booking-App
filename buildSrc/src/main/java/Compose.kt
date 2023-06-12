@@ -19,4 +19,6 @@ object Compose {
 
     const val materialIconsExtended = "androidx.compose.material:material-icons-extended:$composeVersion"
 
+    private const val constraintLayoutVersion = "1.0.1"
+    const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:$constraintLayoutVersion"
 }

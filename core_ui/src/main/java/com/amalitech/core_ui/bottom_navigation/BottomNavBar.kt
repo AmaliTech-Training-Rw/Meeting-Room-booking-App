@@ -65,12 +65,6 @@ fun BottomNavBar(
                 } == true,
                 onClick = { onClick(screen) },
                 icon = {
-                    Icon(
-                        painter = painterResource(id = screen.icon),
-                        contentDescription = screen.label.asString(context),
-                    )
-                },
-                label = {
                     BadgedBox(badge = {
                         if (screen.badge.count > 0)
                             Text(
@@ -81,12 +75,18 @@ fun BottomNavBar(
                                     .background(badgeBackgroundColor)
                             )
                     }) {
-                        Text(
-                            text = screen.label.asString(context),
-                            maxLines = 1,
-                            fontSize = 10.sp
+                        Icon(
+                            painter = painterResource(id = screen.icon),
+                            contentDescription = screen.label.asString(context),
                         )
                     }
+                },
+                label = {
+                    Text(
+                        text = screen.label.asString(context),
+                        maxLines = 1,
+                        fontSize = 10.sp
+                    )
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = selectedIconColor,
