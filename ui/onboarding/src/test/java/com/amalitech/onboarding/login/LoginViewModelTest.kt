@@ -1,7 +1,7 @@
 package com.amalitech.onboarding.login
 
 import com.amalitech.core.util.UiText
-import com.amalitech.domain.onboarding.R
+import com.amalitech.core.R
 import com.amalitech.onboarding.MainDispatcherRule
 import com.amalitech.onboarding.login.use_case.LoginUseCase
 import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
@@ -93,7 +93,7 @@ class LoginViewModelTest {
             true, state.value.finishedLoggingIn
         )
         assertEquals(
-            UiText.StringResource(com.amalitech.ui.onboarding.R.string.logged_in_successfully),
+            UiText.StringResource(R.string.logged_in_successfully),
             state.value.snackBarValue
         )
     }
@@ -106,12 +106,12 @@ class LoginViewModelTest {
 
         every {
             loginUseCase.validatePassword(any())
-        } returns UiText.StringResource(R.string.error_password_is_blank)
+        } returns UiText.StringResource(R.string.error_password_is_not_valid)
 
         viewModel.onLoginClick()
 
         assertEquals(
-            UiText.StringResource(R.string.error_password_is_blank), viewModel.uiState.value.error
+            UiText.StringResource(R.string.error_password_is_not_valid), viewModel.uiState.value.error
         )
     }
 

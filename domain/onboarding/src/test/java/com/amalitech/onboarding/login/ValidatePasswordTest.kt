@@ -28,7 +28,7 @@ class ValidatePasswordTest {
         val result = validatePassword(password)
 
         // THEN - the result is a UiText instance
-        val expectedResult = UiText.StringResource(R.string.error_password_is_blank)
+        val expectedResult = UiText.StringResource(R.string.error_password_is_not_valid)
         assertEquals(expectedResult, result)
     }
     @Test
@@ -40,7 +40,7 @@ class ValidatePasswordTest {
         val result = validatePassword(password)
 
         // THEN - the result is a UiText instance
-        val expectedResult = UiText.StringResource(R.string.error_password_is_blank)
+        val expectedResult = UiText.StringResource(R.string.error_password_is_not_valid)
         assertEquals(expectedResult, result)
     }
     @Test
@@ -52,7 +52,7 @@ class ValidatePasswordTest {
         val result = validatePassword(password)
 
         // THEN - the result is a UiText instance
-        val expectedResult = UiText.StringResource(R.string.error_password_is_blank)
+        val expectedResult = UiText.StringResource(R.string.error_password_is_not_valid)
         assertEquals(expectedResult, result)
     }
     @Test
@@ -64,7 +64,7 @@ class ValidatePasswordTest {
         val result = validatePassword(password)
 
         // THEN - the result is a UiText instance
-        val expectedResult = UiText.StringResource(R.string.error_password_is_blank)
+        val expectedResult = UiText.StringResource(R.string.error_password_is_not_valid)
         assertEquals(expectedResult, result)
     }
     @Test
@@ -76,7 +76,7 @@ class ValidatePasswordTest {
         val result = validatePassword(password)
 
         // THEN - the result is a UiText instance
-        val expectedResult = UiText.StringResource(R.string.error_password_is_blank)
+        val expectedResult = UiText.StringResource(R.string.error_password_is_not_valid)
         assertEquals(expectedResult, result)
     }
     @Test
@@ -88,7 +88,7 @@ class ValidatePasswordTest {
         val result = validatePassword(password)
 
         // THEN - the result is a UiText instance
-        val expectedResult = UiText.StringResource(R.string.error_password_is_blank)
+        val expectedResult = UiText.StringResource(R.string.error_password_is_not_valid)
         assertEquals(expectedResult, result)
     }
 

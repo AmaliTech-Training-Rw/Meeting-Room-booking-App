@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.amalitech.core.util.UiText
 import com.amalitech.onboarding.login.use_case.LoginUseCase
 import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
-import com.amalitech.ui.onboarding.R
+import com.amalitech.core.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
