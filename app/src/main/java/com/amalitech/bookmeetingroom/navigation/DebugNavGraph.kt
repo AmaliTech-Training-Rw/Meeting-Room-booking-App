@@ -36,8 +36,7 @@ fun NavigationGraph(navController: NavHostController) {
         composable(route = NavigationTarget.FORGOT.route) {
             ForgotPasswordScreen(
                 onNavigateToLogin = {},
-                onNavigateToReset = {},
-                viewModel = it.sharedViewModel(navController = navController)
+                onNavigateToReset = {}
             )
         }
         composable(route = NavigationTarget.RESET.route) {
