@@ -3,6 +3,7 @@ package com.amalitech.onboarding.login
 import com.amalitech.core.util.UiText
 import com.amalitech.core.R
 import com.amalitech.onboarding.MainDispatcherRule
+import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.login.use_case.LoginUseCase
 import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 import io.mockk.every
@@ -55,13 +56,6 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `when a snackBar is shown, its value is cleared in state`() {
-        viewModel.onSnackBarShown()
-
-        assertEquals(null, viewModel.uiState.value.snackBarValue)
-    }
-
-    @Test
     fun `when onLoginClick is called with valid email and password the state is updated accordingly`() {
         every {
             loginUseCase.validateEmail(any())
@@ -88,14 +82,8 @@ class LoginViewModelTest {
 
         viewModel.onLoginClick()
 
-        val state = viewModel.uiState
-        assertEquals(
-            true, state.value.finishedLoggingIn
-        )
-        assertEquals(
-            UiText.StringResource(R.string.logged_in_successfully),
-            state.value.snackBarValue
-        )
+        val state = viewModel.publicBaseResult
+        assertTrue(state.value is UiState.Success)
     }
 
     @Test
@@ -110,8 +98,11 @@ class LoginViewModelTest {
 
         viewModel.onLoginClick()
 
+        val state = viewModel.publicBaseResult
+        assertTrue(state.value is UiState.Error)
         assertEquals(
-            UiText.StringResource(R.string.error_password_is_not_valid), viewModel.uiState.value.error
+            UiText.StringResource(R.string.error_password_is_not_valid),
+            (state.value as UiState.Error).error
         )
     }
 
@@ -127,8 +118,11 @@ class LoginViewModelTest {
 
         viewModel.onLoginClick()
 
+        val state = viewModel.publicBaseResult
+        assertTrue(state.value is UiState.Error)
         assertEquals(
-            UiText.StringResource(R.string.error_email_not_valid), viewModel.uiState.value.error
+            UiText.StringResource(R.string.error_email_not_valid),
+            (state.value as UiState.Error).error
         )
     }
 
@@ -149,9 +143,11 @@ class LoginViewModelTest {
 
         viewModel.onLoginClick()
 
+        val state = viewModel.publicBaseResult
+        assertTrue(state.value is UiState.Error)
         assertEquals(
             UiText.StringResource(androidx.compose.ui.R.string.default_error_message),
-            viewModel.uiState.value.error
+            (state.value as UiState.Error).error
         )
     }
 }

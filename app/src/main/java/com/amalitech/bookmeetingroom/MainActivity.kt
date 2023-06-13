@@ -5,10 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
-import com.amalitech.admin.components.DashBoardCard
-import com.amalitech.admin.DashboardCardItem
-import com.amalitech.core_ui.R
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -20,9 +19,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BookMeetingRoomTheme {
-                DashBoardCard(
-                    DashboardCardItem(label = "Users", iconId = R.drawable.baseline_mail_outline_24, count = 5)
-                )
+                val showOnboarding by viewModel.showOnBoarding.collectAsStateWithLifecycle()
+                AppScaffold(shouldShowOnboarding = showOnboarding)
             }
         }
     }
