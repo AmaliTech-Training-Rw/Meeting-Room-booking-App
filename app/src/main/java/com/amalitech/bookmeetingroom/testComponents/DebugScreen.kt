@@ -29,7 +29,9 @@ fun DebugScreen(onNavigate: (NavigationTarget) -> Unit) {
             NavigationTarget.DRAWER
         )
 
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    LazyColumn(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
         items(actionButtons) { navigationTarget ->
             Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Center) {
                 DefaultButton(

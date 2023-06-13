@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.amalitech.admin.DashboardCardItem
+import com.amalitech.admin.components.DashBoardCard
 import com.amalitech.bookmeetingroom.AppScaffold
 import com.amalitech.bookmeetingroom.testComponents.DebugScreen
 import com.amalitech.core_ui.components.drawer.BookMeetingRoomDrawer
@@ -14,6 +16,7 @@ import com.amalitech.onboarding.forgot_password.ForgotPasswordScreen
 import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
+import com.amalitech.core_ui.R
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
@@ -59,8 +62,14 @@ fun NavigationGraph(navController: NavHostController) {
                 ) {}
             }
         }
-        composable(route = NavigationTarget.CARD.route){
-
+        composable(route = NavigationTarget.CARD.route) {
+            DashBoardCard(
+                DashboardCardItem(
+                    label = "Users",
+                    iconId = R.drawable.baseline_mail_outline_24,
+                    count = 5
+                )
+            )
         }
     }
 }
