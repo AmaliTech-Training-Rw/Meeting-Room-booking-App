@@ -20,6 +20,7 @@
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/domain/onboarding" />
             <option value="$PROJECT_DIR$/ui" />
+            <option value="$PROJECT_DIR$/ui/admin" />
             <option value="$PROJECT_DIR$/ui/onboarding" />
           </set>
         </option>
