@@ -16,6 +16,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.amalitech.core_ui.R
 import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage.Companion.toMessage
 import com.google.accompanist.systemuicontroller.SystemUiController
@@ -79,7 +80,14 @@ class BookMeetingRoomAppState(
         coroutineScope.launch {
             snackbarManager.snackbarMessages.filterNotNull().collect { snackbarMessage ->
                 val text = snackbarMessage.toMessage(resources)
-                snackbarHostState.showSnackbar(text)
+                if (text == resources.getString(R.string.no_internet_error)) {
+                    snackbarHostState.showSnackbar(
+                        text,
+                        resources.getString(R.string.retry)
+                    )
+                } else {
+                    snackbarHostState.showSnackbar(text)
+                }
             }
         }
     }
