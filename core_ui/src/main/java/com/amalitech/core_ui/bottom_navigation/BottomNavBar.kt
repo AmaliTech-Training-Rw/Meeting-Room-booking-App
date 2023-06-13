@@ -2,9 +2,8 @@ package com.amalitech.core_ui.bottom_navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,7 +39,7 @@ fun BottomNavBar(
     selectedIconColor: Color = MaterialTheme.colorScheme.primary,
     selectedTextColor: Color = MaterialTheme.colorScheme.primary,
     indicatorColor: Color = MaterialTheme.colorScheme.background,
-    containerColor: Color = MaterialTheme.colorScheme.background,
+    containerColor: Color = Color.Transparent,
     contentColor: Color = MaterialTheme.colorScheme.onBackground,
     badgeBackgroundColor: Color = MaterialTheme.colorScheme.error,
     badgeTextColor: Color = MaterialTheme.colorScheme.onError,
@@ -62,6 +61,7 @@ fun BottomNavBar(
                 width = 1.dp,
                 color = contentColor.copy(alpha = 0.3f)
             )
+            .padding(spacing.spaceExtraSmall)
     ) {
         BottomNavItem.createItems().forEach { screen ->
             if (screen.route == BottomNavItem.Invitations.route)
@@ -82,10 +82,10 @@ fun BottomNavBar(
                                 text = count,
                                 color = badgeTextColor,
                                 modifier = Modifier
-                                    .requiredWidthIn(spacing.spaceMedium, spacing.spaceSmall + spacing.spaceMedium)
-                                    .aspectRatio(1f)
+                                    .height(spacing.spaceSmall + spacing.spaceMedium)
                                     .clip(CircleShape)
-                                    .background(badgeBackgroundColor),
+                                    .background(badgeBackgroundColor)
+                                    .padding(1.dp),
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -106,7 +106,7 @@ fun BottomNavBar(
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = selectedIconColor,
                     selectedTextColor = selectedTextColor,
-                    indicatorColor = indicatorColor
+                    indicatorColor = indicatorColor,
                 )
             )
         }
