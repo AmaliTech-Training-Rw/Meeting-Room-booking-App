@@ -22,14 +22,15 @@ fun DefaultButton(
     textColor: Color = MaterialTheme.colorScheme.onPrimary,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
     onClick: () -> Unit,
-    textStyle: TextStyle = MaterialTheme.typography.bodyMedium
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+    enabled: Boolean = true
 ) {
     val spacing = LocalSpacing.current
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(size = spacing.spaceExtraSmall))
             .background(color = backgroundColor)
-            .clickable {
+            .clickable(enabled = enabled) {
                 onClick()
             }
             .padding(spacing.spaceSmall),

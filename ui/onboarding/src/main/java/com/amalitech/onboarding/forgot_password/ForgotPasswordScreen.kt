@@ -33,12 +33,15 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.amalitech.core.R
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.onboarding.components.AuthenticationTextField
-import com.amalitech.core.R
+import com.amalitech.core_ui.util.UiState
+import com.amalitech.onboarding.util.showSnackBar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -53,16 +56,23 @@ fun ForgotPasswordScreen(
     val snackbarHostState = remember {
         SnackbarHostState()
     }
+    val baseResult by viewModel.publicBaseResult.collectAsStateWithLifecycle()
 
-    LaunchedEffect(key1 = state) {
-        state.snackBarValue?.let {
-            snackbarHostState.showSnackbar(
-                it.asString(context = context)
-            )
-            viewModel.onSnackBarShown()
-        }
-        if (state.linkSent) {
-            onNavigateToReset()
+    LaunchedEffect(key1 = baseResult) {
+        when (baseResult) {
+            is UiState.Success -> {
+                onNavigateToReset()
+            }
+            is UiState.Error -> {
+                showSnackBar(
+                    snackBarValue = (baseResult as UiState.Error<ForgotPasswordUiState>).error,
+                    snackbarHostState = snackbarHostState,
+                    context = context
+                ) {
+                    viewModel.onSnackBarShown()
+                }
+            }
+            else -> {}
         }
     }
 
@@ -93,14 +103,6 @@ fun ForgotPasswordScreen(
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.titleMedium
             )
-            state.error?.let {
-                Spacer(modifier = Modifier.height(spacing.spaceSmall))
-                Text(
-                    text = it.asString(context),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
             Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
             AuthenticationTextField(
                 placeholder = stringResource(R.string.email),
@@ -124,7 +126,8 @@ fun ForgotPasswordScreen(
                 onClick = { viewModel.onSendResetLink() },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = spacing.spaceSmall)
+                    .padding(bottom = spacing.spaceSmall),
+                enabled = baseResult !is UiState.Loading
             )
             val text = buildAnnotatedString {
                 withStyle(style = SpanStyle(color = Color.Black)) {
@@ -156,4 +159,10 @@ fun ForgotPasswordScreen(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun Preview() {
+    ForgotPasswordScreen(onNavigateToLogin = {}, onNavigateToReset = {})
 }
