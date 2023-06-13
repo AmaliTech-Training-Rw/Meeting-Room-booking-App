@@ -48,7 +48,6 @@ fun BookMeetingRoomApp(
             )
         }
     )
-
 }
 
 @Preview(showBackground = true)
