@@ -2,7 +2,9 @@ package com.amalitech.core_ui.bottom_navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,12 +23,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import com.amalitech.core_ui.R
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavBadge
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
+import com.amalitech.core_ui.theme.LocalSpacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,8 +49,10 @@ fun BottomNavBar(
 ) {
     val context = LocalContext.current
     val invitations by remember {
-        mutableStateOf(5)
+        mutableStateOf(200)
     }
+    val spacing = LocalSpacing.current
+
     NavigationBar(
         containerColor = containerColor,
         contentColor = contentColor,
@@ -65,28 +73,35 @@ fun BottomNavBar(
                 } == true,
                 onClick = { onClick(screen) },
                 icon = {
-                    Icon(
-                        painter = painterResource(id = screen.icon),
-                        contentDescription = screen.label.asString(context),
-                    )
-                },
-                label = {
                     BadgedBox(badge = {
-                        if (screen.badge.count > 0)
+                        if (screen.badge.count > 0) {
+                            val count = if (screen.badge.count < 100)
+                                screen.badge.count.toString()
+                            else stringResource(id = R.string.ninety_plus)
                             Text(
-                                screen.badge.count.toString(),
+                                text = count,
                                 color = badgeTextColor,
                                 modifier = Modifier
+                                    .requiredWidthIn(spacing.spaceMedium, spacing.spaceSmall + spacing.spaceMedium)
+                                    .aspectRatio(1f)
                                     .clip(CircleShape)
-                                    .background(badgeBackgroundColor)
+                                    .background(badgeBackgroundColor),
+                                textAlign = TextAlign.Center
                             )
+                        }
                     }) {
-                        Text(
-                            text = screen.label.asString(context),
-                            maxLines = 1,
-                            fontSize = 10.sp
+                        Icon(
+                            painter = painterResource(id = screen.icon),
+                            contentDescription = screen.label.asString(context),
                         )
                     }
+                },
+                label = {
+                    Text(
+                        text = screen.label.asString(context),
+                        maxLines = 1,
+                        fontSize = 10.sp
+                    )
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = selectedIconColor,
