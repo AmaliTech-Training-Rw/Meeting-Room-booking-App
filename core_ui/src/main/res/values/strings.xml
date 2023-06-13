@@ -9,7 +9,11 @@
     <string name="invitations">Invitations</string>
     <string name="logout">Logout</string>
     <string name="generic_error">Oops, an error has occurred …</string>
+    <string name="no_internet_error">No internet, please check connection and retry …</string>
+    <string name="retry">Retry</string>
     <string name="profile">Profile</string>
     <string name="bookings">Bookings</string>
     <string name="invitation">Invitations</string>
+    <string name="ninety_plus">99+</string>
+    <string name="rooms_against_booked_time">Rooms against booked time</string>
 </resources>
