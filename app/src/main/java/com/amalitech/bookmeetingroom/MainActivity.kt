@@ -3,14 +3,19 @@ package com.amalitech.bookmeetingroom
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.amalitech.core_ui.components.BookMeetingTopAppBar
+import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -23,7 +28,22 @@ class MainActivity : ComponentActivity() {
         setContent {
             BookMeetingRoomTheme {
                 val showOnboarding by viewModel.showOnBoarding.collectAsStateWithLifecycle()
-                AppScaffold(shouldShowOnboarding = showOnboarding)
+                val appState = rememberBookMeetingRoomAppState()
+                var query by rememberSaveable {
+                    mutableStateOf("")
+                }
+                Scaffold(
+                    topBar = {
+                        BookMeetingTopAppBar(
+                            appState = appState,
+                            title = "Home",
+                            query,
+                            { query = it }
+                        ) { }
+                    }
+                ) {
+                    Text(text = "Test", modifier = Modifier.padding(it))
+                }
             }
         }
     }

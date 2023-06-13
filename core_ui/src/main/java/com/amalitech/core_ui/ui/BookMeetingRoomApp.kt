@@ -20,7 +20,7 @@ fun BookMeetingRoomApp(
             // Show the top app bar on top level destinations.
             val destination = appState.currentTopLevelDestination
             if (destination != null) {
-                BookMeetingTopAppBar(appState, title)
+                BookMeetingTopAppBar(appState, title, "search", {}) {}
             }
         },
         content = { innerPadding ->
