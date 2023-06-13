@@ -1,4 +1,4 @@
-package com.amalitech.admin.components
+package com.amalitech.admin
 
 data class RoomsBookedTime(
     val roomId: Int,
