@@ -1,12 +1,12 @@
 package com.amalitech.onboarding.signup
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core.R
 import com.amalitech.core.util.UiText
+import com.amalitech.core_ui.util.AuthenticationBaseViewModel
+import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.signup.model.User
 import com.amalitech.onboarding.signup.use_case.SignupUseCase
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -14,13 +14,11 @@ import kotlinx.coroutines.launch
 
 class SignupViewModel(
     private val signupUseCase: SignupUseCase
-) : ViewModel() {
+) : AuthenticationBaseViewModel<SignupApiUiState>() {
 
     private val _uiState = MutableStateFlow(SignupUiState())
     val uiState = _uiState.asStateFlow()
 
-    var job: Job? = null
-        private set
 
     init {
         fetchOrganizations()
@@ -32,8 +30,8 @@ class SignupViewModel(
      * @param newEmail the email address entered by the user
      */
     fun onNewEmail(newEmail: String) {
-        _uiState.update { loginUiState ->
-            loginUiState.copy(
+        _uiState.update { signupUiState ->
+            signupUiState.copy(
                 email = newEmail.trim()
             )
         }
@@ -45,8 +43,8 @@ class SignupViewModel(
      * @param newPassword the password entered by the user
      */
     fun onNewPassword(newPassword: String) {
-        _uiState.update { loginUiState ->
-            loginUiState.copy(
+        _uiState.update { signupUiState ->
+            signupUiState.copy(
                 password = newPassword.trim()
             )
         }
@@ -58,8 +56,8 @@ class SignupViewModel(
      * @param location the location entered by the user
      */
     fun onNewLocation(location: String) {
-        _uiState.update { loginUiState ->
-            loginUiState.copy(
+        _uiState.update { signupUiState ->
+            signupUiState.copy(
                 location = location.trim()
             )
         }
@@ -72,8 +70,8 @@ class SignupViewModel(
      * @param organizationName the location entered by the user
      */
     fun onNewOrganizationName(organizationName: String) {
-        _uiState.update { loginUiState ->
-            loginUiState.copy(
+        _uiState.update { signupUiState ->
+            signupUiState.copy(
                 organizationName = organizationName.trim()
             )
         }
@@ -86,8 +84,8 @@ class SignupViewModel(
      * @param username the location entered by the user
      */
     fun onNewUsername(username: String) {
-        _uiState.update { loginUiState ->
-            loginUiState.copy(
+        _uiState.update { signupUiState ->
+            signupUiState.copy(
                 username = username.trim()
             )
         }
@@ -104,10 +102,6 @@ class SignupViewModel(
         _uiState.update { resetPasswordUiState ->
             resetPasswordUiState.copy(
                 passwordConfirmation = password.trim(),
-                error = signupUseCase.checkPasswordsMatch(
-                    _uiState.value.password,
-                    password.trim()
-                )
             )
         }
     }
@@ -120,26 +114,31 @@ class SignupViewModel(
         }
     }
 
-    fun fetchOrganizations() {
+    private fun fetchOrganizations() {
+        if (job?.isActive == true)
+            return
 
-        viewModelScope.launch {
+        job = viewModelScope.launch {
+            baseResult.update {
+                UiState.Loading()
+            }
             val result = signupUseCase.fetchOrganizationsType()
             if (result.data != null) {
-                _uiState.update { signupUiState ->
-                    signupUiState.copy(
-                        typeOfOrganization = result.data!!
+                baseResult.update {
+                    UiState.Success(
+                        SignupApiUiState(result.data!!)
                     )
                 }
             } else if (result.error != null) {
-                _uiState.update { signupUiState ->
-                    signupUiState.copy(
-                        error = result.error!!
+                baseResult.update {
+                    UiState.Error(
+                        result.error!!
                     )
                 }
             } else {
-                _uiState.update { signupUiState ->
-                    signupUiState.copy(
-                        error = UiText.StringResource(R.string.error_default_message)
+                baseResult.update {
+                    UiState.Error(
+                        UiText.StringResource(R.string.error_default_message)
                     )
                 }
             }
@@ -155,8 +154,11 @@ class SignupViewModel(
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
+            baseResult.update {
+                UiState.Loading()
+            }
             validateData()
-            if (_uiState.value.error == null) {
+            if (baseResult.value !is UiState.Error) {
                 val result = signupUseCase.signup(
                     user = User(
                         _uiState.value.username,
@@ -169,17 +171,12 @@ class SignupViewModel(
                     )
                 )
                 if (result == null) {
-                    _uiState.update { signupUiState ->
-                        signupUiState.copy(
-                            snackBarValue = UiText.StringResource(R.string.your_account_is_created),
-                            finishedSigningUp = true
-                        )
+                    baseResult.update {
+                        UiState.Success(SignupApiUiState(shouldNavigate = true))
                     }
                 } else {
-                    _uiState.update { signupUiState ->
-                        signupUiState.copy(
-                            error = result
-                        )
+                    baseResult.update {
+                        UiState.Error(result)
                     }
                 }
             }
@@ -192,7 +189,6 @@ class SignupViewModel(
      * it updates the viewModel state with it.
      */
     private fun validateData() {
-        updateStateWithError(null)
         val emailValidationResult = signupUseCase.validateEmail(_uiState.value.email)
         val passwordValidationResult = signupUseCase.validatePassword(_uiState.value.password)
         val valuesNotBlankResult = signupUseCase.checkValuesNotBlank(
@@ -238,21 +234,8 @@ class SignupViewModel(
      * @param error The error to be added
      */
     private fun updateStateWithError(error: UiText?) {
-        _uiState.update { signupUiState ->
-            signupUiState.copy(
-                error = error
-            )
-        }
-    }
-
-    /**
-     * onSnackBarShown - Reset the snackbarvalue in our state to null
-     */
-    fun onSnackBarShown() {
-        _uiState.update { loginUiState ->
-            loginUiState.copy(
-                snackBarValue = null
-            )
+        baseResult.update {
+            UiState.Error(error)
         }
     }
 
@@ -292,5 +275,16 @@ class SignupViewModel(
         typeOfOrganization: String?
     ): Boolean {
         return !email.isNullOrBlank() && !organizationName.isNullOrBlank() && !location.isNullOrBlank() && !typeOfOrganization.isNullOrBlank()
+    }
+
+    /**
+     * isJobActive - Checks if the job is active or completed
+     *
+     * This function is for testing purpose only, that's why it's an
+     * internal function
+     * @return true if the job is active, false otherwise
+     */
+    internal fun isJobActive(): Boolean {
+        return job?.isActive == true
     }
 }

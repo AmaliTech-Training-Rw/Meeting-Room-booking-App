@@ -2,6 +2,7 @@ package com.amalitech.onboarding.signup
 
 import com.amalitech.core.R
 import com.amalitech.core.util.UiText
+import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.MainDispatcherRule
 import com.amalitech.onboarding.signup.use_case.SignupUseCase
 import com.amalitech.onboarding.util.Response
@@ -136,12 +137,11 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertEquals(null, viewModel.uiState.value.error)
+        assertEquals(true, viewModel.publicBaseResult.value is UiState.Success)
         assertEquals(
-            UiText.StringResource(R.string.your_account_is_created),
-            viewModel.uiState.value.snackBarValue
+            true,
+            (viewModel.publicBaseResult.value as UiState.Success).data?.shouldNavigate
         )
-        assertEquals(true, viewModel.uiState.value.finishedSigningUp)
     }
 
     @Test
@@ -177,9 +177,10 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
+        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
         assertEquals(
             UiText.StringResource(R.string.your_account_is_created),
-            viewModel.uiState.value.error
+            (viewModel.publicBaseResult.value as UiState.Error).error
         )
     }
 
@@ -218,7 +219,11 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertEquals(error, viewModel.uiState.value.error)
+        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertEquals(
+            error,
+            (viewModel.publicBaseResult.value as UiState.Error).error
+        )
     }
 
     @Test
@@ -256,7 +261,11 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertEquals(error, viewModel.uiState.value.error)
+        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertEquals(
+            error,
+            (viewModel.publicBaseResult.value as UiState.Error).error
+        )
     }
 
     @Test
@@ -293,7 +302,11 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertEquals(error, viewModel.uiState.value.error)
+        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertEquals(
+            error,
+            (viewModel.publicBaseResult.value as UiState.Error).error
+        )
     }
 
     @Test
@@ -331,7 +344,11 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertEquals(error, viewModel.uiState.value.error)
+        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertEquals(
+            error,
+            (viewModel.publicBaseResult.value as UiState.Error).error
+        )
     }
 
     @Test
@@ -370,7 +387,11 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertEquals(error, viewModel.uiState.value.error)
+        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertEquals(
+            error,
+            (viewModel.publicBaseResult.value as UiState.Error).error
+        )
     }
 
     @Test
@@ -408,7 +429,11 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertEquals(error, viewModel.uiState.value.error)
+        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertEquals(
+            error,
+            (viewModel.publicBaseResult.value as UiState.Error).error
+        )
     }
 
     @Test
@@ -446,7 +471,11 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertEquals(error, viewModel.uiState.value.error)
+        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertEquals(
+            error,
+            (viewModel.publicBaseResult.value as UiState.Error).error
+        )
     }
 
     @Test
@@ -456,7 +485,8 @@ class SignupViewModelTest {
         val typeOfOrganization = "type"
         val location = "location"
 
-        val response = viewModel.isInvitedUser(email, organizationName, location, typeOfOrganization)
+        val response =
+            viewModel.isInvitedUser(email, organizationName, location, typeOfOrganization)
 
         assertEquals(true, response)
     }
@@ -468,7 +498,8 @@ class SignupViewModelTest {
         val typeOfOrganization = ""
         val location = ""
 
-        val response = viewModel.isInvitedUser(email, organizationName, location, typeOfOrganization)
+        val response =
+            viewModel.isInvitedUser(email, organizationName, location, typeOfOrganization)
 
         assertEquals(false, response)
     }
@@ -594,6 +625,6 @@ class SignupViewModelTest {
         viewModel.onSignupClick()
 
         advanceUntilIdle()
-        assertEquals(true, viewModel.job?.isCompleted)
+        assertEquals(false, viewModel.isJobActive())
     }
 }

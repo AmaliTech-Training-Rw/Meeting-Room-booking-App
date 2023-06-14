@@ -46,8 +46,10 @@ import androidx.navigation.NavBackStackEntry
 import com.amalitech.core.R
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
+import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.components.AuthenticationDropDown
 import com.amalitech.onboarding.components.AuthenticationTextField
+import com.amalitech.onboarding.util.showSnackBar
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -75,23 +77,37 @@ fun SignupScreen(
     }
     val focusManager: FocusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    val organizationType = state.typeOfOrganization
+    val baseResult by viewModel.publicBaseResult.collectAsStateWithLifecycle()
     val selectedItem = state.selectedOrganizationType
+    var organizationType: List<String> by rememberSaveable {
+        mutableStateOf(listOf())
+    }
 
     val onGo = {
         viewModel.onSignupClick()
         keyboardController?.hide()
     }
 
-    LaunchedEffect(key1 = state) {
-        state.snackBarValue?.let {
-            snackbarHostState.showSnackbar(
-                it.asString(context = context)
-            )
-            viewModel.onSnackBarShown()
-        }
-        if (state.finishedSigningUp) {
-            onNavigateToLogin()
+    LaunchedEffect(key1 = baseResult) {
+        when(baseResult) {
+            is UiState.Success -> {
+                (baseResult as UiState.Success<SignupApiUiState>).data?.let {
+                    if (it.shouldNavigate) {
+                        onNavigateToLogin()
+                    }
+                    organizationType = it.typeOfOrganization
+                }
+            }
+            is UiState.Error -> {
+                showSnackBar(
+                    snackBarValue = (baseResult as UiState.Error<SignupApiUiState>).error,
+                    snackbarHostState = snackbarHostState,
+                    context = context
+                ) {
+                    viewModel.onSnackBarShown()
+                }
+            }
+            else -> {}
         }
     }
 
@@ -129,14 +145,6 @@ fun SignupScreen(
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 24.sp
             )
-            state.error?.let {
-                Spacer(modifier = Modifier.height(spacing.spaceSmall))
-                Text(
-                    text = it.asString(context),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
             Spacer(modifier = Modifier.height(spacing.spaceLarge))
             AuthenticationTextField(
                 onGo = { onGo() },
