@@ -52,7 +52,7 @@ fun ResetPasswordScreen(
         SnackbarHostState()
     }
     val baseResult
-            by viewModel.publicBaseResult.collectAsStateWithLifecycle()
+            by viewModel.baseResult.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = baseResult) {
         when (baseResult) {

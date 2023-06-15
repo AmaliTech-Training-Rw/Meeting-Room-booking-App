@@ -5,13 +5,13 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class AuthenticationBaseViewModelTest {
+class BaseViewModelTest {
 
-    private lateinit var viewModel: AuthenticationBaseViewModel<String>
+    private lateinit var viewModel: BaseViewModel<String>
 
     @Before
     fun setUp() {
-        viewModel = AuthenticationBaseViewModel()
+        viewModel = BaseViewModel()
     }
 
     @Test
@@ -20,6 +20,6 @@ class AuthenticationBaseViewModelTest {
 
         viewModel.onSnackBarShown()
 
-        assertEquals(null, (viewModel.publicBaseResult.value as UiState.Error).error)
+        assertEquals(null, (viewModel.baseResult.value as UiState.Error).error)
     }
 }

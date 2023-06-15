@@ -63,7 +63,7 @@ class ForgotPasswordViewModelTest {
         viewModel.onSendResetLink()
 
         // THEN - two states are updated
-        val state = viewModel.publicBaseResult
+        val state = viewModel.baseResult
         assertTrue(state.value is UiState.Success)
     }
 
@@ -82,7 +82,7 @@ class ForgotPasswordViewModelTest {
         viewModel.onSendResetLink()
 
         // THEN - state holds the value of an error
-        val state = viewModel.publicBaseResult
+        val state = viewModel.baseResult
         assertTrue(state.value is UiState.Error)
         assertEquals(
             UiText.StringResource(androidx.compose.ui.R.string.default_error_message),
@@ -101,7 +101,7 @@ class ForgotPasswordViewModelTest {
         viewModel.onSendResetLink()
 
         // THEN - state holds the value of an error
-        val state = viewModel.publicBaseResult
+        val state = viewModel.baseResult
         assertTrue(state.value is UiState.Error)
         assertEquals(
             UiText.StringResource(R.string.error_email_not_valid),

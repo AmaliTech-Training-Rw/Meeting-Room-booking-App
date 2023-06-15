@@ -1,7 +1,7 @@
 package com.amalitech.onboarding.reset_password
 
 import androidx.lifecycle.viewModelScope
-import com.amalitech.core_ui.util.AuthenticationBaseViewModel
+import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class ResetPasswordViewModel(
     private val resetPasswordUseCase: ResetPasswordUseCase
-) : AuthenticationBaseViewModel<ResetPasswordUiState>() {
+) : BaseViewModel<ResetPasswordUiState>() {
 
     private val _uiState = MutableStateFlow(
         ResetPasswordUiState()
@@ -49,7 +49,7 @@ class ResetPasswordViewModel(
             _uiState.value.passwordConfirmation
         )
         if (passwordCheck != null) {
-            baseResult.update {
+            privateBaseResult.update {
                 UiState.Error(
                     error = passwordCheck
                 )
@@ -71,7 +71,7 @@ class ResetPasswordViewModel(
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
-            baseResult.update {
+            privateBaseResult.update {
                 UiState.Loading()
             }
             val passwordsCheck = resetPasswordUseCase.checkPasswordsMatch(
@@ -85,18 +85,18 @@ class ResetPasswordViewModel(
                 )
 
                 if (apiResult != null) {
-                    baseResult.update {
+                    privateBaseResult.update {
                         UiState.Error(
                             error = apiResult
                         )
                     }
                 } else {
-                    baseResult.update {
+                    privateBaseResult.update {
                         UiState.Success()
                     }
                 }
             } else {
-                baseResult.update {
+                privateBaseResult.update {
                     UiState.Error(error = passwordsCheck)
                 }
             }

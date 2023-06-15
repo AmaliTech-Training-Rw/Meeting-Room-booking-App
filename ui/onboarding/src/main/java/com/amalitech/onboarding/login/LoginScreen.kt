@@ -70,7 +70,7 @@ fun LoginScreen(
         viewModel.onLoginClick()
         keyboardController?.hide()
     }
-    val baseResult by viewModel.publicBaseResult.collectAsStateWithLifecycle()
+    val baseResult by viewModel.baseResult.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = baseResult) {
         when (baseResult) {
