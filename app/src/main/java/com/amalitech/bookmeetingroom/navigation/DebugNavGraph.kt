@@ -6,8 +6,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.amalitech.admin.DashboardCardItem
 import com.amalitech.admin.components.DashBoardCard
+import com.amalitech.admin.room.AddRoomScreen
 import com.amalitech.bookmeetingroom.AppScaffold
 import com.amalitech.bookmeetingroom.testComponents.DebugScreen
+import com.amalitech.core_ui.R
 import com.amalitech.core_ui.components.drawer.BookMeetingRoomDrawer
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
@@ -16,7 +18,6 @@ import com.amalitech.onboarding.forgot_password.ForgotPasswordScreen
 import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
-import com.amalitech.core_ui.R
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
@@ -70,6 +71,9 @@ fun NavigationGraph(navController: NavHostController) {
                     count = 5
                 )
             )
+        }
+        composable(route = NavigationTarget.ADDROOM.route) {
+            AddRoomScreen()
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.amalitech.bookmeetingroom
 
 import android.app.Application
+import com.amalitech.admin.di.adminPresentationModule
 import com.amalitech.bookmeetingroom.di.appModule
 import com.amalitech.core.di.coreModule
 import com.amalitech.core.di.networkModule
@@ -21,7 +22,8 @@ class BookMeetingApplication : Application() {
                 onboardingDataModule,
                 onboardingPresentationModule,
                 onboardingDomainModule,
-                appModule
+                appModule,
+                adminPresentationModule
             )
         }
     }
