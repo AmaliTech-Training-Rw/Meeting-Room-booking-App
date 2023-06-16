@@ -61,7 +61,7 @@ fun RoomCard(
             RoomDescription(
                 room, modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.White)
+                    .background(MaterialTheme.colorScheme.surface)
             )
         }
     )
@@ -72,6 +72,7 @@ fun RoomDescription(
     room: Room,
     modifier: Modifier = Modifier
 ) {
+    val spacing = LocalSpacing.current
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
@@ -87,19 +88,19 @@ fun RoomDescription(
             modifier = Modifier
                 .size(150.dp)
                 .fillMaxWidth(0.4f)
-                .clip(RoundedCornerShape(LocalSpacing.current.spaceMedium))
+                .clip(RoundedCornerShape(spacing.spaceMedium))
 
         )
-        Spacer(modifier = Modifier.width(LocalSpacing.current.spaceMedium))
+        Spacer(modifier = Modifier.width(spacing.spaceMedium))
         Column(
             modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .weight(1f)
-                .padding(vertical = LocalSpacing.current.spaceMedium)
+                .padding(vertical =spacing.spaceMedium)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                VerticalLine(modifier = Modifier.height(LocalSpacing.current.spaceLarge))
-                Column(Modifier.padding(start = LocalSpacing.current.spaceSmall)) {
+                VerticalLine(modifier = Modifier.height(spacing.spaceLarge))
+                Column(Modifier.padding(start = spacing.spaceSmall)) {
                     Text(
                         text = room.roomName,
                         style = MaterialTheme.typography.titleLarge
@@ -111,7 +112,7 @@ fun RoomDescription(
                 }
             }
 
-            Spacer(modifier = Modifier.height(LocalSpacing.current.spaceSmall))
+            Spacer(modifier = Modifier.height(spacing.spaceSmall))
             Text(
                 text = room.roomFeatures,
                 style = MaterialTheme.typography.bodyMedium
@@ -138,24 +139,20 @@ private fun SwipeAction(
     onActionClick: () -> Unit,
 ) {
 
-    Box(
+    IconButton(
+        onClick = onActionClick,
         modifier = Modifier
-            .background(backgroundColor)
             .fillMaxSize()
-
+            .background(backgroundColor)
 
     ) {
-        IconButton(
-            onClick = onActionClick,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = Color.White
-            )
-        }
-
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.surface
+        )
     }
+
+
 }
 

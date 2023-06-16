@@ -16,8 +16,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.rooms.components.RoomCard
 import org.koin.androidx.compose.koinViewModel
@@ -41,7 +39,7 @@ fun RoomListScreen(
                 Icon(
                     imageVector = Icons.Filled.Add,
                     contentDescription = "Add",
-                    tint = Color.White
+                    tint = MaterialTheme.colorScheme.surface
                 )
             }
         },
@@ -54,11 +52,10 @@ fun RoomListScreen(
                 contentAlignment = Alignment.Center
             ) {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(vertical = 16.dp)
+                    contentPadding = PaddingValues(vertical = spacing.spaceMedium)
                 ){
                     items(roomViewModel.rooms.value) { room ->
-                        RoomCard(room = room, modifier = Modifier.padding(bottom = 16.dp))
+                        RoomCard(room = room, modifier = Modifier.padding(bottom = spacing.spaceMedium))
                     }
                 }
 
