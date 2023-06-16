@@ -22,7 +22,9 @@ fun BookMeetingRoomApp(
     title: String,
     searchQuery: String? = null,
     onSearchQueryChange: ((String) -> Unit)? = null,
-    onSearchClick: (() -> Unit)? = null
+    onSearchClick: (() -> Unit)? = null,
+    isSearchTextFieldVisible: Boolean = false,
+    onSearchTextFieldVisibilityChange: ((Boolean) -> Unit)? = null
 ) {
     Scaffold(
         topBar = {
@@ -35,6 +37,8 @@ fun BookMeetingRoomApp(
                     searchQuery = searchQuery,
                     onSearchQueryChange = onSearchQueryChange,
                     onSearchClick = onSearchClick,
+                    isSearchTextFieldVisible = isSearchTextFieldVisible,
+                    onSearchTextFieldVisibilityChange = onSearchTextFieldVisibilityChange
                 )
             }
         },

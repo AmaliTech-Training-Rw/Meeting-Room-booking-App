@@ -10,11 +10,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
@@ -37,12 +33,11 @@ fun BookMeetingTopAppBar(
     title: String,
     searchQuery: String? = null,
     onSearchQueryChange: ((query: String) -> Unit)? = null,
-    onSearchClick: (() -> Unit)? = null
+    onSearchClick: (() -> Unit)? = null,
+    isSearchTextFieldVisible: Boolean = false,
+    onSearchTextFieldVisibilityChange: ((Boolean) -> Unit)? = null
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    var isSearchTextFieldVisible by rememberSaveable {
-        mutableStateOf(false)
-    }
 
     TopAppBar(
         title = {
@@ -79,7 +74,7 @@ fun BookMeetingTopAppBar(
                 onSearch = onSearchClick,
                 onSearchQueryChange = onSearchQueryChange,
                 isSearchTextFieldVisible = isSearchTextFieldVisible,
-                onIsSearchingChange = { isSearchTextFieldVisible = it },
+                onSearchTextFieldVisibilityChanged = onSearchTextFieldVisibilityChange,
             )
             IconButton(onClick = { /* doSomething() */ }) {
                 Image(

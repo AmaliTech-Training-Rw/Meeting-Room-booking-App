@@ -81,12 +81,20 @@ fun NavigationGraph(navController: NavHostController) {
             var query by rememberSaveable {
                 mutableStateOf("")
             }
+            var isSearchTextFieldVisible by rememberSaveable {
+                mutableStateOf(false)
+            }
             BookMeetingRoomDrawer(
                 appState = appState,
                 onClick = {},
                 searchQuery = query,
-                onSearchQueryChange = { query = it }
-            ) {}
+                onSearchQueryChange = { query = it },
+                {},
+                isSearchTextFieldVisible = isSearchTextFieldVisible,
+                onSearchTextFieldVisibilityChange = { isVisible ->
+                    isSearchTextFieldVisible = isVisible
+                }
+            )
         }
     }
 }

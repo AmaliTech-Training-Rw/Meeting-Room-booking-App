@@ -10,6 +10,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.amalitech.core_ui.R
@@ -21,17 +22,27 @@ fun SearchIcon(
     onSearch: (() -> Unit)?,
     onSearchQueryChange: ((query: String) -> Unit)?,
     isSearchTextFieldVisible: Boolean,
-    onIsSearchingChange: (isSearching: Boolean) -> Unit,
+    onSearchTextFieldVisibilityChanged: ((isSearching: Boolean) -> Unit)?,
+    searchIcon: Painter = painterResource(id = R.drawable.baseline_search_24),
+    closeIcon: Painter = painterResource(id = R.drawable.baseline_close_24),
+    focusedIndicatorColor: Color = Color.Transparent,
+    unfocusedIndicatorColor: Color = Color.Transparent,
+    focusedTextColor: Color = MaterialTheme.colorScheme.onBackground,
+    unfocusedContainerColor: Color = MaterialTheme.colorScheme.background,
+    unfocusedTextColor: Color = MaterialTheme.colorScheme.onBackground,
+    focusedContainerColor: Color = MaterialTheme.colorScheme.background,
+    placeholder: String = stringResource(id = R.string.search)
 ) {
     if (
         searchQuery != null
         && onSearch != null
         && onSearchQueryChange != null
+        && onSearchTextFieldVisibilityChanged != null
     ) {
         if (!isSearchTextFieldVisible) {
-            IconButton(onClick = { onIsSearchingChange(true) }) {
+            IconButton(onClick = { onSearchTextFieldVisibilityChanged(true) }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.baseline_search_24),
+                    painter = searchIcon,
                     contentDescription = stringResource(
                         R.string.open_search
                     )
@@ -47,29 +58,29 @@ fun SearchIcon(
                 leadingIcon = {
                     IconButton(onClick = onSearch) {
                         Icon(
-                            painter = painterResource(R.drawable.baseline_search_24),
+                            painter = searchIcon,
                             contentDescription = stringResource(R.string.search)
                         )
                     }
                 },
                 trailingIcon = {
-                    IconButton(onClick = { onIsSearchingChange(false) }) {
+                    IconButton(onClick = { onSearchTextFieldVisibilityChanged(false) }) {
                         Icon(
-                            painter = painterResource(R.drawable.baseline_close_24),
+                            painter = closeIcon,
                             contentDescription = stringResource(R.string.close_search_textfield)
                         )
                     }
                 },
                 colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedTextColor = MaterialTheme.colorScheme.onBackground,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                    unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-                    focusedContainerColor = MaterialTheme.colorScheme.background,
+                    focusedIndicatorColor = focusedIndicatorColor,
+                    unfocusedIndicatorColor = unfocusedIndicatorColor,
+                    focusedTextColor = focusedTextColor,
+                    unfocusedContainerColor = unfocusedContainerColor,
+                    unfocusedTextColor = unfocusedTextColor,
+                    focusedContainerColor = focusedContainerColor,
                 ),
                 placeholder = {
-                    Text(stringResource(R.string.search))
+                    Text(placeholder)
                 }
             )
         }

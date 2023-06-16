@@ -46,7 +46,9 @@ fun BookMeetingRoomDrawer(
     onClick: (screen: NavigationItem) -> Unit,
     searchQuery: String? = null,
     onSearchQueryChange: ((query: String) -> Unit)? = null,
-    onSearchClick: (() -> Unit)? = null
+    onSearchClick: (() -> Unit)? = null,
+    isSearchTextFieldVisible: Boolean = false,
+    onSearchTextFieldVisibilityChange: ((Boolean) -> Unit)? = null
 ) {
     val selectedItem = remember { mutableStateOf(NavigationItem.Home.title) }
 
@@ -72,7 +74,9 @@ fun BookMeetingRoomDrawer(
                 title = selectedItem.value,
                 searchQuery = searchQuery,
                 onSearchQueryChange = onSearchQueryChange,
-                onSearchClick = onSearchClick
+                onSearchClick = onSearchClick,
+                isSearchTextFieldVisible = isSearchTextFieldVisible,
+                onSearchTextFieldVisibilityChange = onSearchTextFieldVisibilityChange
             )
         }
     )
