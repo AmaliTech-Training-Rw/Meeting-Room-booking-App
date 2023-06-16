@@ -61,7 +61,7 @@ fun SignupScreen(
     navBackStackEntry: NavBackStackEntry
 ) {
     val arguments = navBackStackEntry.arguments
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val userInput by viewModel.userInput
     val organizationName = arguments?.getString(NavArguments.organizationName)
     val email = arguments?.getString(NavArguments.email)
     val typeOfOrganization = arguments?.getString(NavArguments.typeOfOrganization)
@@ -77,8 +77,8 @@ fun SignupScreen(
     }
     val focusManager: FocusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    val baseResult by viewModel.publicBaseResult.collectAsStateWithLifecycle()
-    val selectedItem = state.selectedOrganizationType
+    val uiState by viewModel.publicBaseResult.collectAsStateWithLifecycle()
+    val selectedItem = userInput.selectedOrganizationType
     var organizationType: List<String> by rememberSaveable {
         mutableStateOf(listOf())
     }
@@ -88,10 +88,10 @@ fun SignupScreen(
         keyboardController?.hide()
     }
 
-    LaunchedEffect(key1 = baseResult) {
-        when(baseResult) {
+    LaunchedEffect(key1 = uiState) {
+        when(uiState) {
             is UiState.Success -> {
-                (baseResult as UiState.Success<SignupApiUiState>).data?.let {
+                (uiState as UiState.Success<SignupUiState>).data?.let {
                     if (it.shouldNavigate) {
                         onNavigateToLogin()
                     }
@@ -100,7 +100,7 @@ fun SignupScreen(
             }
             is UiState.Error -> {
                 showSnackBar(
-                    snackBarValue = (baseResult as UiState.Error<SignupApiUiState>).error,
+                    snackBarValue = (uiState as UiState.Error<SignupUiState>).error,
                     snackbarHostState = snackbarHostState,
                     context = context
                 ) {
@@ -149,7 +149,7 @@ fun SignupScreen(
             AuthenticationTextField(
                 onGo = { onGo() },
                 placeholder = stringResource(id = R.string.username),
-                value = state.username,
+                value = userInput.username,
                 onValueChange = {
                     viewModel.onNewUsername(it)
                 },
@@ -160,7 +160,7 @@ fun SignupScreen(
                 AuthenticationTextField(
                     onGo = { onGo() },
                     placeholder = stringResource(id = R.string.organization_name),
-                    value = state.organizationName,
+                    value = userInput.organizationName,
                     onValueChange = {
                         viewModel.onNewOrganizationName(it)
                     },
@@ -170,7 +170,7 @@ fun SignupScreen(
                 AuthenticationTextField(
                     onGo = { onGo() },
                     placeholder = stringResource(id = R.string.email),
-                    value = state.email,
+                    value = userInput.email,
                     onValueChange = {
                         viewModel.onNewEmail(it)
                     },
@@ -195,7 +195,7 @@ fun SignupScreen(
                 AuthenticationTextField(
                     onGo = { onGo() },
                     placeholder = stringResource(id = R.string.location),
-                    value = state.location,
+                    value = userInput.location,
                     onValueChange = {
                         viewModel.onNewLocation(it)
                     },
@@ -213,7 +213,7 @@ fun SignupScreen(
             AuthenticationTextField(
                 onGo = { onGo() },
                 placeholder = stringResource(id = R.string.password),
-                value = state.password,
+                value = userInput.password,
                 onValueChange = {
                     viewModel.onNewPassword(it)
                 },
@@ -224,7 +224,7 @@ fun SignupScreen(
             AuthenticationTextField(
                 onGo = { onGo() },
                 placeholder = stringResource(id = R.string.confirm_new_password),
-                value = state.passwordConfirmation,
+                value = userInput.passwordConfirmation,
                 onValueChange = {
                     viewModel.onNewPasswordConfirmation(it)
                 },
@@ -244,7 +244,8 @@ fun SignupScreen(
             DefaultButton(
                 text = buttonText,
                 onClick = { onGo() },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                isLoading = uiState is UiState.Loading
             )
             if (!invitedUser) {
                 Spacer(modifier = Modifier.height(spacing.spaceSmall))

@@ -1,5 +1,7 @@
 package com.amalitech.onboarding.signup
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core.R
 import com.amalitech.core.util.UiText
@@ -7,17 +9,16 @@ import com.amalitech.core_ui.util.AuthenticationBaseViewModel
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.signup.model.User
 import com.amalitech.onboarding.signup.use_case.SignupUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SignupViewModel(
     private val signupUseCase: SignupUseCase
-) : AuthenticationBaseViewModel<SignupApiUiState>() {
+) : AuthenticationBaseViewModel<SignupUiState>() {
 
-    private val _uiState = MutableStateFlow(SignupUiState())
-    val uiState = _uiState.asStateFlow()
+    private val _userInput = mutableStateOf(UserInput())
+    val userInput: State<UserInput>
+        get() = _userInput
 
 
     init {
@@ -30,11 +31,9 @@ class SignupViewModel(
      * @param newEmail the email address entered by the user
      */
     fun onNewEmail(newEmail: String) {
-        _uiState.update { signupUiState ->
-            signupUiState.copy(
-                email = newEmail.trim()
-            )
-        }
+        _userInput.value = _userInput.value.copy(
+            email = newEmail.trim()
+        )
     }
 
     /**
@@ -43,11 +42,9 @@ class SignupViewModel(
      * @param newPassword the password entered by the user
      */
     fun onNewPassword(newPassword: String) {
-        _uiState.update { signupUiState ->
-            signupUiState.copy(
-                password = newPassword.trim()
-            )
-        }
+        _userInput.value = _userInput.value.copy(
+            password = newPassword.trim()
+        )
     }
 
     /**
@@ -56,11 +53,9 @@ class SignupViewModel(
      * @param location the location entered by the user
      */
     fun onNewLocation(location: String) {
-        _uiState.update { signupUiState ->
-            signupUiState.copy(
-                location = location.trim()
-            )
-        }
+        _userInput.value = _userInput.value.copy(
+            location = location.trim()
+        )
     }
 
     /**
@@ -70,11 +65,9 @@ class SignupViewModel(
      * @param organizationName the location entered by the user
      */
     fun onNewOrganizationName(organizationName: String) {
-        _uiState.update { signupUiState ->
-            signupUiState.copy(
-                organizationName = organizationName.trim()
-            )
-        }
+        _userInput.value = _userInput.value.copy(
+            organizationName = organizationName
+        )
     }
 
     /**
@@ -84,11 +77,9 @@ class SignupViewModel(
      * @param username the location entered by the user
      */
     fun onNewUsername(username: String) {
-        _uiState.update { signupUiState ->
-            signupUiState.copy(
-                username = username.trim()
-            )
-        }
+        _userInput.value = _userInput.value.copy(
+           username = username
+        )
     }
 
     /**
@@ -99,19 +90,15 @@ class SignupViewModel(
      */
 
     fun onNewPasswordConfirmation(password: String) {
-        _uiState.update { resetPasswordUiState ->
-            resetPasswordUiState.copy(
-                passwordConfirmation = password.trim(),
-            )
-        }
+        _userInput.value = _userInput.value.copy(
+            passwordConfirmation = password
+        )
     }
 
     fun onSelectedOrganizationType(type: String) {
-        _uiState.update { signupUiState ->
-            signupUiState.copy(
-                selectedOrganizationType = type
-            )
-        }
+        _userInput.value = _userInput.value.copy(
+           selectedOrganizationType = type
+        )
     }
 
     private fun fetchOrganizations() {
@@ -126,7 +113,7 @@ class SignupViewModel(
             if (result.data != null) {
                 baseResult.update {
                     UiState.Success(
-                        SignupApiUiState(result.data!!)
+                        SignupUiState(result.data!!)
                     )
                 }
             } else if (result.error != null) {
@@ -161,18 +148,18 @@ class SignupViewModel(
             if (baseResult.value !is UiState.Error) {
                 val result = signupUseCase.signup(
                     user = User(
-                        _uiState.value.username,
-                        _uiState.value.organizationName,
-                        _uiState.value.email,
-                        _uiState.value.selectedOrganizationType,
-                        _uiState.value.location,
-                        _uiState.value.password,
-                        _uiState.value.passwordConfirmation,
+                        _userInput.value.username,
+                        _userInput.value.organizationName,
+                        _userInput.value.email,
+                        _userInput.value.selectedOrganizationType,
+                        _userInput.value.location,
+                        _userInput.value.password,
+                        _userInput.value.passwordConfirmation,
                     )
                 )
                 if (result == null) {
                     baseResult.update {
-                        UiState.Success(SignupApiUiState(shouldNavigate = true))
+                        UiState.Success(SignupUiState(shouldNavigate = true))
                     }
                 } else {
                     baseResult.update {
@@ -189,19 +176,19 @@ class SignupViewModel(
      * it updates the viewModel state with it.
      */
     private fun validateData() {
-        val emailValidationResult = signupUseCase.validateEmail(_uiState.value.email)
-        val passwordValidationResult = signupUseCase.validatePassword(_uiState.value.password)
+        val emailValidationResult = signupUseCase.validateEmail(_userInput.value.email)
+        val passwordValidationResult = signupUseCase.validatePassword(_userInput.value.password)
         val valuesNotBlankResult = signupUseCase.checkValuesNotBlank(
-            _uiState.value.email,
-            _uiState.value.password,
-            _uiState.value.passwordConfirmation,
-            _uiState.value.location,
-            _uiState.value.username,
-            _uiState.value.selectedOrganizationType
+            _userInput.value.email,
+            _userInput.value.password,
+            _userInput.value.passwordConfirmation,
+            _userInput.value.location,
+            _userInput.value.username,
+            _userInput.value.selectedOrganizationType
         )
         val passwordsMatchResult = signupUseCase.checkPasswordsMatch(
-            _uiState.value.password,
-            _uiState.value.passwordConfirmation
+            _userInput.value.password,
+            _userInput.value.passwordConfirmation
         )
 
         when {
@@ -209,13 +196,13 @@ class SignupViewModel(
             passwordValidationResult != null -> updateStateWithError(passwordValidationResult)
             valuesNotBlankResult != null -> updateStateWithError(valuesNotBlankResult)
             passwordsMatchResult != null -> updateStateWithError(passwordsMatchResult)
-            _uiState.value.selectedOrganizationType.isBlank() -> updateStateWithError(
+            _userInput.value.selectedOrganizationType.isBlank() -> updateStateWithError(
                 UiText.StringResource(R.string.error_no_organization_type_selected)
             )
 
             else -> {
-                val isEmailAvailable = signupUseCase.isEmailAvailable(_uiState.value.email)
-                val isUsernameAvailable = signupUseCase.isUsernameAvailable(_uiState.value.username)
+                val isEmailAvailable = signupUseCase.isEmailAvailable(_userInput.value.email)
+                val isUsernameAvailable = signupUseCase.isUsernameAvailable(_userInput.value.username)
 
                 if (!isEmailAvailable) {
                     updateStateWithError(UiText.StringResource(R.string.error_email_address_already_taken))

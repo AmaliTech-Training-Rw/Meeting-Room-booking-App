@@ -44,7 +44,7 @@ class SignupViewModelTest {
 
         viewModel.onNewEmail(email)
 
-        assertEquals(email, viewModel.uiState.value.email)
+        assertEquals(email, viewModel.userInput.value.email)
     }
 
     @Test
@@ -53,7 +53,7 @@ class SignupViewModelTest {
 
         viewModel.onNewPassword(password)
 
-        assertEquals(password, viewModel.uiState.value.password)
+        assertEquals(password, viewModel.userInput.value.password)
     }
 
     @Test
@@ -62,7 +62,7 @@ class SignupViewModelTest {
 
         viewModel.onNewUsername(username)
 
-        assertEquals(username, viewModel.uiState.value.username)
+        assertEquals(username, viewModel.userInput.value.username)
     }
 
     @Test
@@ -71,7 +71,7 @@ class SignupViewModelTest {
 
         viewModel.onNewLocation(location)
 
-        assertEquals(location, viewModel.uiState.value.location)
+        assertEquals(location, viewModel.userInput.value.location)
     }
 
     @Test
@@ -80,7 +80,7 @@ class SignupViewModelTest {
 
         viewModel.onNewOrganizationName(organizationName)
 
-        assertEquals(organizationName, viewModel.uiState.value.organizationName)
+        assertEquals(organizationName, viewModel.userInput.value.organizationName)
     }
 
     @Test
@@ -92,7 +92,7 @@ class SignupViewModelTest {
 
         viewModel.onNewPasswordConfirmation(passwordConfirmation)
 
-        assertEquals(passwordConfirmation, viewModel.uiState.value.passwordConfirmation)
+        assertEquals(passwordConfirmation, viewModel.userInput.value.passwordConfirmation)
     }
 
     @Test
@@ -101,7 +101,7 @@ class SignupViewModelTest {
 
         viewModel.onSelectedOrganizationType(selectedOrganizationType)
 
-        assertEquals(selectedOrganizationType, viewModel.uiState.value.selectedOrganizationType)
+        assertEquals(selectedOrganizationType, viewModel.userInput.value.selectedOrganizationType)
     }
 
     @Test
@@ -519,16 +519,16 @@ class SignupViewModelTest {
         )
 
         assertEquals(
-            email, viewModel.uiState.value.email
+            email, viewModel.userInput.value.email
         )
         assertEquals(
-            organizationName, viewModel.uiState.value.organizationName
+            organizationName, viewModel.userInput.value.organizationName
         )
         assertEquals(
-            typeOfOrganization, viewModel.uiState.value.selectedOrganizationType
+            typeOfOrganization, viewModel.userInput.value.selectedOrganizationType
         )
         assertEquals(
-            location, viewModel.uiState.value.location
+            location, viewModel.userInput.value.location
         )
     }
 

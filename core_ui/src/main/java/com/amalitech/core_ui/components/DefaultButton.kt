@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,9 +22,11 @@ fun DefaultButton(
     modifier: Modifier = Modifier,
     textColor: Color = MaterialTheme.colorScheme.onPrimary,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
+    circularProgressColor: Color = MaterialTheme.colorScheme.onPrimary,
     onClick: () -> Unit,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    isLoading: Boolean = false
 ) {
     val spacing = LocalSpacing.current
     Box(
@@ -42,6 +45,9 @@ fun DefaultButton(
             color = textColor,
             textAlign = TextAlign.Center,
         )
+        if (isLoading) {
+            CircularProgressIndicator(color = circularProgressColor)
+        }
     }
 }
 
