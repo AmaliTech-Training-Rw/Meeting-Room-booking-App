@@ -78,7 +78,7 @@ class SignupViewModel(
      */
     fun onNewUsername(username: String) {
         _userInput.value = _userInput.value.copy(
-           username = username
+            username = username
         )
     }
 
@@ -97,7 +97,7 @@ class SignupViewModel(
 
     fun onSelectedOrganizationType(type: String) {
         _userInput.value = _userInput.value.copy(
-           selectedOrganizationType = type
+            selectedOrganizationType = type
         )
     }
 
@@ -202,7 +202,8 @@ class SignupViewModel(
 
             else -> {
                 val isEmailAvailable = signupUseCase.isEmailAvailable(_userInput.value.email)
-                val isUsernameAvailable = signupUseCase.isUsernameAvailable(_userInput.value.username)
+                val isUsernameAvailable =
+                    signupUseCase.isUsernameAvailable(_userInput.value.username)
 
                 if (!isEmailAvailable) {
                     updateStateWithError(UiText.StringResource(R.string.error_email_address_already_taken))

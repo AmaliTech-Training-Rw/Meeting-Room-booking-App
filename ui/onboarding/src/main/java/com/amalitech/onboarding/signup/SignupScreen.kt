@@ -89,7 +89,7 @@ fun SignupScreen(
     }
 
     LaunchedEffect(key1 = uiState) {
-        when(uiState) {
+        when (uiState) {
             is UiState.Success -> {
                 (uiState as UiState.Success<SignupUiState>).data?.let {
                     if (it.shouldNavigate) {
@@ -98,6 +98,7 @@ fun SignupScreen(
                     organizationType = it.typeOfOrganization
                 }
             }
+
             is UiState.Error -> {
                 showSnackBar(
                     snackBarValue = (uiState as UiState.Error<SignupUiState>).error,
@@ -107,6 +108,7 @@ fun SignupScreen(
                     viewModel.onSnackBarShown()
                 }
             }
+
             else -> {}
         }
     }
@@ -186,7 +188,7 @@ fun SignupScreen(
                     items = organizationType,
                     onSelectedItemChange = {
                         viewModel.onSelectedOrganizationType(it)
-                                           },
+                    },
                     onIsExpandedStateChange = { isDropDownExpanded = it },
                     selectedItem = selectedItem,
                     focusManager = focusManager
