@@ -2,6 +2,7 @@ package com.amalitech.onboarding.reset_password
 
 import com.amalitech.core.R
 import com.amalitech.core.util.UiText
+import com.amalitech.core_ui.util.UiState
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
@@ -79,9 +80,11 @@ class ResetPasswordViewModelTest {
         viewModel.onNewPasswordConfirmation(confirmationPassword)
 
         // THEN - state holds the value an error
+        val state = viewModel.publicBaseResult
+        assertTrue(state.value is UiState.Error)
         assertEquals(
             UiText.StringResource(R.string.error_passwords_dont_match),
-            viewModel.uiState.value.error
+            (state.value as UiState.Error).error
         )
     }
 
@@ -97,14 +100,8 @@ class ResetPasswordViewModelTest {
 
         viewModel.onResetPassword()
 
-        assertEquals(
-            UiText.StringResource(R.string.password_reset_successfully),
-            viewModel.uiState.value.snackbarValue
-        )
-        assertEquals(
-            true,
-            viewModel.uiState.value.passwordReset
-        )
+        val state = viewModel.publicBaseResult
+        assertTrue(state.value is UiState.Success)
     }
 
     @Test
@@ -122,9 +119,11 @@ class ResetPasswordViewModelTest {
         viewModel.onResetPassword()
 
         // THEN - state is updated with the corresponding error
+        val state = viewModel.publicBaseResult
+        assertTrue(state.value is UiState.Error)
         assertEquals(
             UiText.StringResource(R.string.error_passwords_dont_match),
-            viewModel.uiState.value.error
+            (state.value as UiState.Error).error
         )
     }
 }

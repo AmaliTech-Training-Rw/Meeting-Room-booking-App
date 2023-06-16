@@ -100,10 +100,12 @@ dependencies {
     implementation(project(Modules.uiOnboarding))
     implementation(project(Modules.coreUI))
 
+
     implementation(project(Modules.uiRooms))
     implementation(project(Modules.dataRoom))
     implementation(project(Modules.domainRoom))
-
+   
+    implementation(project(Modules.uiAdmin))
 
     implementation(AndroidX.coreKtx)
 

@@ -2,6 +2,7 @@ package com.amalitech.onboarding.forgot_password
 
 import com.amalitech.core.util.UiText
 import com.amalitech.core.R
+import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.forgot_password.use_case.ForgotPasswordUseCase
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -48,13 +49,6 @@ class ForgotPasswordViewModelTest {
     }
 
     @Test
-    fun `when a snackBar is shown, its value is cleared in state`() {
-        viewModel.onSnackBarShown()
-
-        assertEquals(null, viewModel.uiState.value.snackBarValue)
-    }
-
-    @Test
     fun `when sendResetLink is called with valid email address, state is updated accordingly`() {
         // GIVEN - a mock authentication use case that assume email is valid and onResetLinkEvent event
         every {
@@ -69,14 +63,8 @@ class ForgotPasswordViewModelTest {
         viewModel.onSendResetLink()
 
         // THEN - two states are updated
-        assertEquals(
-            UiText.StringResource(R.string.link_sent_inbox),
-            viewModel.uiState.value.snackBarValue
-        )
-        assertEquals(
-            true,
-            viewModel.uiState.value.linkSent
-        )
+        val state = viewModel.publicBaseResult
+        assertTrue(state.value is UiState.Success)
     }
 
     @Test
@@ -94,9 +82,11 @@ class ForgotPasswordViewModelTest {
         viewModel.onSendResetLink()
 
         // THEN - state holds the value of an error
+        val state = viewModel.publicBaseResult
+        assertTrue(state.value is UiState.Error)
         assertEquals(
             UiText.StringResource(androidx.compose.ui.R.string.default_error_message),
-            viewModel.uiState.value.error
+            (state.value as UiState.Error).error
         )
     }
 
@@ -111,9 +101,11 @@ class ForgotPasswordViewModelTest {
         viewModel.onSendResetLink()
 
         // THEN - state holds the value of an error
+        val state = viewModel.publicBaseResult
+        assertTrue(state.value is UiState.Error)
         assertEquals(
             UiText.StringResource(R.string.error_email_not_valid),
-            viewModel.uiState.value.error
+            (state.value as UiState.Error).error
         )
     }
 }

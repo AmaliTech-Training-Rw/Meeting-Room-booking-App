@@ -13,6 +13,7 @@ object Modules {
 
     const val ui = ":ui"
     const val uiOnboarding = ":ui:onboarding"
+    const val uiAdmin = ":ui:admin"
 
     const val coreUI = ":core_ui"
 
