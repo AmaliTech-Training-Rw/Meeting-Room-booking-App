@@ -1,4 +1,4 @@
-package com.amalitech.core_ui.swip_animation.components
+package com.amalitech.core_ui.swipe_animation.components
 
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -11,7 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.amalitech.core_ui.swip_animation.util.SwipeDirection
+import com.amalitech.core_ui.swipe_animation.util.SwipeDirection
 
 @Composable
 fun SwipeableCard(
