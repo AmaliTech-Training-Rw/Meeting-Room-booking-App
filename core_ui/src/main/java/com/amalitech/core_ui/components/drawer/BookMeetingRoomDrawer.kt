@@ -43,7 +43,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun BookMeetingRoomDrawer(
     appState: BookMeetingRoomAppState,
-    onClick: (screen: NavigationItem) -> Unit
+    onClick: (screen: NavigationItem) -> Unit,
+    searchQuery: String? = null,
+    onSearchQueryChange: ((query: String) -> Unit)? = null,
+    onSearchClick: (() -> Unit)? = null
 ) {
     val selectedItem = remember { mutableStateOf(NavigationItem.Home.title) }
 
@@ -64,7 +67,13 @@ fun BookMeetingRoomDrawer(
             }
         },
         content = {
-            BookMeetingRoomApp(appState, selectedItem.value)
+            BookMeetingRoomApp(
+                appState = appState,
+                title = selectedItem.value,
+                searchQuery = searchQuery,
+                onSearchQueryChange = onSearchQueryChange,
+                onSearchClick = onSearchClick
+            )
         }
     )
 }

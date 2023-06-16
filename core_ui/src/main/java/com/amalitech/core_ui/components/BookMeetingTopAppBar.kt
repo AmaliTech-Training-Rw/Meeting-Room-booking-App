@@ -1,17 +1,13 @@
 package com.amalitech.core_ui.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,9 +17,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,12 +35,12 @@ import kotlinx.coroutines.launch
 fun BookMeetingTopAppBar(
     appState: BookMeetingRoomAppState,
     title: String,
-    searchQuery: String,
-    onSearchQueryChange: (query: String) -> Unit,
-    onSearch: () -> Unit
+    searchQuery: String? = null,
+    onSearchQueryChange: ((query: String) -> Unit)? = null,
+    onSearchClick: (() -> Unit)? = null
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    var isSearching by rememberSaveable {
+    var isSearchTextFieldVisible by rememberSaveable {
         mutableStateOf(false)
     }
 
@@ -80,57 +74,13 @@ fun BookMeetingTopAppBar(
             }
         },
         actions = {
-//            if (
-//                appState.currentDestination?.route == NavigationItem.Users.route
-//                || appState.currentDestination?.route == NavigationItem.BookingRequests.route
-//                || appState.currentDestination?.route == NavigationItem.BookingHistory.route
-//            ) {
-            if (!isSearching) {
-                IconButton(onClick = { isSearching = true }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.baseline_search_24),
-                        contentDescription = stringResource(
-                            R.string.open_search
-                        )
-                    )
-                }
-            } else {
-                TextField(
-                    value = searchQuery,
-                    onValueChange = {
-                        onSearchQueryChange(it)
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    leadingIcon = {
-                        IconButton(onClick = onSearch) {
-                            Icon(
-                                painter = painterResource(R.drawable.baseline_search_24),
-                                contentDescription = stringResource(R.string.search)
-                            )
-                        }
-                    },
-                    trailingIcon = {
-                        IconButton(onClick = { isSearching = false }) {
-                            Icon(
-                                painter = painterResource(R.drawable.baseline_close_24),
-                                contentDescription = stringResource(R.string.close_search_textfield)
-                            )
-                        }
-                    },
-                    colors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        focusedTextColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                        unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-                        focusedContainerColor = MaterialTheme.colorScheme.background,
-                    ),
-                    placeholder = {
-                        Text(stringResource(R.string.search))
-                    }
-                )
-            }
-//            }
+            SearchIcon(
+                searchQuery = searchQuery,
+                onSearch = onSearchClick,
+                onSearchQueryChange = onSearchQueryChange,
+                isSearchTextFieldVisible = isSearchTextFieldVisible,
+                onIsSearchingChange = { isSearchTextFieldVisible = it },
+            )
             IconButton(onClick = { /* doSomething() */ }) {
                 Image(
                     painter = painterResource(id = R.drawable.drawer_user),
@@ -147,8 +97,8 @@ fun BookMeetingTopAppBar(
 fun BookMeetingTopAppBarPreview() {
     BookMeetingRoomTheme {
         val appState = rememberBookMeetingRoomAppState()
-        BookMeetingTopAppBar(appState, "Home", "search", {}) {
+        BookMeetingTopAppBar(appState, "Home", "search", {}, {
 
-        }
+        })
     }
 }
