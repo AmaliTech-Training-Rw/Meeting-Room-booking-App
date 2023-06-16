@@ -24,6 +24,7 @@ class BookMeetingApplication : Application() {
                 onboardingDataModule,
                 onboardingPresentationModule,
                 onboardingDomainModule,
+                appModule,
                 roomPresentationModule,
                 dataRoomModule,
                 domainRoomModule

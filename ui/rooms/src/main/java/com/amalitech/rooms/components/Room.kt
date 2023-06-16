@@ -32,6 +32,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.amalitech.core.data.model.Room
 import com.amalitech.core_ui.swipe_animation.SwipeableCardSideContents
+import com.amalitech.core_ui.theme.LocalSpacing
 
 @Composable
 fun RoomCard(
@@ -39,76 +40,84 @@ fun RoomCard(
     modifier: Modifier = Modifier
 ) {
     SwipeableCardSideContents(
-        modifier = modifier.
-        fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .height(150.dp),
         rightContent = {
             SwipeAction(
-                backgroundColor = Color(0xFFF93844),
+                backgroundColor = MaterialTheme.colorScheme.error,
                 icon = Icons.Filled.Delete,
                 onActionClick = {}
             )
         },
         leftContent = {
             SwipeAction(
-                backgroundColor = Color(0xFFFFCC47),
+                backgroundColor = MaterialTheme.colorScheme.inversePrimary,
                 icon = Icons.Filled.Edit,
                 onActionClick = {}
             )
         },
         content = {
-            Box( modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)){
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+            RoomDescription(
+                room, modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White)
+            )
+        }
+    )
+}
 
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(room.imageUrl)
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = "",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(150.dp)
-                            .fillMaxWidth(0.4f)
-                            .clip(RoundedCornerShape(16.dp))
+@Composable
+fun RoomDescription(
+    room: Room,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
 
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(room.imageUrl)
+                .crossfade(true)
+                .build(),
+            contentDescription = "",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(150.dp)
+                .fillMaxWidth(0.4f)
+                .clip(RoundedCornerShape(LocalSpacing.current.spaceMedium))
+
+        )
+        Spacer(modifier = Modifier.width(LocalSpacing.current.spaceMedium))
+        Column(
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .weight(1f)
+                .padding(vertical = LocalSpacing.current.spaceMedium)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                VerticalLine(modifier = Modifier.height(LocalSpacing.current.spaceLarge))
+                Column(Modifier.padding(start = LocalSpacing.current.spaceSmall)) {
+                    Text(
+                        text = room.roomName,
+                        style = MaterialTheme.typography.titleLarge
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .weight(1f)
-                            .padding(vertical = 16.dp)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            VerticalLine(modifier=Modifier.height(40.dp))
-                            Column(Modifier.padding(start = 8.dp)) {
-                                Text(
-                                    text = room.roomName,
-                                    style = MaterialTheme.typography.titleLarge
-                                )
-                                Text(
-                                    text = "Up to ${room.numberOfPeople} people",
-                                    style = MaterialTheme.typography.labelMedium
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = room.roomFeatures,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
+                    Text(
+                        text = "Up to ${room.numberOfPeople} people",
+                        style = MaterialTheme.typography.labelMedium
+                    )
                 }
             }
 
+            Spacer(modifier = Modifier.height(LocalSpacing.current.spaceSmall))
+            Text(
+                text = room.roomFeatures,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
-    )
+    }
 }
 
 
@@ -116,12 +125,10 @@ fun RoomCard(
 fun VerticalLine(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
-            .width(3.dp)
-            .background(Color(0xFFFFCC47))
+            .width(LocalSpacing.current.spaceExtraSmall)
+            .background(MaterialTheme.colorScheme.inversePrimary)
     )
 }
-
-
 
 
 @Composable
@@ -138,16 +145,16 @@ private fun SwipeAction(
 
 
     ) {
-            IconButton(
-                onClick = onActionClick,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    tint = Color.White
-                )
-            }
+        IconButton(
+            onClick = onActionClick,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = Color.White
+            )
+        }
 
     }
 }

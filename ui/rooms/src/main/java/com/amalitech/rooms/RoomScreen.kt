@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,7 +35,7 @@ fun RoomListScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { /* TODO: Handle floating action button click */ },
-                containerColor = Color(0xFFFFCC47),
+                containerColor = MaterialTheme.colorScheme.inversePrimary,
                 shape = CircleShape
             ) {
                 Icon(

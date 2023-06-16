@@ -7,7 +7,8 @@ import com.amalitech.rooms.repository.RoomRepository
 
 class GetRoomsUseCase(private val roomRepository: RoomRepository) {
 
-    fun execute(): List<Room>{
-         return roomRepository.getRooms()
+
+    operator fun invoke(): List<Room>{
+        return roomRepository.getRooms()
     }
 }
