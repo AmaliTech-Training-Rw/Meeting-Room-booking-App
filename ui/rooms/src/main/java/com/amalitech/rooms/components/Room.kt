@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.amalitech.core.data.model.Room
-import com.amalitech.swipe_animation.SwipeableCardSideContents
+import com.amalitech.core_ui.swipe_animation.SwipeableCardSideContents
 
 @Composable
 fun RoomCard(

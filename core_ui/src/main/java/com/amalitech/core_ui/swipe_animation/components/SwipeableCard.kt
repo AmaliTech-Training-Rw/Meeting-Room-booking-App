@@ -1,4 +1,5 @@
-package com.amalitech.swipe_animation.components
+package com.amalitech.core_ui.swipe_animation.components
+
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
@@ -10,7 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.amalitech.swipe_animation.util.SwipeDirection
+import com.amalitech.core_ui.swipe_animation.util.SwipeDirection
 
 @Composable
 fun SwipeableCard(
@@ -21,7 +22,7 @@ fun SwipeableCard(
     content: @Composable () -> Unit
 ) {
     var offsetX by remember { mutableStateOf(0f) }
-    val swipeDirection = remember { mutableStateOf(SwipeDirection.None) }
+    val swipeDirection = remember { mutableStateOf(SwipeDirection.NONE) }
     Box(
         modifier = modifier
             .draggable(
@@ -32,9 +33,9 @@ fun SwipeableCard(
                 onDragStopped = {
 
                     if (offsetX < -swipeThreshold) {
-                        swipeDirection.value = SwipeDirection.Right
+                        swipeDirection.value = SwipeDirection.RIGHT
                     } else if (offsetX > swipeThreshold) {
-                        swipeDirection.value = SwipeDirection.Left
+                        swipeDirection.value = SwipeDirection.LEFT
                     } else {
                         onSwipeEnd()
                     }
@@ -45,7 +46,7 @@ fun SwipeableCard(
         content()
     }
     LaunchedEffect(swipeDirection.value) {
-        if (swipeDirection.value != SwipeDirection.None) {
+        if (swipeDirection.value != SwipeDirection.NONE) {
             onSwipeStart(swipeDirection.value)
         }
     }
