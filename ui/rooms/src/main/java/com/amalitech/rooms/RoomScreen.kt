@@ -16,6 +16,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.amalitech.core_ui.components.BookMeetingTopAppBar
+import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.rooms.components.RoomCard
 import org.koin.androidx.compose.koinViewModel
@@ -28,7 +30,8 @@ fun RoomListScreen(
 
     Scaffold(
         topBar = {
-
+            val appState = rememberBookMeetingRoomAppState()
+            BookMeetingTopAppBar(appState, "Rooms")
         },
         floatingActionButton = {
             FloatingActionButton(
