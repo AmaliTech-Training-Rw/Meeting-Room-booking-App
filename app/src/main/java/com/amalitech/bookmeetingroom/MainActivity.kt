@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BookMeetingRoomTheme {
-                NavigationGraph(navController = rememberNavController())
+               NavigationGraph(navController = rememberNavController())
             }
         }
     }

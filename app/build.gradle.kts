@@ -99,7 +99,14 @@ dependencies {
     implementation(project(Modules.domainOnboarding))
     implementation(project(Modules.uiOnboarding))
     implementation(project(Modules.coreUI))
+
+
+    implementation(project(Modules.uiRooms))
+    implementation(project(Modules.dataRoom))
+    implementation(project(Modules.domainRoom))
+   
     implementation(project(Modules.uiAdmin))
+
     implementation(AndroidX.coreKtx)
 
     implementation(Coil.coilCompose)
@@ -125,6 +132,7 @@ dependencies {
     testImplementation(Testing.mockk)
     testImplementation(Testing.mockWebServer)
 
+
     androidTestImplementation(Testing.junit4)
     androidTestImplementation(Testing.junitAndroidExt)
     androidTestImplementation(Testing.truth)
@@ -133,6 +141,7 @@ dependencies {
     androidTestImplementation(Testing.mockkAndroid)
     androidTestImplementation(Testing.mockWebServer)
     androidTestImplementation(Testing.testRunner)
+
 
     //     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

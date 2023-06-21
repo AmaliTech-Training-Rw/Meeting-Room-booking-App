@@ -4,7 +4,7 @@ apply {
 
 dependencies {
     "implementation"(project(Modules.core))
-    "implementation"(project(Modules.domainOnboarding))
+    "implementation"(project(Modules.domainRoom))
 
 
     "implementation"(Retrofit.okHttp)
