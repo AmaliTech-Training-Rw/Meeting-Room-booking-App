@@ -12,7 +12,7 @@ class ValidatePassword {
      * valid and null otherwise.
      */
     operator fun invoke(password: String): UiText? {
-        val passwordPattern = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#\"\'~}{|;])[A-Za-z\\d@$!%*?&]{7,}\$")
+        val passwordPattern = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\w\\d\\s])[A-Za-z\\d[^\\w\\d\\s]]{7,}$")
         return if (password.isBlank() || !password.matches(passwordPattern)) {
             UiText.StringResource(R.string.error_password_is_not_valid)
         } else
