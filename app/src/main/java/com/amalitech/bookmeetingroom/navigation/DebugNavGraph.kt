@@ -17,6 +17,7 @@ import com.amalitech.onboarding.OnboardingScreen
 import com.amalitech.onboarding.forgot_password.ForgotPasswordScreen
 import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
+import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
 
 @Composable
@@ -74,6 +75,9 @@ fun NavigationGraph(navController: NavHostController) {
         }
         composable(route = NavigationTarget.ADDROOM.route) {
             AddRoomScreen()
+        }
+        composable(route = NavigationTarget.SIGNUP.route) { entry ->
+            SignupScreen(onNavigateToLogin = { navController.navigate(NavigationTarget.LOGIN.route) }, navBackStackEntry = entry)
         }
     }
 }
