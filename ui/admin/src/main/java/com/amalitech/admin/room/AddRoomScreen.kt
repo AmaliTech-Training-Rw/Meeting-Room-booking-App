@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -116,7 +118,7 @@ fun AddRoomScreen(
                         .align(Alignment.Center)
                         .size(57.dp, 42.dp)
                         .clip(RoundedCornerShape(4.dp))
-                        .background(MaterialTheme.colorScheme.inverseSurface)
+                        .background(MaterialTheme.colorScheme.onSurfaceVariant)
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Add,
@@ -188,8 +190,72 @@ fun AddRoomScreen(
                         fontSize = 16.sp
                     )
                 }
+
+                item {
+                    RoomCounter(
+                        state.capacity,
+                        viewModel::onRemoveRoomCapacity,
+                        viewModel::onAddRoomCapacity
+                    )
+                }
             }
         }
+    }
+}
+
+@Composable
+fun RoomCounter(
+    value: Int = 1,
+    removeRoom: () -> Unit,
+    addRoom: () -> Unit
+) {
+    Box(
+        Modifier
+            .border(
+                BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.outline
+                ),
+                shape = RoundedCornerShape(5.dp)
+            )
+            .size(460.dp, 39.dp)
+            .padding(16.dp, 0.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Filled.Remove,
+            contentDescription = null,
+            modifier = Modifier
+                .clickable(
+                    onClick = {
+                        removeRoom()
+                    }
+                )
+                .align(Alignment.CenterStart)
+                .size(20.dp)
+        )
+
+        Text(
+            text = value.toString(),
+            modifier = Modifier
+                .align(Alignment.Center),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Start,
+            fontWeight = FontWeight.Light,
+            fontSize = 16.sp
+        )
+
+        Icon(
+            imageVector = Icons.Filled.Add,
+            contentDescription = null,
+            modifier = Modifier
+                .clickable(
+                    onClick = {
+                        addRoom()
+                    }
+                )
+                .align(Alignment.CenterEnd)
+                .size(20.dp)
+        )
     }
 }
 
@@ -246,14 +312,18 @@ fun RoomTextField(
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
-            focusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            unfocusedContainerColor = MaterialTheme.colorScheme.onBackground,
-            unfocusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            focusedContainerColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+            focusedContainerColor = MaterialTheme.colorScheme.background,
+            disabledTextColor = MaterialTheme.colorScheme.onBackground,
+            disabledContainerColor = MaterialTheme.colorScheme.background,
+            disabledIndicatorColor = Color.Transparent
         ),
         placeholder = {
             Text(
                 text = placeholder,
+                fontSize = 16.sp,
                 style = placeholderTextStyle
             )
         },
@@ -283,5 +353,16 @@ fun RoomTextFieldPreview() {
 fun AddRoomScreenPreview() {
     BookMeetingRoomTheme {
         AddRoomScreen()
+    }
+}
+
+@Composable
+fun RoomCounterPreview() {
+    BookMeetingRoomTheme {
+        RoomCounter(
+            1,
+            {},
+            {}
+        )
     }
 }
