@@ -1,5 +1,6 @@
 package com.amalitech.admin.room
 
+import android.util.Log
 import android.view.KeyEvent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -59,8 +60,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core_ui.R
+import com.amalitech.core_ui.components.BookMeetingRoomDropDown
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
+import com.amalitech.core_ui.util.SnackbarManager
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -68,6 +71,13 @@ fun AddRoomScreen(
     viewModel: AddRoomViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    var isDropDownExpanded by rememberSaveable {
+        mutableStateOf(false)
+    }
+    val focusManager: FocusManager = LocalFocusManager.current
+    var roomLocations: List<String> by rememberSaveable {
+        mutableStateOf(listOf())
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -198,6 +208,20 @@ fun AddRoomScreen(
                         viewModel::onAddRoomCapacity
                     )
                 }
+
+                item {
+                    BookMeetingRoomDropDown(
+                        isDropDownExpanded = isDropDownExpanded,
+                        items = roomLocations,
+                        onSelectedItemChange = {
+                            viewModel.onSelectedLocation(it)
+                        },
+                        onIsExpandedStateChange = { isDropDownExpanded = it },
+                        selectedItem = state.location,
+                        focusManager = focusManager,
+                        com.amalitech.core.R.string.select_location,
+                    ) { isDropDownExpanded = it }
+                }
             }
         }
     }
@@ -227,7 +251,9 @@ fun RoomCounter(
             modifier = Modifier
                 .clickable(
                     onClick = {
-                        removeRoom()
+                        if (value > 1) {
+                            removeRoom()
+                        }
                     }
                 )
                 .align(Alignment.CenterStart)

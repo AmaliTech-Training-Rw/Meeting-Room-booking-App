@@ -1,5 +1,6 @@
 package com.amalitech.admin.room
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.amalitech.admin.R
 import com.amalitech.core_ui.util.SnackbarManager
@@ -34,14 +35,14 @@ class AddRoomViewModel() : ViewModel() {
     }
 
     fun onRemoveRoomCapacity() {
-        if (capacity < 0) { // TODO: move this to validation
-            SnackbarManager.showMessage(com.amalitech.core.R.string.negative_room)
-        }
         _uiState.update { addRoomUiState ->
             addRoomUiState.copy(
                 capacity = capacity.minus(1)
             )
         }
+    }
+
+    fun onSelectedLocation(location: String) {
     }
 
     fun onSaveRoomClick() {
