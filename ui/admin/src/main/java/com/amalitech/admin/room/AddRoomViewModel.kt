@@ -1,10 +1,6 @@
 package com.amalitech.admin.room
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.amalitech.admin.R
-import com.amalitech.core_ui.util.SnackbarManager
-import com.amalitech.core_ui.util.SnackbarMessage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -38,6 +34,14 @@ class AddRoomViewModel() : ViewModel() {
         _uiState.update { addRoomUiState ->
             addRoomUiState.copy(
                 capacity = capacity.minus(1)
+            )
+        }
+    }
+
+    fun onFeatures(features: String) {
+        _uiState.update { addRoomUiState ->
+            addRoomUiState.copy(
+                features = features.trim()
             )
         }
     }

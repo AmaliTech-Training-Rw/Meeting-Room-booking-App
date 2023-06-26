@@ -1,15 +1,17 @@
 package com.amalitech.admin.room
 
-import android.util.Log
 import android.view.KeyEvent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -61,9 +63,9 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.components.BookMeetingRoomDropDown
+import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
-import com.amalitech.core_ui.util.SnackbarManager
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -98,7 +100,7 @@ fun AddRoomScreen(
                         end.linkTo(parent.end, 8.dp)
                         width = Dimension.fillToConstraints
                     },
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.outlineVariant,
                 textAlign = TextAlign.Start,
                 fontWeight = FontWeight.Light,
                 fontSize = 16.sp
@@ -116,7 +118,7 @@ fun AddRoomScreen(
                     .border(
                         BorderStroke(
                             1.dp,
-                            MaterialTheme.colorScheme.outline
+                            MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f)
                         ),
                         shape = RoundedCornerShape(4.dp)
                     )
@@ -128,7 +130,7 @@ fun AddRoomScreen(
                         .align(Alignment.Center)
                         .size(57.dp, 42.dp)
                         .clip(RoundedCornerShape(4.dp))
-                        .background(MaterialTheme.colorScheme.onSurfaceVariant)
+                        .background(MaterialTheme.colorScheme.outlineVariant)
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Add,
@@ -164,6 +166,10 @@ fun AddRoomScreen(
             }
 
             LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(
+                    vertical = 8.dp
+                ),
                 modifier = Modifier
                     .constrainAs(form) {
                         top.linkTo(photo_selector.bottom, 33.dp)
@@ -194,7 +200,7 @@ fun AddRoomScreen(
                 item {
                     Text(
                         text = stringResource(com.amalitech.core.R.string.room_capacity),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = MaterialTheme.colorScheme.outlineVariant,
                         textAlign = TextAlign.Start,
                         fontWeight = FontWeight.Light,
                         fontSize = 16.sp
@@ -221,6 +227,35 @@ fun AddRoomScreen(
                         focusManager = focusManager,
                         com.amalitech.core.R.string.select_location,
                     ) { isDropDownExpanded = it }
+                }
+
+                item {
+                    RoomTextField(
+                        placeholder = stringResource(com.amalitech.core.R.string.add_features),
+                        value = state.features,
+                        onValueChange = {
+                            viewModel.onFeatures(it)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(118.dp),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Go,
+                            keyboardType = KeyboardType.Password
+                        ),
+                        onGo = {
+                            viewModel.onSaveRoomClick()
+                        }
+                    )
+                }
+
+                item {
+                    DefaultButton(
+                        text = stringResource(com.amalitech.core.R.string.save_room),
+                        onClick = { viewModel.onSaveRoomClick() },
+                        modifier = Modifier.fillMaxWidth(),
+                        isLoading = false // TODO: use network ui state here
+                    )
                 }
             }
         }
