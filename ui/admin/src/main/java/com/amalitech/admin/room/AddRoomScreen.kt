@@ -95,7 +95,7 @@ fun AddRoomScreen(
                 text = stringResource(com.amalitech.core.R.string.add_photos),
                 modifier = Modifier
                     .constrainAs(add_photos) {
-                        top.linkTo(parent.top, 48.dp)
+                        top.linkTo(parent.top, 16.dp) // set to 48.dp
                         start.linkTo(parent.start, 16.dp)
                         end.linkTo(parent.end, 8.dp)
                         width = Dimension.fillToConstraints
