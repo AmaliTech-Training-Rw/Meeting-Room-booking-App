@@ -12,4 +12,5 @@ sealed class NavigationTarget (val route:String){
     object DRAWER: NavigationTarget("Drawer")
     object  CALENDAR: NavigationTarget("Calendar Screen")
     object HOME: NavigationTarget("Home Screen")
+    object SIGNUP: NavigationTarget("Signup")
 }
