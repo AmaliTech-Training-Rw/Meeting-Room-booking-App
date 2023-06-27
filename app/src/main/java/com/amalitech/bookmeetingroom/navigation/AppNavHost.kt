@@ -1,5 +1,6 @@
 package com.amalitech.bookmeetingroom.navigation
 
+import android.content.Intent
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -9,8 +10,11 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
 import com.amalitech.onboarding.OnboardingScreen
@@ -20,6 +24,8 @@ import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.login.LoginViewModel
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordViewModel
+import com.amalitech.onboarding.signup.NavArguments
+import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -83,13 +89,42 @@ fun NavGraphBuilder.onboardingGraph(
             )
         }
 
-        composable(Route.SIGNUP) {
-            // TODO (ADD SIGN UP SCREEN COMPOSABLE HERE)
-            Text("Sign up screen")
+        composable(
+            Route.SIGNUP,
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern =
+                        "http://www.example.com/{${NavArguments.organizationName}}/{${NavArguments.email}}/{${NavArguments.typeOfOrganization}}/{${NavArguments.location}}"
+                    action = Intent.ACTION_VIEW
+                }
+            ),
+            arguments = listOf(
+                navArgument(NavArguments.organizationName) {
+                    type = NavType.StringType
+                    defaultValue = ""
+                },
+                navArgument(NavArguments.email) {
+                    type = NavType.StringType
+                    defaultValue = ""
+                },
+                navArgument(NavArguments.typeOfOrganization) {
+                    type = NavType.StringType
+                    defaultValue = ""
+                },
+                navArgument(NavArguments.location) {
+                    type = NavType.StringType
+                    defaultValue = ""
+                }
+            )
+        ) { entry ->
+            SignupScreen(
+                onNavigateToLogin = { navController.navigate(Route.LOGIN) },
+                navBackStackEntry = entry
+            )
         }
 
         composable(Route.SPLASH) {
-            SplashScreen(onNavigate = {isUserAdmin ->
+            SplashScreen(onNavigate = { isUserAdmin ->
                 if (isUserAdmin) {
                     navController.navigate(Route.DASHBOARD_SCREENS) {
                         popUpTo(Route.SPLASH) {

@@ -15,7 +15,7 @@
     <string name="question_dont_have_account">Don\'t have an account yet?</string>
     <string name="sign_up">Sign up</string>
     <string name="error_email_not_valid">Email address not valid, please check</string>
-    <string name="error_password_is_not_valid">Password is blank, or not valid. Make sure it has at least 7 characters including lowercase, uppercase, digits and one of these characters: @$!%*?&amp;#"'~}{|;</string>
+    <string name="error_password_is_not_valid">Password is blank, or not valid. Make sure it has at least 7 characters including lowercase, uppercase, digits and two special characters</string>
     <string name="error_passwords_dont_match">Passwords don\'t match or blank</string>
     <string name="logged_in_successfully">You logged in successfully</string>
     <string name="password_reset_successfully">Your password has been reset successfully</string>
@@ -31,4 +31,20 @@
     <string name="book_your_meeting_from_anywhere">Book your meeting from anywhere you are.</string>
     <string name="invite_attendees_to_the_booked_room">Invite attendees to the booked room meeting.</string>
     <string name="synchronize_with_google_calendar">Synchronize with google calender.</string>
+    <string name="close_organization_type">Close type of organization</string>
+    <string name="open_organization_type">Open type of organization to see the list</string>
+    <string name="error_no_organization_type_selected">"No organization type selected, please select one before signing up "</string>
+    <string name="error_email_address_already_taken">The email address is already used, you can login if it\'s your account</string>
+    <string name="error_username_address_already_taken">The username is being used, please select another one</string>
+    <string name="your_account_is_created">Your account is created, check your inbox to validate your email address</string>
+    <string name="create_your_account">Create your account</string>
+    <string name="username">Username</string>
+    <string name="organization_name">Organization name</string>
+    <string name="type_of_organization">Type of organization</string>
+    <string name="reload_organization_type">Try reloading organizations type</string>
+    <string name="location">Location</string>
+    <string name="error_value_is_blank">A field is blank, please provide all required values</string>
+    <string name="error_the_link_doesnt_work">There is an error with the link, please make sure you click on the right link</string>
+    <string name="set_up">Set up</string>
+    <string name="error_default_message">An unexpected error occurred, please retry later</string>
 </resources>
