@@ -10,4 +10,6 @@ sealed class NavigationTarget (val route:String){
     object CARD: NavigationTarget("Dashboard Card")
     object DASHBOARD: NavigationTarget("Dashboard Graph")
     object DRAWER: NavigationTarget("Drawer")
+    object  CALENDAR: NavigationTarget("Calendar Screen")
+
 }

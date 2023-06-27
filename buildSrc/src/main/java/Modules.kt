@@ -8,6 +8,7 @@ object Modules {
 
     const val domain = ":domain"
     const val domainOnboarding = ":domain:onboarding"
+    const val domainHome = ":domain:home"
 
     const val ui = ":ui"
     const val uiOnboarding = ":ui:onboarding"

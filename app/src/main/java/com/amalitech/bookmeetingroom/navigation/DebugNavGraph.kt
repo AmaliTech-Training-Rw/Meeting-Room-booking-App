@@ -17,6 +17,7 @@ import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
 import com.amalitech.core_ui.R
+import com.amalitech.home.calendar.CalendarScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
@@ -70,6 +71,9 @@ fun NavigationGraph(navController: NavHostController) {
                     count = 5
                 )
             )
+        }
+        composable(route = NavigationTarget.CALENDAR.route) {
+            CalendarScreen()
         }
     }
 }
