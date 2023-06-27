@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
-import com.amalitech.home.HomeUiState
 import com.amalitech.home.HomeViewModel
 import com.amalitech.home.calendar.components.BookingItem
 import com.amalitech.home.calendar.components.Day
@@ -111,7 +110,6 @@ fun CalendarScreen(
         modifier = modifier
             .fillMaxWidth()
             .background(calendarBackgroundColor)
-            .padding(spacing.spaceMedium)
     ) {
         item {
             LaunchedEffect(calendarState) {
@@ -170,7 +168,7 @@ fun CalendarScreen(
             )
         }
         if (state is UiState.Success) {
-            (state as UiState.Success<HomeUiState>).data?.let {
+            (state as UiState.Success<CalendarUiState>).data?.let {
                 item {
                     selection?.let { localDate ->
                         if (it.bookingsForDay.isNotEmpty())

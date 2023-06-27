@@ -8,16 +8,17 @@ import com.amalitech.admin.DashboardCardItem
 import com.amalitech.admin.components.DashBoardCard
 import com.amalitech.bookmeetingroom.AppScaffold
 import com.amalitech.bookmeetingroom.testComponents.DebugScreen
+import com.amalitech.core_ui.R
 import com.amalitech.core_ui.components.drawer.BookMeetingRoomDrawer
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
+import com.amalitech.home.HomeScreen
+import com.amalitech.home.calendar.CalendarScreen
 import com.amalitech.onboarding.OnboardingScreen
 import com.amalitech.onboarding.forgot_password.ForgotPasswordScreen
 import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
-import com.amalitech.core_ui.R
-import com.amalitech.home.calendar.CalendarScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
@@ -74,6 +75,10 @@ fun NavigationGraph(navController: NavHostController) {
         }
         composable(route = NavigationTarget.CALENDAR.route) {
             CalendarScreen()
+        }
+
+        composable(route = NavigationTarget.HOME.route) {
+            HomeScreen()
         }
     }
 }

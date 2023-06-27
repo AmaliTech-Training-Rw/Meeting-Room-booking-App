@@ -47,7 +47,7 @@ fun SimpleCalendarTitle(
     Row(
         modifier = modifier
             .height(40.dp)
-            .padding(spacing.spaceExtraSmall)
+            //.padding(spacing.spaceExtraSmall)
             .background(backgroundColor),
         verticalAlignment = Alignment.CenterVertically,
     ) {

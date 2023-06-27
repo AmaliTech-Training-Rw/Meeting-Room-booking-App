@@ -8,6 +8,9 @@ import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.util.AuthenticationBaseViewModel
 import com.amalitech.core_ui.util.UiState
+import com.amalitech.home.calendar.BookingUiState
+import com.amalitech.home.calendar.CalendarUiState
+import com.amalitech.home.components.HomeTab
 import com.amalitech.home.model.Booking
 import com.amalitech.home.use_case.HomeUseCase
 import com.kizitonwose.calendar.core.CalendarDay
@@ -17,12 +20,14 @@ import java.time.YearMonth
 
 class HomeViewModel(
     private val homeUseCase: HomeUseCase
-) : AuthenticationBaseViewModel<HomeUiState>() {
-
+) : AuthenticationBaseViewModel<CalendarUiState>() {
+    val tabs = mutableStateOf(HomeTab.createHomeTabsList())
+    private val _selectedTab = mutableStateOf(tabs.value.first())
+    val selectedTab: State<HomeTab> get() = _selectedTab
     private val _currentMonth = mutableStateOf(YearMonth.now())
     val currentMonth: State<YearMonth> get() = _currentMonth
     private val _currentSelectedDate: MutableState<CalendarDay?> = mutableStateOf(null)
-    val currentSelectedDate: State<CalendarDay?> get () = _currentSelectedDate
+    val currentSelectedDate: State<CalendarDay?> get() = _currentSelectedDate
 
     init {
         refreshBookings()
@@ -51,7 +56,7 @@ class HomeViewModel(
                 val bookings = toBookingsUiStateMap(response.data!!)
                 baseResult.update {
                     UiState.Success(
-                        HomeUiState(
+                        CalendarUiState(
                             bookings = bookings
                         )
                     )
@@ -107,5 +112,9 @@ class HomeViewModel(
 
             else -> {}
         }
+    }
+
+    fun onSelectedTabChange(tab: HomeTab) {
+        _selectedTab.value = tab
     }
 }
