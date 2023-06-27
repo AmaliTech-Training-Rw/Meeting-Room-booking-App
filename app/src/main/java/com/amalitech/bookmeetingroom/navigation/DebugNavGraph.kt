@@ -17,6 +17,7 @@ import com.amalitech.onboarding.OnboardingScreen
 import com.amalitech.onboarding.forgot_password.ForgotPasswordScreen
 import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
+import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
 
 @Composable
@@ -72,12 +73,17 @@ fun NavigationGraph(navController: NavHostController) {
                 )
             )
         }
+        
         composable(route = NavigationTarget.CALENDAR.route) {
             CalendarScreen()
         }
 
         composable(route = NavigationTarget.HOME.route) {
             AppScaffold(shouldShowOnboarding = false)
+        }
+
+        composable(route = NavigationTarget.SIGNUP.route) { entry ->
+            SignupScreen(onNavigateToLogin = { navController.navigate(NavigationTarget.LOGIN.route) }, navBackStackEntry = entry)
         }
     }
 }

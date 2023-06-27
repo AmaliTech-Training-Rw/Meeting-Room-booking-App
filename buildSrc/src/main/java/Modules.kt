@@ -16,4 +16,6 @@ object Modules {
     const val uiHome = ":ui:home"
 
     const val coreUI = ":core_ui"
+
+    const val uiSwipe = ":ui:swip_animation"
 }
