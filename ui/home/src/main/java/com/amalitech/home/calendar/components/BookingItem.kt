@@ -14,9 +14,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.home.calendar.BookingUiState
+import com.amalitech.home.calendar.util.formatTime
 import com.amalitech.ui.home.R
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun BookingItem(
@@ -48,10 +47,3 @@ fun BookingItem(
         )
     }
 }
-
-
-fun formatTime(localDateTime: LocalDateTime): String {
-    val formatter = DateTimeFormatter.ofPattern("hh:mm a")
-    return localDateTime.format(formatter)
-}
-

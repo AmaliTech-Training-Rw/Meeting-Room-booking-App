@@ -30,6 +30,7 @@ import com.amalitech.home.calendar.components.BookingItem
 import com.amalitech.home.calendar.components.Day
 import com.amalitech.home.calendar.components.MonthHeader
 import com.amalitech.home.calendar.components.SimpleCalendarTitle
+import com.amalitech.home.calendar.util.formatDate
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -42,8 +43,6 @@ import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun CalendarScreen(
@@ -59,9 +58,8 @@ fun CalendarScreen(
     bookingsContentColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     bookingsContentBackgroundColor: Color = MaterialTheme.colorScheme.onSurfaceVariant
 ) {
-    val currentMonth by rememberSaveable {
-        viewModel.currentMonth
-    }
+    val uiState = viewModel.uiState.value
+    val currentMonth = uiState.currentMonth
     val startMonth by rememberSaveable {
         mutableStateOf(currentMonth.minusMonths(500))
     }
@@ -69,14 +67,11 @@ fun CalendarScreen(
         mutableStateOf(currentMonth.plusMonths(500))
     }
     val state by viewModel.publicBaseResult.collectAsStateWithLifecycle()
-    val selection by rememberSaveable {
-        viewModel.currentSelectedDate
-    }
-
+    val selection = uiState.currentSelectedDate
     val daysOfWeek = rememberSaveable { daysOfWeek() }
-    val uiState by viewModel.publicBaseResult.collectAsStateWithLifecycle()
-    var bookings = if (uiState is UiState.Success)
-        (uiState as UiState.Success).data?.bookings ?: emptyMap()
+    val uiStateFlow by viewModel.publicBaseResult.collectAsStateWithLifecycle()
+    var bookings = if (uiStateFlow is UiState.Success)
+        (uiStateFlow as UiState.Success).data?.bookings ?: emptyMap()
     else emptyMap()
     val spacing = LocalSpacing.current
     val calendarState = rememberCalendarState(
@@ -88,6 +83,7 @@ fun CalendarScreen(
     )
     val coroutineScope = rememberCoroutineScope()
     var visibleMonth by rememberSaveable { mutableStateOf(calendarState.firstVisibleMonth) }
+
     LaunchedEffect(calendarState) {
         snapshotFlow { calendarState.layoutInfo.completelyVisibleMonths.firstOrNull() }
             .filterNotNull()
@@ -100,9 +96,9 @@ fun CalendarScreen(
             }
     }
 
-    LaunchedEffect(key1 = uiState) {
-        bookings = if (uiState is UiState.Success)
-            (uiState as UiState.Success).data?.bookings ?: emptyMap()
+    LaunchedEffect(key1 = uiStateFlow) {
+        bookings = if (uiStateFlow is UiState.Success)
+            (uiStateFlow as UiState.Success).data?.bookings ?: emptyMap()
         else emptyMap()
     }
 
@@ -196,11 +192,6 @@ fun CalendarScreen(
             }
         }
     }
-}
-
-fun formatDate(localDate: LocalDate): String {
-    val formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy")
-    return localDate.format(formatter)
 }
 
 private

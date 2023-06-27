@@ -1,6 +1,5 @@
 package com.amalitech.home
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
@@ -16,18 +15,12 @@ import com.amalitech.home.use_case.HomeUseCase
 import com.kizitonwose.calendar.core.CalendarDay
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.YearMonth
 
 class HomeViewModel(
     private val homeUseCase: HomeUseCase
 ) : AuthenticationBaseViewModel<CalendarUiState>() {
-    val tabs = mutableStateOf(HomeTab.createHomeTabsList())
-    private val _selectedTab = mutableStateOf(tabs.value.first())
-    val selectedTab: State<HomeTab> get() = _selectedTab
-    private val _currentMonth = mutableStateOf(YearMonth.now())
-    val currentMonth: State<YearMonth> get() = _currentMonth
-    private val _currentSelectedDate: MutableState<CalendarDay?> = mutableStateOf(null)
-    val currentSelectedDate: State<CalendarDay?> get() = _currentSelectedDate
+    private val _uiState = mutableStateOf(HomeUiState())
+    val uiState: State<HomeUiState> get () = _uiState
 
     init {
         refreshBookings()
@@ -46,7 +39,7 @@ class HomeViewModel(
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
-            val year = _currentMonth.value.year
+            val year = _uiState.value.currentMonth.year
             baseResult.update {
                 UiState.Loading()
             }
@@ -90,7 +83,9 @@ class HomeViewModel(
             }
 
     fun onCurrentDayChange(day: CalendarDay?) {
-        _currentSelectedDate.value = day
+        _uiState.value = _uiState.value.copy(
+            currentSelectedDate = day
+        )
         updateBookingsForDay()
     }
 
@@ -100,7 +95,7 @@ class HomeViewModel(
                 baseResult.update { state ->
                     val successState = (state as UiState.Success).data
                     val bookingsForDay =
-                        successState?.bookings?.get(_currentSelectedDate.value?.date)
+                        successState?.bookings?.get(_uiState.value.currentSelectedDate?.date)
                             ?: emptyList()
                     UiState.Success(
                         data = successState?.copy(
@@ -115,6 +110,6 @@ class HomeViewModel(
     }
 
     fun onSelectedTabChange(tab: HomeTab) {
-        _selectedTab.value = tab
+        _uiState.value = _uiState.value.copy(selectedTab = tab)
     }
 }

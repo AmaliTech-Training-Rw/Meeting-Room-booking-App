@@ -45,7 +45,7 @@ class HomeViewModelTest {
 
         viewModel.onCurrentDayChange(currentDay)
 
-        assertEquals(currentDay, viewModel.currentSelectedDate.value)
+        assertEquals(currentDay, viewModel.uiState.value.currentSelectedDate)
     }
 
     @Test
@@ -103,6 +103,6 @@ class HomeViewModelTest {
         val tab = HomeTab.createHomeTabsList().random()
 
         viewModel.onSelectedTabChange(tab)
-        assertEquals(tab, viewModel.selectedTab.value)
+        assertEquals(tab, viewModel.uiState.value.selectedTab)
     }
 }
