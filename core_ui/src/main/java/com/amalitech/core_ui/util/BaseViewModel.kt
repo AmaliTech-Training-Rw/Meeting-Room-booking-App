@@ -8,16 +8,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 open class BaseViewModel<T> : ViewModel() {
-    protected val privateBaseResult: MutableStateFlow<UiState<T>?> =
+    protected val _uiStateFlow: MutableStateFlow<UiState<T>?> =
         MutableStateFlow(null)
-    val baseResult = privateBaseResult.asStateFlow()
+    val uiStateFlow = _uiStateFlow.asStateFlow()
     protected var job: Job? = null
 
     /**
      * onSnackBarShown - Reset snackBarValue to null
      */
     fun onSnackBarShown() {
-        privateBaseResult.update { state ->
+        _uiStateFlow.update { state ->
             (state as UiState.Error<T>).copy(
                 error = null
             )
@@ -25,7 +25,7 @@ open class BaseViewModel<T> : ViewModel() {
     }
 
     internal fun setSnackBarValue(value: UiText?) {
-        privateBaseResult.update {
+        _uiStateFlow.update {
             UiState.Error(
                 error = value
             )

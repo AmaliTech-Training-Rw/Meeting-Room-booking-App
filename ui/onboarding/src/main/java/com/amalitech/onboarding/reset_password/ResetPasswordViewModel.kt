@@ -49,7 +49,7 @@ class ResetPasswordViewModel(
             _uiState.value.passwordConfirmation
         )
         if (passwordCheck != null) {
-            privateBaseResult.update {
+            _uiStateFlow.update {
                 UiState.Error(
                     error = passwordCheck
                 )
@@ -71,7 +71,7 @@ class ResetPasswordViewModel(
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
-            privateBaseResult.update {
+            _uiStateFlow.update {
                 UiState.Loading()
             }
             val passwordsCheck = resetPasswordUseCase.checkPasswordsMatch(
@@ -85,18 +85,18 @@ class ResetPasswordViewModel(
                 )
 
                 if (apiResult != null) {
-                    privateBaseResult.update {
+                    _uiStateFlow.update {
                         UiState.Error(
                             error = apiResult
                         )
                     }
                 } else {
-                    privateBaseResult.update {
+                    _uiStateFlow.update {
                         UiState.Success()
                     }
                 }
             } else {
-                privateBaseResult.update {
+                _uiStateFlow.update {
                     UiState.Error(error = passwordsCheck)
                 }
             }

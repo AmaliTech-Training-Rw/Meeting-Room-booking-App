@@ -20,6 +20,6 @@ class BaseViewModelTest {
 
         viewModel.onSnackBarShown()
 
-        assertEquals(null, (viewModel.baseResult.value as UiState.Error).error)
+        assertEquals(null, (viewModel.uiStateFlow.value as UiState.Error).error)
     }
 }

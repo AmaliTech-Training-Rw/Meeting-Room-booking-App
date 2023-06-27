@@ -57,7 +57,7 @@ class LoginViewModel(
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
-            privateBaseResult.update {
+            _uiStateFlow.update {
                 UiState.Loading()
             }
             val emailValidation = loginUseCase.validateEmail(_uiState.value.email)
@@ -68,7 +68,7 @@ class LoginViewModel(
                     password = _uiState.value.password
                 )
                 if (apiResult != null) {
-                    privateBaseResult.update {
+                    _uiStateFlow.update {
                         UiState.Error(
                             error = apiResult
                         )
@@ -77,18 +77,18 @@ class LoginViewModel(
                     val isAdmin = loginUseCase.isUserAdmin()
                     sharedPreferences.saveShouldShowOnboarding(false)
                     sharedPreferences.saveUserType(isAdmin)
-                    privateBaseResult.update {
+                    _uiStateFlow.update {
                         UiState.Success()
                     }
                 }
             } else if (emailValidation != null) {
-                privateBaseResult.update {
+                _uiStateFlow.update {
                     UiState.Error(
                         error = emailValidation
                     )
                 }
             } else {
-                privateBaseResult.update {
+                _uiStateFlow.update {
                     UiState.Error(
                         error = passwordValidation
                     )

@@ -41,7 +41,7 @@ class ForgotPasswordViewModel(
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
-            privateBaseResult.update {
+            _uiStateFlow.update {
                 UiState.Loading()
             }
             val emailValidation = forgotPasswordUseCase.validateEmail(_uiState.value.email)
@@ -49,18 +49,18 @@ class ForgotPasswordViewModel(
             if (emailValidation == null) {
                 val apiResult = forgotPasswordUseCase.sendResetLink(_uiState.value.email)
                 if (apiResult == null) {
-                    privateBaseResult.update {
+                    _uiStateFlow.update {
                         UiState.Success()
                     }
                 } else {
-                    privateBaseResult.update {
+                    _uiStateFlow.update {
                         UiState.Error(
                             error = apiResult
                         )
                     }
                 }
             } else {
-                privateBaseResult.update {
+                _uiStateFlow.update {
                     UiState.Error(
                         error = emailValidation
                     )
