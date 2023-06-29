@@ -28,4 +28,5 @@ include ':ui:onboarding'
 include ':ui:swip_animation'
 
 include ':ui:admin'
-
+include ':ui:home'
+include 'domain:home'
