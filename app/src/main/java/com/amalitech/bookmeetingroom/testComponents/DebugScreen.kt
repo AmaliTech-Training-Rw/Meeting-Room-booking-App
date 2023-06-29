@@ -28,6 +28,9 @@ fun DebugScreen(onNavigate: (NavigationTarget) -> Unit) {
             NavigationTarget.DASHBOARD,
             NavigationTarget.DRAWER,
             NavigationTarget.APPBAR
+            NavigationTarget.CALENDAR,
+            NavigationTarget.HOME,
+            NavigationTarget.SIGNUP,
         )
 
     LazyColumn(modifier = Modifier

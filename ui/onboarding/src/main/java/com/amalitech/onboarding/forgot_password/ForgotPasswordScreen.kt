@@ -140,7 +140,7 @@ fun ForgotPasswordScreen(
                 )
                 withStyle(
                     style = SpanStyle(
-                        color = Color.Blue,
+                        color = MaterialTheme.colorScheme.outline,
                     )
                 ) {
                     append(stringResource(id = R.string.log_in))
