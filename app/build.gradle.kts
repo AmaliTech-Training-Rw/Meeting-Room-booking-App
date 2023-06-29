@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.firebase.appdistribution")
+    id ("org.jetbrains.kotlin.android")
+    id ("com.google.firebase.appdistribution")
     id("kotlin-kapt")
     id("com.google.devtools.ksp")
 }
