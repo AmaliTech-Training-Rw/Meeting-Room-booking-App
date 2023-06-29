@@ -103,6 +103,8 @@ dependencies {
     implementation(project(Modules.uiSwipe))
 
     implementation(project(Modules.uiAdmin))
+    implementation(project(Modules.uiHome))
+    implementation(project(Modules.domainHome))
 
     implementation(AndroidX.coreKtx)
 

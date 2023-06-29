@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="booking_time">%s - %s</string>
+    <string name="rooms">Rooms</string>
+    <string name="calendar">Calendar</string>
+</resources>

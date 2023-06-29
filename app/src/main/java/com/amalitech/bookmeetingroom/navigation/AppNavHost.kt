@@ -17,6 +17,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
+import com.amalitech.home.HomeScreen
 import com.amalitech.onboarding.OnboardingScreen
 import com.amalitech.onboarding.forgot_password.ForgotPasswordScreen
 import com.amalitech.onboarding.forgot_password.ForgotPasswordViewModel
@@ -157,8 +158,7 @@ fun NavGraphBuilder.mainNavGraph() {
         route = Route.HOME_SCREENS
     ) {
         composable(BottomNavItem.Home.route) {
-            // TODO (ADD HOME SCREEN COMPOSABLE HERE)
-            Text("Home Screen")
+            HomeScreen()
         }
         composable(BottomNavItem.Profile.route) {
             // TODO (ADD PROFILE SCREEN COMPOSABLE HERE)
