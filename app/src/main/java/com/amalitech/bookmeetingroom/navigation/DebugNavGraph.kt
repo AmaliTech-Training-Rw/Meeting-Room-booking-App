@@ -97,7 +97,7 @@ fun NavigationGraph(navController: NavHostController) {
                     isSearchTextFieldVisible = isVisible
                 }
             )
-        
+        }
         composable(route = NavigationTarget.CALENDAR.route) {
             CalendarScreen()
         }
