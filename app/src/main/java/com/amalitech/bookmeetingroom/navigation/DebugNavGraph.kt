@@ -1,10 +1,6 @@
 package com.amalitech.bookmeetingroom.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,6 +14,7 @@ import com.amalitech.core_ui.R
 import com.amalitech.core_ui.components.drawer.BookMeetingRoomDrawer
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
+import com.amalitech.home.book_room.BookRoomScreen
 import com.amalitech.home.calendar.CalendarScreen
 import com.amalitech.onboarding.OnboardingScreen
 import com.amalitech.onboarding.forgot_password.ForgotPasswordScreen
@@ -122,6 +119,10 @@ fun NavigationGraph(navController: NavHostController) {
 
         composable(route = NavigationTarget.SIGNUP.route) { entry ->
             SignupScreen(onNavigateToLogin = { navController.navigate(NavigationTarget.LOGIN.route) }, navBackStackEntry = entry)
+        }
+
+        composable(route = NavigationTarget.BOOK_ROOM.route) { entry ->
+            BookRoomScreen(navBackStackEntry = entry)
         }
 
         composable(route = NavigationTarget.BOOKING.route) {

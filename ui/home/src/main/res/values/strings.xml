@@ -4,4 +4,8 @@
     <string name="previous">Previous</string>
     <string name="booking_time">%s - %s</string>
     <string name="rooms">Rooms</string>
+    <string name="calendar">Calendar</string>
+    <string name="error_no_date_selected">No date selected, please select one before proceeding</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>
