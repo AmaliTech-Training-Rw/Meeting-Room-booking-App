@@ -254,4 +254,79 @@ class BookRoomViewModelTest {
         assertTrue(bookRoomViewModel.publicBaseResult.value is UiState.Error)
         assertEquals(error, (bookRoomViewModel.publicBaseResult.value as UiState.Error).error)
     }
+
+    @Test
+    fun `ensures that isDateAvailable returns false when there is no slot available`() {
+        val date = LocalDate.of(2023, 5, 1)
+        val room = RoomUi(
+            name = "No Available Slots Room",
+            description = "Meeting Room with No Available Slots",
+            features = listOf("Projector", "Whiteboard"),
+            bookings = listOf(
+                BookingUi(LocalTime.of(9, 0), LocalTime.of(12, 47), date),
+                BookingUi(LocalTime.of(13, 0), LocalTime.of(15, 0), date),
+                BookingUi(LocalTime.of(15, 12), LocalTime.of(16, 0), date),
+                BookingUi(LocalTime.of(16, 7), LocalTime.of(18, 0), date)
+            )
+        )
+
+        val isAvailable = bookRoomViewModel.isDateAvailable(date, room)
+
+        assertTrue(!isAvailable)
+    }
+
+    @Test
+    fun `ensures that isDateAvailable returns true when there is available slots`() {
+        val date = LocalDate.of(2023, 5, 1)
+        val room = RoomUi(
+            name = "No Available Slots Room",
+            description = "Meeting Room with No Available Slots",
+            features = listOf("Projector", "Whiteboard"),
+            bookings = listOf(
+                BookingUi(LocalTime.of(9, 0), LocalTime.of(12, 45), date),
+                BookingUi(LocalTime.of(13, 0), LocalTime.of(15, 0), date),
+                BookingUi(LocalTime.of(15, 0), LocalTime.of(16, 0), date),
+                BookingUi(LocalTime.of(16, 0), LocalTime.of(18, 0), date)
+            )
+        )
+
+        val isAvailable = bookRoomViewModel.isDateAvailable(date, room)
+
+        assertTrue(isAvailable)
+    }
+
+    @Test
+    fun `ensures that isDateAvailable returns true when there is available slots after the last booking`() {
+        val date = LocalDate.of(2023, 5, 1)
+        val room = RoomUi(
+            name = "No Available Slots Room",
+            description = "Meeting Room with No Available Slots",
+            features = listOf("Projector", "Whiteboard"),
+            bookings = listOf(
+                BookingUi(LocalTime.of(9, 0), LocalTime.of(12, 59), date),
+                BookingUi(LocalTime.of(13, 0), LocalTime.of(15, 0), date),
+                BookingUi(LocalTime.of(15, 0), LocalTime.of(16, 0), date),
+                BookingUi(LocalTime.of(16, 0), LocalTime.of(17, 45), date)
+            )
+        )
+
+        val isAvailable = bookRoomViewModel.isDateAvailable(date, room)
+
+        assertTrue(isAvailable)
+    }
+
+    @Test
+    fun `ensures that isDateAvailable returns true when there is no booking`() {
+        val date = LocalDate.of(2023, 5, 1)
+        val room = RoomUi(
+            name = "No Available Slots Room",
+            description = "Meeting Room with No Available Slots",
+            features = listOf("Projector", "Whiteboard"),
+            bookings = listOf()
+        )
+
+        val isAvailable = bookRoomViewModel.isDateAvailable(date, room)
+
+        assertTrue(isAvailable)
+    }
 }

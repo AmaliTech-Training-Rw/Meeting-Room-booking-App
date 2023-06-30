@@ -20,6 +20,10 @@ class BookRoomViewModel(
     private val _userInput = mutableStateOf(UserInput())
     val userInput: State<UserInput> get() = _userInput
 
+    private val globalStartTime = LocalTime.of(9, 0)
+    private val globalEndTime = LocalTime.of(18, 0)
+    private val globalInterval = Duration.ofMinutes(15)
+
     fun getBookableRoom(id: String) {
         if (job?.isActive == true)
             return
@@ -47,14 +51,12 @@ class BookRoomViewModel(
 
     fun getAvailableEndTimes(room: RoomUi, meetingStartTime: LocalTime): List<LocalTime> {
         val availableEndTimes: MutableList<LocalTime> = mutableListOf()
-        val endTime = LocalTime.of(18, 0)
         val firstNextMeeting = room.bookings.sortedBy { it.startTime.toSecondOfDay() }
             .firstOrNull { meetingStartTime.isBefore(it.startTime) }?.startTime
-        val interval = Duration.ofMinutes(15)
         var startTime = meetingStartTime
 
-        while(startTime.isBefore(firstNextMeeting ?: endTime)) {
-            startTime = startTime.plusMinutes(interval.toMinutes())
+        while(startTime.isBefore(firstNextMeeting ?: globalEndTime)) {
+            startTime = startTime.plusMinutes(globalInterval.toMinutes())
             availableEndTimes.add(startTime)
         }
         return availableEndTimes
@@ -88,17 +90,31 @@ class BookRoomViewModel(
         return allTimes.filterNot { time -> bookedTimes.contains(time) }
     }
     private fun generateAllTimes(): List<LocalTime> {
-        val startTime = LocalTime.of(9, 0)
-        val endTime = LocalTime.of(18, 0)
-        val interval = Duration.ofMinutes(15)
         val allTimes = mutableListOf<LocalTime>()
 
-        var currentTime = startTime
-        while (currentTime.isBefore(endTime)) {
+        var currentTime = globalStartTime
+        while (currentTime.isBefore(globalEndTime)) {
             allTimes.add(currentTime)
-            currentTime = currentTime.plus(interval)
+            currentTime = currentTime.plus(globalInterval)
         }
 
         return allTimes
+    }
+
+    fun isDateAvailable(date: LocalDate, room: RoomUi): Boolean {
+        val bookingForDate = room.bookings.filter { it.date == date }
+        val length = bookingForDate.size - 1
+        if (bookingForDate.isEmpty())
+            return true
+        bookingForDate.forEachIndexed { index, bookingUi ->
+            if (index < length)
+                if (Duration.between(bookingForDate[index].endTime, bookingForDate[index + 1].startTime).toMinutes() >= globalInterval.toMinutes()) {
+                    return true
+                }
+            if (index == length)
+                if (Duration.between(bookingUi.endTime, globalEndTime) >= globalInterval)
+                    return true
+        }
+        return false
     }
 }
