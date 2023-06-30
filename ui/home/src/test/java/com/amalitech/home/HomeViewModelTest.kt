@@ -63,9 +63,9 @@ class HomeViewModelTest {
         viewModel.refreshBookings()
 
         val expected = viewModel.toBookingsUiStateMap(generatedBookings)
-        assertTrue(viewModel.publicBaseResult.value is UiState.Success)
-        assertEquals(expected, (viewModel.publicBaseResult.value as UiState.Success).data?.bookings)
-        assertEquals(expected[selectedDate.date], (viewModel.publicBaseResult.value as UiState.Success).data?.bookingsForDay)
+        assertTrue(viewModel.uiStateFlow.value is UiState.Success)
+        assertEquals(expected, (viewModel.uiStateFlow.value as UiState.Success).data?.bookings)
+        assertEquals(expected[selectedDate.date], (viewModel.uiStateFlow.value as UiState.Success).data?.bookingsForDay)
     }
 
     private fun generateBookings(): List<Booking> {
