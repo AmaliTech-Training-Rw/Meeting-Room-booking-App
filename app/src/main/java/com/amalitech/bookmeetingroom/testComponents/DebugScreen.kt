@@ -26,7 +26,10 @@ fun DebugScreen(onNavigate: (NavigationTarget) -> Unit) {
             NavigationTarget.RESET,
             NavigationTarget.CARD,
             NavigationTarget.DASHBOARD,
-            NavigationTarget.DRAWER
+            NavigationTarget.DRAWER,
+            NavigationTarget.CALENDAR,
+            NavigationTarget.HOME,
+            NavigationTarget.SIGNUP,
         )
 
     LazyColumn(modifier = Modifier
