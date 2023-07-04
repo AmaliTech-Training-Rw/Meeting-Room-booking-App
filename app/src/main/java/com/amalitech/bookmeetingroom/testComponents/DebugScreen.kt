@@ -28,7 +28,7 @@ fun DebugScreen(onNavigate: (NavigationTarget) -> Unit) {
             NavigationTarget.DASHBOARD,
             NavigationTarget.DRAWER,
             NavigationTarget.ADDROOM,
-            NavigationTarget.SIGNUP
+            NavigationTarget.SIGNUP,
             NavigationTarget.CALENDAR,
             NavigationTarget.HOME,
             NavigationTarget.SIGNUP,
