@@ -79,11 +79,11 @@ fun NavigationGraph(navController: NavHostController) {
                 )
             )
         }
-<<<<<<< HEAD
+
         composable(route = NavigationTarget.ADDROOM.route) {
             AddRoomScreen()
         }
-=======
+
         composable(route = NavigationTarget.APPBAR.route) {
             val appState = rememberBookMeetingRoomAppState()
             var query by rememberSaveable {
@@ -104,6 +104,11 @@ fun NavigationGraph(navController: NavHostController) {
                 }
             )
         }
+
+        composable(route = NavigationTarget.ADDROOM.route) {
+            AddRoomScreen()
+        }
+
         composable(route = NavigationTarget.CALENDAR.route) {
             CalendarScreen()
         }
@@ -112,7 +117,6 @@ fun NavigationGraph(navController: NavHostController) {
             AppScaffold(shouldShowOnboarding = false)
         }
 
->>>>>>> develop
         composable(route = NavigationTarget.SIGNUP.route) { entry ->
             SignupScreen(onNavigateToLogin = { navController.navigate(NavigationTarget.LOGIN.route) }, navBackStackEntry = entry)
         }

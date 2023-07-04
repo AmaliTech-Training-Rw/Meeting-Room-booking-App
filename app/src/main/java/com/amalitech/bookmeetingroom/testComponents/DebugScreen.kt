@@ -29,7 +29,6 @@ fun DebugScreen(onNavigate: (NavigationTarget) -> Unit) {
             NavigationTarget.DRAWER,
             NavigationTarget.ADDROOM,
             NavigationTarget.SIGNUP
-            NavigationTarget.APPBAR,
             NavigationTarget.CALENDAR,
             NavigationTarget.HOME,
             NavigationTarget.SIGNUP,
