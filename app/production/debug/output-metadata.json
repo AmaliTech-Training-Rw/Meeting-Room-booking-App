@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.amalitech.bookmeetingroom.production.debug",
+  "variantName": "productionDebug",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 1,
+      "versionName": "0.0.5-production-debug",
+      "outputFile": "app-production-debug.apk"
+    }
+  ],
+  "elementType": "File"
+}

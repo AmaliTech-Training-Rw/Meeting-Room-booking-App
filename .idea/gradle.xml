@@ -18,9 +18,11 @@
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/data/onboarding" />
             <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/domain/home" />
             <option value="$PROJECT_DIR$/domain/onboarding" />
             <option value="$PROJECT_DIR$/ui" />
             <option value="$PROJECT_DIR$/ui/admin" />
+            <option value="$PROJECT_DIR$/ui/home" />
             <option value="$PROJECT_DIR$/ui/onboarding" />
           </set>
         </option>

@@ -1,6 +1,10 @@
 package com.amalitech.bookmeetingroom.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,6 +17,7 @@ import com.amalitech.core_ui.R
 import com.amalitech.core_ui.components.drawer.BookMeetingRoomDrawer
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
+import com.amalitech.home.calendar.CalendarScreen
 import com.amalitech.onboarding.OnboardingScreen
 import com.amalitech.onboarding.forgot_password.ForgotPasswordScreen
 import com.amalitech.onboarding.login.LoginScreen
@@ -60,8 +65,9 @@ fun NavigationGraph(navController: NavHostController) {
             val appState = rememberBookMeetingRoomAppState()
             BookMeetingRoomTheme {
                 BookMeetingRoomDrawer(
-                    appState
-                ) {}
+                    appState = appState,
+                    onClick = {}
+                )
             }
         }
         composable(route = NavigationTarget.CARD.route) {
@@ -73,9 +79,40 @@ fun NavigationGraph(navController: NavHostController) {
                 )
             )
         }
+<<<<<<< HEAD
         composable(route = NavigationTarget.ADDROOM.route) {
             AddRoomScreen()
         }
+=======
+        composable(route = NavigationTarget.APPBAR.route) {
+            val appState = rememberBookMeetingRoomAppState()
+            var query by rememberSaveable {
+                mutableStateOf("")
+            }
+            var isSearchTextFieldVisible by rememberSaveable {
+                mutableStateOf(false)
+            }
+            BookMeetingRoomDrawer(
+                appState = appState,
+                onClick = {},
+                searchQuery = query,
+                onSearchQueryChange = { query = it },
+                {},
+                isSearchTextFieldVisible = isSearchTextFieldVisible,
+                onSearchTextFieldVisibilityChange = { isVisible ->
+                    isSearchTextFieldVisible = isVisible
+                }
+            )
+        }
+        composable(route = NavigationTarget.CALENDAR.route) {
+            CalendarScreen()
+        }
+
+        composable(route = NavigationTarget.HOME.route) {
+            AppScaffold(shouldShowOnboarding = false)
+        }
+
+>>>>>>> develop
         composable(route = NavigationTarget.SIGNUP.route) { entry ->
             SignupScreen(onNavigateToLogin = { navController.navigate(NavigationTarget.LOGIN.route) }, navBackStackEntry = entry)
         }

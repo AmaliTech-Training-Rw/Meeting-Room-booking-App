@@ -8,8 +8,11 @@ sealed class NavigationTarget (val route:String){
     object ONBOARD: NavigationTarget("OnBoarding")
     object SPLASH: NavigationTarget("Splash")
     object CARD: NavigationTarget("Dashboard Card")
-    object DASHBOARD: NavigationTarget("Dashboard Graph")
+    object DASHBOARD: NavigationTarget("Dashboard")
     object DRAWER: NavigationTarget("Drawer")
     object ADDROOM: NavigationTarget("Add Room")
+    object APPBAR: NavigationTarget("Top app bar")
+    object  CALENDAR: NavigationTarget("Calendar Screen")
+    object HOME: NavigationTarget("Home Screen")
     object SIGNUP: NavigationTarget("Signup")
 }

@@ -24,4 +24,8 @@ include ':core_ui'
 include ':domain:onboarding'
 include ':data:onboarding'
 include ':ui:onboarding'
+
+
 include ':ui:admin'
+include ':ui:home'
+include 'domain:home'
