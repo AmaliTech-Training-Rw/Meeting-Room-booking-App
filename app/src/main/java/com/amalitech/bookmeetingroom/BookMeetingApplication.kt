@@ -4,6 +4,8 @@ import android.app.Application
 import com.amalitech.bookmeetingroom.di.appModule
 import com.amalitech.core.di.coreModule
 import com.amalitech.core.di.networkModule
+import com.amalitech.home.di.domainHomeModule
+import com.amalitech.home.di.uiHomeModule
 import com.amalitech.onboarding.di.onboardingDomainModule
 import com.amalitech.onboarding.di.onboardingPresentationModule
 import com.amalitech.onboarding_data.di.onboardingDataModule
@@ -25,9 +27,14 @@ class BookMeetingApplication : Application() {
                 onboardingPresentationModule,
                 onboardingDomainModule,
                 appModule,
+
                 roomPresentationModule,
                 dataRoomModule,
                 domainRoomModule
+
+                domainHomeModule,
+                uiHomeModule
+
             )
         }
     }

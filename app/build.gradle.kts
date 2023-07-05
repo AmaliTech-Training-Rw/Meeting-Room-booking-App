@@ -36,7 +36,10 @@ android {
         getByName("release") {
             isMinifyEnabled = true
             isDebuggable = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -101,11 +104,17 @@ dependencies {
     implementation(project(Modules.coreUI))
 
 
+
     implementation(project(Modules.uiRooms))
     implementation(project(Modules.dataRoom))
     implementation(project(Modules.domainRoom))
    
     implementation(project(Modules.uiAdmin))
+
+    implementation(project(Modules.uiAdmin))
+    implementation(project(Modules.uiHome))
+    implementation(project(Modules.domainHome))
+
 
     implementation(AndroidX.coreKtx)
 

@@ -19,10 +19,12 @@
             <option value="$PROJECT_DIR$/data/onboarding" />
             <option value="$PROJECT_DIR$/data/rooms" />
             <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/domain/home" />
             <option value="$PROJECT_DIR$/domain/onboarding" />
             <option value="$PROJECT_DIR$/domain/rooms" />
             <option value="$PROJECT_DIR$/ui" />
             <option value="$PROJECT_DIR$/ui/admin" />
+            <option value="$PROJECT_DIR$/ui/home" />
             <option value="$PROJECT_DIR$/ui/onboarding" />
             <option value="$PROJECT_DIR$/ui/rooms" />
           </set>
