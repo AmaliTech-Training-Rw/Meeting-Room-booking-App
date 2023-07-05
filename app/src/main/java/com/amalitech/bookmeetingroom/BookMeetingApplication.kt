@@ -30,8 +30,7 @@ class BookMeetingApplication : Application() {
 
                 roomPresentationModule,
                 dataRoomModule,
-                domainRoomModule
-
+                domainRoomModule,
                 domainHomeModule,
                 uiHomeModule
 
