@@ -1,6 +1,10 @@
 package com.amalitech.bookmeetingroom.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -60,8 +64,9 @@ fun NavigationGraph(navController: NavHostController) {
             val appState = rememberBookMeetingRoomAppState()
             BookMeetingRoomTheme {
                 BookMeetingRoomDrawer(
-                    appState
-                ) {}
+                    appState = appState,
+                    onClick = {}
+                )
             }
         }
         composable(route = NavigationTarget.CARD.route) {
@@ -73,7 +78,26 @@ fun NavigationGraph(navController: NavHostController) {
                 )
             )
         }
-        
+        composable(route = NavigationTarget.APPBAR.route) {
+            val appState = rememberBookMeetingRoomAppState()
+            var query by rememberSaveable {
+                mutableStateOf("")
+            }
+            var isSearchTextFieldVisible by rememberSaveable {
+                mutableStateOf(false)
+            }
+            BookMeetingRoomDrawer(
+                appState = appState,
+                onClick = {},
+                searchQuery = query,
+                onSearchQueryChange = { query = it },
+                {},
+                isSearchTextFieldVisible = isSearchTextFieldVisible,
+                onSearchTextFieldVisibilityChange = { isVisible ->
+                    isSearchTextFieldVisible = isVisible
+                }
+            )
+        }
         composable(route = NavigationTarget.CALENDAR.route) {
             CalendarScreen()
         }
