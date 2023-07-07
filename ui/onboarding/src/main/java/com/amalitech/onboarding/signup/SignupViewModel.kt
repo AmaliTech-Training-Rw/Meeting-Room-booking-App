@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core.R
 import com.amalitech.core.util.UiText
-import com.amalitech.core_ui.util.AuthenticationBaseViewModel
+import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.signup.model.User
 import com.amalitech.onboarding.signup.use_case.SignupUseCase
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class SignupViewModel(
     private val signupUseCase: SignupUseCase
-) : AuthenticationBaseViewModel<SignupUiState>() {
+) : BaseViewModel<SignupUiState>() {
 
     private val _userInput = mutableStateOf(UserInput())
     val userInput: State<UserInput>
@@ -106,24 +106,24 @@ class SignupViewModel(
             return
 
         job = viewModelScope.launch {
-            baseResult.update {
+            _uiStateFlow.update {
                 UiState.Loading()
             }
             val result = signupUseCase.fetchOrganizationsType()
             if (result.data != null) {
-                baseResult.update {
+                _uiStateFlow.update {
                     UiState.Success(
                         SignupUiState(result.data!!)
                     )
                 }
             } else if (result.error != null) {
-                baseResult.update {
+                _uiStateFlow.update {
                     UiState.Error(
                         result.error!!
                     )
                 }
             } else {
-                baseResult.update {
+                _uiStateFlow.update {
                     UiState.Error(
                         UiText.StringResource(R.string.error_default_message)
                     )
@@ -141,11 +141,11 @@ class SignupViewModel(
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
-            baseResult.update {
+            _uiStateFlow.update {
                 UiState.Loading()
             }
             validateData()
-            if (baseResult.value !is UiState.Error) {
+            if (_uiStateFlow.value !is UiState.Error) {
                 val result = signupUseCase.signup(
                     user = User(
                         _userInput.value.username,
@@ -158,11 +158,11 @@ class SignupViewModel(
                     )
                 )
                 if (result == null) {
-                    baseResult.update {
+                    _uiStateFlow.update {
                         UiState.Success(SignupUiState(shouldNavigate = true))
                     }
                 } else {
-                    baseResult.update {
+                    _uiStateFlow.update {
                         UiState.Error(result)
                     }
                 }
@@ -222,7 +222,7 @@ class SignupViewModel(
      * @param error The error to be added
      */
     private fun updateStateWithError(error: UiText?) {
-        baseResult.update {
+        _uiStateFlow.update {
             UiState.Error(error)
         }
     }

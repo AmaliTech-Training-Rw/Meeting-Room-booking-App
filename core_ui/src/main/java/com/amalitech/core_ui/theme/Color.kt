@@ -66,3 +66,4 @@ val md_theme_dark_scrim = Color(0xFF000000)
 
 
 val seed = Color(0xFFFFCC47)
+val add_room_icon_button_bg = Color(0xFFD9D9D9)

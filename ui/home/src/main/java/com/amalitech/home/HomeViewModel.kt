@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.R
-import com.amalitech.core_ui.util.AuthenticationBaseViewModel
+import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.home.calendar.BookingUiState
 import com.amalitech.home.calendar.CalendarUiState
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val homeUseCase: HomeUseCase
-) : AuthenticationBaseViewModel<CalendarUiState>() {
+) : BaseViewModel<CalendarUiState>() {
     private val _uiState = mutableStateOf(HomeUiState())
     val uiState: State<HomeUiState> get () = _uiState
 
@@ -28,11 +28,11 @@ class HomeViewModel(
 
     /**
      * refreshBookings - Refreshes list of bookings for the current year
-     * it checks if value of baseResult is UiState.Success, then it takes the year
+     * it checks if value of _uiStateFlow is UiState.Success, then it takes the year
      * associated with the current month. Otherwise, the current year is used.
      *
      * Values of bookings gotten from the api will be arranged by date
-     * to make it easier for the calendar to access them. The baseResult variable is
+     * to make it easier for the calendar to access them. The _uiStateFlow variable is
      * updated with these values.
      */
     fun refreshBookings() {
@@ -40,14 +40,14 @@ class HomeViewModel(
             return
         job = viewModelScope.launch {
             val year = _uiState.value.currentMonth.year
-            baseResult.update {
+            _uiStateFlow.update {
                 UiState.Loading()
             }
 
             val response = homeUseCase.fetchBookings(year = year)
             if (response.data != null) {
                 val bookings = toBookingsUiStateMap(response.data!!)
-                baseResult.update {
+                _uiStateFlow.update {
                     UiState.Success(
                         CalendarUiState(
                             bookings = bookings
@@ -56,11 +56,11 @@ class HomeViewModel(
                 }
                 updateBookingsForDay()
             } else if (response.error != null) {
-                baseResult.update {
+                _uiStateFlow.update {
                     UiState.Error(response.error)
                 }
             } else {
-                baseResult.update {
+                _uiStateFlow.update {
                     UiState.Error(
                         UiText.StringResource(R.string.generic_error)
                     )
@@ -90,9 +90,9 @@ class HomeViewModel(
     }
 
     private fun updateBookingsForDay() {
-        when (baseResult.value) {
+        when (_uiStateFlow.value) {
             is UiState.Success -> {
-                baseResult.update { state ->
+                _uiStateFlow.update { state ->
                     val successState = (state as UiState.Success).data
                     val bookingsForDay =
                         successState?.bookings?.get(_uiState.value.currentSelectedDate?.date)

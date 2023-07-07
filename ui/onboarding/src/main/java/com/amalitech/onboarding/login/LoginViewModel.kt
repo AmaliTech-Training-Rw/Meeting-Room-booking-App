@@ -1,7 +1,7 @@
 package com.amalitech.onboarding.login
 
 import androidx.lifecycle.viewModelScope
-import com.amalitech.core_ui.util.AuthenticationBaseViewModel
+import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.login.use_case.LoginUseCase
 import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
     private val sharedPreferences: OnboardingSharedPreferences
-) : AuthenticationBaseViewModel<LoginUiState>() {
+) : BaseViewModel<LoginUiState>() {
     private val _uiState = MutableStateFlow(
         LoginUiState()
     )
@@ -57,7 +57,7 @@ class LoginViewModel(
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
-            baseResult.update {
+            _uiStateFlow.update {
                 UiState.Loading()
             }
             val emailValidation = loginUseCase.validateEmail(_uiState.value.email)
@@ -68,7 +68,7 @@ class LoginViewModel(
                     password = _uiState.value.password
                 )
                 if (apiResult != null) {
-                    baseResult.update {
+                    _uiStateFlow.update {
                         UiState.Error(
                             error = apiResult
                         )
@@ -77,18 +77,18 @@ class LoginViewModel(
                     val isAdmin = loginUseCase.isUserAdmin()
                     sharedPreferences.saveShouldShowOnboarding(false)
                     sharedPreferences.saveUserType(isAdmin)
-                    baseResult.update {
+                    _uiStateFlow.update {
                         UiState.Success()
                     }
                 }
             } else if (emailValidation != null) {
-                baseResult.update {
+                _uiStateFlow.update {
                     UiState.Error(
                         error = emailValidation
                     )
                 }
             } else {
-                baseResult.update {
+                _uiStateFlow.update {
                     UiState.Error(
                         error = passwordValidation
                     )

@@ -56,7 +56,7 @@ fun ForgotPasswordScreen(
     val snackbarHostState = remember {
         SnackbarHostState()
     }
-    val baseResult by viewModel.publicBaseResult.collectAsStateWithLifecycle()
+    val baseResult by viewModel.uiStateFlow.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = baseResult) {
         when (baseResult) {

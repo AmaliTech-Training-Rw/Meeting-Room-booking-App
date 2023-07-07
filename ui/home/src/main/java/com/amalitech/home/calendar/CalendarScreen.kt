@@ -66,10 +66,10 @@ fun CalendarScreen(
     val endMonth by rememberSaveable {
         mutableStateOf(currentMonth.plusMonths(500))
     }
-    val state by viewModel.publicBaseResult.collectAsStateWithLifecycle()
+    val state by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     val selection = uiState.currentSelectedDate
     val daysOfWeek = rememberSaveable { daysOfWeek() }
-    val uiStateFlow by viewModel.publicBaseResult.collectAsStateWithLifecycle()
+    val uiStateFlow by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     var bookings = if (uiStateFlow is UiState.Success)
         (uiStateFlow as UiState.Success).data?.bookings ?: emptyMap()
     else emptyMap()

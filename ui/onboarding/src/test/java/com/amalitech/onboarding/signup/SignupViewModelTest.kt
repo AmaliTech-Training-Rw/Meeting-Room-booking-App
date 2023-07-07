@@ -137,10 +137,10 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertEquals(true, viewModel.publicBaseResult.value is UiState.Success)
+        assertEquals(true, viewModel.uiStateFlow.value is UiState.Success)
         assertEquals(
             true,
-            (viewModel.publicBaseResult.value as UiState.Success).data?.shouldNavigate
+            (viewModel.uiStateFlow.value as UiState.Success).data?.shouldNavigate
         )
     }
 
@@ -177,10 +177,10 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertTrue(viewModel.uiStateFlow.value is UiState.Error)
         assertEquals(
             UiText.StringResource(R.string.your_account_is_created),
-            (viewModel.publicBaseResult.value as UiState.Error).error
+            (viewModel.uiStateFlow.value as UiState.Error).error
         )
     }
 
@@ -219,10 +219,10 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertTrue(viewModel.uiStateFlow.value is UiState.Error)
         assertEquals(
             error,
-            (viewModel.publicBaseResult.value as UiState.Error).error
+            (viewModel.uiStateFlow.value as UiState.Error).error
         )
     }
 
@@ -261,10 +261,10 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertTrue(viewModel.uiStateFlow.value is UiState.Error)
         assertEquals(
             error,
-            (viewModel.publicBaseResult.value as UiState.Error).error
+            (viewModel.uiStateFlow.value as UiState.Error).error
         )
     }
 
@@ -302,10 +302,10 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertTrue(viewModel.uiStateFlow.value is UiState.Error)
         assertEquals(
             error,
-            (viewModel.publicBaseResult.value as UiState.Error).error
+            (viewModel.uiStateFlow.value as UiState.Error).error
         )
     }
 
@@ -344,10 +344,10 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertTrue(viewModel.uiStateFlow.value is UiState.Error)
         assertEquals(
             error,
-            (viewModel.publicBaseResult.value as UiState.Error).error
+            (viewModel.uiStateFlow.value as UiState.Error).error
         )
     }
 
@@ -387,10 +387,10 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertTrue(viewModel.uiStateFlow.value is UiState.Error)
         assertEquals(
             error,
-            (viewModel.publicBaseResult.value as UiState.Error).error
+            (viewModel.uiStateFlow.value as UiState.Error).error
         )
     }
 
@@ -429,10 +429,10 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertTrue(viewModel.uiStateFlow.value is UiState.Error)
         assertEquals(
             error,
-            (viewModel.publicBaseResult.value as UiState.Error).error
+            (viewModel.uiStateFlow.value as UiState.Error).error
         )
     }
 
@@ -471,10 +471,10 @@ class SignupViewModelTest {
 
         viewModel.onSignupClick()
 
-        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertTrue(viewModel.uiStateFlow.value is UiState.Error)
         assertEquals(
             error,
-            (viewModel.publicBaseResult.value as UiState.Error).error
+            (viewModel.uiStateFlow.value as UiState.Error).error
         )
     }
 
