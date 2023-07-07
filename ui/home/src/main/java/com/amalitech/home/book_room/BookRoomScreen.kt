@@ -1,5 +1,9 @@
 package com.amalitech.home.book_room
 
+import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,254 +14,473 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SelectableDates
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
-import com.amalitech.core.util.UiText
+import coil.compose.AsyncImage
 import com.amalitech.core_ui.theme.LocalSpacing
+import com.amalitech.core_ui.theme.NoRippleTheme
 import com.amalitech.core_ui.util.UiState
+import com.amalitech.home.book_room.components.AttendeeItem
+import com.amalitech.home.book_room.components.BookRoomTitle
 import com.amalitech.home.book_room.components.FeatureItem
 import com.amalitech.home.book_room.components.SelectDateBox
+import com.amalitech.home.book_room.components.TimeSelector
 import com.amalitech.home.book_room.util.NavArguments
 import com.amalitech.home.book_room.util.formatDate
-import com.amalitech.home.book_room.util.longToLocalDate
 import com.amalitech.home.calendar.util.formatTime
 import com.amalitech.ui.home.R
-import kotlinx.coroutines.launch
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.date.datepicker
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.Year
 
 @Composable
 fun BookRoomScreen(
     viewModel: BookRoomViewModel = koinViewModel(),
-    navBackStackEntry: NavBackStackEntry
+    navBackStackEntry: NavBackStackEntry,
+    onNavigate: () -> Unit
 ) {
     val uiState by viewModel.publicBaseResult.collectAsStateWithLifecycle()
-    val userInput by viewModel.userInput
     val arguments = navBackStackEntry.arguments
-    val roomId by rememberSaveable {
-        mutableStateOf(arguments?.getString(NavArguments.roomId))
-    }
-    val key1 = rememberSaveable {
-        mutableStateOf(true)
-    }
+    val roomId = arguments?.getString(NavArguments.roomId)
     val snackbarHostState = remember {
         SnackbarHostState()
     }
-    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    var roomUi: RoomUi? = null
-    val lifeCycleOwner = LocalLifecycleOwner.current
-    val configuration = LocalConfiguration.current
-    val updatedConfiguration = rememberSaveable { configuration }
+    var roomUi: RoomUi? by remember {
+        mutableStateOf(null)
+    }
+    val spacing = LocalSpacing.current
+    val userInput by viewModel.userInput
+    val slotSelectionManager by viewModel.slotManager
+    val canShowEndTimes = slotSelectionManager.canShowEndTimes
+    val canShowStartTimes = slotSelectionManager.canShowStartTimes
+    val availableStartTime = slotSelectionManager.availableStartTimes
+    val availableEndTime = slotSelectionManager.availableEndTimes
 
-    LaunchedEffect(key1 = updatedConfiguration) {
+    LaunchedEffect(key1 = true) {
         viewModel.getBookableRoom(roomId ?: "")
     }
 
-//    DisposableEffect(lifeCycleOwner) {
-//        val observer = LifecycleEventObserver { _, event ->
-//            if (event == Lifecycle.Event.ON_START) {
-//                viewModel.getBookableRoom(roomId ?: "")
-//            } else if (event == Lifecycle.Event.ON_STOP) {
-//
-//            }
-//        }
-//    }
-
     LaunchedEffect(key1 = uiState) {
+        Log.d("uiState", "uiState = $uiState, room: $roomUi")
         when (uiState) {
-            is UiState.Error -> {
-                snackbarHostState.showSnackbar(
-                    (uiState as UiState.Error<RoomUi>).error!!.asString(
-                        context
-                    )
-                )
-            }
-
             is UiState.Success -> {
                 roomUi = (uiState as UiState.Success<RoomUi>).data
+                if (roomUi?.canNavigate == true)
+                    onNavigate()
             }
-            else -> {}
-        }
-    }
 
-    SlotSelectionSection(
-        viewModel = viewModel,
-        roomUi
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
-@Composable
-fun SlotSelectionSection(
-    viewModel: BookRoomViewModel,
-    roomUi: RoomUi?
-) {
-    val snackbarHostState = remember {
-        SnackbarHostState()
-    }
-    val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-    val uiState by viewModel.publicBaseResult.collectAsStateWithLifecycle()
-    val userInput by viewModel.userInput
-    var isSelectingDate by rememberSaveable {
-        mutableStateOf(false)
-    }
-    var isSelectingHour by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        when (uiState) {
-            is UiState.Success -> {
-                (uiState as UiState.Success<RoomUi>).data?.let { roomUi ->
-                    val startDateState = rememberDatePickerState(
-                        selectableDates = object : SelectableDates {
-                            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                                val date = longToLocalDate(utcTimeMillis)
-                                return viewModel.isDateAvailable(
-                                    date,
-                                    roomUi
-                                ) && LocalDate.now() <= date
-                            }
-
-                            override fun isSelectableYear(year: Int): Boolean {
-                                return year >= Year.now().value
-                            }
-                        },
-                        initialSelectedDateMillis = System.currentTimeMillis()
+            is UiState.Error -> {
+                (uiState as UiState.Error<RoomUi>).error?.let {
+                    snackbarHostState.showSnackbar(
+                        it.asString(context)
                     )
-                    if (isSelectingDate) {
-                        DatePickerDialog(onDismissRequest = {
-                            isSelectingDate = false
-                        }, confirmButton = {
-                            TextButton(onClick = {
-                                if (startDateState.selectedDateMillis != null) {
-                                    isSelectingDate = false
-                                    viewModel.onSelectedDate(longToLocalDate(startDateState.selectedDateMillis!!))
-                                } else {
-                                    coroutineScope.launch {
-                                        snackbarHostState.showSnackbar(
-                                            UiText.StringResource(R.string.error_no_date_selected)
-                                                .asString(context)
-                                        )
-                                    }
-                                }
-                            }) {
-                                Text(stringResource(id = R.string.ok))
-                            }
-                        },
-                            dismissButton = {
-                                TextButton(onClick = {
-                                    isSelectingDate = false
-                                }) {
-                                    Text(stringResource(id = R.string.cancel))
-                                }
-                            }
-                        ) {
-                            DatePicker(
-                                state = startDateState,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-                    }
+                    viewModel.onSnackBarShown()
                 }
             }
 
-            is UiState.Loading -> {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            }
-
             else -> {}
         }
-        Column(
-            modifier = Modifier.fillMaxSize()
+    }
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(spacing.spaceMedium)
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
-            val date = if (userInput.date != null) formatDate(userInput.date!!) else ""
-            val startTime = if (userInput.startTime != null) formatTime(
-                LocalDateTime.of(
-                    LocalDate.now(),
-                    userInput.startTime
-                )
-            ) else ""
-            val spacing = LocalSpacing.current
-            Text(
-                text = stringResource(R.string.select_time),
-                style = MaterialTheme.typography.titleLarge
+            roomUi?.let { room ->
+                if (!canShowEndTimes && !canShowStartTimes) {
+                    Column(Modifier.verticalScroll(rememberScrollState())) {
+                        AsyncImage(
+                            model = room.imgUrl,
+                            contentDescription = room.description,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(spacing.spaceExtraSmall)),
+                            error = painterResource(id = R.drawable.baseline_broken_image_24),
+                            placeholder = painterResource(id = R.drawable.baseline_refresh_24),
+                            contentScale = ContentScale.Crop
+                        )
+                        Text(text = room.description)
+                        SlotSelectionSection(
+                            viewModel = viewModel,
+                            roomUi = room,
+                            userInput = userInput,
+                            onSelectEndTimeClick = {
+                                viewModel.onShowEndTimeRequest(room)
+                            },
+                            onSelectStartTimeClick = {
+                                viewModel.onShowStartTimesRequest(room)
+                            }
+                        )
+                        Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
+                        FeatureSection(
+                            roomUi = room
+                        )
+                        Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
+                        AttendeesSection(
+                            viewModel = viewModel,
+                            userInput = userInput
+                        )
+                        Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
+                        NoteSection(
+                            viewModel = viewModel,
+                            userInput = userInput
+                        )
+                        Spacer(Modifier.height(spacing.spaceMedium))
+                        CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+                            Button(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RectangleShape)
+                                    .background(MaterialTheme.colorScheme.primary),
+                                onClick = { viewModel.onBook(roomId ?: "") }
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.book),
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
+                            }
+                        }
+                    }
+                }
+                if (canShowStartTimes) {
+                    TimeSelector(
+                        availableTimes = availableStartTime,
+                        onDismiss = { viewModel.onStopShowingStartTime() },
+                        selectedTime = userInput.startTime,
+                        onTimeSelected = { viewModel.onStartTimeSelected(it) }
+                    )
+                }
+                if (canShowEndTimes) {
+                    TimeSelector(
+                        availableTimes = availableEndTime,
+                        onDismiss = { viewModel.onStopShowingEndTime() },
+                        selectedTime = userInput.endTime,
+                        onTimeSelected = { viewModel.onEndTimeSelected(it) }
+                    )
+
+                }
+            }
+            if (uiState is UiState.Loading)
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        }
+    }
+}
+
+@Composable
+fun SlotSelectionSection(
+    viewModel: BookRoomViewModel,
+    roomUi: RoomUi,
+    userInput: UserInput,
+    onSelectStartTimeClick: (isSelecting: Boolean) -> Unit,
+    onSelectEndTimeClick: (isSelecting: Boolean) -> Unit,
+) {
+    val spacing = LocalSpacing.current
+    val dateDialogState = rememberMaterialDialogState()
+
+    MaterialDialog(
+        dialogState = dateDialogState,
+        buttons = {
+            positiveButton(text = stringResource(id = R.string.ok))
+            negativeButton(text = stringResource(id = R.string.cancel))
+        }
+    ) {
+        datepicker(
+            title = stringResource(id = R.string.pick_date),
+            allowedDateValidator = { date ->
+                viewModel.isDateAvailable(
+                    date,
+                    roomUi
+                ) && LocalDate.now() <= date
+            },
+            initialDate = userInput.date ?: LocalDate.now()
+        ) { date ->
+            viewModel.onSelectedDate(date)
+        }
+    }
+    Column(
+        modifier = Modifier
+    ) {
+        val date = if (userInput.date != null) formatDate(userInput.date) else ""
+        val startTime = if (userInput.startTime != null) formatTime(
+            LocalDateTime.of(
+                LocalDate.now(),
+                userInput.startTime
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                Text(
-                    text = stringResource(R.string.start),
-                    modifier = Modifier.weight(1f)
-                )
-                Spacer(Modifier.width(spacing.spaceSmall))
-                SelectDateBox(
-                    onClick = { isSelectingDate = !isSelectingDate },
-                    text = date,
-                    modifier = Modifier
-                        .height(30.dp)
-                        .weight(0.5f)
-                )
-                Spacer(Modifier.width(spacing.spaceSmall))
-                SelectDateBox(
-                    onClick = { isSelectingHour = !isSelectingHour },
-                    text = startTime,
-                    modifier = Modifier
-                        .height(30.dp)
-                        .weight(0.5f)
-                )
+        ) else ""
+        val endTime = if (userInput.endTime != null) formatTime(
+            LocalDateTime.of(
+                LocalDate.now(),
+                userInput.endTime
+            )
+        ) else ""
+        BookRoomTitle(text = stringResource(id = R.string.select_time))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(
+                text = stringResource(R.string.start),
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(Modifier.width(spacing.spaceSmall))
+            SelectDateBox(
+                onClick = { dateDialogState.show() },
+                text = date,
+                modifier = Modifier
+                    .height(30.dp)
+                    .weight(2f)
+            )
+            Spacer(Modifier.width(spacing.spaceSmall))
+            SelectDateBox(
+                onClick = { onSelectStartTimeClick(true) },
+                text = startTime,
+                modifier = Modifier
+                    .height(30.dp)
+                    .weight(2f)
+            )
+        }
+        Spacer(Modifier.height(spacing.spaceMedium))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(
+                text = stringResource(R.string.end),
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(Modifier.width(spacing.spaceSmall))
+            SelectDateBox(
+                onClick = { dateDialogState.show() },
+                text = date,
+                modifier = Modifier
+                    .height(30.dp)
+                    .weight(2f)
+            )
+            Spacer(Modifier.width(spacing.spaceSmall))
+            SelectDateBox(
+                onClick = { onSelectEndTimeClick(true) },
+                text = endTime,
+                modifier = Modifier
+                    .height(30.dp)
+                    .weight(2f)
+            )
+        }
+    }
+}
+
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun FeatureSection(
+    roomUi: RoomUi
+) {
+    val spacing = LocalSpacing.current
+    Column {
+        BookRoomTitle(text = stringResource(id = R.string.features))
+        Spacer(modifier = Modifier.height(spacing.spaceMedium))
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            roomUi.features.forEach {
+                FeatureItem(feature = it)
+                Spacer(Modifier.padding(spacing.spaceSmall))
             }
         }
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalComposeUiApi::class
+)
 @Composable
-fun FeatureSection(roomUi: RoomUi) {
-    FlowRow(
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        roomUi.features.forEach {
-            FeatureItem(feature = it)
+fun AttendeesSection(
+    viewModel: BookRoomViewModel,
+    userInput: UserInput
+) {
+    val spacing = LocalSpacing.current
+    var shouldExpandList by rememberSaveable {
+        mutableStateOf(false)
+    }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        BookRoomTitle(text = stringResource(id = R.string.attendees))
+        Spacer(Modifier.height(spacing.spaceMedium))
+        Row {
+            TextField(
+                value = userInput.attendee,
+                onValueChange = {
+                    viewModel.onAttendeeNewValue(it)
+                },
+                modifier = Modifier
+                    .weight(4f)
+                    .fillMaxWidth()
+                    .padding(1.dp)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
+                        shape = RoundedCornerShape(spacing.spaceExtraSmall)
+                    ),
+                shape = RoundedCornerShape(spacing.spaceExtraSmall),
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+                    focusedContainerColor = MaterialTheme.colorScheme.background,
+                ),
+                singleLine = true,
+                placeholder = {
+                    Text(stringResource(id = com.amalitech.core.R.string.email))
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email
+                ),
+                keyboardActions = KeyboardActions(onDone = {
+                    viewModel.onAddAttendee()
+                    keyboardController?.hide()
+                })
+            )
+            Spacer(Modifier.width(spacing.spaceExtraSmall))
+            IconButton(onClick = {
+                viewModel.onAddAttendee()
+                keyboardController?.hide()
+            }) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_add_24),
+                    contentDescription = stringResource(id = R.string.add_attendee)
+                )
+            }
+        }
+
+        Spacer(Modifier.height(spacing.spaceMedium))
+        FlowRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { shouldExpandList = !shouldExpandList },
+        ) {
+            if (shouldExpandList) {
+//                AlertDialog(onDismissRequest = { shouldExpandList = false }) {
+                    userInput.attendees.forEachIndexed { index, attendee ->
+                        AttendeeItem(
+                            attendee = attendee,
+                            modifier = Modifier
+                                .height(30.dp)
+                                .padding(spacing.spaceExtraSmall)
+                        ) {
+                            viewModel.onDeleteAttendee(attendee)
+                        }
+//                    }
+                }
+            }
+            else {
+                for (i in 0 until userInput.attendees.size) {
+                    if (i <= 2) {
+                        val attendee = userInput.attendees[i]
+                        AttendeeItem(
+                            attendee = attendee,
+                            modifier = Modifier
+                                .height(30.dp)
+                                .padding(spacing.spaceExtraSmall)
+                        ) {
+                            viewModel.onDeleteAttendee(attendee)
+                        }
+                    } else {
+                        Text(text = stringResource(id = R.string.x_more, userInput.attendees.size - i))
+                        break
+                    }
+                }
+            }
         }
     }
+}
+
+@Composable
+fun NoteSection(
+    viewModel: BookRoomViewModel,
+    userInput: UserInput
+) {
+    val spacing = LocalSpacing.current
+    BookRoomTitle(text = stringResource(id = R.string.note))
+    Spacer(Modifier.height(spacing.spaceMedium))
+    TextField(
+        value = userInput.note,
+        onValueChange = {
+            viewModel.onNoteValueChanged(it)
+        },
+        singleLine = false,
+        minLines = 3,
+        maxLines = 4,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(1.dp)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
+                shape = RoundedCornerShape(spacing.spaceExtraSmall)
+            ),
+        shape = RoundedCornerShape(spacing.spaceExtraSmall),
+        colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+            focusedContainerColor = MaterialTheme.colorScheme.background,
+        ),
+    )
 }

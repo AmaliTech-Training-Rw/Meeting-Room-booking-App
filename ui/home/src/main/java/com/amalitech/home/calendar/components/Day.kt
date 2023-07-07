@@ -30,7 +30,8 @@ fun Day(
     selectedBackgroundColor: Color = MaterialTheme.colorScheme.onBackground,
     unselectedBackgroundColor: Color = MaterialTheme.colorScheme.background,
     selectedContentColor: Color = MaterialTheme.colorScheme.background,
-    unselectedContentColor: Color = MaterialTheme.colorScheme.onBackground
+    unselectedContentColor: Color = MaterialTheme.colorScheme.onBackground,
+    enabled: Boolean = day.position == DayPosition.MonthDate
 ) {
     Box(
         modifier = Modifier
@@ -43,8 +44,6 @@ fun Day(
             ),
         contentAlignment = Alignment.Center
     ) {
-        val enabled = day.position == DayPosition.MonthDate
-
         val spacing = LocalSpacing.current
         Text(
             modifier = Modifier
