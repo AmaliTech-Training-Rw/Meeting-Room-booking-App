@@ -137,7 +137,7 @@ fun AddRoomScreen(
                         imageVector = Icons.Filled.Add,
                         contentDescription = null,
                         modifier = Modifier.size(50.dp),
-                        tint = MaterialTheme.colorScheme.inverseOnSurface
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
@@ -246,8 +246,24 @@ fun AddRoomScreen(
                         ),
                         onGo = {
                             viewModel.onSaveRoomClick()
-                        }
+                        },
+                        singleLine = false
                     )
+
+//                    RoomMultiLineTextField(
+//                        placeholder = stringResource(com.amalitech.core.R.string.add_features),
+//                        value = state.features,
+//                        onValueChange = {
+//                            viewModel.onFeatures(it)
+//                        },
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .height(118.dp),
+//                        keyboardOptions = KeyboardOptions(
+//                            imeAction = ImeAction.Go,
+//                            keyboardType = KeyboardType.Password
+//                        ),
+//                    )
                 }
 
                 item {
@@ -343,14 +359,15 @@ fun RoomTextField(
         onNext = { focusManager.moveFocus(FocusDirection.Down) },
         onDone = { focusManager.clearFocus() },
         onGo = { onGo() }
-    )
+    ),
+    singleLine: Boolean = true
 ) {
     val spacing = LocalSpacing.current
     TextField(
         value = value,
         onValueChange = onValueChange,
         textStyle = textStyle,
-        singleLine = true,
+        singleLine = singleLine,
         visualTransformation = VisualTransformation.None,
         modifier = modifier
             .padding(1.dp)
