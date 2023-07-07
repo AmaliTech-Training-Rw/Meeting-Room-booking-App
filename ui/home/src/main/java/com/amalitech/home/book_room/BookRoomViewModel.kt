@@ -101,8 +101,14 @@ class BookRoomViewModel(
             val endIdx = allTimes.indexOf(booking.endTime)
             allTimes.subList(startIdx, endIdx)
         }
+        val timeUis = allTimes.map { localTime ->
+            if (bookedTimes.any { bookedTime ->
+                bookedTime == localTime
+            } || localTime == globalEndTime) TimeUi(localTime, false)
+            else TimeUi(localTime, true)
+        }
         _slotManager.value = _slotManager.value.copy(
-            availableStartTimes = allTimes.filterNot { time -> bookedTimes.contains(time) }
+            availableStartTimes = timeUis
         )
     }
 
@@ -114,6 +120,7 @@ class BookRoomViewModel(
             allTimes.add(currentTime)
             currentTime = currentTime.plus(globalInterval)
         }
+        allTimes.add(globalEndTime)
 
         return allTimes
     }
@@ -150,8 +157,14 @@ class BookRoomViewModel(
             startTime = startTime.plusMinutes(globalInterval.toMinutes())
             availableEndTimes.add(startTime)
         }
+        val timeUis = generateAllTimes().map { localTime ->
+            if (availableEndTimes.any { availableEndTime ->
+                availableEndTime == localTime
+            }) TimeUi(localTime, true)
+            else TimeUi(localTime, false)
+        }
         _slotManager.value = _slotManager.value.copy(
-            availableEndTimes = availableEndTimes
+            availableEndTimes = timeUis
         )
     }
 
@@ -279,7 +292,8 @@ class BookRoomViewModel(
 
     fun onStartTimeSelected(startTime: LocalTime) {
         _userInput.value = _userInput.value.copy(
-            startTime = startTime
+            startTime = startTime,
+            endTime = null
         )
     }
 

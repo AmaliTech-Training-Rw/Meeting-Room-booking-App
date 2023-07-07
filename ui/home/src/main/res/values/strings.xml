@@ -26,4 +26,6 @@
     <string name="select_date">Select date</string>
     <string name="pick_date">Pick a date</string>
     <string name="x_more">&amp; %d more</string>
+    <string name="selected_date">Selected date %s</string>
+    <string name="select_date_and_time">Select date and time</string>
 </resources>

@@ -16,28 +16,36 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.theme.LocalSpacing
+import com.amalitech.home.book_room.TimeUi
+import com.amalitech.home.calendar.util.formatDate
 import com.amalitech.ui.home.R
+import java.time.LocalDate
 import java.time.LocalTime
 
 @Composable
 fun TimeSelector(
-    availableTimes: List<LocalTime>,
+    availableTimes: List<TimeUi>,
     onDismiss: () -> Unit,
-    selectedTime: LocalTime? = null,
-    onTimeSelected: (selectedTime: LocalTime) -> Unit
+    onTimeSelected: (selectedTime: LocalTime) -> Unit,
+    selectedDate: LocalDate?,
+    modifier: Modifier = Modifier,
+    selectedTime: LocalTime? = null
 ) {
     val spacing = LocalSpacing.current
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        Row {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             IconButton(
                 onClick = onDismiss,
             ) {
@@ -48,17 +56,24 @@ fun TimeSelector(
             }
             Spacer(Modifier.width(spacing.spaceMedium))
             Text(
-                text = stringResource(id = R.string.pick_date),
+                text = stringResource(id = R.string.select_time),
                 style = MaterialTheme.typography.headlineMedium
             )
         }
         Spacer(Modifier.height(spacing.spaceMedium))
+        val dateText = selectedDate?.let { formatDate(it) } ?: ""
+        Text(
+            text = stringResource(id = R.string.selected_date, dateText),
+            style = MaterialTheme.typography.titleMedium
+        )
+        Spacer(Modifier.height(spacing.spaceMedium))
         LazyVerticalGrid(
             columns = GridCells.Adaptive(spacing.spaceExtraLarge),
             verticalArrangement = Arrangement.spacedBy(spacing.spaceSmall),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.spacedBy(spacing.spaceExtraSmall)
         ) {
-            items(availableTimes) { localTime ->
+            items(availableTimes) { timeUi ->
+                val localTime = timeUi.time
                 TimeItem(
                     time = localTime,
                     onClick = {
@@ -68,6 +83,8 @@ fun TimeSelector(
                     isSelected = localTime == selectedTime,
                     modifier = Modifier
                         .height(40.dp)
+                        .width(spacing.spaceExtraLarge),
+                    enabled = timeUi.isAvailable
                 )
             }
         }

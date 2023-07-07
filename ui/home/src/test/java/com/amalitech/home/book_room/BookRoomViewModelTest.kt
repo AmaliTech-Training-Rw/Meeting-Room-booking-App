@@ -95,7 +95,8 @@ class BookRoomViewModelTest {
             LocalTime.of(17, 30),
             LocalTime.of(17, 45)
         )
-        assertEquals(expected, viewModel.slotManager.value.availableStartTimes)
+        val availableTimes = viewModel.slotManager.value.availableStartTimes.filter { it.isAvailable }.map { it.time }
+        assertEquals(expected, availableTimes)
     }
 
     @Test
@@ -116,17 +117,14 @@ class BookRoomViewModelTest {
         viewModel.onShowEndTimeRequest(room)
 
         val expected = listOf(
-            LocalTime.of(8, 15),
-            LocalTime.of(8, 30),
-            LocalTime.of(8, 45),
             LocalTime.of(9, 0),
             LocalTime.of(9, 15),
             LocalTime.of(9, 30),
             LocalTime.of(9, 45),
             LocalTime.of(10, 0)
         )
-
-        assertEquals(expected, viewModel.slotManager.value.availableEndTimes)
+        val availableTimes = viewModel.slotManager.value.availableEndTimes.filter { it.isAvailable }.map { it.time }
+        assertEquals(expected, availableTimes)
     }
 
     @Test
@@ -157,7 +155,8 @@ class BookRoomViewModelTest {
             LocalTime.of(14, 0)
         )
 
-        assertEquals(expected, viewModel.slotManager.value.availableEndTimes)
+        val availableTimes = viewModel.slotManager.value.availableEndTimes.filter { it.isAvailable }.map { it.time }
+        assertEquals(expected,availableTimes)
     }
 
     @Test
@@ -189,7 +188,8 @@ class BookRoomViewModelTest {
             LocalTime.of(18, 0),
         )
 
-        assertEquals(expected, viewModel.slotManager.value.availableEndTimes)
+        val availableTimes = viewModel.slotManager.value.availableEndTimes.filter { it.isAvailable }.map { it.time }
+        assertEquals(expected, availableTimes)
     }
 
     @Test
@@ -523,6 +523,16 @@ class BookRoomViewModelTest {
         viewModel.onEndTimeSelected(endTime)
 
         assertEquals(endTime, viewModel.userInput.value.endTime)
+    }
+
+    @Test
+    fun `ensures onStartTimeSelected works`() {
+        val startTime = LocalTime.now()
+
+        viewModel.onStartTimeSelected(startTime)
+
+        assertEquals(startTime, viewModel.userInput.value.startTime)
+        assertEquals(null, viewModel.userInput.value.endTime)
     }
 
     @Test
