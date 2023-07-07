@@ -199,7 +199,8 @@ fun BookRoomScreen(
                         availableTimes = availableStartTime,
                         onDismiss = { viewModel.onStopShowingStartTime() },
                         selectedTime = userInput.startTime,
-                        onTimeSelected = { viewModel.onStartTimeSelected(it) }
+                        onTimeSelected = { viewModel.onStartTimeSelected(it) },
+                        selectedDate = userInput.date
                     )
                 }
                 if (canShowEndTimes) {
@@ -207,7 +208,8 @@ fun BookRoomScreen(
                         availableTimes = availableEndTime,
                         onDismiss = { viewModel.onStopShowingEndTime() },
                         selectedTime = userInput.endTime,
-                        onTimeSelected = { viewModel.onEndTimeSelected(it) }
+                        onTimeSelected = { viewModel.onEndTimeSelected(it) },
+                        selectedDate = userInput.date
                     )
 
                 }
@@ -265,7 +267,7 @@ fun SlotSelectionSection(
                 userInput.endTime
             )
         ) else ""
-        BookRoomTitle(text = stringResource(id = R.string.select_time))
+        BookRoomTitle(text = stringResource(id = R.string.select_date_and_time))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
@@ -358,7 +360,7 @@ fun AttendeesSection(
     Column(modifier = Modifier.fillMaxWidth()) {
         BookRoomTitle(text = stringResource(id = R.string.attendees))
         Spacer(Modifier.height(spacing.spaceMedium))
-        Row {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             TextField(
                 value = userInput.attendee,
                 onValueChange = {

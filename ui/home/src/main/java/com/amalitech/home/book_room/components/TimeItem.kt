@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,20 +31,28 @@ fun TimeItem(
     selectedColor: Color = MaterialTheme.colorScheme.onPrimary,
     unSelectedBackgroundColor: Color = MaterialTheme.colorScheme.background,
     selectedBackgroundColor: Color = MaterialTheme.colorScheme.primary,
+    disabledColor: Color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
+    disabledBackgroundColor: Color = MaterialTheme.colorScheme.background,
+    enabled: Boolean = true
 ) {
     val spacing = LocalSpacing.current
     Row(
        modifier = modifier
-           .wrapContentWidth()
            .clip(RoundedCornerShape(spacing.spaceSmall))
-           .background(if (isSelected) selectedBackgroundColor else unSelectedBackgroundColor)
+           .background(
+               if (!enabled)
+                   disabledBackgroundColor
+               else {
+                   if (isSelected) selectedBackgroundColor else unSelectedBackgroundColor
+               }
+           )
            .border(
                1.dp,
                MaterialTheme.colorScheme.onBackground,
                shape = RoundedCornerShape(spacing.spaceSmall)
            )
            .padding(spacing.spaceSmall)
-           .clickable { onClick() },
+           .clickable(enabled = enabled) { onClick() },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -53,7 +60,11 @@ fun TimeItem(
         Text(
             text = timeString,
             style = textStyle,
-            color = if (isSelected) selectedColor else unSelectedColor,
+            color = if (!enabled)
+                disabledColor
+            else {
+                if (isSelected) selectedColor else unSelectedColor
+            },
         )
     }
 }
