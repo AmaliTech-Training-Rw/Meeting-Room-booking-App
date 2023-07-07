@@ -226,7 +226,7 @@ fun SignupScreen(
             Spacer(modifier = Modifier.height(spacing.spaceSmall))
             AuthenticationTextField(
                 onGo = { onGo() },
-                placeholder = stringResource(id = R.string.confirm_new_password),
+                placeholder = stringResource(id = R.string.confirm_password),
                 value = userInput.passwordConfirmation,
                 onValueChange = {
                     viewModel.onNewPasswordConfirmation(it)
