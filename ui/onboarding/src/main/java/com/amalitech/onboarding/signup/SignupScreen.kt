@@ -44,10 +44,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import com.amalitech.core.R
+import com.amalitech.core_ui.components.BookMeetingRoomDropDown
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
-import com.amalitech.onboarding.components.AuthenticationDropDown
 import com.amalitech.onboarding.components.AuthenticationTextField
 import com.amalitech.onboarding.util.showSnackBar
 import org.koin.androidx.compose.koinViewModel
@@ -183,7 +183,7 @@ fun SignupScreen(
                     )
                 )
                 Spacer(modifier = Modifier.height(spacing.spaceSmall))
-                AuthenticationDropDown(
+                BookMeetingRoomDropDown(
                     isDropDownExpanded = isDropDownExpanded,
                     items = organizationType,
                     onSelectedItemChange = {
@@ -191,7 +191,8 @@ fun SignupScreen(
                     },
                     onIsExpandedStateChange = { isDropDownExpanded = it },
                     selectedItem = selectedItem,
-                    focusManager = focusManager
+                    focusManager = focusManager,
+                    R.string.type_of_organization,
                 ) { isDropDownExpanded = it }
                 Spacer(Modifier.height(spacing.spaceSmall))
                 AuthenticationTextField(

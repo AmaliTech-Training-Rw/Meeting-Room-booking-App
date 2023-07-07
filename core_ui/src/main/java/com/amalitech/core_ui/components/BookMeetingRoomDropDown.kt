@@ -1,4 +1,4 @@
-package com.amalitech.onboarding.components
+package com.amalitech.core_ui.components
 
 import android.view.KeyEvent
 import androidx.compose.foundation.border
@@ -38,13 +38,14 @@ import com.amalitech.core_ui.theme.LocalSpacing
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AuthenticationDropDown(
+fun BookMeetingRoomDropDown(
     isDropDownExpanded: Boolean,
     items: List<String>,
     onSelectedItemChange: (item: String) -> Unit,
     onIsExpandedStateChange: (Boolean) -> Unit,
     selectedItem: String,
     focusManager: FocusManager,
+    label: Int,
     onDopDownStatusChange: (Boolean) -> Unit
 ) {
     val spacing = LocalSpacing.current
@@ -72,7 +73,7 @@ fun AuthenticationDropDown(
                     }
                 },
             placeholder = {
-                Text(stringResource(R.string.type_of_organization))
+                Text(stringResource(label))
             },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next
@@ -85,9 +86,9 @@ fun AuthenticationDropDown(
             enabled = false,
             trailingIcon = {
                 val image = if (isDropDownExpanded)
-                    com.amalitech.ui.onboarding.R.drawable.baseline_arrow_drop_up_24
+                    com.amalitech.core_ui.R.drawable.baseline_arrow_drop_up_24
                 else
-                    com.amalitech.ui.onboarding.R.drawable.baseline_arrow_drop_down_24
+                    com.amalitech.core_ui.R.drawable.baseline_arrow_drop_down_24
                 val description = if (isDropDownExpanded)
                     stringResource(id = R.string.close_organization_type)
                 else
