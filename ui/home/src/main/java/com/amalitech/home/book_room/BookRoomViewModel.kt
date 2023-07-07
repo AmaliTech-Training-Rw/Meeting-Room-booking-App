@@ -4,7 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core.util.UiText
-import com.amalitech.core_ui.util.AuthenticationBaseViewModel
+import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.home.book_room.model.Booking
 import com.amalitech.home.book_room.use_case.BookRoomUseCase
@@ -18,7 +18,7 @@ import java.time.LocalTime
 
 class BookRoomViewModel(
     private val bookRoomUseCase: BookRoomUseCase
-) : AuthenticationBaseViewModel<RoomUi>() {
+) : BaseViewModel<RoomUi>() {
     private val _userInput = mutableStateOf(UserInput())
     val userInput: State<UserInput> get() = _userInput
 
@@ -32,7 +32,7 @@ class BookRoomViewModel(
     fun onShowStartTimesRequest(room: RoomUi) {
         val date = _userInput.value.date
         if (date == null) {
-            baseResult.update {
+            _uiStateFlow.update {
                 UiState.Error(UiText.StringResource(R.string.error_select_date))
             }
         } else {
@@ -72,21 +72,21 @@ class BookRoomViewModel(
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
-            baseResult.update {
+            _uiStateFlow.update {
                 UiState.Loading()
             }
             val result = bookRoomUseCase.getBookableRoom(id)
 
             if (result.data != null) {
-                baseResult.update {
+                _uiStateFlow.update {
                     UiState.Success(result.data!!.toBookRoomUi())
                 }
             } else if (result.error != null) {
-                baseResult.update {
+                _uiStateFlow.update {
                     UiState.Error(result.error)
                 }
             } else {
-                baseResult.update {
+                _uiStateFlow.update {
                     UiState.Error(UiText.StringResource(com.amalitech.core_ui.R.string.generic_error))
                 }
             }
@@ -133,7 +133,7 @@ class BookRoomViewModel(
                 canShowEndTimes = true
             )
         } else {
-            baseResult.update {
+            _uiStateFlow.update {
                 UiState.Error(UiText.StringResource(R.string.error_select_start_time))
             }
         }
@@ -204,19 +204,19 @@ class BookRoomViewModel(
             return
         viewModelScope.launch {
             var error: UiText?
-            baseResult.update {
+            _uiStateFlow.update {
                 UiState.Loading()
             }
             for (attendee in _userInput.value.attendees) {
                 error = bookRoomUseCase.validateEmail(attendee)
                 if (error != null) {
-                    baseResult.update {
+                    _uiStateFlow.update {
                         UiState.Error(error)
                     }
                     break
                 }
             }
-            if (baseResult.value !is UiState.Error) {
+            if (_uiStateFlow.value !is UiState.Error) {
                 val isStartTimeValid = _userInput.value.startTime != null
                 val isEndTimeValid = _userInput.value.endTime != null
                 val isDateValid = _userInput.value.date != null
@@ -247,11 +247,11 @@ class BookRoomViewModel(
                         )
                         val result = bookRoomUseCase.bookRoom(booking)
                         if (result != null) {
-                            baseResult.update {
+                            _uiStateFlow.update {
                                 UiState.Error(result)
                             }
                         } else {
-                            baseResult.update {
+                            _uiStateFlow.update {
                                 UiState.Success(RoomUi(canNavigate = true))
                             }
                         }
@@ -266,7 +266,7 @@ class BookRoomViewModel(
      * @param error The error to be added
      */
     internal fun updateStateWithError(error: UiText?) {
-        baseResult.update {
+        _uiStateFlow.update {
             UiState.Error(error)
         }
     }
