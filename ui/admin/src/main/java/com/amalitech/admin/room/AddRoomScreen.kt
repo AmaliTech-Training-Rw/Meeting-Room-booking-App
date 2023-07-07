@@ -74,13 +74,11 @@ fun AddRoomScreen(
     viewModel: AddRoomViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+
     var isDropDownExpanded by rememberSaveable {
         mutableStateOf(false)
     }
     val focusManager: FocusManager = LocalFocusManager.current
-    var roomLocations: List<String> by rememberSaveable {
-        mutableStateOf(listOf())
-    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -194,7 +192,8 @@ fun AddRoomScreen(
                         ),
                         onGo = {
                             viewModel.onSaveRoomClick()
-                        }
+                        },
+                        hasError = state.error
                     )
                 }
 
@@ -219,7 +218,7 @@ fun AddRoomScreen(
                 item {
                     BookMeetingRoomDropDown(
                         isDropDownExpanded = isDropDownExpanded,
-                        items = roomLocations,
+                        items = state.locationList,
                         onSelectedItemChange = {
                             viewModel.onSelectedLocation(it)
                         },
@@ -360,7 +359,8 @@ fun RoomTextField(
         onDone = { focusManager.clearFocus() },
         onGo = { onGo() }
     ),
-    singleLine: Boolean = true
+    singleLine: Boolean = true,
+    hasError: Pair<Boolean, String> = Pair(false, "")
 ) {
     val spacing = LocalSpacing.current
     TextField(
@@ -407,6 +407,7 @@ fun RoomTextField(
                 style = placeholderTextStyle
             )
         },
+        isError = hasError.first,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions
     )
