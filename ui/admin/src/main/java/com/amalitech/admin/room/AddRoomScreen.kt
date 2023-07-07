@@ -66,6 +66,7 @@ import com.amalitech.core_ui.components.BookMeetingRoomDropDown
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
+import com.amalitech.core_ui.theme.add_room_icon_button_bg
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -130,7 +131,7 @@ fun AddRoomScreen(
                         .align(Alignment.Center)
                         .size(57.dp, 42.dp)
                         .clip(RoundedCornerShape(4.dp))
-                        .background(MaterialTheme.colorScheme.outlineVariant)
+                        .background(add_room_icon_button_bg)
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Add,
@@ -254,6 +255,7 @@ fun AddRoomScreen(
                         text = stringResource(com.amalitech.core.R.string.save_room),
                         onClick = { viewModel.onSaveRoomClick() },
                         modifier = Modifier.fillMaxWidth(),
+                        backgroundColor = MaterialTheme.colorScheme.inversePrimary,
                         isLoading = false // TODO: use network ui state here
                     )
                 }
