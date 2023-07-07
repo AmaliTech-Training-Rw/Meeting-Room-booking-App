@@ -246,8 +246,8 @@ class BookRoomViewModelTest {
         advanceUntilIdle()
 
 
-        assertTrue(viewModel.publicBaseResult.value is UiState.Success)
-        assertEquals(bookableRoom.toBookRoomUi(), (viewModel.publicBaseResult.value as UiState.Success).data)
+        assertTrue(viewModel.uiStateFlow.value is UiState.Success)
+        assertEquals(bookableRoom.toBookRoomUi(), (viewModel.uiStateFlow.value as UiState.Success).data)
     }
 
     @Test
@@ -262,8 +262,8 @@ class BookRoomViewModelTest {
         advanceUntilIdle()
 
 
-        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
-        assertEquals(error, (viewModel.publicBaseResult.value as UiState.Error).error)
+        assertTrue(viewModel.uiStateFlow.value is UiState.Error)
+        assertEquals(error, (viewModel.uiStateFlow.value as UiState.Error).error)
     }
 
     @Test
@@ -404,8 +404,8 @@ class BookRoomViewModelTest {
 
         viewModel.onBook("id")
 
-        assertEquals(true, viewModel.publicBaseResult.value is UiState.Success)
-        assertEquals(UiState.Success(RoomUi(canNavigate = true)), (viewModel.publicBaseResult.value) as UiState.Success)
+        assertEquals(true, viewModel.uiStateFlow.value is UiState.Success)
+        assertEquals(UiState.Success(RoomUi(canNavigate = true)), (viewModel.uiStateFlow.value) as UiState.Success)
     }
 
     @Test
@@ -425,8 +425,8 @@ class BookRoomViewModelTest {
 
         viewModel.onBook("id")
 
-        assertEquals(true, viewModel.publicBaseResult.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUi>(error), (viewModel.publicBaseResult.value) as UiState.Error)
+        assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
+        assertEquals(UiState.Error<RoomUi>(error), (viewModel.uiStateFlow.value) as UiState.Error)
     }
 
     @Test
@@ -445,8 +445,8 @@ class BookRoomViewModelTest {
 
         viewModel.onBook("id")
 
-        assertEquals(true, viewModel.publicBaseResult.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUi>(error), (viewModel.publicBaseResult.value) as UiState.Error)
+        assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
+        assertEquals(UiState.Error<RoomUi>(error), (viewModel.uiStateFlow.value) as UiState.Error)
     }
 
     @Test
@@ -465,8 +465,8 @@ class BookRoomViewModelTest {
 
         viewModel.onBook("id")
 
-        assertEquals(true, viewModel.publicBaseResult.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUi>(error), (viewModel.publicBaseResult.value) as UiState.Error)
+        assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
+        assertEquals(UiState.Error<RoomUi>(error), (viewModel.uiStateFlow.value) as UiState.Error)
     }
 
     @Test
@@ -485,8 +485,8 @@ class BookRoomViewModelTest {
 
         viewModel.onBook("id")
 
-        assertEquals(true, viewModel.publicBaseResult.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUi>(error), (viewModel.publicBaseResult.value) as UiState.Error)
+        assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
+        assertEquals(UiState.Error<RoomUi>(error), (viewModel.uiStateFlow.value) as UiState.Error)
     }
 
     @Test
@@ -503,8 +503,8 @@ class BookRoomViewModelTest {
 
         viewModel.onBook("id")
 
-        assertEquals(true, viewModel.publicBaseResult.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUi>(error), (viewModel.publicBaseResult.value) as UiState.Error)
+        assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
+        assertEquals(UiState.Error<RoomUi>(error), (viewModel.uiStateFlow.value) as UiState.Error)
     }
 
     @Test
@@ -531,7 +531,7 @@ class BookRoomViewModelTest {
 
         viewModel.updateStateWithError(error)
 
-        assertEquals(true, viewModel.publicBaseResult.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUi>(error), (viewModel.publicBaseResult.value) as UiState.Error)
+        assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
+        assertEquals(UiState.Error<RoomUi>(error), (viewModel.uiStateFlow.value) as UiState.Error)
     }
 }

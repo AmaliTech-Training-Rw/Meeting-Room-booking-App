@@ -25,7 +25,6 @@ import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -84,7 +83,7 @@ fun BookRoomScreen(
     navBackStackEntry: NavBackStackEntry,
     onNavigate: () -> Unit
 ) {
-    val uiState by viewModel.publicBaseResult.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     val arguments = navBackStackEntry.arguments
     val roomId = arguments?.getString(NavArguments.roomId)
     val snackbarHostState = remember {
@@ -342,7 +341,7 @@ fun FeatureSection(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class,
+@OptIn(ExperimentalLayoutApi::class,
     ExperimentalComposeUiApi::class
 )
 @Composable
@@ -414,8 +413,7 @@ fun AttendeesSection(
                 .clickable { shouldExpandList = !shouldExpandList },
         ) {
             if (shouldExpandList) {
-//                AlertDialog(onDismissRequest = { shouldExpandList = false }) {
-                    userInput.attendees.forEachIndexed { index, attendee ->
+                    userInput.attendees.forEach { attendee ->
                         AttendeeItem(
                             attendee = attendee,
                             modifier = Modifier
@@ -424,7 +422,6 @@ fun AttendeesSection(
                         ) {
                             viewModel.onDeleteAttendee(attendee)
                         }
-//                    }
                 }
             }
             else {
