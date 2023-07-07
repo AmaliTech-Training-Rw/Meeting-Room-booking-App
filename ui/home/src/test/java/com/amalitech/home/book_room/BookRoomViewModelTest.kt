@@ -10,6 +10,7 @@ import com.amalitech.home.book_room.util.toBookRoomUi
 import com.amalitech.home.model.Booking
 import com.amalitech.home.util.Response
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,18 +28,18 @@ import java.time.LocalTime
 @OptIn(ExperimentalCoroutinesApi::class)
 class BookRoomViewModelTest {
 
-    private lateinit var bookRoomViewModel: BookRoomViewModel
+    private lateinit var viewModel: BookRoomViewModel
 
     @MockK
-    private lateinit var bookRoomUseCase: BookRoomUseCase
+    private lateinit var useCase: BookRoomUseCase
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     @Before
     fun setUp() {
-        bookRoomUseCase = mockk()
-        bookRoomViewModel = BookRoomViewModel(bookRoomUseCase)
+        useCase = mockk()
+        viewModel = BookRoomViewModel(useCase)
     }
 
     @Test
@@ -58,12 +59,18 @@ class BookRoomViewModelTest {
                     startTime = LocalTime.of(14, 0),
                     endTime = LocalTime.of(16, 0),
                     date = selectedDate
-                )
+                ),
+                BookingUi(
+                    startTime = LocalTime.of(17, 0),
+                    endTime = LocalTime.of(18, 0),
+                    date = LocalDate.now()
+                ),
+
             )
         )
 
-        bookRoomViewModel.onSelectedDate(selectedDate)
-        val result = bookRoomViewModel.getAvailableStartTimes(room)
+        viewModel.onSelectedDate(selectedDate)
+        viewModel.onShowStartTimesRequest(room)
 
 
         val expected = listOf(
@@ -88,7 +95,7 @@ class BookRoomViewModelTest {
             LocalTime.of(17, 30),
             LocalTime.of(17, 45)
         )
-        assertEquals(expected, result)
+        assertEquals(expected, viewModel.slotManager.value.availableStartTimes)
     }
 
     @Test
@@ -104,8 +111,9 @@ class BookRoomViewModelTest {
             )
         )
 
-        bookRoomViewModel.onSelectedDate(selectedDate)
-        val result = bookRoomViewModel.getAvailableEndTimes(room, LocalTime.of(8, 0))
+        viewModel.onSelectedDate(selectedDate)
+        viewModel.onStartTimeSelected(LocalTime.of(8, 0))
+        viewModel.onShowEndTimeRequest(room)
 
         val expected = listOf(
             LocalTime.of(8, 15),
@@ -118,7 +126,7 @@ class BookRoomViewModelTest {
             LocalTime.of(10, 0)
         )
 
-        assertEquals(expected, result)
+        assertEquals(expected, viewModel.slotManager.value.availableEndTimes)
     }
 
     @Test
@@ -134,8 +142,9 @@ class BookRoomViewModelTest {
             )
         )
 
-        bookRoomViewModel.onSelectedDate(selectedDate)
-        val result = bookRoomViewModel.getAvailableEndTimes(room, LocalTime.of(12, 0))
+        viewModel.onSelectedDate(selectedDate)
+        viewModel.onStartTimeSelected(LocalTime.of(12, 0))
+        viewModel.onShowEndTimeRequest(room)
 
         val expected = listOf(
             LocalTime.of(12, 15),
@@ -148,7 +157,7 @@ class BookRoomViewModelTest {
             LocalTime.of(14, 0)
         )
 
-        assertEquals(expected, result)
+        assertEquals(expected, viewModel.slotManager.value.availableEndTimes)
     }
 
     @Test
@@ -161,8 +170,9 @@ class BookRoomViewModelTest {
             bookings = listOf()
         )
 
-        bookRoomViewModel.onSelectedDate(selectedDate)
-        val result = bookRoomViewModel.getAvailableEndTimes(room, LocalTime.of(15, 0))
+        viewModel.onSelectedDate(selectedDate)
+        viewModel.onStartTimeSelected(LocalTime.of(15, 0))
+        viewModel.onShowEndTimeRequest(room)
 
         val expected = listOf(
             LocalTime.of(15, 15),
@@ -179,31 +189,31 @@ class BookRoomViewModelTest {
             LocalTime.of(18, 0),
         )
 
-        assertEquals(expected, result)
+        assertEquals(expected, viewModel.slotManager.value.availableEndTimes)
     }
 
     @Test
     fun `ensures onNewStartTime works`() {
         val startTime = LocalTime.now()
-        bookRoomViewModel.onNewStartTime(startTime)
+        viewModel.onNewStartTime(startTime)
 
-        assertEquals(startTime, bookRoomViewModel.userInput.value.startTime)
+        assertEquals(startTime, viewModel.userInput.value.startTime)
     }
 
     @Test
     fun `ensures onNewEndTime works`() {
         val endTime = LocalTime.now()
-        bookRoomViewModel.onNewEndTime(endTime)
+        viewModel.onNewEndTime(endTime)
 
-        assertEquals(endTime, bookRoomViewModel.userInput.value.endTime)
+        assertEquals(endTime, viewModel.userInput.value.endTime)
     }
 
     @Test
     fun `ensures onSelectedDate works`() {
         val date = LocalDate.now()
-        bookRoomViewModel.onSelectedDate(date)
+        viewModel.onSelectedDate(date)
 
-        assertEquals(date, bookRoomViewModel.userInput.value.date)
+        assertEquals(date, viewModel.userInput.value.date)
     }
 
     @Test
@@ -223,36 +233,37 @@ class BookRoomViewModelTest {
                     endTime = LocalDateTime.now().plusHours(4),
                     roomName = "room2"
                 )
-            )
+            ),
+            imgUrl = ""
         )
 
         coEvery {
-            bookRoomUseCase.getBookableRoom(any())
+            useCase.getBookableRoom(any())
         } returns Response(
             data = bookableRoom
         )
-        bookRoomViewModel.getBookableRoom("id")
+        viewModel.getBookableRoom("id")
         advanceUntilIdle()
 
 
-        assertTrue(bookRoomViewModel.publicBaseResult.value is UiState.Success)
-        assertEquals(bookableRoom.toBookRoomUi(), (bookRoomViewModel.publicBaseResult.value as UiState.Success).data)
+        assertTrue(viewModel.publicBaseResult.value is UiState.Success)
+        assertEquals(bookableRoom.toBookRoomUi(), (viewModel.publicBaseResult.value as UiState.Success).data)
     }
 
     @Test
     fun `ensures getBookableRoom works when the result is Error`() = runTest {
         val error = UiText.StringResource(R.string.error_default_message)
         coEvery {
-            bookRoomUseCase.getBookableRoom(any())
+            useCase.getBookableRoom(any())
         } returns Response(
             error = error
         )
-        bookRoomViewModel.getBookableRoom("id")
+        viewModel.getBookableRoom("id")
         advanceUntilIdle()
 
 
-        assertTrue(bookRoomViewModel.publicBaseResult.value is UiState.Error)
-        assertEquals(error, (bookRoomViewModel.publicBaseResult.value as UiState.Error).error)
+        assertTrue(viewModel.publicBaseResult.value is UiState.Error)
+        assertEquals(error, (viewModel.publicBaseResult.value as UiState.Error).error)
     }
 
     @Test
@@ -270,7 +281,7 @@ class BookRoomViewModelTest {
             )
         )
 
-        val isAvailable = bookRoomViewModel.isDateAvailable(date, room)
+        val isAvailable = viewModel.isDateAvailable(date, room)
 
         assertTrue(!isAvailable)
     }
@@ -290,7 +301,7 @@ class BookRoomViewModelTest {
             )
         )
 
-        val isAvailable = bookRoomViewModel.isDateAvailable(date, room)
+        val isAvailable = viewModel.isDateAvailable(date, room)
 
         assertTrue(isAvailable)
     }
@@ -310,7 +321,7 @@ class BookRoomViewModelTest {
             )
         )
 
-        val isAvailable = bookRoomViewModel.isDateAvailable(date, room)
+        val isAvailable = viewModel.isDateAvailable(date, room)
 
         assertTrue(isAvailable)
     }
@@ -325,8 +336,202 @@ class BookRoomViewModelTest {
             bookings = listOf()
         )
 
-        val isAvailable = bookRoomViewModel.isDateAvailable(date, room)
+        val isAvailable = viewModel.isDateAvailable(date, room)
 
         assertTrue(isAvailable)
+    }
+
+    @Test
+    fun `ensures onAttendeeNewValue works`() {
+        val attendee = "nkamdaou@gmail.com"
+
+        viewModel.onAttendeeNewValue(attendee)
+
+        assertEquals(attendee, viewModel.userInput.value.attendee)
+    }
+    @Test
+    fun `ensures onStopShowingStartTime works`() {
+
+        viewModel.onStopShowingStartTime()
+
+        assertEquals(false, viewModel.slotManager.value.canShowStartTimes)
+    }
+
+    @Test
+    fun `ensures onStopShowingEndTime works`() {
+
+        viewModel.onStopShowingEndTime()
+
+        assertEquals(false, viewModel.slotManager.value.canShowEndTimes)
+    }
+
+    @Test
+    fun `ensures onAddAttendee works`() {
+        val attendee = "nkamdaou@gmail.Com"
+        viewModel.onAttendeeNewValue(attendee)
+
+        viewModel.onAddAttendee()
+
+        assertEquals(true, viewModel.userInput.value.attendees.contains(attendee))
+    }
+
+    @Test
+    fun `ensures onDeleteAttendee works`() {
+        val attendee = "nkamdaou@gmail.Com"
+        viewModel.onAttendeeNewValue(attendee)
+        viewModel.onAddAttendee()
+        viewModel.onAttendeeNewValue("test")
+        viewModel.onAddAttendee()
+
+        viewModel.onDeleteAttendee(attendee)
+
+        assertEquals(false, viewModel.userInput.value.attendees.contains(attendee))
+    }
+
+    @Test
+    fun `ensures onBook works when every need parameter is provided`() {
+        every {
+            useCase.validateEmail(any())
+        } returns null
+        coEvery {
+            useCase.bookRoom(any())
+        } returns null
+        viewModel.onAttendeeNewValue("test")
+        viewModel.onAddAttendee()
+        viewModel.onNewEndTime(LocalTime.now())
+        viewModel.onNewStartTime(LocalTime.now().plusHours(4))
+        viewModel.onSelectedDate(LocalDate.now())
+
+        viewModel.onBook("id")
+
+        assertEquals(true, viewModel.publicBaseResult.value is UiState.Success)
+        assertEquals(UiState.Success(RoomUi(canNavigate = true)), (viewModel.publicBaseResult.value) as UiState.Success)
+    }
+
+    @Test
+    fun `ensures onBook triggers an error when attendees are not email type`() {
+        val error = UiText.StringResource(R.string.error_email_not_valid)
+        every {
+            useCase.validateEmail(any())
+        } returns error
+        coEvery {
+            useCase.bookRoom(any())
+        } returns null
+        viewModel.onAttendeeNewValue("test")
+        viewModel.onAddAttendee()
+        viewModel.onNewEndTime(LocalTime.now())
+        viewModel.onNewStartTime(LocalTime.now().plusHours(4))
+        viewModel.onSelectedDate(LocalDate.now())
+
+        viewModel.onBook("id")
+
+        assertEquals(true, viewModel.publicBaseResult.value is UiState.Error)
+        assertEquals(UiState.Error<RoomUi>(error), (viewModel.publicBaseResult.value) as UiState.Error)
+    }
+
+    @Test
+    fun `ensures onBook triggers an error when startTime is not set`() {
+        val error = UiText.StringResource(com.amalitech.ui.home.R.string.error_provide_start_time)
+        every {
+            useCase.validateEmail(any())
+        } returns null
+        coEvery {
+            useCase.bookRoom(any())
+        } returns null
+        viewModel.onAttendeeNewValue("test")
+        viewModel.onAddAttendee()
+        viewModel.onNewEndTime(LocalTime.now())
+        viewModel.onSelectedDate(LocalDate.now())
+
+        viewModel.onBook("id")
+
+        assertEquals(true, viewModel.publicBaseResult.value is UiState.Error)
+        assertEquals(UiState.Error<RoomUi>(error), (viewModel.publicBaseResult.value) as UiState.Error)
+    }
+
+    @Test
+    fun `ensures onBook triggers an error when endTime is not set`() {
+        val error = UiText.StringResource(com.amalitech.ui.home.R.string.error_provide_an_end_time)
+        every {
+            useCase.validateEmail(any())
+        } returns null
+        coEvery {
+            useCase.bookRoom(any())
+        } returns null
+        viewModel.onAttendeeNewValue("test")
+        viewModel.onAddAttendee()
+        viewModel.onNewStartTime(LocalTime.now())
+        viewModel.onSelectedDate(LocalDate.now())
+
+        viewModel.onBook("id")
+
+        assertEquals(true, viewModel.publicBaseResult.value is UiState.Error)
+        assertEquals(UiState.Error<RoomUi>(error), (viewModel.publicBaseResult.value) as UiState.Error)
+    }
+
+    @Test
+    fun `ensures onBook triggers an error when date is not set`() {
+        val error = UiText.StringResource(com.amalitech.ui.home.R.string.error_provide_date_for_the_meeting)
+        every {
+            useCase.validateEmail(any())
+        } returns null
+        coEvery {
+            useCase.bookRoom(any())
+        } returns null
+        viewModel.onAttendeeNewValue("test")
+        viewModel.onAddAttendee()
+        viewModel.onNewStartTime(LocalTime.now())
+        viewModel.onNewEndTime(LocalTime.now())
+
+        viewModel.onBook("id")
+
+        assertEquals(true, viewModel.publicBaseResult.value is UiState.Error)
+        assertEquals(UiState.Error<RoomUi>(error), (viewModel.publicBaseResult.value) as UiState.Error)
+    }
+
+    @Test
+    fun `ensures onBook triggers an error when there is no attendee`() {
+        val error = UiText.StringResource(com.amalitech.ui.home.R.string.error_no_attendee_added)
+        every {
+            useCase.validateEmail(any())
+        } returns null
+        coEvery {
+            useCase.bookRoom(any())
+        } returns null
+        viewModel.onNewStartTime(LocalTime.now())
+        viewModel.onNewEndTime(LocalTime.now())
+
+        viewModel.onBook("id")
+
+        assertEquals(true, viewModel.publicBaseResult.value is UiState.Error)
+        assertEquals(UiState.Error<RoomUi>(error), (viewModel.publicBaseResult.value) as UiState.Error)
+    }
+
+    @Test
+    fun `ensures onNoteValueChanged works`() {
+        val note = "note"
+
+        viewModel.onNoteValueChanged(note)
+
+        assertEquals(note, viewModel.userInput.value.note)
+    }
+
+    @Test
+    fun `ensures onEndTimeSelected works`() {
+        val endTime = LocalTime.now()
+
+        viewModel.onEndTimeSelected(endTime)
+
+        assertEquals(endTime, viewModel.userInput.value.endTime)
+    }
+
+    @Test
+    fun `ensures updateStateWithError works`() {
+        val error = UiText.StringResource(R.string.error_email_not_valid)
+
+        viewModel.updateStateWithError(error)
+
+        assertEquals(true, viewModel.publicBaseResult.value is UiState.Error)
+        assertEquals(UiState.Error<RoomUi>(error), (viewModel.publicBaseResult.value) as UiState.Error)
     }
 }

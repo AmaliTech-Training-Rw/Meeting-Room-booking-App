@@ -1,6 +1,9 @@
 package com.amalitech.bookmeetingroom.navigation
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,6 +28,63 @@ import com.amalitech.onboarding.splash_screen.SplashScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
+    Scaffold() {
+        NavHost(
+            navController = navController,
+            startDestination = NavigationTarget.DEBUG.route,
+            modifier = Modifier.padding(it)
+        ) {
+            composable(route = NavigationTarget.DEBUG.route) {
+                DebugScreen {
+                    navController.navigate(it.route)
+                }
+            }
+            composable(route = NavigationTarget.LOGIN.route) {
+                LoginScreen(
+                    onNavigateToHome = {},
+                    onNavigateToForgotPassword = {},
+                    onNavigateToSignUp = {}
+                )
+            }
+            composable(route = NavigationTarget.FORGOT.route) {
+                ForgotPasswordScreen(
+                    onNavigateToLogin = {},
+                    onNavigateToReset = {}
+                )
+            }
+            composable(route = NavigationTarget.RESET.route) {
+                ResetPasswordScreen(onNavigateToLogin = {})
+            }
+            composable(route = NavigationTarget.SPLASH.route) {
+                SplashScreen(onNavigate = {})
+            }
+            composable(route = NavigationTarget.ONBOARD.route) {
+                OnboardingScreen(onNavigateToLogin = {})
+            }
+            composable(route = NavigationTarget.DASHBOARD.route) {
+                AppScaffold(shouldShowOnboarding = false)
+            }
+            composable(route = NavigationTarget.DRAWER.route) {
+                val appState = rememberBookMeetingRoomAppState()
+                BookMeetingRoomTheme {
+                    BookMeetingRoomDrawer(
+                        appState
+                    ) {}
+                }
+            }
+            composable(route = NavigationTarget.CARD.route) {
+                DashBoardCard(
+                    DashboardCardItem(
+                        label = "Users",
+                        iconId = R.drawable.baseline_mail_outline_24,
+                        count = 5
+                    )
+                )
+            }
+
+            composable(route = NavigationTarget.CALENDAR.route) {
+                CalendarScreen()
+            }
     NavHost(
         navController = navController,
         startDestination = NavigationTarget.DEBUG.route
@@ -113,16 +173,19 @@ fun NavigationGraph(navController: NavHostController) {
             CalendarScreen()
         }
 
-        composable(route = NavigationTarget.HOME.route) {
-            AppScaffold(shouldShowOnboarding = false)
-        }
+            composable(route = NavigationTarget.HOME.route) {
+                AppScaffold(shouldShowOnboarding = false)
+            }
 
-        composable(route = NavigationTarget.SIGNUP.route) { entry ->
-            SignupScreen(onNavigateToLogin = { navController.navigate(NavigationTarget.LOGIN.route) }, navBackStackEntry = entry)
-        }
+            composable(route = NavigationTarget.SIGNUP.route) { entry ->
+                SignupScreen(onNavigateToLogin = { navController.navigate(NavigationTarget.LOGIN.route) }, navBackStackEntry = entry)
+            }
 
-        composable(route = NavigationTarget.BOOK_ROOM.route) { entry ->
-            BookRoomScreen(navBackStackEntry = entry)
+            composable(route = NavigationTarget.BOOK_ROOM.route) { entry ->
+                BookRoomScreen(navBackStackEntry = entry) {
+                    navController.navigateUp()
+                }
+            }
         }
 
         composable(route = NavigationTarget.BOOKING.route) {

@@ -7,4 +7,6 @@ dependencies {
     "implementation"(project(Modules.coreUI))
     "implementation"(project(Modules.domainHome))
     "implementation"(Calendar.kizitonwose)
+    "implementation"(DatePicker.vanpra)
+    "implementation"(Coil.coilCompose)
 }

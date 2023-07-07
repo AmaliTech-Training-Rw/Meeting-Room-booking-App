@@ -8,5 +8,6 @@ data class UserInput(
     val startTime: LocalTime? = null,
     val endTime: LocalTime? = null,
     val attendees: List<String> = listOf(),
-    val note: String = ""
+    val note: String = "",
+    val attendee: String = ""
 )

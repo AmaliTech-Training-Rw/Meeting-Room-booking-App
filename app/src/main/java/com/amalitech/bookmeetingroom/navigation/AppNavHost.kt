@@ -18,7 +18,7 @@ import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.amalitech.booking.BookingScreen
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
-import com.amalitech.home.HomeScreen
+import com.amalitech.home.book_room.BookRoomScreen
 import com.amalitech.onboarding.OnboardingScreen
 import com.amalitech.onboarding.forgot_password.ForgotPasswordScreen
 import com.amalitech.onboarding.forgot_password.ForgotPasswordViewModel
@@ -43,7 +43,7 @@ fun AppNavHost(
         modifier = modifier
     ) {
         onboardingGraph(navController, shouldShowOnboarding)
-        mainNavGraph()
+        mainNavGraph(navController)
         dashboardNavGraph()
     }
 }
@@ -153,13 +153,15 @@ fun NavGraphBuilder.onboardingGraph(
     }
 }
 
-fun NavGraphBuilder.mainNavGraph() {
+fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
     navigation(
         startDestination = BottomNavItem.Home.route,
         route = Route.HOME_SCREENS
     ) {
         composable(BottomNavItem.Home.route) {
-            HomeScreen()
+            BookRoomScreen(navBackStackEntry = it) {
+                navController.navigateUp()
+            }
         }
         composable(BottomNavItem.Profile.route) {
             // TODO (ADD PROFILE SCREEN COMPOSABLE HERE)
