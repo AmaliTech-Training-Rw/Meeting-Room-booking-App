@@ -114,6 +114,7 @@ class AddRoomViewModel(
         }
     }
 
+    // TODO: ideally, this method should come from a share vm
     fun launchCatching(snackbar: Boolean = true, block: suspend CoroutineScope.() -> Unit) =
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
