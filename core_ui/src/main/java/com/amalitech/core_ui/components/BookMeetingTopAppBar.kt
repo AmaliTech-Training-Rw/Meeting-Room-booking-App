@@ -3,7 +3,6 @@ package com.amalitech.core_ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,7 +30,12 @@ import kotlinx.coroutines.launch
 @Composable
 fun BookMeetingTopAppBar(
     appState: BookMeetingRoomAppState,
-    title: String
+    title: String,
+    searchQuery: String? = null,
+    onSearchQueryChange: ((query: String) -> Unit)? = null,
+    onSearchClick: (() -> Unit)? = null,
+    isSearchTextFieldVisible: Boolean = false,
+    onSearchTextFieldVisibilityChange: ((Boolean) -> Unit)? = null
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
 
@@ -65,6 +69,13 @@ fun BookMeetingTopAppBar(
             }
         },
         actions = {
+            SearchIcon(
+                searchQuery = searchQuery,
+                onSearch = onSearchClick,
+                onSearchQueryChange = onSearchQueryChange,
+                isSearchTextFieldVisible = isSearchTextFieldVisible,
+                onSearchTextFieldVisibilityChanged = onSearchTextFieldVisibilityChange,
+            )
             IconButton(onClick = { /* doSomething() */ }) {
                 Image(
                     painter = painterResource(id = R.drawable.drawer_user),
@@ -81,6 +92,8 @@ fun BookMeetingTopAppBar(
 fun BookMeetingTopAppBarPreview() {
     BookMeetingRoomTheme {
         val appState = rememberBookMeetingRoomAppState()
-        BookMeetingTopAppBar(appState, "Home")
+        BookMeetingTopAppBar(appState, "Home", "search", {}, {
+
+        })
     }
 }

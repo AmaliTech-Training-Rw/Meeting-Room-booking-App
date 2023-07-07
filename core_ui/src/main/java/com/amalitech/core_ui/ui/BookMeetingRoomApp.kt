@@ -19,14 +19,27 @@ import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 @Composable
 fun BookMeetingRoomApp(
     appState: BookMeetingRoomAppState,
-    title: String
+    title: String,
+    searchQuery: String? = null,
+    onSearchQueryChange: ((String) -> Unit)? = null,
+    onSearchClick: (() -> Unit)? = null,
+    isSearchTextFieldVisible: Boolean = false,
+    onSearchTextFieldVisibilityChange: ((Boolean) -> Unit)? = null
 ) {
     Scaffold(
         topBar = {
             // Show the top app bar on top level destinations.
             val destination = appState.currentTopLevelDestination
             if (destination != null) {
-                BookMeetingTopAppBar(appState, title)
+                BookMeetingTopAppBar(
+                    appState = appState,
+                    title = title,
+                    searchQuery = searchQuery,
+                    onSearchQueryChange = onSearchQueryChange,
+                    onSearchClick = onSearchClick,
+                    isSearchTextFieldVisible = isSearchTextFieldVisible,
+                    onSearchTextFieldVisibilityChange = onSearchTextFieldVisibilityChange
+                )
             }
         },
         content = { innerPadding ->
@@ -55,7 +68,10 @@ fun BookMeetingRoomApp(
 fun BookMeetingTopAppBarPreview() {
     BookMeetingRoomTheme {
         val appState = rememberBookMeetingRoomAppState()
-        BookMeetingRoomApp(appState, "Home")
+        BookMeetingRoomApp(
+            appState,
+            "Home",
+        )
     }
 }
 
