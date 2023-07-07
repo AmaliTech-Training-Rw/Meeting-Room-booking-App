@@ -214,6 +214,8 @@ class BookRoomViewModelTest {
         viewModel.onSelectedDate(date)
 
         assertEquals(date, viewModel.userInput.value.date)
+        assertEquals(null, viewModel.userInput.value.startTime)
+        assertEquals(null, viewModel.userInput.value.endTime)
     }
 
     @Test
@@ -397,10 +399,10 @@ class BookRoomViewModelTest {
             useCase.bookRoom(any())
         } returns null
         viewModel.onAttendeeNewValue("test")
-        viewModel.onAddAttendee()
-        viewModel.onNewEndTime(LocalTime.now())
-        viewModel.onNewStartTime(LocalTime.now().plusHours(4))
         viewModel.onSelectedDate(LocalDate.now())
+        viewModel.onAddAttendee()
+        viewModel.onNewStartTime(LocalTime.now())
+        viewModel.onNewEndTime(LocalTime.now().plusHours(4))
 
         viewModel.onBook("id")
 
@@ -439,9 +441,9 @@ class BookRoomViewModelTest {
             useCase.bookRoom(any())
         } returns null
         viewModel.onAttendeeNewValue("test")
+        viewModel.onSelectedDate(LocalDate.now())
         viewModel.onAddAttendee()
         viewModel.onNewEndTime(LocalTime.now())
-        viewModel.onSelectedDate(LocalDate.now())
 
         viewModel.onBook("id")
 

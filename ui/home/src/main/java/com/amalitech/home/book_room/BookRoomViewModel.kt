@@ -176,7 +176,9 @@ class BookRoomViewModel(
 
     fun onSelectedDate(date: LocalDate) {
         _userInput.value = _userInput.value.copy(
-            date = date
+            date = date,
+            startTime = null,
+            endTime = null
         )
     }
 
