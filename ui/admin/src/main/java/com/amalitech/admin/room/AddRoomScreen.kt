@@ -131,7 +131,7 @@ fun AddRoomScreen(
                         .align(Alignment.Center)
                         .size(57.dp, 42.dp)
                         .clip(RoundedCornerShape(4.dp))
-                        .background(add_room_icon_button_bg)
+                        .background(add_room_icon_button_bg.copy(alpha = 0.5f))
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Add,
@@ -291,7 +291,7 @@ fun RoomCounter(
             .border(
                 BorderStroke(
                     1.dp,
-                    MaterialTheme.colorScheme.outline
+                    MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f)
                 ),
                 shape = RoundedCornerShape(5.dp)
             )
