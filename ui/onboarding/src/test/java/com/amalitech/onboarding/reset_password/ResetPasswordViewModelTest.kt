@@ -80,7 +80,7 @@ class ResetPasswordViewModelTest {
         viewModel.onNewPasswordConfirmation(confirmationPassword)
 
         // THEN - state holds the value an error
-        val state = viewModel.publicBaseResult
+        val state = viewModel.uiStateFlow
         assertTrue(state.value is UiState.Error)
         assertEquals(
             UiText.StringResource(R.string.error_passwords_dont_match),
@@ -100,7 +100,7 @@ class ResetPasswordViewModelTest {
 
         viewModel.onResetPassword()
 
-        val state = viewModel.publicBaseResult
+        val state = viewModel.uiStateFlow
         assertTrue(state.value is UiState.Success)
     }
 
@@ -119,7 +119,7 @@ class ResetPasswordViewModelTest {
         viewModel.onResetPassword()
 
         // THEN - state is updated with the corresponding error
-        val state = viewModel.publicBaseResult
+        val state = viewModel.uiStateFlow
         assertTrue(state.value is UiState.Error)
         assertEquals(
             UiText.StringResource(R.string.error_passwords_dont_match),

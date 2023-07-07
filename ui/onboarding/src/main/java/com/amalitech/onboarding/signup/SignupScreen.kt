@@ -77,7 +77,7 @@ fun SignupScreen(
     }
     val focusManager: FocusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    val uiState by viewModel.publicBaseResult.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     val selectedItem = userInput.selectedOrganizationType
     var organizationType: List<String> by rememberSaveable {
         mutableStateOf(listOf())
