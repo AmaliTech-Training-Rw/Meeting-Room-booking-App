@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.formatDate
 import com.amalitech.ui.room.R
-import com.example.room.book_room.TimeUi
+import com.amalitech.room.book_room.TimeUi
 import java.time.LocalDate
 import java.time.LocalTime
 

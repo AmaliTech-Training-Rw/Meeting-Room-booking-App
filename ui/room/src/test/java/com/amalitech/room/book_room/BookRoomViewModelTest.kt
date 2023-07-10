@@ -5,10 +5,10 @@ import com.amalitech.core.domain.model.Booking
 import com.amalitech.core.util.Response
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.UiState
-import com.example.room.MainDispatcherRule
+import com.amalitech.room.MainDispatcherRule
 import com.amalitech.room.book_room.model.Room
 import com.amalitech.room.book_room.use_case.BookRoomUseCase
-import com.example.room.book_room.util.toBookRoomUi
+import com.amalitech.room.book_room.util.toBookRoomUi
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -30,7 +30,7 @@ class BookRoomViewModelTest {
     private lateinit var viewModel: BookRoomViewModel
 
     @MockK
-    private lateinit var useCase: com.amalitech.room.book_room.use_case.BookRoomUseCase
+    private lateinit var useCase: BookRoomUseCase
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
@@ -263,7 +263,7 @@ class BookRoomViewModelTest {
 
     @Test
     fun `ensures getBookableRoom works when the result is Success`() = runTest {
-        val room = com.amalitech.room.book_room.model.Room(
+        val room = Room(
             name = "Room",
             description = "description",
             features = listOf("Internet", "Drinks", "Air conditional"),
