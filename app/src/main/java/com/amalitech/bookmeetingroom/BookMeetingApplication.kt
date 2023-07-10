@@ -17,6 +17,7 @@ import com.amalitech.rooms.di.domainRoomModule
 import com.amalitech.rooms.di.roomPresentationModule
 import com.amalitech.room.di.domainRoomModule
 import com.example.room.di.uiRoomModule
+import com.amalitech.room.di.uiRoomModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 

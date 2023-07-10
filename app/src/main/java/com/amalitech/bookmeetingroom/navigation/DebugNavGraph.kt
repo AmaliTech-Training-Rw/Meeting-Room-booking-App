@@ -26,6 +26,7 @@ import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
+import com.amalitech.room.book_room.BookRoomScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {

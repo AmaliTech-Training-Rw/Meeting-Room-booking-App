@@ -8,7 +8,7 @@ import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.ui.room.R
-import com.example.room.book_room.util.toBookRoomUi
+import com.amalitech.room.book_room.util.toBookRoomUi
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Duration

@@ -1,10 +1,11 @@
 package com.amalitech.room.book_room.util
 
-import com.example.room.book_room.RoomUiState
+import com.amalitech.room.book_room.RoomUiState
+import com.amalitech.room.book_room.model.Room
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-fun com.amalitech.room.book_room.model.Room.toBookRoomUi(): RoomUiState {
+fun Room.toBookRoomUi(): RoomUiState {
     return RoomUiState(
         name,
         description,
