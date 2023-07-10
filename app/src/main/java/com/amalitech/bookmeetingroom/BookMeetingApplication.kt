@@ -38,6 +38,9 @@ class BookMeetingApplication : Application() {
                 uiHomeModule,
                 domainBookingModule,
                 presentationBookingModule
+                uiHomeModule,
+                domainRoomModule,
+                uiRoomModule
             )
         }
     }

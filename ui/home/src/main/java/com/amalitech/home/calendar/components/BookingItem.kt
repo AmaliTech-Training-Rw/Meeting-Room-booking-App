@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.home.calendar.BookingUiState
-import com.amalitech.home.calendar.util.formatTime
+import com.amalitech.core_ui.util.formatTime
 import com.amalitech.ui.home.R
 
 @Composable

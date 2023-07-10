@@ -78,11 +78,12 @@ class HomeViewModel(
                 BookingUiState(
                     booking.startTime,
                     booking.endTime,
-                    booking.roomName
+                    booking.roomName,
+                    booking.date
                 )
             }
             .groupBy {
-                it.startTime.toLocalDate()
+                it.date
             }
 
     fun onCurrentDayChange(day: CalendarDay?) {

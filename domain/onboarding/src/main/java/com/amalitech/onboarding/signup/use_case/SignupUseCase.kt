@@ -1,6 +1,6 @@
 package com.amalitech.onboarding.signup.use_case
 
-import com.amalitech.onboarding.login.use_case.ValidateEmail
+import com.amalitech.core.domain.use_case.ValidateEmail
 import com.amalitech.onboarding.login.use_case.ValidatePassword
 import com.amalitech.onboarding.reset_password.CheckPasswordsMatch
 

@@ -5,7 +5,7 @@ import com.amalitech.onboarding.forgot_password.use_case.SendResetLink
 import com.amalitech.onboarding.login.use_case.IsUserAdmin
 import com.amalitech.onboarding.login.use_case.LogIn
 import com.amalitech.onboarding.login.use_case.LoginUseCase
-import com.amalitech.onboarding.login.use_case.ValidateEmail
+import com.amalitech.core.domain.use_case.ValidateEmail
 import com.amalitech.onboarding.login.use_case.ValidatePassword
 import com.amalitech.onboarding.reset_password.CheckPasswordsMatch
 import com.amalitech.onboarding.reset_password.ResetPassword
