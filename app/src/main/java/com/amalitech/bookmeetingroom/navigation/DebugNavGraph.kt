@@ -10,13 +10,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.amalitech.admin.DashboardCardItem
 import com.amalitech.admin.components.DashBoardCard
+import com.amalitech.admin.room.AddRoomScreen
 import com.amalitech.bookmeetingroom.AppScaffold
 import com.amalitech.bookmeetingroom.testComponents.DebugScreen
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.components.drawer.BookMeetingRoomDrawer
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
-import com.amalitech.home.book_room.BookRoomScreen
+import com.example.room.book_room.BookRoomScreen
 import com.amalitech.home.calendar.CalendarScreen
 import com.amalitech.onboarding.OnboardingScreen
 import com.amalitech.onboarding.forgot_password.ForgotPasswordScreen
@@ -79,6 +80,11 @@ fun NavigationGraph(navController: NavHostController) {
                 )
             )
         }
+
+        composable(route = NavigationTarget.ADDROOM.route) {
+            AddRoomScreen()
+        }
+
         composable(route = NavigationTarget.APPBAR.route) {
             val appState = rememberBookMeetingRoomAppState()
             var query by rememberSaveable {

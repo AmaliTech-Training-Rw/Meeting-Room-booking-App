@@ -10,7 +10,7 @@ import com.amalitech.core_ui.util.UiState
 import com.amalitech.home.calendar.BookingUiState
 import com.amalitech.home.calendar.CalendarUiState
 import com.amalitech.home.components.HomeTab
-import com.amalitech.home.model.Booking
+import com.amalitech.core.domain.model.Booking
 import com.amalitech.home.use_case.HomeUseCase
 import com.kizitonwose.calendar.core.CalendarDay
 import kotlinx.coroutines.flow.update
@@ -75,11 +75,12 @@ class HomeViewModel(
                 BookingUiState(
                     booking.startTime,
                     booking.endTime,
-                    booking.roomName
+                    booking.roomName,
+                    booking.date
                 )
             }
             .groupBy {
-                it.startTime.toLocalDate()
+                it.date
             }
 
     fun onCurrentDayChange(day: CalendarDay?) {
