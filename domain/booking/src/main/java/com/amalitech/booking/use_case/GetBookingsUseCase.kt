@@ -14,37 +14,37 @@ class GetBookingsUseCase {
         val date1 = LocalDate.now().plusDays(2)
         return if (ended)
             Response(
-            data = listOf(
-                Booking(
-                    "room1",
-                    date,
-                    LocalTime.of((0..23).random(), 0),
-                    LocalTime.of((0..23).random(), 0),
-                    "https://via.placeholder.com/500.png"
-                ),
-                Booking(
-                    "room2",
-                    date,
-                    LocalTime.of((0..23).random(), 0),
-                    LocalTime.of((0..23).random(), 0),
-                    "https://via.placeholder.com/500.png"
-                ),
-                Booking(
-                    "room1",
-                    date,
-                    LocalTime.of((0..23).random(), 0),
-                    LocalTime.of((0..23).random(), 0),
-                    "https://via.placeholder.com/500.png"
-                ),
-                Booking(
-                    "room1",
-                    date,
-                    LocalTime.of((0..23).random(), 0),
-                    LocalTime.of((0..23).random(), 0),
-                    "https://via.placeholder.com/500.png"
-                ),
-            )
-        ) else    Response(
+                data = listOf(
+                    Booking(
+                        "room1",
+                        date,
+                        LocalTime.of((0..23).random(), 0),
+                        LocalTime.of((0..23).random(), 0),
+                        "https://via.placeholder.com/500.png"
+                    ),
+                    Booking(
+                        "room2",
+                        date,
+                        LocalTime.of((0..23).random(), 0),
+                        LocalTime.of((0..23).random(), 0),
+                        "https://via.placeholder.com/500.png"
+                    ),
+                    Booking(
+                        "room1",
+                        date,
+                        LocalTime.of((0..23).random(), 0),
+                        LocalTime.of((0..23).random(), 0),
+                        "https://via.placeholder.com/500.png"
+                    ),
+                    Booking(
+                        "room1",
+                        date,
+                        LocalTime.of((0..23).random(), 0),
+                        LocalTime.of((0..23).random(), 0),
+                        "https://via.placeholder.com/500.png"
+                    ),
+                )
+            ) else Response(
             data = listOf(
                 Booking(
                     "room3",
