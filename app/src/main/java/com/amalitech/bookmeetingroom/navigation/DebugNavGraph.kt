@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import com.amalitech.admin.DashboardCardItem
 import com.amalitech.admin.components.DashBoardCard
 import com.amalitech.admin.room.AddRoomScreen
+import com.amalitech.booking.BookingScreen
 import com.amalitech.bookmeetingroom.AppScaffold
 import com.amalitech.bookmeetingroom.testComponents.DebugScreen
 import com.amalitech.core_ui.R
@@ -119,6 +120,10 @@ fun NavigationGraph(navController: NavHostController) {
 
         composable(route = NavigationTarget.SIGNUP.route) { entry ->
             SignupScreen(onNavigateToLogin = { navController.navigate(NavigationTarget.LOGIN.route) }, navBackStackEntry = entry)
+        }
+
+        composable(route = NavigationTarget.BOOKING.route) {
+            BookingScreen()
         }
     }
 }
