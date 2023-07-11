@@ -24,6 +24,7 @@ import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
+import com.amalitech.room.book_room.BookRoomScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
@@ -104,11 +105,6 @@ fun NavigationGraph(navController: NavHostController) {
                 }
             )
         }
-
-        composable(route = NavigationTarget.ADDROOM.route) {
-            AddRoomScreen()
-        }
-
         composable(route = NavigationTarget.CALENDAR.route) {
             CalendarScreen()
         }
@@ -118,7 +114,16 @@ fun NavigationGraph(navController: NavHostController) {
         }
 
         composable(route = NavigationTarget.SIGNUP.route) { entry ->
-            SignupScreen(onNavigateToLogin = { navController.navigate(NavigationTarget.LOGIN.route) }, navBackStackEntry = entry)
+            SignupScreen(
+                onNavigateToLogin = { navController.navigate(NavigationTarget.LOGIN.route) },
+                navBackStackEntry = entry
+            )
+        }
+
+        composable(route = NavigationTarget.BOOK_ROOM.route) { entry ->
+            BookRoomScreen(navBackStackEntry = entry) {
+                navController.navigateUp()
+            }
         }
     }
 }

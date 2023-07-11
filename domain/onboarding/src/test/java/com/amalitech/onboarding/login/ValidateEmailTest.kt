@@ -1,4 +1,5 @@
 import com.amalitech.core.R
+import com.amalitech.core.domain.use_case.ValidateEmail
 import com.amalitech.core.util.UiText
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -9,11 +10,11 @@ import org.junit.Test
 
 class ValidateEmailTest {
     @MockK
-    private lateinit var validateEmail: com.amalitech.onboarding.login.use_case.ValidateEmail
+    private lateinit var validateEmail: ValidateEmail
 
     @Before
     fun setup() {
-        validateEmail = spyk(com.amalitech.onboarding.login.use_case.ValidateEmail())
+        validateEmail = spyk(ValidateEmail())
     }
 
     @Test

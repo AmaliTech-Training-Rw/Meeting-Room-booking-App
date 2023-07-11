@@ -1,9 +1,9 @@
-package com.amalitech.onboarding.login.use_case
+package com.amalitech.core.domain.use_case
 
 import android.util.Patterns
 import androidx.annotation.VisibleForTesting
-import com.amalitech.core.util.UiText
 import com.amalitech.core.R
+import com.amalitech.core.util.UiText
 
 class ValidateEmail {
     /**

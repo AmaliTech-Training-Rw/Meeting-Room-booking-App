@@ -1,11 +1,11 @@
 package com.amalitech.onboarding.signup
 
 import com.amalitech.core.R
+import com.amalitech.core.util.Response
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.MainDispatcherRule
 import com.amalitech.onboarding.signup.use_case.SignupUseCase
-import com.amalitech.onboarding.util.Response
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

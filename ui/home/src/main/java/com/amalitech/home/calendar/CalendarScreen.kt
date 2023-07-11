@@ -30,7 +30,7 @@ import com.amalitech.home.calendar.components.BookingItem
 import com.amalitech.home.calendar.components.Day
 import com.amalitech.home.calendar.components.MonthHeader
 import com.amalitech.home.calendar.components.SimpleCalendarTitle
-import com.amalitech.home.calendar.util.formatDate
+import com.amalitech.core_ui.util.formatDate
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
