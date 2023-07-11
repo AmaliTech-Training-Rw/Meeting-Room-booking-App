@@ -54,4 +54,5 @@
     <string name="error_the_link_doesnt_work">There is an error with the link, please make sure you click on the right link</string>
     <string name="set_up">Set up</string>
     <string name="error_default_message">An unexpected error occurred, please retry later</string>
+    <string name="confirm_password">Confirm password</string>
 </resources>
