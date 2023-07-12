@@ -43,6 +43,27 @@ class GetBookingsUseCase {
                         LocalTime.of((0..23).random(), 0),
                         "https://via.placeholder.com/500.png"
                     ),
+                    Booking(
+                        "room2",
+                        date,
+                        LocalTime.of((0..23).random(), 0),
+                        LocalTime.of((0..23).random(), 0),
+                        "https://via.placeholder.com/500.png"
+                    ),
+                    Booking(
+                        "room2",
+                        date,
+                        LocalTime.of((0..23).random(), 0),
+                        LocalTime.of((0..23).random(), 0),
+                        "https://via.placeholder.com/500.png"
+                    ),
+                    Booking(
+                        "room1",
+                        date,
+                        LocalTime.of((0..23).random(), 0),
+                        LocalTime.of((0..23).random(), 0),
+                        "https://via.placeholder.com/500.png"
+                    ),
                 )
             ) else Response(
             data = listOf(
@@ -62,6 +83,27 @@ class GetBookingsUseCase {
                 ),
                 Booking(
                     "room1",
+                    date1,
+                    LocalTime.of((0..23).random(), 0),
+                    LocalTime.of((0..23).random(), 0),
+                    "https://via.placeholder.com/400.png"
+                ),
+                Booking(
+                    "room1",
+                    date1,
+                    LocalTime.of((0..23).random(), 0),
+                    LocalTime.of((0..23).random(), 0),
+                    "https://via.placeholder.com/400.png"
+                ),
+                Booking(
+                    "room2",
+                    date1,
+                    LocalTime.of((0..23).random(), 0),
+                    LocalTime.of((0..23).random(), 0),
+                    "https://via.placeholder.com/400.png"
+                ),
+                Booking(
+                    "room2",
                     date1,
                     LocalTime.of((0..23).random(), 0),
                     LocalTime.of((0..23).random(), 0),

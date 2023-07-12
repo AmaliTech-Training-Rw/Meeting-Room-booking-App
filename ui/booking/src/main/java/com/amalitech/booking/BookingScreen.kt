@@ -2,6 +2,8 @@ package com.amalitech.booking
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -74,30 +76,32 @@ fun BookingScreen(
         }
     }
 
+
     Box(
         Modifier
             .fillMaxSize()
             .padding(spacing.spaceMedium)
     ) {
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)) {
-            item {
-                BookingAppTab(
-                    onTabSelected = { tab ->
-                        viewModel.onTabSelected(tab)
-                        val ended = tab is Tab.EndedBookings
-                        viewModel.fetchBookings(ended = ended)
-                    },
-                    selectedTab = selectedTab,
-                    modifier = Modifier.height(40.dp),
-                    tabs = viewModel.tabs
-                )
-            }
-            bookings?.let {
-                items(items = it) { item ->
-                    BookingItem(
-                        item = item,
-                        modifier = Modifier.height(150.dp)
-                    )
+        Column {
+            BookingAppTab(
+                onTabSelected = { tab ->
+                    viewModel.onTabSelected(tab)
+                    val ended = tab is Tab.EndedBookings
+                    viewModel.fetchBookings(ended = ended)
+                },
+                selectedTab = selectedTab,
+                modifier = Modifier.height(40.dp),
+                tabs = viewModel.tabs
+            )
+            Spacer(modifier = Modifier.height(spacing.spaceSmall))
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)) {
+                bookings?.let {
+                    items(items = it) { item ->
+                        BookingItem(
+                            item = item,
+                            modifier = Modifier.height(150.dp)
+                        )
+                    }
                 }
             }
         }
