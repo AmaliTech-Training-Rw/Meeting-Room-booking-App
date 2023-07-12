@@ -2,7 +2,7 @@ package com.amalitech.core_ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val md_theme_light_primary = Color(0xFF775A00)
+val md_theme_light_primary = Color(0xFFFFCC47)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFFFFDF98)
 val md_theme_light_onPrimaryContainer = Color(0xFF251A00)
@@ -28,12 +28,11 @@ val md_theme_light_outline = Color(0xFF7E7667)
 val md_theme_light_inverseOnSurface = Color(0xFFF7F0E7)
 val md_theme_light_inverseSurface = Color(0xFF33302A)
 val md_theme_light_inversePrimary = Color(0xFFF1C03B)
-val md_theme_light_shadow = Color(0xFF000000)
 val md_theme_light_surfaceTint = Color(0xFF775A00)
 val md_theme_light_outlineVariant = Color(0xFFD0C5B4)
 val md_theme_light_scrim = Color(0xFF000000)
 
-val md_theme_dark_primary = Color(0xFFF1C03B)
+val md_theme_dark_primary = Color(0xFFFFCC47)
 val md_theme_dark_onPrimary = Color(0xFF3E2E00)
 val md_theme_dark_primaryContainer = Color(0xFF5A4300)
 val md_theme_dark_onPrimaryContainer = Color(0xFFFFDF98)
@@ -59,11 +58,8 @@ val md_theme_dark_outline = Color(0xFF999080)
 val md_theme_dark_inverseOnSurface = Color(0xFF1E1B16)
 val md_theme_dark_inverseSurface = Color(0xFFE9E1D9)
 val md_theme_dark_inversePrimary = Color(0xFF775A00)
-val md_theme_dark_shadow = Color(0xFF000000)
 val md_theme_dark_surfaceTint = Color(0xFFF1C03B)
 val md_theme_dark_outlineVariant = Color(0xFF4D4639)
 val md_theme_dark_scrim = Color(0xFF000000)
 
-
-val seed = Color(0xFFFFCC47)
 val add_room_icon_button_bg = Color(0xFFD9D9D9)
