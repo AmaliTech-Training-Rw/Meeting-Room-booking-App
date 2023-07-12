@@ -1,4 +1,4 @@
-package com.amalitech.admin.room
+package com.amalitech.home.room
 
 data class AddRoomUiState(
     val name: String = "",

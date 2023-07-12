@@ -8,4 +8,12 @@ val uiHomeModule = module {
     viewModel {
         HomeViewModel(get())
     }
+
+    viewModel {
+        com.amalitech.home.room.AddRoomViewModel(get())
+    }
+
+    single {
+        com.amalitech.home.room.usecase.GetLocation()
+    }
 }

@@ -1,4 +1,4 @@
-package com.amalitech.admin.room.usecase
+package com.amalitech.home.room.usecase
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

@@ -7,4 +7,9 @@ dependencies {
     "implementation"(project(Modules.coreUI))
     "implementation"(project(Modules.domainHome))
     "implementation"(Calendar.kizitonwose)
+
+    "implementation"(Coil.coilCompose)
+    "implementation"(Kotlin.coreKtx)
+    "implementation"(Lifecycle.composeLifecycle)
+    "implementation"(Compose.constraintLayout)
 }
