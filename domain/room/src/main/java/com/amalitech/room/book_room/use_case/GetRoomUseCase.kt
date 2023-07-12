@@ -7,12 +7,12 @@ import kotlinx.coroutines.delay
 import java.time.LocalDate
 import java.time.LocalTime
 
-class GetBookableRoomUseCase {
-    suspend operator fun invoke(roomId: String): Response<com.amalitech.room.book_room.model.Room> {
+class GetRoomUseCase {
+    suspend operator fun invoke(roomId: String): Response<Room> {
         // TODO (API integration)
         delay(2000)
         return Response(
-            data = com.amalitech.room.book_room.model.Room(
+            data = Room(
                 name = "Room",
                 description = "description",
                 features = listOf("Internet", "Drinks", "Air conditional"),

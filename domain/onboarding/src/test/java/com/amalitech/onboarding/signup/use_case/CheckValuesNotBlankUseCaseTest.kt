@@ -7,13 +7,13 @@ import org.junit.Before
 import org.junit.Assert.*
 import org.junit.Test
 
-class CheckValuesNotBlankTest {
+class CheckValuesNotBlankUseCaseTest {
 
-    private lateinit var checkValuesNotBlank: CheckValuesNotBlank
+    private lateinit var checkValuesNotBlankUseCase: CheckValuesNotBlankUseCase
 
     @Before
     fun setUp() {
-        checkValuesNotBlank = CheckValuesNotBlank()
+        checkValuesNotBlankUseCase = CheckValuesNotBlankUseCase()
     }
 
     @Test
@@ -23,7 +23,7 @@ class CheckValuesNotBlankTest {
         val two = "two"
         val three = "three"
 
-        val result = checkValuesNotBlank(blank, one, two, three)
+        val result = checkValuesNotBlankUseCase(blank, one, two, three)
 
         assertEquals(UiText.StringResource(R.string.error_value_is_blank), result)
     }
@@ -35,7 +35,7 @@ class CheckValuesNotBlankTest {
         val two = "two"
         val three = "three"
 
-        val result = checkValuesNotBlank(blank, one, two, three)
+        val result = checkValuesNotBlankUseCase(blank, one, two, three)
 
         assertEquals(null, result)
     }

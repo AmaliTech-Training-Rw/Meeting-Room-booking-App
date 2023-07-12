@@ -7,7 +7,7 @@ import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.room.MainDispatcherRule
 import com.amalitech.room.book_room.model.Room
-import com.amalitech.room.book_room.use_case.BookRoomUseCase
+import com.amalitech.room.book_room.use_case.BookRoomUseCasesWrapper
 import com.amalitech.room.book_room.util.toBookRoomUi
 import io.mockk.coEvery
 import io.mockk.every
@@ -25,12 +25,12 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class BookRoomViewModelTest {
+class BookRoomUseCaseViewModelTest {
 
     private lateinit var viewModel: BookRoomViewModel
 
     @MockK
-    private lateinit var useCase: BookRoomUseCase
+    private lateinit var useCase: BookRoomUseCasesWrapper
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
@@ -44,7 +44,7 @@ class BookRoomViewModelTest {
     @Test
     fun `ensures getAvailableStartTimes works`() {
         val selectedDate = LocalDate.of(2023, 5, 1)
-        val room = RoomUiState(
+        val room = Room(
             name = "Room 1",
             description = "Meeting Room",
             features = listOf("Projector", "Whiteboard"),
@@ -76,12 +76,16 @@ class BookRoomViewModelTest {
                     attendees = emptyList(),
                     note = ""
                 ),
-
-                )
+                ),
+            imgUrl = ""
         )
+        coEvery {
+            useCase.getRoomUseCase(any())
+        } returns Response(data = room)
+        viewModel.getRoom("")
 
         viewModel.onSelectedDate(selectedDate)
-        viewModel.onShowStartTimesRequest(room)
+        viewModel.onShowStartTimesRequest()
 
 
         val expected = listOf(
@@ -113,7 +117,7 @@ class BookRoomViewModelTest {
     @Test
     fun `ensures getAvailableEndTimes works when there is a meeting`() {
         val selectedDate = LocalDate.of(2023, 5, 1)
-        val room = RoomUiState(
+        val room = Room(
             name = "Room 1",
             description = "Meeting Room",
             features = listOf("Projector", "Whiteboard"),
@@ -136,12 +140,17 @@ class BookRoomViewModelTest {
                     "",
                     selectedDate
                 )
-            )
+            ),
+            ""
         )
+        coEvery {
+            useCase.getRoomUseCase(any())
+        } returns Response(data = room)
+        viewModel.getRoom("")
 
         viewModel.onSelectedDate(selectedDate)
         viewModel.onStartTimeSelected(LocalTime.of(8, 0))
-        viewModel.onShowEndTimeRequest(room)
+        viewModel.onShowEndTimeRequest()
 
         val expected = listOf(
             LocalTime.of(9, 0),
@@ -157,7 +166,7 @@ class BookRoomViewModelTest {
     @Test
     fun `ensures getAvailableEndTimes works for a booking withing two meeting`() {
         val selectedDate = LocalDate.of(2023, 5, 1)
-        val room = RoomUiState(
+        val room = Room(
             name = "Room 1",
             description = "Meeting Room",
             features = listOf("Projector", "Whiteboard"),
@@ -180,12 +189,18 @@ class BookRoomViewModelTest {
                     "",
                     selectedDate
                 )
-            )
+            ),
+            ""
         )
+
+        coEvery {
+            useCase.getRoomUseCase(any())
+        } returns Response(data = room)
+        viewModel.getRoom("")
 
         viewModel.onSelectedDate(selectedDate)
         viewModel.onStartTimeSelected(LocalTime.of(12, 0))
-        viewModel.onShowEndTimeRequest(room)
+        viewModel.onShowEndTimeRequest()
 
         val expected = listOf(
             LocalTime.of(12, 15),
@@ -205,16 +220,22 @@ class BookRoomViewModelTest {
     @Test
     fun `ensures getAvailableEndTimes works when there is no meeting`() {
         val selectedDate = LocalDate.of(2023, 5, 1)
-        val room = RoomUiState(
+        val room = Room(
             name = "Room 1",
             description = "Meeting Room",
             features = listOf("Projector", "Whiteboard"),
-            bookings = listOf()
+            bookings = listOf(),
+            ""
         )
+
+        coEvery {
+            useCase.getRoomUseCase(any())
+        } returns Response(data = room)
+        viewModel.getRoom("")
 
         viewModel.onSelectedDate(selectedDate)
         viewModel.onStartTimeSelected(LocalTime.of(15, 0))
-        viewModel.onShowEndTimeRequest(room)
+        viewModel.onShowEndTimeRequest()
 
         val expected = listOf(
             LocalTime.of(15, 15),
@@ -291,11 +312,11 @@ class BookRoomViewModelTest {
         )
 
         coEvery {
-            useCase.getBookableRoomUseCase(any())
+            useCase.getRoomUseCase(any())
         } returns Response(
             data = room
         )
-        viewModel.getBookableRoom("id")
+        viewModel.getRoom("id")
         advanceUntilIdle()
 
 
@@ -307,11 +328,11 @@ class BookRoomViewModelTest {
     fun `ensures getBookableRoom works when the result is Error`() = runTest {
         val error = UiText.StringResource(R.string.error_default_message)
         coEvery {
-            useCase.getBookableRoomUseCase(any())
+            useCase.getRoomUseCase(any())
         } returns Response(
             error = error
         )
-        viewModel.getBookableRoom("id")
+        viewModel.getRoom("id")
         advanceUntilIdle()
 
 
@@ -322,7 +343,7 @@ class BookRoomViewModelTest {
     @Test
     fun `ensures that isDateAvailable returns false when there is no slot available`() {
         val date = LocalDate.of(2023, 5, 1)
-        val room = RoomUiState(
+        val room = Room(
             name = "No Available Slots Room",
             description = "Meeting Room with No Available Slots",
             features = listOf("Projector", "Whiteboard"),
@@ -331,10 +352,15 @@ class BookRoomViewModelTest {
                 Booking(LocalTime.of(13, 0), LocalTime.of(15, 0), "", "id", emptyList(), "", date),
                 Booking(LocalTime.of(15, 12), LocalTime.of(16, 0), "", "id", emptyList(), "", date),
                 Booking(LocalTime.of(16, 7), LocalTime.of(18, 0), "", "id", emptyList(), "", date)
-            )
+            ),
+            ""
         )
+        coEvery {
+            useCase.getRoomUseCase(any())
+        } returns Response(data = room)
+        viewModel.getRoom("")
 
-        val isAvailable = viewModel.isDateAvailable(date, room)
+        val isAvailable = viewModel.isDateAvailable(date)
 
         assertTrue(!isAvailable)
     }
@@ -342,7 +368,7 @@ class BookRoomViewModelTest {
     @Test
     fun `ensures that isDateAvailable returns true when there is available slots`() {
         val date = LocalDate.of(2023, 5, 1)
-        val room = RoomUiState(
+        val room = Room(
             name = "No Available Slots Room",
             description = "Meeting Room with No Available Slots",
             features = listOf("Projector", "Whiteboard"),
@@ -351,10 +377,15 @@ class BookRoomViewModelTest {
                 Booking(LocalTime.of(13, 0), LocalTime.of(15, 0), "", "id", emptyList(), "", date),
                 Booking(LocalTime.of(15, 0), LocalTime.of(16, 0), "", "id", emptyList(), "", date),
                 Booking(LocalTime.of(16, 0), LocalTime.of(18, 0), "", "id", emptyList(), "", date)
-            )
+            ),
+            ""
         )
+        coEvery {
+            useCase.getRoomUseCase(any())
+        } returns Response(data = room)
+        viewModel.getRoom("")
 
-        val isAvailable = viewModel.isDateAvailable(date, room)
+        val isAvailable = viewModel.isDateAvailable(date)
 
         assertTrue(isAvailable)
     }
@@ -362,7 +393,7 @@ class BookRoomViewModelTest {
     @Test
     fun `ensures that isDateAvailable returns true when there is available slots after the last booking`() {
         val date = LocalDate.of(2023, 5, 1)
-        val room = RoomUiState(
+        val room = Room(
             name = "No Available Slots Room",
             description = "Meeting Room with No Available Slots",
             features = listOf("Projector", "Whiteboard"),
@@ -371,10 +402,15 @@ class BookRoomViewModelTest {
                 Booking(LocalTime.of(13, 0), LocalTime.of(15, 0), "", "id", emptyList(), "", date),
                 Booking(LocalTime.of(15, 0), LocalTime.of(16, 0), "", "id", emptyList(), "", date),
                 Booking(LocalTime.of(16, 0), LocalTime.of(17, 45), "", "id", emptyList(), "", date)
-            )
+            ),
+            ""
         )
+        coEvery {
+            useCase.getRoomUseCase(any())
+        } returns Response(data = room)
+        viewModel.getRoom("")
 
-        val isAvailable = viewModel.isDateAvailable(date, room)
+        val isAvailable = viewModel.isDateAvailable(date)
 
         assertTrue(isAvailable)
     }
@@ -382,14 +418,19 @@ class BookRoomViewModelTest {
     @Test
     fun `ensures that isDateAvailable returns true when there is no booking`() {
         val date = LocalDate.of(2023, 5, 1)
-        val room = RoomUiState(
+        val room = Room(
             name = "No Available Slots Room",
             description = "Meeting Room with No Available Slots",
             features = listOf("Projector", "Whiteboard"),
-            bookings = listOf()
+            bookings = listOf(),
+            ""
         )
+        coEvery {
+            useCase.getRoomUseCase(any())
+        } returns Response(data = room)
+        viewModel.getRoom("")
 
-        val isAvailable = viewModel.isDateAvailable(date, room)
+        val isAvailable = viewModel.isDateAvailable(date)
 
         assertTrue(isAvailable)
     }
@@ -444,10 +485,10 @@ class BookRoomViewModelTest {
     @Test
     fun `ensures onBook works when every need parameter is provided`() {
         every {
-            useCase.validateEmail(any())
+            useCase.validateEmailUseCase(any())
         } returns null
         coEvery {
-            useCase.bookRoom(any())
+            useCase.bookRoomUseCase(any())
         } returns null
         viewModel.onAttendeeNewValue("test")
         viewModel.onSelectedDate(LocalDate.now())
@@ -465,10 +506,10 @@ class BookRoomViewModelTest {
     fun `ensures onBook triggers an error when attendees are not email type`() {
         val error = UiText.StringResource(R.string.error_email_not_valid)
         every {
-            useCase.validateEmail(any())
+            useCase.validateEmailUseCase(any())
         } returns error
         coEvery {
-            useCase.bookRoom(any())
+            useCase.bookRoomUseCase(any())
         } returns null
         viewModel.onAttendeeNewValue("test")
         viewModel.onAddAttendee()
@@ -486,10 +527,10 @@ class BookRoomViewModelTest {
     fun `ensures onBook triggers an error when startTime is not set`() {
         val error = UiText.StringResource(com.amalitech.ui.room.R.string.error_provide_start_time)
         every {
-            useCase.validateEmail(any())
+            useCase.validateEmailUseCase(any())
         } returns null
         coEvery {
-            useCase.bookRoom(any())
+            useCase.bookRoomUseCase(any())
         } returns null
         viewModel.onAttendeeNewValue("test")
         viewModel.onSelectedDate(LocalDate.now())
@@ -506,10 +547,10 @@ class BookRoomViewModelTest {
     fun `ensures onBook triggers an error when endTime is not set`() {
         val error = UiText.StringResource(com.amalitech.ui.room.R.string.error_provide_an_end_time)
         every {
-            useCase.validateEmail(any())
+            useCase.validateEmailUseCase(any())
         } returns null
         coEvery {
-            useCase.bookRoom(any())
+            useCase.bookRoomUseCase(any())
         } returns null
         viewModel.onAttendeeNewValue("test")
         viewModel.onAddAttendee()
@@ -526,10 +567,10 @@ class BookRoomViewModelTest {
     fun `ensures onBook triggers an error when date is not set`() {
         val error = UiText.StringResource(com.amalitech.ui.room.R.string.error_provide_date_for_the_meeting)
         every {
-            useCase.validateEmail(any())
+            useCase.validateEmailUseCase(any())
         } returns null
         coEvery {
-            useCase.bookRoom(any())
+            useCase.bookRoomUseCase(any())
         } returns null
         viewModel.onAttendeeNewValue("test")
         viewModel.onAddAttendee()
@@ -546,10 +587,10 @@ class BookRoomViewModelTest {
     fun `ensures onBook triggers an error when there is no attendee`() {
         val error = UiText.StringResource(com.amalitech.ui.room.R.string.error_no_attendee_added)
         every {
-            useCase.validateEmail(any())
+            useCase.validateEmailUseCase(any())
         } returns null
         coEvery {
-            useCase.bookRoom(any())
+            useCase.bookRoomUseCase(any())
         } returns null
         viewModel.onNewStartTime(LocalTime.now())
         viewModel.onNewEndTime(LocalTime.now())

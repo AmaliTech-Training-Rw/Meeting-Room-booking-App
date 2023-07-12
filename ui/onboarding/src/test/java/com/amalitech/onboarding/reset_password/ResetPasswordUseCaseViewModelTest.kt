@@ -17,18 +17,18 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ResetPasswordViewModelTest {
+class ResetPasswordUseCaseViewModelTest {
     private lateinit var viewModel: ResetPasswordViewModel
 
     @MockK
-    private lateinit var resetPasswordUseCase: ResetPasswordUseCase
+    private lateinit var resetPasswordUseCasesWrapper: ResetPasswordUseCasesWrapper
 
     @Before
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        resetPasswordUseCase = mockk()
+        resetPasswordUseCasesWrapper = mockk()
         viewModel = ResetPasswordViewModel(
-            resetPasswordUseCase
+            resetPasswordUseCasesWrapper
         )
     }
 
@@ -55,7 +55,7 @@ class ResetPasswordViewModelTest {
         val confirmationPassword = "password"
 
         every {
-            resetPasswordUseCase.checkPasswordsMatch(any(), any())
+            resetPasswordUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns null
 
         // WHEN - onResetPassword is called
@@ -72,7 +72,7 @@ class ResetPasswordViewModelTest {
         val confirmationPassword = "password"
         val password = "different"
         every {
-            resetPasswordUseCase.checkPasswordsMatch(any(), any())
+            resetPasswordUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns UiText.StringResource(R.string.error_passwords_dont_match)
 
         // WHEN - onNewPassword and onNewPasswordConfirmation are called
@@ -91,14 +91,11 @@ class ResetPasswordViewModelTest {
     @Test
     fun `when onResetPassword is called and there is no errors, state is updated`() {
         every {
-            resetPasswordUseCase.resetPassword(any(), any())
-        } returns null
-        every {
-            resetPasswordUseCase.validatePassword(any())
+            resetPasswordUseCasesWrapper.resetPasswordUseCase(any(), any())
         } returns null
 
         every {
-            resetPasswordUseCase.checkPasswordsMatch(any(), any())
+            resetPasswordUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns null
 
         viewModel.onResetPassword()
@@ -111,42 +108,12 @@ class ResetPasswordViewModelTest {
     fun `when onResetPassword is called with errors, state is updated`() {
         // GIVEN - a mock authentication use case that assume reset password fails
         every {
-            resetPasswordUseCase.resetPassword(any(), any())
+            resetPasswordUseCasesWrapper.resetPasswordUseCase(any(), any())
         } returns null
 
         every {
-            resetPasswordUseCase.validatePassword(any())
-        } returns null
-
-        every {
-            resetPasswordUseCase.checkPasswordsMatch(any(), any())
+            resetPasswordUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns UiText.StringResource(R.string.error_passwords_dont_match)
-
-        // WHEN - onResetPassword is called
-        viewModel.onResetPassword()
-
-        // THEN - state is updated with the corresponding error
-        val state = viewModel.uiStateFlow
-        assertTrue(state.value is UiState.Error)
-        assertEquals(
-            UiText.StringResource(R.string.error_passwords_dont_match),
-            (state.value as UiState.Error).error
-        )
-    }
-
-    @Test
-    fun `when onResetPassword is called with an invalid password, state is updated`() {
-        // GIVEN - a mock authentication use case that assume reset password fails
-        every {
-            resetPasswordUseCase.resetPassword(any(), any())
-        } returns null
-        every {
-            resetPasswordUseCase.validatePassword(any())
-        } returns UiText.StringResource(R.string.error_passwords_dont_match)
-
-        every {
-            resetPasswordUseCase.checkPasswordsMatch(any(), any())
-        } returns null
 
         // WHEN - onResetPassword is called
         viewModel.onResetPassword()

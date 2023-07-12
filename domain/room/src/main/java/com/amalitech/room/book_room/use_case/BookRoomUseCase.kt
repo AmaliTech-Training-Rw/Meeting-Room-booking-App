@@ -1,9 +1,12 @@
 package com.amalitech.room.book_room.use_case
 
-import com.amalitech.core.domain.use_case.ValidateEmail
+import com.amalitech.core.domain.model.Booking
+import com.amalitech.core.util.UiText
+import kotlinx.coroutines.delay
 
-data class BookRoomUseCase(
-    val getBookableRoomUseCase: com.amalitech.room.book_room.use_case.GetBookableRoomUseCase,
-    val validateEmail: ValidateEmail,
-    val bookRoom: com.amalitech.room.book_room.use_case.BookRoom
-)
+class BookRoomUseCase {
+    suspend operator fun invoke(booking: Booking): UiText? {
+        delay(2000)
+        return null
+    }
+}

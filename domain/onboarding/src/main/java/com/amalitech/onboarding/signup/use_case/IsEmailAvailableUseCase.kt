@@ -1,6 +1,6 @@
 package com.amalitech.onboarding.signup.use_case
 
-class IsEmailAvailable {
+class IsEmailAvailableUseCase {
     operator fun invoke(email: String): Boolean {
         // TODO("CHECK WITH THE API IF THE Email IS AVAILABLE")
         return true

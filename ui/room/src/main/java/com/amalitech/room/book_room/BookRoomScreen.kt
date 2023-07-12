@@ -62,7 +62,6 @@ import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.NoRippleTheme
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.core_ui.util.formatTime
-import com.amalitech.ui.room.R
 import com.amalitech.room.book_room.components.AttendeeItem
 import com.amalitech.room.book_room.components.BookRoomTitle
 import com.amalitech.room.book_room.components.FeatureItem
@@ -70,6 +69,7 @@ import com.amalitech.room.book_room.components.SelectDateBox
 import com.amalitech.room.book_room.components.TimeSelector
 import com.amalitech.room.book_room.util.NavArguments
 import com.amalitech.room.book_room.util.formatDate
+import com.amalitech.ui.room.R
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -101,7 +101,7 @@ fun BookRoomScreen(
     val availableEndTime = slotSelectionManager.availableEndTimes
 
     LaunchedEffect(key1 = true) {
-        viewModel.getBookableRoom(roomId ?: "")
+        viewModel.getRoom(roomId ?: "")
     }
 
     LaunchedEffect(key1 = uiState) {
@@ -153,15 +153,13 @@ fun BookRoomScreen(
                         Text(text = room.description)
                         SlotSelectionSection(
                             viewModel = viewModel,
-                            roomUiState = room,
                             userInput = userInput,
-                            onSelectEndTimeClick = {
-                                viewModel.onShowEndTimeRequest(room)
-                            },
                             onSelectStartTimeClick = {
-                                viewModel.onShowStartTimesRequest(room)
+                                viewModel.onShowStartTimesRequest()
                             }
-                        )
+                        ) {
+                            viewModel.onShowEndTimeRequest()
+                        }
                         Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
                         FeatureSection(
                             roomUiState = room
@@ -222,7 +220,6 @@ fun BookRoomScreen(
 @Composable
 fun SlotSelectionSection(
     viewModel: BookRoomViewModel,
-    roomUiState: RoomUiState,
     userInput: BookRoomUserInput,
     onSelectStartTimeClick: (isSelecting: Boolean) -> Unit,
     onSelectEndTimeClick: (isSelecting: Boolean) -> Unit,
@@ -242,7 +239,6 @@ fun SlotSelectionSection(
             allowedDateValidator = { date ->
                 viewModel.isDateAvailable(
                     date,
-                    roomUiState
                 ) && LocalDate.now() <= date
             },
             initialDate = userInput.date ?: LocalDate.now()

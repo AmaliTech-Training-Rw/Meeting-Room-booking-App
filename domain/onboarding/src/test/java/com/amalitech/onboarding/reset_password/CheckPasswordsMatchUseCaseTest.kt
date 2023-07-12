@@ -5,8 +5,8 @@ import com.amalitech.core.util.UiText
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class CheckPasswordsMatchTest {
-    private val checkPasswordsMatch = CheckPasswordsMatch()
+class CheckPasswordsMatchUseCaseTest {
+    private val checkPasswordsMatchUseCase = CheckPasswordsMatchUseCase()
 
     @Test
     fun checkPasswordMatch_samePasswords_returnNull() {
@@ -15,7 +15,7 @@ class CheckPasswordsMatchTest {
         val newPasswordConfirmation = "password"
 
         // WHEN - Check passwordsMatch is called with the given passwords
-        val result = checkPasswordsMatch(newPassword, newPasswordConfirmation)
+        val result = checkPasswordsMatchUseCase(newPassword, newPasswordConfirmation)
 
         // THEN - The result is null
         assertEquals(null, result)
@@ -28,7 +28,7 @@ class CheckPasswordsMatchTest {
         val newPasswordConfirmation = ""
 
         // WHEN - Check passwordsMatch is called with the given passwords
-        val result = checkPasswordsMatch(newPassword, newPasswordConfirmation)
+        val result = checkPasswordsMatchUseCase(newPassword, newPasswordConfirmation)
 
         // THEN - The result is an instance of UiText
         assertEquals(UiText.StringResource(R.string.error_passwords_dont_match), result)
@@ -42,7 +42,7 @@ class CheckPasswordsMatchTest {
         val newPasswordConfirmation = "confirmation"
 
         // WHEN - Check passwordsMatch is called with the given passwords
-        val result = checkPasswordsMatch(newPassword, newPasswordConfirmation)
+        val result = checkPasswordsMatchUseCase(newPassword, newPasswordConfirmation)
 
         // THEN - The result is an instance of UiText
         assertEquals(UiText.StringResource(R.string.error_passwords_dont_match), result)

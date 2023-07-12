@@ -2,7 +2,7 @@ package com.amalitech.onboarding.login
 
 import com.amalitech.core.R
 import com.amalitech.core.util.UiText
-import com.amalitech.onboarding.login.use_case.ValidatePassword
+import com.amalitech.onboarding.login.use_case.ValidatePasswordUseCase
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -10,13 +10,13 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
-class ValidatePasswordTest {
+class ValidatePasswordUseCaseTest {
 
-    private lateinit var validatePassword: ValidatePassword
+    private lateinit var validatePasswordUseCase: ValidatePasswordUseCase
 
     @Before
     fun setUp() {
-        validatePassword = ValidatePassword()
+        validatePasswordUseCase = ValidatePasswordUseCase()
     }
 
     @Test
@@ -25,7 +25,7 @@ class ValidatePasswordTest {
         val password = ""
 
         // WHEN - validate password is called
-        val result = validatePassword(password)
+        val result = validatePasswordUseCase(password)
 
         // THEN - the result is a UiText instance
         val expectedResult = UiText.StringResource(R.string.error_password_is_not_valid)
@@ -37,7 +37,7 @@ class ValidatePasswordTest {
         val password = "ndojv"
 
         // WHEN - validate password is called
-        val result = validatePassword(password)
+        val result = validatePasswordUseCase(password)
 
         // THEN - the result is a UiText instance
         val expectedResult = UiText.StringResource(R.string.error_password_is_not_valid)
@@ -49,7 +49,7 @@ class ValidatePasswordTest {
         val password = "Mdjnkvvrvo14"
 
         // WHEN - validate password is called
-        val result = validatePassword(password)
+        val result = validatePasswordUseCase(password)
 
         // THEN - the result is a UiText instance
         val expectedResult = UiText.StringResource(R.string.error_password_is_not_valid)
@@ -61,7 +61,7 @@ class ValidatePasswordTest {
         val password = "Mdjnkvvrvo$"
 
         // WHEN - validate password is called
-        val result = validatePassword(password)
+        val result = validatePasswordUseCase(password)
 
         // THEN - the result is a UiText instance
         val expectedResult = UiText.StringResource(R.string.error_password_is_not_valid)
@@ -73,7 +73,7 @@ class ValidatePasswordTest {
         val password = "djnkvvrvo$11"
 
         // WHEN - validate password is called
-        val result = validatePassword(password)
+        val result = validatePasswordUseCase(password)
 
         // THEN - the result is a UiText instance
         val expectedResult = UiText.StringResource(R.string.error_password_is_not_valid)
@@ -85,7 +85,7 @@ class ValidatePasswordTest {
         val password = "DKBTROT$11"
 
         // WHEN - validate password is called
-        val result = validatePassword(password)
+        val result = validatePasswordUseCase(password)
 
         // THEN - the result is a UiText instance
         val expectedResult = UiText.StringResource(R.string.error_password_is_not_valid)
@@ -99,7 +99,7 @@ class ValidatePasswordTest {
         val password = "Mjuofud@\$VR44"
 
         // WHEN - validate password is called
-        val result = validatePassword(password)
+        val result = validatePasswordUseCase(password)
 
         // THEN - the result is null
         assertEquals(null, result)

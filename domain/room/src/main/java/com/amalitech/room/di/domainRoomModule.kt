@@ -1,20 +1,20 @@
 package com.amalitech.room.di
 
-import com.amalitech.room.book_room.use_case.BookRoom
 import com.amalitech.room.book_room.use_case.BookRoomUseCase
-import com.amalitech.room.book_room.use_case.GetBookableRoomUseCase
+import com.amalitech.room.book_room.use_case.BookRoomUseCasesWrapper
+import com.amalitech.room.book_room.use_case.GetRoomUseCase
 import org.koin.dsl.module
 
 val domainRoomModule = module {
     single {
-        com.amalitech.room.book_room.use_case.GetBookableRoomUseCase()
+        GetRoomUseCase()
     }
 
     single {
-        com.amalitech.room.book_room.use_case.BookRoom()
+        BookRoomUseCase()
     }
 
     single {
-        com.amalitech.room.book_room.use_case.BookRoomUseCase(get(), get(), get())
+        BookRoomUseCasesWrapper(get(), get(), get())
     }
 }

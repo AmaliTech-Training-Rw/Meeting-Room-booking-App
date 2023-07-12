@@ -3,7 +3,7 @@ package com.amalitech.onboarding.signup.use_case
 import com.amalitech.core.util.UiText
 import com.amalitech.core.R
 
-class CheckValuesNotBlank {
+class CheckValuesNotBlankUseCase {
 
     operator fun invoke(vararg value: String): UiText? {
         value.forEach { string ->

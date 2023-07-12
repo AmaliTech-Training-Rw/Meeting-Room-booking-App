@@ -4,7 +4,7 @@ import com.amalitech.core.util.UiText
 import com.amalitech.core.R
 
 
-class ValidatePassword {
+class ValidatePasswordUseCase {
     /**
      * Validates the password by checking if it's not blank
      * @param password The password that needs to be validated

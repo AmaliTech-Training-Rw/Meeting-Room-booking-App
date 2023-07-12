@@ -2,7 +2,7 @@ package com.amalitech.onboarding.forgot_password.use_case
 
 import com.amalitech.core.util.UiText
 
-class SendResetLink {
+class SendResetLinkUseCase {
 
     /**
      * Sends a reset link to the provided email address

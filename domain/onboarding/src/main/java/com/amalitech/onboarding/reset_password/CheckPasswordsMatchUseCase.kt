@@ -1,9 +1,8 @@
 package com.amalitech.onboarding.reset_password
 
 import com.amalitech.core.util.UiText
-import com.amalitech.domain.onboarding.R
 
-class CheckPasswordsMatch {
+class CheckPasswordsMatchUseCase {
 
     /**
      * Checks if two passwords match

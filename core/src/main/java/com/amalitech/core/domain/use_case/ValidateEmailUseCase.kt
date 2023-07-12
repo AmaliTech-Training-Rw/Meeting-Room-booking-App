@@ -5,7 +5,7 @@ import androidx.annotation.VisibleForTesting
 import com.amalitech.core.R
 import com.amalitech.core.util.UiText
 
-class ValidateEmail {
+class ValidateEmailUseCase {
     /**
      * Validates email by checking if it's not blank and has an email form
      * @param email The email address that needs to be validated

@@ -3,7 +3,7 @@ package com.amalitech.onboarding.signup.use_case
 import com.amalitech.core.util.ApiResult
 import kotlinx.coroutines.delay
 
-class FetchOrganizationsType {
+class FetchOrganizationsTypeUseCase {
 
 
     suspend operator fun invoke(): ApiResult<List<String>> {

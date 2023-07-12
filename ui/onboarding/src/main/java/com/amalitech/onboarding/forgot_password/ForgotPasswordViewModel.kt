@@ -3,14 +3,14 @@ package com.amalitech.onboarding.forgot_password
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.core_ui.util.BaseViewModel
-import com.amalitech.onboarding.forgot_password.use_case.ForgotPasswordUseCase
+import com.amalitech.onboarding.forgot_password.use_case.ForgotPasswordUseCasesWrapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ForgotPasswordViewModel(
-    private val forgotPasswordUseCase: ForgotPasswordUseCase
+    private val forgotPasswordUseCasesWrapper: ForgotPasswordUseCasesWrapper
 ) : BaseViewModel<ForgotPasswordUiState>() {
     private val _uiState = MutableStateFlow(ForgotPasswordUiState())
     val uiState = _uiState.asStateFlow()
@@ -44,10 +44,10 @@ class ForgotPasswordViewModel(
             _uiStateFlow.update {
                 UiState.Loading()
             }
-            val emailValidation = forgotPasswordUseCase.validateEmail(_uiState.value.email)
+            val emailValidation = forgotPasswordUseCasesWrapper.validateEmailUseCase(_uiState.value.email)
 
             if (emailValidation == null) {
-                val apiResult = forgotPasswordUseCase.sendResetLink(_uiState.value.email)
+                val apiResult = forgotPasswordUseCasesWrapper.sendResetLinkUseCase(_uiState.value.email)
                 if (apiResult == null) {
                     _uiStateFlow.update {
                         UiState.Success()

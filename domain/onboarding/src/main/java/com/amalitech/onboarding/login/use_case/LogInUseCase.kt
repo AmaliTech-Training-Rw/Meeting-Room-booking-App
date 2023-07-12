@@ -2,7 +2,7 @@ package com.amalitech.onboarding.login.use_case
 
 import com.amalitech.core.util.UiText
 
-class LogIn {
+class LogInUseCase {
     /**
      * Log the user into their account by making an API call
      * using the provided credentials
