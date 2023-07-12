@@ -21,6 +21,7 @@ class BookingViewModel(
     init {
         fetchBookings()
     }
+
     fun fetchBookings(ended: Boolean = false) {
         if (job?.isActive == true)
             job?.cancel()
@@ -29,10 +30,11 @@ class BookingViewModel(
                 UiState.Loading()
             }
             val response = useCase.getBookingsUseCase(ended)
+            val data = response.data
 
-            if (response.data != null) {
+            if (data != null) {
                 _uiStateFlow.update {
-                    UiState.Success(data = BookingUiState(response.data!!))
+                    UiState.Success(data = BookingUiState(data))
                 }
             } else if (response.error != null) {
                 _uiStateFlow.update {

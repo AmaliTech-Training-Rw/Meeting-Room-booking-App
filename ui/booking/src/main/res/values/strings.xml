@@ -2,4 +2,5 @@
 <resources>
     <string name="booking_date">Date: %s</string>
     <string name="booking_start_end_time">Start: %s - End: %s</string>
+    <string name="no_item_found">No item found</string>
 </resources>
