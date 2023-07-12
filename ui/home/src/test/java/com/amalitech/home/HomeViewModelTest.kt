@@ -1,7 +1,7 @@
 package com.amalitech.home
 
 import com.amalitech.core_ui.util.UiState
-import com.amalitech.home.components.HomeTab
+import com.amalitech.core_ui.components.Tab
 import com.amalitech.home.model.Booking
 import com.amalitech.home.use_case.HomeUseCase
 import com.amalitech.home.util.Response
@@ -100,7 +100,7 @@ class HomeViewModelTest {
 
     @Test
     fun `ensures onSelectedTabChange works`() {
-        val tab = HomeTab.createHomeTabsList().random()
+        val tab = Tab.createHomeTabsList().random()
 
         viewModel.onSelectedTabChange(tab)
         assertEquals(tab, viewModel.uiState.value.selectedTab)
