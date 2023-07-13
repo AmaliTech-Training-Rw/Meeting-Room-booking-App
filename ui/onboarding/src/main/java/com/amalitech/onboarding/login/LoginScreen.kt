@@ -160,7 +160,7 @@ fun LoginScreen(
                     Text(
                         text = stringResource(R.string.question_forgot_password),
                         textAlign = TextAlign.Right,
-                        color = MaterialTheme.colorScheme.outline,
+                        color = MaterialTheme.colorScheme.inverseOnSurface,
                         modifier = Modifier.clickable {
                             onNavigateToForgotPassword()
                         }
@@ -188,7 +188,7 @@ fun LoginScreen(
                 )
                 withStyle(
                     style = SpanStyle(
-                        color = MaterialTheme.colorScheme.outline,
+                        color = MaterialTheme.colorScheme.inverseOnSurface,
                     )
                 ) {
                     append(stringResource(id = R.string.sign_up))

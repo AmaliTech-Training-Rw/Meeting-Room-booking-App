@@ -69,7 +69,7 @@ fun SignupScreen(
     val invitedUser = viewModel.isInvitedUser(email, organizationName, location, typeOfOrganization)
     val spacing = LocalSpacing.current
     val context = LocalContext.current
-    val snackbarHostState = remember {
+    val hostState = remember {
         SnackbarHostState()
     }
     var isDropDownExpanded by rememberSaveable {
@@ -102,7 +102,7 @@ fun SignupScreen(
             is UiState.Error -> {
                 showSnackBar(
                     snackBarValue = (uiState as UiState.Error<SignupUiState>).error,
-                    snackbarHostState = snackbarHostState,
+                    snackbarHostState = hostState,
                     context = context
                 ) {
                     viewModel.onSnackBarShown()
@@ -114,7 +114,7 @@ fun SignupScreen(
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(hostState) }
     ) { padding ->
         Column(
             modifier = modifier
@@ -205,12 +205,14 @@ fun SignupScreen(
                     modifier = Modifier.fillMaxWidth(),
                 )
             } else {
-                viewModel.submitValues(
-                    organizationName!!,
-                    typeOfOrganization!!,
-                    location!!,
-                    email!!
-                )
+                if (organizationName != null && typeOfOrganization != null && location != null && email != null) {
+                    viewModel.submitValues(
+                        organizationName,
+                        typeOfOrganization,
+                        location,
+                        email
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(spacing.spaceSmall))
             AuthenticationTextField(
@@ -263,7 +265,7 @@ fun SignupScreen(
                     )
                     withStyle(
                         style = SpanStyle(
-                            color = MaterialTheme.colorScheme.outline,
+                            color = MaterialTheme.colorScheme.inverseOnSurface,
                         )
                     ) {
                         append(stringResource(id = R.string.log_in))

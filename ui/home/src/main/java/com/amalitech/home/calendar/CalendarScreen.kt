@@ -54,9 +54,11 @@ fun CalendarScreen(
     selectedDayContentColor: Color = MaterialTheme.colorScheme.onPrimary,
     selectedDayBackgroundColor: Color = MaterialTheme.colorScheme.primary,
     bookingsTitleBackgroundColor: Color = MaterialTheme.colorScheme.tertiary,
-    bookingsTitleContentColor: Color = MaterialTheme.colorScheme.onTertiary,
-    bookingsContentColor: Color = MaterialTheme.colorScheme.surfaceVariant,
-    bookingsContentBackgroundColor: Color = MaterialTheme.colorScheme.onSurfaceVariant
+    bookingsTitleContentColor: Color = MaterialTheme.colorScheme.scrim,
+    bookingsContentColor: Color = MaterialTheme.colorScheme.scrim,
+    buttonBackgroundColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    bookingsContentBackgroundColor: Color = MaterialTheme.colorScheme.surface,
+    dotsContentColor: Color = MaterialTheme.colorScheme.outline
 ) {
     val uiState = viewModel.uiState.value
     val currentMonth = uiState.currentMonth
@@ -88,8 +90,7 @@ fun CalendarScreen(
         snapshotFlow { calendarState.layoutInfo.completelyVisibleMonths.firstOrNull() }
             .filterNotNull()
             .collect { month ->
-                if (visibleMonth != month)
-                {
+                if (visibleMonth != month) {
                     visibleMonth = month
                     viewModel.onCurrentDayChange(null)
                 }
@@ -129,7 +130,7 @@ fun CalendarScreen(
                 },
                 backgroundColor = MaterialTheme.colorScheme.background,
                 contentColor = onToolBarColor,
-                buttonBackgroundColor = bookingsContentBackgroundColor,
+                buttonBackgroundColor = buttonBackgroundColor,
                 buttonContentColor = bookingsContentColor
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
@@ -144,7 +145,7 @@ fun CalendarScreen(
                 state = calendarState,
                 dayContent = { day ->
                     val colors = if (day.position == DayPosition.MonthDate) {
-                        bookings[day.date].orEmpty().map { MaterialTheme.colorScheme.tertiary }
+                        bookings[day.date].orEmpty().map { dotsContentColor }
                     } else {
                         emptyList()
                     }
