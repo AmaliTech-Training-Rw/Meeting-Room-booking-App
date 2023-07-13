@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -34,14 +35,17 @@ fun DebugScreen(onNavigate: (NavigationTarget) -> Unit) {
             NavigationTarget.SIGNUP,
         )
 
-    LazyColumn(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         items(actionButtons) { navigationTarget ->
             Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Center) {
                 DefaultButton(
                     modifier = Modifier.align(CenterVertically),
                     text = navigationTarget.route,
+                    textColor = MaterialTheme.colorScheme.onTertiaryContainer,
                     onClick = { onNavigate.invoke(navigationTarget) })
 
             }
