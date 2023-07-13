@@ -5,10 +5,12 @@ object Modules {
 
     const val data = ":data"
     const val dataOnboarding = ":data:onboarding"
+    const val dataUser = ":data:user"
 
     const val domain = ":domain"
     const val domainOnboarding = ":domain:onboarding"
     const val domainHome = ":domain:home"
+    const val domainUser = ":domain:user"
 
     const val ui = ":ui"
     const val uiOnboarding = ":ui:onboarding"

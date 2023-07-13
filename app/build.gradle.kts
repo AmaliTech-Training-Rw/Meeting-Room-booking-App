@@ -99,7 +99,9 @@ dependencies {
     implementation(project(Modules.core))
 
     implementation(project(Modules.dataOnboarding))
+    implementation(project(Modules.dataUser))
     implementation(project(Modules.domainOnboarding))
+    implementation(project(Modules.domainUser))
     implementation(project(Modules.uiOnboarding))
     implementation(project(Modules.coreUI))
 
