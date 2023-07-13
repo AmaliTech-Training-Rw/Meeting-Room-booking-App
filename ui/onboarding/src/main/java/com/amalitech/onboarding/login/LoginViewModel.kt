@@ -1,5 +1,7 @@
 package com.amalitech.onboarding.login
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
@@ -18,6 +20,8 @@ class LoginViewModel(
         LoginUiState()
     )
     val uiState = _uiState.asStateFlow()
+    private val _isAdmin = mutableStateOf(false)
+    val isAdmin: State<Boolean> get() = _isAdmin
 
     /**
      * onNewEmail - trims and adds value of email entered by the user in our state
@@ -74,9 +78,9 @@ class LoginViewModel(
                         )
                     }
                 } else {
-                    val isAdmin = loginUseCase.isUserAdmin()
+                    _isAdmin.value = loginUseCase.isUserAdmin()
                     sharedPreferences.saveShouldShowOnboarding(false)
-                    sharedPreferences.saveUserType(isAdmin)
+                    sharedPreferences.saveUserType(_isAdmin.value)
                     _uiStateFlow.update {
                         UiState.Success()
                     }

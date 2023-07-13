@@ -36,7 +36,6 @@ import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
-import com.amalitech.core_ui.ui.BookMeetingRoomApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -44,11 +43,7 @@ import kotlinx.coroutines.launch
 fun BookMeetingRoomDrawer(
     appState: BookMeetingRoomAppState,
     onClick: (screen: NavigationItem) -> Unit,
-    searchQuery: String? = null,
-    onSearchQueryChange: ((query: String) -> Unit)? = null,
-    onSearchClick: (() -> Unit)? = null,
-    isSearchTextFieldVisible: Boolean = false,
-    onSearchTextFieldVisibilityChange: ((Boolean) -> Unit)? = null
+    content: @Composable () -> Unit
 ) {
     val selectedItem = remember { mutableStateOf(NavigationItem.Home.title) }
 
@@ -69,15 +64,7 @@ fun BookMeetingRoomDrawer(
             }
         },
         content = {
-            BookMeetingRoomApp(
-                appState = appState,
-                title = selectedItem.value,
-                searchQuery = searchQuery,
-                onSearchQueryChange = onSearchQueryChange,
-                onSearchClick = onSearchClick,
-                isSearchTextFieldVisible = isSearchTextFieldVisible,
-                onSearchTextFieldVisibilityChange = onSearchTextFieldVisibilityChange
-            )
+            content()
         }
     )
 }
@@ -156,6 +143,7 @@ fun BookMeetingRoomDrawerPreview() {
     BookMeetingRoomTheme {
         BookMeetingRoomDrawer(
             appState,
-            {})
+            {}
+        ) {}
     }
 }
