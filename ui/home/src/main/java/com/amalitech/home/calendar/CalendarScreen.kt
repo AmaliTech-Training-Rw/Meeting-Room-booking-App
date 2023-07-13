@@ -54,7 +54,7 @@ fun CalendarScreen(
     selectedDayContentColor: Color = MaterialTheme.colorScheme.onPrimary,
     selectedDayBackgroundColor: Color = MaterialTheme.colorScheme.primary,
     bookingsTitleBackgroundColor: Color = MaterialTheme.colorScheme.tertiary,
-    bookingsTitleContentColor: Color = MaterialTheme.colorScheme.scrim,
+    bookingsTitleContentColor: Color = MaterialTheme.colorScheme.onTertiaryContainer,
     bookingsContentColor: Color = MaterialTheme.colorScheme.scrim,
     buttonBackgroundColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     bookingsContentBackgroundColor: Color = MaterialTheme.colorScheme.surface,

@@ -28,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -62,7 +61,7 @@ fun LoginScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val spacing = LocalSpacing.current
     val context = LocalContext.current
-    val snackbarHostState = remember {
+    val snackBarHostState = remember {
         SnackbarHostState()
     }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -81,7 +80,7 @@ fun LoginScreen(
             is UiState.Error -> {
                 showSnackBar(
                     snackBarValue = (baseResult as UiState.Error<LoginUiState>).error,
-                    snackbarHostState = snackbarHostState,
+                    snackbarHostState = snackBarHostState,
                     context = context
                 ) {
                     viewModel.onSnackBarShown()
@@ -93,7 +92,7 @@ fun LoginScreen(
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(snackBarHostState) }
     ) { padding ->
         Box(
             modifier = Modifier
@@ -178,7 +177,7 @@ fun LoginScreen(
                 )
             }
             val text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = Color.Black)) {
+                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.scrim)) {
                     append(stringResource(id = R.string.question_dont_have_account))
                     append(" ")
                 }

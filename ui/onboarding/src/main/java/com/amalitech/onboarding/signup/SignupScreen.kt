@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -255,7 +254,7 @@ fun SignupScreen(
             if (!invitedUser) {
                 Spacer(modifier = Modifier.height(spacing.spaceSmall))
                 val text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = Color.Black)) {
+                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.scrim)) {
                         append(stringResource(id = R.string.question_already_have_an_account))
                         append(" ")
                     }

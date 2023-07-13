@@ -136,7 +136,7 @@ fun DrawerHeader() {
                 .clip(CircleShape)
         )
         Spacer(Modifier.height(12.dp))
-        Text("Firstname   Lastname")
+        Text("Firstname   Lastname", color = MaterialTheme.colorScheme.scrim)
         Spacer(Modifier.height(12.dp))
         Divider(
             modifier = Modifier
