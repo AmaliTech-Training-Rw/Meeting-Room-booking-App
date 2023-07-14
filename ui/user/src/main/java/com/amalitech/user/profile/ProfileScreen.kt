@@ -129,8 +129,8 @@ fun ProfileScreen(
                         Switch(
                             checked = isUsingAdminDashboard,
                             onCheckedChange = {
-                                viewModel.updateAdminUserScreen(!isUsingAdminDashboard)
                                 onToggleButtonClick(!isUsingAdminDashboard)
+                                viewModel.updateAdminUserScreen(!isUsingAdminDashboard)
                             }
                         )
                     }

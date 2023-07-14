@@ -2,16 +2,16 @@ package com.amalitech.onboarding.splash_screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.onboarding.components.SplashAnimation
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SplashScreen(
-    onNavigate: (isUserAdmin: Boolean) -> Unit,
+    onNavigate: (goToAdmin: Boolean) -> Unit,
     viewModel: SplashScreenViewModel = koinViewModel()
 ) {
     var isAnimationVisible by remember {
@@ -23,7 +23,7 @@ fun SplashScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     SplashAnimation(
-        onNavigate = { onNavigate(state.isUserAdmin) },
+        onNavigate = { onNavigate(state.isUsingAdminDashboard) },
         canShowFadeoutAnim = canShowFadeOutAnim,
         onVisibilityChange = {
             isAnimationVisible = it

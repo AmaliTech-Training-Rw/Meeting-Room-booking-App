@@ -45,15 +45,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core.R
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
-import com.amalitech.onboarding.components.AuthenticationTextField
 import com.amalitech.core_ui.util.UiState
+import com.amalitech.onboarding.components.AuthenticationTextField
 import com.amalitech.onboarding.util.showSnackBar
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginScreen(
-    onNavigateToHome: () -> Unit,
+    onNavigateToHome: (isUsingAdminDashboard: Boolean) -> Unit,
     onNavigateToForgotPassword: () -> Unit,
     onNavigateToSignUp: () -> Unit,
     viewModel: LoginViewModel = koinViewModel()
@@ -70,11 +70,12 @@ fun LoginScreen(
         keyboardController?.hide()
     }
     val baseResult by viewModel.uiStateFlow.collectAsStateWithLifecycle()
+    val isUsingAdminDashboard = viewModel.isUsingAdminDashboard
 
     LaunchedEffect(key1 = baseResult) {
         when (baseResult) {
             is UiState.Success -> {
-                onNavigateToHome()
+                onNavigateToHome(isUsingAdminDashboard)
             }
 
             is UiState.Error -> {

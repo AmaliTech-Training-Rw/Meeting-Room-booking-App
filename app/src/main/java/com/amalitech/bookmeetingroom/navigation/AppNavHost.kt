@@ -1,6 +1,7 @@
 package com.amalitech.bookmeetingroom.navigation
 
 import android.content.Intent
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -29,6 +30,7 @@ import com.amalitech.onboarding.signup.NavArguments
 import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
 import com.amalitech.user.profile.ProfileScreen
+import com.amalitech.user.profile.ProfileViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -44,7 +46,7 @@ fun AppNavHost(
     ) {
         onboardingGraph(navController, shouldShowOnboarding)
         mainNavGraph(navController)
-        dashboardNavGraph()
+        dashboardNavGraph(navController)
     }
 }
 
@@ -68,10 +70,18 @@ fun NavGraphBuilder.onboardingGraph(
         composable(Route.LOGIN) {
             val viewModel: LoginViewModel = it.sharedViewModel(navController = navController)
             LoginScreen(
-                onNavigateToHome = {
-                    navController.navigate(Route.HOME_SCREENS) {
-                        popUpTo(Route.ONBOARDING_SCREENS) {
-                            inclusive = true
+                onNavigateToHome = { goToAdmin ->
+                    if (goToAdmin) {
+                        navController.navigate(Route.DASHBOARD_SCREENS) {
+                            popUpTo(Route.ONBOARDING_SCREENS) {
+                                inclusive = true
+                            }
+                        }
+                    } else {
+                        navController.navigate(Route.HOME_SCREENS) {
+                            popUpTo(Route.ONBOARDING_SCREENS) {
+                                inclusive = true
+                            }
                         }
                     }
                 },
@@ -166,7 +176,7 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
                 onUpdateProfileClick = {
                     /*TODO("Navigate to Update profile screen")*/
                 },
-                onToggleButtonClick = {goToAdmin ->
+                onToggleButtonClick = { goToAdmin ->
                     if (goToAdmin)
                         navController.navigate(Route.DASHBOARD_SCREENS) {
                             popUpTo(Route.HOME_SCREENS) {
@@ -193,14 +203,23 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
     }
 }
 
-fun NavGraphBuilder.dashboardNavGraph() {
+fun NavGraphBuilder.dashboardNavGraph(navController: NavHostController) {
     navigation(
         startDestination = Route.ADMIN_DASHBOARD,
         route = Route.DASHBOARD_SCREENS
     ) {
         composable(Route.ADMIN_DASHBOARD) {
+            val profileViewModel: ProfileViewModel = koinViewModel()
             // TODO (ADD DASHBOARD SCREEN COMPOSABLE HERE)
             Text("Admin dashboard")
+            Switch(checked = true, onCheckedChange = {
+                profileViewModel.updateAdminUserScreen(false)
+                navController.navigate(Route.HOME_SCREENS) {
+                    popUpTo(Route.DASHBOARD_SCREENS) {
+                        inclusive = true
+                    }
+                }
+            })
         }
     }
 }

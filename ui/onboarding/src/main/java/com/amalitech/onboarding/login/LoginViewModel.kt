@@ -22,6 +22,8 @@ class LoginViewModel(
     )
     val uiState = _uiState.asStateFlow()
 
+    val isUsingAdminDashboard = sharedPreferences.loadAdminUserScreen()
+
     /**
      * onNewEmail - trims and adds value of email entered by the user in our state
      *

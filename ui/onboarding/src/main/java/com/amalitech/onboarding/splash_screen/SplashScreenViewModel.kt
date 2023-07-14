@@ -15,10 +15,10 @@ class SplashScreenViewModel(
 
     init {
         _uiState.update { splashScreenUiState ->
-            val isUserAdmin = preferences.isUserAdmin()
+            val isUsingAdminDashboard = preferences.loadAdminUserScreen()
             splashScreenUiState.copy(
                 hasFinishedChecking = true,
-                isUserAdmin = isUserAdmin
+                isUsingAdminDashboard = isUsingAdminDashboard
             )
         }
     }
