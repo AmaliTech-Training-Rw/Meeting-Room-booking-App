@@ -1,10 +1,10 @@
 package com.amalitech.onboarding.login
 
 import androidx.lifecycle.viewModelScope
+import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.login.use_case.LoginUseCase
-import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -77,6 +77,7 @@ class LoginViewModel(
                     val isAdmin = loginUseCase.isUserAdmin()
                     sharedPreferences.saveShouldShowOnboarding(false)
                     sharedPreferences.saveUserType(isAdmin)
+                    sharedPreferences.saveLoggedInUserEmail(_uiState.value.email)
                     _uiStateFlow.update {
                         UiState.Success()
                     }

@@ -1,7 +1,7 @@
 package com.amalitech.onboarding.splash_screen
 
 import androidx.lifecycle.ViewModel
-import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
+import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

@@ -28,6 +28,7 @@ import com.amalitech.onboarding.reset_password.ResetPasswordViewModel
 import com.amalitech.onboarding.signup.NavArguments
 import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
+import com.amalitech.user.profile.ProfileScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -42,7 +43,7 @@ fun AppNavHost(
         modifier = modifier
     ) {
         onboardingGraph(navController, shouldShowOnboarding)
-        mainNavGraph()
+        mainNavGraph(navController)
         dashboardNavGraph()
     }
 }
@@ -152,7 +153,7 @@ fun NavGraphBuilder.onboardingGraph(
     }
 }
 
-fun NavGraphBuilder.mainNavGraph() {
+fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
     navigation(
         startDestination = BottomNavItem.Home.route,
         route = Route.HOME_SCREENS
@@ -161,8 +162,25 @@ fun NavGraphBuilder.mainNavGraph() {
             HomeScreen()
         }
         composable(BottomNavItem.Profile.route) {
-            // TODO (ADD PROFILE SCREEN COMPOSABLE HERE)
-            Text("Profile Screen")
+            ProfileScreen(
+                onUpdateProfileClick = {
+                    /*TODO("Navigate to Update profile screen")*/
+                },
+                onToggleButtonClick = {goToAdmin ->
+                    if (goToAdmin)
+                        navController.navigate(Route.DASHBOARD_SCREENS) {
+                            popUpTo(Route.HOME_SCREENS) {
+                                inclusive = true
+                            }
+                        }
+                    else
+                        navController.navigate(Route.HOME_SCREENS) {
+                            popUpTo(Route.DASHBOARD_SCREENS) {
+                                inclusive = true
+                            }
+                        }
+                }
+            )
         }
         composable(BottomNavItem.Invitations.route) {
             // TODO (ADD INVITATIONS SCREEN COMPOSABLE HERE)

@@ -49,6 +49,8 @@ dependencies {
     implementation Koin.koinCompose
     implementation Koin.koin
 
+    implementation Coil.coilCompose
+
     implementation Compose.compiler
     implementation Compose.ui
     implementation Compose.uiToolingPreview

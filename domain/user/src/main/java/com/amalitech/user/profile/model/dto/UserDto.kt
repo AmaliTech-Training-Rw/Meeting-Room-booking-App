@@ -1,4 +1,4 @@
-package com.amalitech.user.model.dto
+package com.amalitech.user.profile.model.dto
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -11,5 +11,6 @@ data class UserDto(
     @ColumnInfo("first_name") val firstName: String,
     @ColumnInfo("last_name") val lastName: String,
     val email: String,
-    val title: String
+    val title: String,
+    @ColumnInfo("profile_img_url") val profileImgUrl: String
 )

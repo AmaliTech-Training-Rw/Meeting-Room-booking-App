@@ -104,6 +104,7 @@ dependencies {
     implementation(project(Modules.domainUser))
     implementation(project(Modules.uiOnboarding))
     implementation(project(Modules.coreUI))
+    implementation(project(Modules.uiUser))
 
 
     implementation(project(Modules.uiAdmin))

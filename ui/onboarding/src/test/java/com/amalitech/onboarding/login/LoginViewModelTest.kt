@@ -5,7 +5,7 @@ import com.amalitech.core.R
 import com.amalitech.onboarding.MainDispatcherRule
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.login.use_case.LoginUseCase
-import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
+import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.justRun

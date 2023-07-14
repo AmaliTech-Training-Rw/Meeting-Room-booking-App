@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="title">Title</string>
+    <string name="profile_image">ProfileImage</string>
+    <string name="admin">Admin</string>
+    <string name="update_profile">Update profile</string>
+</resources>
