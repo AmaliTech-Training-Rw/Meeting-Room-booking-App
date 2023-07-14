@@ -1,6 +1,7 @@
 package com.amalitech.core_ui.components.drawer
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -56,7 +57,9 @@ fun BookMeetingRoomDrawer(
         drawerState = appState.drawerState,
         gesturesEnabled = true,
         drawerContent = {
-            ModalDrawerSheet {
+            ModalDrawerSheet(
+                drawerContainerColor = MaterialTheme.colorScheme.onPrimary
+            ) {
                 DrawerHeader()
                 NavigationItem.createItems().forEach { item ->
                     DrawerNavigationItem(
@@ -111,6 +114,8 @@ fun DrawerNavigationItem(
             unselectedContainerColor = Color.Transparent,
             selectedTextColor = MaterialTheme.colorScheme.primary,
             selectedIconColor = MaterialTheme.colorScheme.primary,
+            unselectedTextColor = MaterialTheme.colorScheme.scrim,
+            unselectedIconColor = MaterialTheme.colorScheme.scrim
         )
     )
 }
@@ -131,12 +136,13 @@ fun DrawerHeader() {
                 .clip(CircleShape)
         )
         Spacer(Modifier.height(12.dp))
-        Text("Firstname   Lastname")
+        Text("Firstname   Lastname", color = MaterialTheme.colorScheme.scrim)
         Spacer(Modifier.height(12.dp))
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(2.dp)
+                .background(MaterialTheme.colorScheme.scrim)
         )
     }
 }
