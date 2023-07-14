@@ -24,7 +24,7 @@ class ProfileViewModel(
         getUser()
     }
 
-    private fun getUser() {
+    internal fun getUser() {
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
