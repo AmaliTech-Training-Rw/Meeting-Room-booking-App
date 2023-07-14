@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -58,18 +60,21 @@ fun BookMeetingRoomDrawer(
         gesturesEnabled = true,
         drawerContent = {
             ModalDrawerSheet(
-                drawerContainerColor = MaterialTheme.colorScheme.onPrimary
-            ) {
-                DrawerHeader()
-                NavigationItem.createItems().forEach { item ->
-                    DrawerNavigationItem(
-                        appState,
-                        item,
-                        onClick,
-                        selectedItem
-                    )
+                drawerContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                content = {
+                    DrawerHeader()
+                    LazyColumn {
+                        items(NavigationItem.createItems()) { item ->
+                            DrawerNavigationItem(
+                                appState,
+                                item,
+                                onClick,
+                                selectedItem
+                            )
+                        }
+                    }
                 }
-            }
+            )
         },
         content = {
             BookMeetingRoomApp(
