@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.home.calendar.CalendarScreen
 import com.amalitech.home.components.HomeTab
+import com.amalitech.home.room.RoomScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -38,7 +39,9 @@ fun HomeScreen(
             HomeTab.Calendar -> {
                 CalendarScreen()
             }
-            HomeTab.Rooms -> {}
+            HomeTab.Rooms -> {
+                RoomScreen()
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.amalitech.home.di
 
 import com.amalitech.home.HomeViewModel
+import com.amalitech.home.room.add.AddRoomViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -10,7 +11,7 @@ val uiHomeModule = module {
     }
 
     viewModel {
-        com.amalitech.home.room.AddRoomViewModel(get())
+        AddRoomViewModel(get())
     }
 
     single {

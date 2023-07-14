@@ -1,4 +1,4 @@
-package com.amalitech.home.room
+package com.amalitech.home.room.add
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
