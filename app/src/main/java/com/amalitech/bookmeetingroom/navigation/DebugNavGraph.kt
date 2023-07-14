@@ -94,7 +94,9 @@ fun NavigationGraph(navController: NavHostController) {
             }
             BookMeetingRoomDrawer(
                 appState = appState,
-                onClick = {},
+                onClick = {
+                    // TODO: cadet: please navigate to screen here, using navigate()
+                },
                 searchQuery = query,
                 onSearchQueryChange = { query = it },
                 {},

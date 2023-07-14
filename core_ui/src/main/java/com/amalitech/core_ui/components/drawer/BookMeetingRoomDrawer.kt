@@ -33,7 +33,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination.Companion.hierarchy
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
@@ -106,9 +105,7 @@ fun DrawerNavigationItem(
             )
         },
         label = { Text(item.title) },
-        selected = appState.currentDestination?.hierarchy?.any {
-            it.route == item.route
-        } == true,
+        selected = selectedItem.value == item.title,
         onClick = {
             coroutineScope.launch { appState.drawerState.close() }
             selectedItem.value = item.title
