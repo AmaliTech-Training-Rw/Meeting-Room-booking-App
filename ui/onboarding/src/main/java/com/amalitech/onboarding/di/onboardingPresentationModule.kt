@@ -11,7 +11,7 @@ import org.koin.dsl.module
 val onboardingPresentationModule = module {
 
     viewModel {
-        LoginViewModel(get(), get())
+        LoginViewModel(get(), get(), get())
     }
 
     viewModel {

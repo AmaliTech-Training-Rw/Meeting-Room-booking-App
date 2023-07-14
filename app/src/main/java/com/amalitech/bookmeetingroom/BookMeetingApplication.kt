@@ -12,6 +12,7 @@ import com.amalitech.onboarding.di.onboardingPresentationModule
 import com.amalitech.onboarding_data.di.onboardingDataModule
 import com.amalitech.user.di.dataUserModule
 import com.amalitech.user.di.domainUserModule
+import com.amalitech.user.profile.di.presentationUserModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 
@@ -31,7 +32,8 @@ class BookMeetingApplication : Application() {
                 domainHomeModule,
                 uiHomeModule,
                 dataUserModule,
-                domainUserModule
+                domainUserModule,
+                presentationUserModule
             )
         }
     }

@@ -5,6 +5,8 @@ import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.login.use_case.LoginUseCase
+import com.amalitech.user.profile.model.dto.UserDto
+import com.amalitech.user.profile.use_case.ProfileUseCaseWrapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -12,7 +14,8 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
-    private val sharedPreferences: OnboardingSharedPreferences
+    private val sharedPreferences: OnboardingSharedPreferences,
+    private val userProfileUseCaseWrapper: ProfileUseCaseWrapper
 ) : BaseViewModel<LoginUiState>() {
     private val _uiState = MutableStateFlow(
         LoginUiState()
@@ -75,6 +78,21 @@ class LoginViewModel(
                     }
                 } else {
                     val isAdmin = loginUseCase.isUserAdmin()
+                    val profileInfo =
+                        loginUseCase.loadProfileInformationUseCase(_uiState.value.email)
+
+                    profileInfo.data?.let {
+                        userProfileUseCaseWrapper.saveUserUseCase(
+                            UserDto(
+                                uid = 0,
+                                firstName = it.firstName,
+                                lastName = it.lastName,
+                                email = it.email,
+                                title = it.title,
+                                profileImgUrl = it.profileImgUrl
+                            )
+                        )
+                    }
                     sharedPreferences.saveShouldShowOnboarding(false)
                     sharedPreferences.saveUserType(isAdmin)
                     sharedPreferences.saveLoggedInUserEmail(_uiState.value.email)

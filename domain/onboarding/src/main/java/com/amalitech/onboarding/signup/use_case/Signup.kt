@@ -7,7 +7,7 @@ import kotlinx.coroutines.delay
 class Signup {
 
     suspend operator fun invoke(user: User): UiText? {
-        // TODO("SIGN UP USING THE GIVEN INFORMATION")
+        // TODO("SIGN UP USING THE GIVEN INFORMATION AND CREATE A PROFILE")
         delay(5000)
         return null
     }

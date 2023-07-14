@@ -4,11 +4,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -17,8 +20,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -40,10 +43,10 @@ fun ProfileScreen(
     onToggleButtonClick: (goToAdmin: Boolean) -> Unit
 ) {
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
-    var user: UserDto? by rememberSaveable {
+    var user: UserDto? by remember {
         mutableStateOf(null)
     }
-    var isLoading: Boolean by rememberSaveable {
+    var isLoading: Boolean by remember {
         mutableStateOf(true)
     }
     val context = LocalContext.current
@@ -51,22 +54,14 @@ fun ProfileScreen(
         SnackbarHostState()
     }
     val spacing = LocalSpacing.current
-    var isAdmin: Boolean by rememberSaveable {
-        mutableStateOf(false)
-    }
-    var isUsingAdminDashboard: Boolean by rememberSaveable {
-        mutableStateOf(false)
-    }
+    val isAdmin: Boolean by viewModel.isAdmin
+    val isUsingAdminDashboard: Boolean by viewModel.isUsingAdminDashboard
 
     LaunchedEffect(key1 = uiState) {
         when (uiState) {
             is UiState.Success -> {
                 user = (uiState as UiState.Success<ProfileUiState>).data?.user
                 isLoading = false
-                (uiState as UiState.Success<ProfileUiState>).data?.let {
-                    isAdmin = it.isAdmin
-                    isUsingAdminDashboard = it.isUsingAdminDashboard
-                }
             }
 
             is UiState.Loading -> {
@@ -87,6 +82,7 @@ fun ProfileScreen(
     }
     Box(
         modifier = Modifier
+            .verticalScroll(rememberScrollState())
             .fillMaxSize()
             .padding(spacing.spaceMedium)
     ) {
@@ -98,7 +94,9 @@ fun ProfileScreen(
                     placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
                     error = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_broken_image_24),
                     modifier = Modifier.fillMaxWidth()
+                        .aspectRatio(1f)
                 )
+                Spacer(Modifier.height(spacing.spaceMedium))
                 ProfileDescriptionItem(
                     title = stringResource(id = R.string.first_name),
                     description = user!!.firstName
@@ -121,7 +119,9 @@ fun ProfileScreen(
                 Spacer(Modifier.height(spacing.spaceMedium))
 
                 if (isAdmin) {
-                    Row {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text(
                             text = stringResource(id = R.string.admin)
                         )

@@ -12,5 +12,5 @@ data class SignupUseCase(
     val validatePassword: ValidatePassword,
     val validateEmail: ValidateEmail,
     val checkPasswordsMatch: CheckPasswordsMatch,
-    val checkValuesNotBlank: CheckValuesNotBlank
+    val checkValuesNotBlank: CheckValuesNotBlank,
 )

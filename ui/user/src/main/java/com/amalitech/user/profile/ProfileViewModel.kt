@@ -1,5 +1,7 @@
 package com.amalitech.user.profile
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import com.amalitech.core.util.UiText
@@ -13,6 +15,10 @@ class ProfileViewModel(
     private val useCaseWrapper: ProfileUseCaseWrapper,
     private val sharedPref: OnboardingSharedPreferences
 ) : BaseViewModel<ProfileUiState>() {
+    private val _isAdmin = mutableStateOf(false)
+    val isAdmin: State<Boolean> get() = _isAdmin
+    private val _isUsingAdminDashboard = mutableStateOf(false)
+    val isUsingAdminDashboard: State<Boolean> get() = _isUsingAdminDashboard
 
     init {
         getUser()
@@ -31,14 +37,13 @@ class ProfileViewModel(
             val error = response.error
 
             if (data != null) {
-                val isAdmin = sharedPref.isUserAdmin()
-                val isUsingAdminDashboard = if (isAdmin) sharedPref.loadAdminUserScreen() else false
+                _isAdmin.value = sharedPref.isUserAdmin()
+                _isUsingAdminDashboard.value =
+                    if (_isAdmin.value) sharedPref.loadAdminUserScreen() else false
                 _uiStateFlow.update {
                     UiState.Success(
                         ProfileUiState(
-                            user = data,
-                            isAdmin = isAdmin,
-                            isUsingAdminDashboard = isUsingAdminDashboard
+                            user = data
                         )
                     )
                 }
@@ -60,10 +65,6 @@ class ProfileViewModel(
 
     fun updateAdminUserScreen(isUsingAdminDashboard: Boolean) {
         sharedPref.saveAdminUserScreen(isUsingAdminDashboard)
-        _uiStateFlow.update { uiState ->
-            UiState.Success(
-                (uiState as UiState.Success).data?.copy(isUsingAdminDashboard = isUsingAdminDashboard)
-            )
-        }
+        _isUsingAdminDashboard.value = isUsingAdminDashboard
     }
 }
