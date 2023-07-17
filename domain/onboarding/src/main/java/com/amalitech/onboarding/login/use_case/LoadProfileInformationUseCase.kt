@@ -6,7 +6,7 @@ import kotlinx.coroutines.delay
 
 class LoadProfileInformationUseCase {
     suspend operator fun invoke(email: String): Response<UserProfile> {
-        delay(200)
+        delay(2000)
         return Response(
             data = UserProfile(
                 email = email,

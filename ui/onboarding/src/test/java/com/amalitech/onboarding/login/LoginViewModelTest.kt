@@ -1,22 +1,26 @@
 package com.amalitech.onboarding.login
 
-import com.amalitech.core.util.UiText
 import com.amalitech.core.R
-import com.amalitech.onboarding.MainDispatcherRule
-import com.amalitech.core_ui.util.UiState
-import com.amalitech.onboarding.login.use_case.LoginUseCase
 import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
+import com.amalitech.core.util.Response
+import com.amalitech.core.util.UiText
+import com.amalitech.core_ui.util.UiState
+import com.amalitech.onboarding.MainDispatcherRule
+import com.amalitech.onboarding.login.model.UserProfile
+import com.amalitech.onboarding.login.use_case.LoginUseCase
+import com.amalitech.user.profile.use_case.ProfileUseCaseWrapper
+import io.mockk.coEvery
+import io.mockk.coJustRun
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.justRun
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class LoginViewModelTest {
 
     private lateinit var viewModel: LoginViewModel
@@ -27,6 +31,9 @@ class LoginViewModelTest {
     @MockK
     private lateinit var sharedPreferences: OnboardingSharedPreferences
 
+    @MockK
+    private lateinit var userProfileUseCaseWrapper: ProfileUseCaseWrapper
+
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
@@ -34,7 +41,12 @@ class LoginViewModelTest {
     fun setUp() {
         loginUseCase = mockk()
         sharedPreferences = mockk()
-        viewModel = LoginViewModel(loginUseCase, sharedPreferences)
+        every { sharedPreferences.loadAdminUserScreen() } returns true
+        userProfileUseCaseWrapper = mockk()
+        coJustRun {
+            userProfileUseCaseWrapper.saveUserUseCase(any())
+        }
+        viewModel = LoginViewModel(loginUseCase, sharedPreferences, userProfileUseCaseWrapper)
     }
 
     @Test
@@ -79,6 +91,16 @@ class LoginViewModelTest {
         justRun {
             sharedPreferences.saveShouldShowOnboarding(any())
         }
+        coEvery { loginUseCase.loadProfileInformationUseCase(any()) } returns Response(
+            data = UserProfile(
+                email = "email",
+                firstName = "Ngomdé Cadet",
+                lastName = "Kamdaou",
+                title = "Android dev",
+                profileImgUrl = "https://via.placeholder.com/400.png"
+            )
+        )
+        justRun { sharedPreferences.saveLoggedInUserEmail(any()) }
 
         viewModel.onLoginClick()
 

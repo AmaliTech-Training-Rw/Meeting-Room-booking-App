@@ -132,6 +132,4 @@ class ProfileViewModelTest {
 
         assertEquals(false, viewModel.isUsingAdminDashboard.value)
     }
-
-
 }
