@@ -76,6 +76,19 @@ class BookingViewModelTest {
     }
 
     @Test
+    fun `ensures fetchBookings update on success with empty list`() {
+        val bookings = emptyList<Booking>()
+        coEvery {
+            useCase.getBookingsUseCase(any())
+        } returns Response(data = bookings)
+
+        viewModel.fetchBookings()
+
+        assertEquals(true, viewModel.uiStateFlow.value is UiState.Success)
+        assertEquals(BookingUiState(bookings = bookings), (viewModel.uiStateFlow.value as UiState.Success).data)
+    }
+
+    @Test
     fun `ensures onTabSelected works`() {
         val tab = Tab.EndedBookings
 
