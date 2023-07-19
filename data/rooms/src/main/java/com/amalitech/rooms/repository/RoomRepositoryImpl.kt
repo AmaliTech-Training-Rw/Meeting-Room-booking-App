@@ -62,15 +62,11 @@ class RoomRepositoryImpl : RoomRepository {
             imageUrl = "https://res.cloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png"
         )
     )
+
     override suspend fun getRooms(): Response<List<Room>> {
         delay(2000)
-        return try {
-            Response(
-                rooms
-            )
-        } catch (e: Exception) {
-            Response(exception = e)
-        }
+        return Response(rooms)
+
     }
 
     override suspend fun deleteRoom(room: Room): UiText? {
