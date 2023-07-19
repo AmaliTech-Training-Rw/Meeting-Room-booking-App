@@ -11,18 +11,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 
 private val LightColors = lightColorScheme(
-//    primary = primary,
-//    onPrimary = onPrimary,
-//    primaryContainer = darkGray,
-//    secondary = secondary,
-//    onSecondary = onSecondary,
-//    tertiary = tertiary,
-//    onTertiary = onTertiary,
-//    background = background,
-//    onBackground = onBackground,
-//    surface = black,
-//    outline = link
-
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
     primaryContainer = md_theme_light_primaryContainer,
@@ -92,7 +80,7 @@ object NoRippleTheme : RippleTheme {
     override fun defaultColor() = Color.Unspecified
 
     @Composable
-    override fun rippleAlpha(): RippleAlpha = RippleAlpha(0.0f,0.0f,0.0f,0.0f)
+    override fun rippleAlpha(): RippleAlpha = RippleAlpha(0.0f, 0.0f, 0.0f, 0.0f)
 }
 
 @Composable

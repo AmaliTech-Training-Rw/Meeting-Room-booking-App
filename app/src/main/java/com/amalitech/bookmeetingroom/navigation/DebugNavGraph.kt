@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.amalitech.admin.DashboardCardItem
 import com.amalitech.admin.components.DashBoardCard
+import com.amalitech.admin.room.AddRoomScreen
 import com.amalitech.bookmeetingroom.AppScaffold
 import com.amalitech.bookmeetingroom.testComponents.DebugScreen
 import com.amalitech.core_ui.R
@@ -78,6 +79,11 @@ fun NavigationGraph(navController: NavHostController) {
                 )
             )
         }
+
+        composable(route = NavigationTarget.ADDROOM.route) {
+            AddRoomScreen()
+        }
+
         composable(route = NavigationTarget.APPBAR.route) {
             val appState = rememberBookMeetingRoomAppState()
             var query by rememberSaveable {
@@ -98,6 +104,11 @@ fun NavigationGraph(navController: NavHostController) {
                 }
             )
         }
+
+        composable(route = NavigationTarget.ADDROOM.route) {
+            AddRoomScreen()
+        }
+
         composable(route = NavigationTarget.CALENDAR.route) {
             CalendarScreen()
         }

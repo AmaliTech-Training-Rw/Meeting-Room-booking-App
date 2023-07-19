@@ -7,17 +7,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-open class AuthenticationBaseViewModel<T> : ViewModel() {
-    protected val baseResult: MutableStateFlow<UiState<T>?> =
+open class BaseViewModel<T> : ViewModel() {
+    protected val _uiStateFlow: MutableStateFlow<UiState<T>?> =
         MutableStateFlow(null)
-    val publicBaseResult = baseResult.asStateFlow()
+    val uiStateFlow = _uiStateFlow.asStateFlow()
     protected var job: Job? = null
 
     /**
      * onSnackBarShown - Reset snackBarValue to null
      */
     fun onSnackBarShown() {
-        baseResult.update { state ->
+        _uiStateFlow.update { state ->
             (state as UiState.Error<T>).copy(
                 error = null
             )
@@ -25,7 +25,7 @@ open class AuthenticationBaseViewModel<T> : ViewModel() {
     }
 
     internal fun setSnackBarValue(value: UiText?) {
-        baseResult.update {
+        _uiStateFlow.update {
             UiState.Error(
                 error = value
             )

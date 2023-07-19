@@ -1,7 +1,7 @@
 package com.amalitech.onboarding.reset_password
 
 import androidx.lifecycle.viewModelScope
-import com.amalitech.core_ui.util.AuthenticationBaseViewModel
+import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class ResetPasswordViewModel(
     private val resetPasswordUseCase: ResetPasswordUseCase
-) : AuthenticationBaseViewModel<ResetPasswordUiState>() {
+) : BaseViewModel<ResetPasswordUiState>() {
 
     private val _uiState = MutableStateFlow(
         ResetPasswordUiState()
@@ -49,7 +49,7 @@ class ResetPasswordViewModel(
             _uiState.value.passwordConfirmation
         )
         if (passwordCheck != null) {
-            baseResult.update {
+            _uiStateFlow.update {
                 UiState.Error(
                     error = passwordCheck
                 )
@@ -71,33 +71,38 @@ class ResetPasswordViewModel(
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
-            baseResult.update {
+            _uiStateFlow.update {
                 UiState.Loading()
             }
+            val passwordValid = resetPasswordUseCase.validatePassword(_uiState.value.newPassword)
             val passwordsCheck = resetPasswordUseCase.checkPasswordsMatch(
                 _uiState.value.newPassword,
                 _uiState.value.passwordConfirmation)
 
-            if (passwordsCheck == null) {
+            if (passwordsCheck == null && passwordValid == null) {
                 val apiResult = resetPasswordUseCase.resetPassword(
                     _uiState.value.newPassword,
                     _uiState.value.passwordConfirmation
                 )
 
                 if (apiResult != null) {
-                    baseResult.update {
+                    _uiStateFlow.update {
                         UiState.Error(
                             error = apiResult
                         )
                     }
                 } else {
-                    baseResult.update {
+                    _uiStateFlow.update {
                         UiState.Success()
                     }
                 }
-            } else {
-                baseResult.update {
+            } else if (passwordsCheck != null) {
+                _uiStateFlow.update {
                     UiState.Error(error = passwordsCheck)
+                }
+            } else {
+                _uiStateFlow.update {
+                    UiState.Error(error = passwordValid)
                 }
             }
         }

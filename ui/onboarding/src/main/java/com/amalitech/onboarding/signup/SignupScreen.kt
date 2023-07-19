@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -44,10 +43,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import com.amalitech.core.R
+import com.amalitech.core_ui.components.BookMeetingRoomDropDown
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
-import com.amalitech.onboarding.components.AuthenticationDropDown
 import com.amalitech.onboarding.components.AuthenticationTextField
 import com.amalitech.onboarding.util.showSnackBar
 import org.koin.androidx.compose.koinViewModel
@@ -69,7 +68,7 @@ fun SignupScreen(
     val invitedUser = viewModel.isInvitedUser(email, organizationName, location, typeOfOrganization)
     val spacing = LocalSpacing.current
     val context = LocalContext.current
-    val snackbarHostState = remember {
+    val hostState = remember {
         SnackbarHostState()
     }
     var isDropDownExpanded by rememberSaveable {
@@ -77,7 +76,7 @@ fun SignupScreen(
     }
     val focusManager: FocusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    val uiState by viewModel.publicBaseResult.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     val selectedItem = userInput.selectedOrganizationType
     var organizationType: List<String> by rememberSaveable {
         mutableStateOf(listOf())
@@ -102,7 +101,7 @@ fun SignupScreen(
             is UiState.Error -> {
                 showSnackBar(
                     snackBarValue = (uiState as UiState.Error<SignupUiState>).error,
-                    snackbarHostState = snackbarHostState,
+                    snackbarHostState = hostState,
                     context = context
                 ) {
                     viewModel.onSnackBarShown()
@@ -114,7 +113,7 @@ fun SignupScreen(
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(hostState) }
     ) { padding ->
         Column(
             modifier = modifier
@@ -183,7 +182,7 @@ fun SignupScreen(
                     )
                 )
                 Spacer(modifier = Modifier.height(spacing.spaceSmall))
-                AuthenticationDropDown(
+                BookMeetingRoomDropDown(
                     isDropDownExpanded = isDropDownExpanded,
                     items = organizationType,
                     onSelectedItemChange = {
@@ -191,7 +190,8 @@ fun SignupScreen(
                     },
                     onIsExpandedStateChange = { isDropDownExpanded = it },
                     selectedItem = selectedItem,
-                    focusManager = focusManager
+                    focusManager = focusManager,
+                    R.string.type_of_organization,
                 ) { isDropDownExpanded = it }
                 Spacer(Modifier.height(spacing.spaceSmall))
                 AuthenticationTextField(
@@ -204,12 +204,14 @@ fun SignupScreen(
                     modifier = Modifier.fillMaxWidth(),
                 )
             } else {
-                viewModel.submitValues(
-                    organizationName!!,
-                    typeOfOrganization!!,
-                    location!!,
-                    email!!
-                )
+                if (organizationName != null && typeOfOrganization != null && location != null && email != null) {
+                    viewModel.submitValues(
+                        organizationName,
+                        typeOfOrganization,
+                        location,
+                        email
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(spacing.spaceSmall))
             AuthenticationTextField(
@@ -225,7 +227,7 @@ fun SignupScreen(
             Spacer(modifier = Modifier.height(spacing.spaceSmall))
             AuthenticationTextField(
                 onGo = { onGo() },
-                placeholder = stringResource(id = R.string.confirm_new_password),
+                placeholder = stringResource(id = R.string.confirm_password),
                 value = userInput.passwordConfirmation,
                 onValueChange = {
                     viewModel.onNewPasswordConfirmation(it)
@@ -252,7 +254,7 @@ fun SignupScreen(
             if (!invitedUser) {
                 Spacer(modifier = Modifier.height(spacing.spaceSmall))
                 val text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = Color.Black)) {
+                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.scrim)) {
                         append(stringResource(id = R.string.question_already_have_an_account))
                         append(" ")
                     }
@@ -262,7 +264,7 @@ fun SignupScreen(
                     )
                     withStyle(
                         style = SpanStyle(
-                            color = MaterialTheme.colorScheme.outline,
+                            color = MaterialTheme.colorScheme.inverseOnSurface,
                         )
                     ) {
                         append(stringResource(id = R.string.log_in))

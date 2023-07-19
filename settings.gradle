@@ -24,15 +24,10 @@ include ':core_ui'
 include ':domain:onboarding'
 include ':data:onboarding'
 include ':ui:onboarding'
-
 include ':ui:rooms'
 include ':data:rooms'
 include ':domain:rooms'
 include ':ui:admin'
-
-
-
-
 include ':ui:admin'
 include ':ui:home'
 include 'domain:home'

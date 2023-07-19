@@ -1,6 +1,6 @@
 package com.amalitech.onboarding.signup.use_case
 
-import com.amalitech.onboarding.util.Response
+import com.amalitech.core.util.Response
 import kotlinx.coroutines.delay
 
 class FetchOrganizationsType {

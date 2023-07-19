@@ -6,7 +6,6 @@ dependencies {
     "implementation"(project(Modules.core))
     "implementation"(project(Modules.domainRoom))
 
-
     "implementation"(Retrofit.okHttp)
     "implementation"(Retrofit.retrofit)
     "implementation"(Retrofit.okHttpLoggingInterceptor)

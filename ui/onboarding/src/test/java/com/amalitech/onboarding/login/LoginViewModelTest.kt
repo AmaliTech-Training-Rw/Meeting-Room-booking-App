@@ -82,7 +82,7 @@ class LoginViewModelTest {
 
         viewModel.onLoginClick()
 
-        val state = viewModel.publicBaseResult
+        val state = viewModel.uiStateFlow
         assertTrue(state.value is UiState.Success)
     }
 
@@ -98,7 +98,7 @@ class LoginViewModelTest {
 
         viewModel.onLoginClick()
 
-        val state = viewModel.publicBaseResult
+        val state = viewModel.uiStateFlow
         assertTrue(state.value is UiState.Error)
         assertEquals(
             UiText.StringResource(R.string.error_password_is_not_valid),
@@ -118,7 +118,7 @@ class LoginViewModelTest {
 
         viewModel.onLoginClick()
 
-        val state = viewModel.publicBaseResult
+        val state = viewModel.uiStateFlow
         assertTrue(state.value is UiState.Error)
         assertEquals(
             UiText.StringResource(R.string.error_email_not_valid),
@@ -143,7 +143,7 @@ class LoginViewModelTest {
 
         viewModel.onLoginClick()
 
-        val state = viewModel.publicBaseResult
+        val state = viewModel.uiStateFlow
         assertTrue(state.value is UiState.Error)
         assertEquals(
             UiText.StringResource(androidx.compose.ui.R.string.default_error_message),

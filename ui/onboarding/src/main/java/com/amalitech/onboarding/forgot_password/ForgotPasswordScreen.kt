@@ -24,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -56,7 +55,7 @@ fun ForgotPasswordScreen(
     val snackbarHostState = remember {
         SnackbarHostState()
     }
-    val baseResult by viewModel.publicBaseResult.collectAsStateWithLifecycle()
+    val baseResult by viewModel.uiStateFlow.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = baseResult) {
         when (baseResult) {
@@ -130,7 +129,7 @@ fun ForgotPasswordScreen(
                 enabled = baseResult !is UiState.Loading
             )
             val text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = Color.Black)) {
+                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.scrim)) {
                     append(stringResource(id = R.string.question_already_have_an_account))
                     append(" ")
                 }
@@ -140,7 +139,7 @@ fun ForgotPasswordScreen(
                 )
                 withStyle(
                     style = SpanStyle(
-                        color = MaterialTheme.colorScheme.outline,
+                        color = MaterialTheme.colorScheme.inverseOnSurface,
                     )
                 ) {
                     append(stringResource(id = R.string.log_in))

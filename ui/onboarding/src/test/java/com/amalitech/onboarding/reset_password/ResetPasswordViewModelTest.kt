@@ -80,7 +80,7 @@ class ResetPasswordViewModelTest {
         viewModel.onNewPasswordConfirmation(confirmationPassword)
 
         // THEN - state holds the value an error
-        val state = viewModel.publicBaseResult
+        val state = viewModel.uiStateFlow
         assertTrue(state.value is UiState.Error)
         assertEquals(
             UiText.StringResource(R.string.error_passwords_dont_match),
@@ -93,6 +93,9 @@ class ResetPasswordViewModelTest {
         every {
             resetPasswordUseCase.resetPassword(any(), any())
         } returns null
+        every {
+            resetPasswordUseCase.validatePassword(any())
+        } returns null
 
         every {
             resetPasswordUseCase.checkPasswordsMatch(any(), any())
@@ -100,7 +103,7 @@ class ResetPasswordViewModelTest {
 
         viewModel.onResetPassword()
 
-        val state = viewModel.publicBaseResult
+        val state = viewModel.uiStateFlow
         assertTrue(state.value is UiState.Success)
     }
 
@@ -112,6 +115,10 @@ class ResetPasswordViewModelTest {
         } returns null
 
         every {
+            resetPasswordUseCase.validatePassword(any())
+        } returns null
+
+        every {
             resetPasswordUseCase.checkPasswordsMatch(any(), any())
         } returns UiText.StringResource(R.string.error_passwords_dont_match)
 
@@ -119,7 +126,33 @@ class ResetPasswordViewModelTest {
         viewModel.onResetPassword()
 
         // THEN - state is updated with the corresponding error
-        val state = viewModel.publicBaseResult
+        val state = viewModel.uiStateFlow
+        assertTrue(state.value is UiState.Error)
+        assertEquals(
+            UiText.StringResource(R.string.error_passwords_dont_match),
+            (state.value as UiState.Error).error
+        )
+    }
+
+    @Test
+    fun `when onResetPassword is called with an invalid password, state is updated`() {
+        // GIVEN - a mock authentication use case that assume reset password fails
+        every {
+            resetPasswordUseCase.resetPassword(any(), any())
+        } returns null
+        every {
+            resetPasswordUseCase.validatePassword(any())
+        } returns UiText.StringResource(R.string.error_passwords_dont_match)
+
+        every {
+            resetPasswordUseCase.checkPasswordsMatch(any(), any())
+        } returns null
+
+        // WHEN - onResetPassword is called
+        viewModel.onResetPassword()
+
+        // THEN - state is updated with the corresponding error
+        val state = viewModel.uiStateFlow
         assertTrue(state.value is UiState.Error)
         assertEquals(
             UiText.StringResource(R.string.error_passwords_dont_match),
