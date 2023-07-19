@@ -4,7 +4,7 @@
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
     <string name="title">Title</string>
-    <string name="profile_image">ProfileImage</string>
+    <string name="profile_image">Profile Image</string>
     <string name="admin">Admin</string>
     <string name="update_profile">Update profile</string>
 </resources>

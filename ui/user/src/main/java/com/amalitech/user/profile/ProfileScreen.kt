@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -29,6 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.amalitech.core_ui.components.DefaultButton
@@ -85,18 +86,20 @@ fun ProfileScreen(
     }
     Box(
         modifier = Modifier
-            .verticalScroll(rememberScrollState())
             .fillMaxSize()
-            .padding(spacing.spaceMedium)
+            .verticalScroll(rememberScrollState())
+            .padding(spacing.spaceMedium),
+        contentAlignment = Alignment.Center
     ) {
         if (user != null) {
-            Column {
+            Column() {
                 AsyncImage(
                     model = user!!.profileImgUrl,
                     contentDescription = stringResource(id = R.string.profile_image),
                     placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
                     error = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_broken_image_24),
-                    modifier = Modifier.wrapContentWidth()
+                    modifier = Modifier
+                        .width(150.dp)
                         .aspectRatio(1f)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
@@ -145,6 +148,9 @@ fun ProfileScreen(
                     onClick = onUpdateProfileClick
                 )
             }
+        }
+        if (isLoading) {
+            CircularProgressIndicator()
         }
     }
 }

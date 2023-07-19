@@ -1,7 +1,6 @@
 package com.amalitech.user.profile.components
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,9 +18,7 @@ fun ProfileDescriptionItem(
     titleTextColor: Color = MaterialTheme.colorScheme.onBackground,
     descriptionTextColor: Color = MaterialTheme.colorScheme.onBackground
 ) {
-    Column(
-        modifier.fillMaxWidth()
-    ) {
+    Column(modifier = modifier) {
         Text(
             text = title,
             style = titleTextStyle,
