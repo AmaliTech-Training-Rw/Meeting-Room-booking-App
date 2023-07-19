@@ -1,6 +1,6 @@
 package com.amalitech.core.util
 
-data class Response<T>(
+data class ApiResult<T>(
     val data: T? = null,
     val error: UiText? = null
 )

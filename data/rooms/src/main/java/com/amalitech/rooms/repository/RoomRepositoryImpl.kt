@@ -1,7 +1,7 @@
 package com.amalitech.rooms.repository
 
 import com.amalitech.core.data.model.Room
-import com.amalitech.core.util.Response
+import com.amalitech.core.util.ApiResult
 import com.amalitech.core.util.UiText
 import kotlinx.coroutines.delay
 
@@ -63,9 +63,9 @@ class RoomRepositoryImpl : RoomRepository {
         )
     )
 
-    override suspend fun getRooms(): Response<List<Room>> {
+    override suspend fun getRooms(): ApiResult<List<Room>> {
         delay(2000)
-        return Response(rooms)
+        return ApiResult(rooms)
 
     }
 

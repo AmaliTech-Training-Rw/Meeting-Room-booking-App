@@ -1,7 +1,7 @@
 package com.amalitech.rooms
 
 import com.amalitech.core.data.model.Room
-import com.amalitech.core.util.Response
+import com.amalitech.core.util.ApiResult
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.rooms.usecase.RoomUseCaseWrapper
@@ -88,7 +88,7 @@ class RoomViewModelTest {
     fun `ensures fetch rooms update when there is no error`() {
         coEvery {
             useCaseWrapper.fetchRoomsUseCase()
-        } returns Response(rooms)
+        } returns ApiResult(rooms)
 
         viewModel.fetchRooms()
 
@@ -101,7 +101,7 @@ class RoomViewModelTest {
         val error = UiText.DynamicString("there is an error")
         coEvery {
             useCaseWrapper.fetchRoomsUseCase()
-        } returns Response(error = error)
+        } returns ApiResult(error = error)
 
         viewModel.fetchRooms()
 
@@ -127,7 +127,7 @@ class RoomViewModelTest {
     fun `ensures deleteRoom update success when there is no error`() {
         coEvery {
             useCaseWrapper.fetchRoomsUseCase()
-        } returns Response(rooms)
+        } returns ApiResult(rooms)
         coEvery {
             useCaseWrapper.deleteRoomUseCase(any())
         } returns null
