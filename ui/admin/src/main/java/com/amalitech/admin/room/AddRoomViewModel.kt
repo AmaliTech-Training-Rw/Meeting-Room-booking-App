@@ -38,6 +38,15 @@ class AddRoomViewModel(
         }
     }
 
+    fun onRoomImages(images: List<@JvmSuppressWildcards Uri>) {
+        _uiState.update { addRoomUiState ->
+            addRoomUiState.copy(
+                imagesList = images
+            )
+        }
+    }
+
+
     fun onRoomName(roomName: String) {
         _uiState.update { addRoomUiState ->
             addRoomUiState.copy(
@@ -79,7 +88,7 @@ class AddRoomViewModel(
     }
 
     // TODO: cadet => these snack bar error messages will only show after the feature has been connected to the scaffold
-    fun onSaveRoomClick(selectImages: List<Uri>) {
+    fun onSaveRoomClick() {
         when {
             _uiState.value.name.isBlank() -> {
                 // TODO: this is an alternative way of handling errors, and using is error / supporting text in the ui
@@ -98,7 +107,7 @@ class AddRoomViewModel(
                 return
             }
 
-            selectImages.isEmpty() -> {
+            _uiState.value.imagesList.isEmpty() -> {
                 SnackbarManager.showMessage(com.amalitech.core.R.string.images_empty)
                 return
             }
@@ -113,7 +122,7 @@ class AddRoomViewModel(
                     _uiState.value.location,
                     _uiState.value.features,
                     _uiState.value.capacity,
-                    selectImages
+                    _uiState.value.imagesList
                 )
             )
         }
