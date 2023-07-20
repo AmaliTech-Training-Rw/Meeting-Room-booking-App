@@ -41,6 +41,8 @@
     <string name="name_empty">Name value is empty</string>
     <string name="location_empty">Location value is empty</string>
     <string name="features_empty">Features value is empty</string>
+    <string name="add_room_button">Add room button</string>
+    <string name="add_room_counter">Add room counter</string>
     <string name="images_empty">Select images</string>
     <string name="add_success">Successfully added room</string>
     <string name="room_capacity">Room capacity</string>

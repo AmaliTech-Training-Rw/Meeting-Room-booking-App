@@ -155,7 +155,9 @@ fun AddRoomScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Add,
-                        contentDescription = null,
+                        contentDescription = stringResource(
+                            id = com.amalitech.core.R.string.add_room_button
+                        ),
                         modifier = Modifier.size(50.dp),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
@@ -330,7 +332,9 @@ fun RoomCounter(
     ) {
         Icon(
             imageVector = Icons.Filled.Remove,
-            contentDescription = null,
+            contentDescription = stringResource(
+                id = com.amalitech.core.R.string.add_room_counter
+            ),
             modifier = Modifier
                 .clickable(
                     onClick = {
@@ -355,7 +359,9 @@ fun RoomCounter(
 
         Icon(
             imageVector = Icons.Filled.Add,
-            contentDescription = null,
+            contentDescription =  stringResource(
+                id = com.amalitech.core.R.string.add_room_counter
+            ),
             modifier = Modifier
                 .clickable(
                     onClick = {
