@@ -181,7 +181,8 @@ fun AddRoomScreen(
                                     start.linkTo(parent.start, spacing.spaceMedium)
                                     end.linkTo(parent.end, spacing.spaceSmall)
                                     width = Dimension.fillToConstraints
-                                },
+                                }
+                                .padding(spacing.spaceMedium),
                             color = MaterialTheme.colorScheme.outlineVariant,
                             textAlign = TextAlign.Start,
                             fontWeight = FontWeight.Light,
