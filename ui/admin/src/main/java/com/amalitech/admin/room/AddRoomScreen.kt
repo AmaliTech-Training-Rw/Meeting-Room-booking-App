@@ -430,7 +430,7 @@ fun RoomTextFieldPreview() {
             mutableStateOf("")
         }
         RoomTextField(
-            placeholder = "Room Name",
+            placeholder = stringResource(com.amalitech.core.R.string.add_room),
             value = value,
             onValueChange = { value = it },
             modifier = Modifier.fillMaxWidth(),
