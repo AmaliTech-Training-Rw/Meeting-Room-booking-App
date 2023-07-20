@@ -36,6 +36,12 @@
     <string name="add_features">Add Features</string>
     <string name="add_photos">Add Photos</string>
     <string name="select_location">Select Location</string>
+    <string name="selected_room_images">Selected room images</string>
+    <string name="name_empty">Name value is empty</string>
+    <string name="location_empty">Location value is empty</string>
+    <string name="features_empty">Features value is empty</string>
+    <string name="images_empty">Select images</string>
+    <string name="add_success">Successfully added room</string>
     <string name="room_capacity">Room capacity</string>
     <string name="negative_room">Room cannot be negative</string>
     <string name="close_organization_type">Close type of organization</string>

@@ -1,6 +1,9 @@
 package com.amalitech.admin.room
 
+import android.net.Uri
 import android.view.KeyEvent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,6 +36,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,12 +46,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -61,7 +64,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.amalitech.core_ui.R
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.amalitech.core_ui.components.BookMeetingRoomDropDown
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
@@ -69,6 +73,7 @@ import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.add_room_icon_button_bg
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun AddRoomScreen(
     viewModel: AddRoomViewModel = koinViewModel()
@@ -79,6 +84,13 @@ fun AddRoomScreen(
         mutableStateOf(false)
     }
     val focusManager: FocusManager = LocalFocusManager.current
+
+    var selectImages by remember { mutableStateOf(listOf<Uri>()) }
+    val galleryLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) {
+            selectImages = it
+        }
+    val spacing = LocalSpacing.current
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -121,10 +133,17 @@ fun AddRoomScreen(
                         ),
                         shape = RoundedCornerShape(4.dp)
                     )
-                    .padding(14.dp, 12.dp, 14.dp, 12.dp)
+                    .padding(
+                        spacing.spaceMedium,
+                        spacing.spaceSmall,
+                        spacing.spaceMedium,
+                        spacing.spaceSmall
+                    )
             ) {
                 IconButton(
-                    onClick = { /* ... */ },
+                    onClick = {
+                        galleryLauncher.launch("image/*")
+                    },
                     modifier = Modifier
                         .align(Alignment.Center)
                         .size(57.dp, 42.dp)
@@ -140,9 +159,6 @@ fun AddRoomScreen(
                 }
             }
 
-            val list = listOf(
-                "A", "B", "C", "D"
-            ) + ((0..100).map { it.toString() })
             LazyRow(
                 modifier = Modifier
                     .constrainAs(images) {
@@ -152,22 +168,27 @@ fun AddRoomScreen(
                         width = Dimension.fillToConstraints
                     }
             ) {
-                items(items = list, itemContent = { item ->
-                    val image: Painter = painterResource(id = R.drawable.room)
-                    Image(
-                        painter = image,
-                        contentDescription = item,
-                        modifier = Modifier
-                            .size(85.dp, 66.dp)
-                            .clip(RoundedCornerShape(4.dp))
-                    )
-                })
+                items(
+                    items = selectImages,
+                    itemContent = { uri ->
+                        Image(
+                            painter = rememberImagePainter(uri),
+                            contentScale = ContentScale.FillWidth,
+                            contentDescription = stringResource(
+                                id = com.amalitech.core.R.string.features_empty
+                            ),
+                            modifier = Modifier
+                                .size(85.dp, 66.dp)
+                                .clip(RoundedCornerShape(4.dp))
+                                .padding(spacing.spaceExtraSmall)
+                        )
+                    })
             }
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(
-                    vertical = 8.dp
+                    vertical = spacing.spaceSmall
                 ),
                 modifier = Modifier
                     .constrainAs(form) {
@@ -188,10 +209,10 @@ fun AddRoomScreen(
                         modifier = Modifier.fillMaxWidth(),
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Go,
-                            keyboardType = KeyboardType.Password
+                            keyboardType = KeyboardType.Text
                         ),
                         onGo = {
-                            viewModel.onSaveRoomClick()
+                            viewModel.onSaveRoomClick(selectImages)
                         },
                         hasError = state.error
                     )
@@ -241,34 +262,21 @@ fun AddRoomScreen(
                             .height(118.dp),
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Go,
-                            keyboardType = KeyboardType.Password
+                            keyboardType = KeyboardType.Text
                         ),
                         onGo = {
-                            viewModel.onSaveRoomClick()
+                            viewModel.onSaveRoomClick(selectImages)
                         },
                         singleLine = false
                     )
-
-//                    RoomMultiLineTextField(
-//                        placeholder = stringResource(com.amalitech.core.R.string.add_features),
-//                        value = state.features,
-//                        onValueChange = {
-//                            viewModel.onFeatures(it)
-//                        },
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .height(118.dp),
-//                        keyboardOptions = KeyboardOptions(
-//                            imeAction = ImeAction.Go,
-//                            keyboardType = KeyboardType.Password
-//                        ),
-//                    )
                 }
 
                 item {
                     DefaultButton(
                         text = stringResource(com.amalitech.core.R.string.save_room),
-                        onClick = { viewModel.onSaveRoomClick() },
+                        onClick = {
+                            viewModel.onSaveRoomClick(selectImages)
+                        },
                         modifier = Modifier.fillMaxWidth(),
                         backgroundColor = MaterialTheme.colorScheme.inversePrimary,
                         isLoading = false // TODO: use network ui state here
@@ -285,6 +293,7 @@ fun RoomCounter(
     removeRoom: () -> Unit,
     addRoom: () -> Unit
 ) {
+    val spacing = LocalSpacing.current
     Box(
         Modifier
             .border(
@@ -295,7 +304,7 @@ fun RoomCounter(
                 shape = RoundedCornerShape(5.dp)
             )
             .size(460.dp, 39.dp)
-            .padding(16.dp, 0.dp)
+            .padding(spacing.spaceMedium, spacing.default)
     ) {
         Icon(
             imageVector = Icons.Filled.Remove,
@@ -350,7 +359,7 @@ fun RoomTextField(
     ),
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         imeAction = ImeAction.Next,
-        keyboardType = KeyboardType.Password
+        keyboardType = KeyboardType.Text
     ),
     focusManager: FocusManager = LocalFocusManager.current,
     onGo: () -> Unit = {},
@@ -421,7 +430,7 @@ fun RoomTextFieldPreview() {
             mutableStateOf("")
         }
         RoomTextField(
-            placeholder = "password",
+            placeholder = "Room Name",
             value = value,
             onValueChange = { value = it },
             modifier = Modifier.fillMaxWidth(),
