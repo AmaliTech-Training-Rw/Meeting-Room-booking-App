@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarHostState
@@ -92,22 +93,27 @@ fun ProfileScreen(
         contentAlignment = Alignment.Center
     ) {
         if (user != null) {
-            Column() {
-                AsyncImage(
-                    model = user!!.profileImgUrl,
-                    contentDescription = stringResource(id = R.string.profile_image),
-                    placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
-                    error = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_broken_image_24),
-                    modifier = Modifier
-                        .width(150.dp)
-                        .aspectRatio(1f)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
+            Column {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.width(spacing.spaceExtraLarge * 4)
+                ) {
+                    AsyncImage(
+                        model = user!!.profileImgUrl,
+                        contentDescription = stringResource(id = R.string.profile_image),
+                        placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
+                        error = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_broken_image_24),
+                        modifier = Modifier
+                            .width(150.dp)
+                            .aspectRatio(1f)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                }
                 Spacer(Modifier.height(spacing.spaceMedium))
                 ProfileDescriptionItem(
                     title = stringResource(id = R.string.first_name),
-                    description = user!!.firstName
+                    description = user!!.firstName,
                 )
                 Spacer(Modifier.height(spacing.spaceMedium))
                 ProfileDescriptionItem(
@@ -124,9 +130,9 @@ fun ProfileScreen(
                     title = stringResource(id = R.string.title),
                     description = user!!.title
                 )
-                Spacer(Modifier.height(spacing.spaceMedium))
 
                 if (isAdmin) {
+                    Spacer(Modifier.height(spacing.spaceMedium))
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -143,9 +149,13 @@ fun ProfileScreen(
                         )
                     }
                 }
+                Spacer(Modifier.height(spacing.spaceExtraLarge))
                 DefaultButton(
                     text = stringResource(id = R.string.update_profile),
-                    onClick = onUpdateProfileClick
+                    onClick = onUpdateProfileClick,
+                    modifier = Modifier
+                        .width(spacing.spaceExtraLarge * 4)
+                        .clip(RoundedCornerShape(spacing.spaceMedium))
                 )
             }
         }
