@@ -1,8 +1,8 @@
-package com.amalitech.home.room
+package com.amalitech.home.model
 
-data class RoomUiState(
+data class Room(
     val room_name: String,
     val number_of_people: Int,
     val description: String,
-    val imageRes : Int
+    val imageRes : String
 )

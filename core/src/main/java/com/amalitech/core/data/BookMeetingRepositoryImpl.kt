@@ -5,4 +5,8 @@ import com.amalitech.core.network.BookMeetingNetworkApi
 
 class BookMeetingRepositoryImpl(
     private val api: BookMeetingNetworkApi
-) : BookMeetingRepository
+) : BookMeetingRepository {
+//    override fun getRooms(): Flowable<List<PopularDrink>> {
+//        TODO("Not yet implemented")
+//    }
+}

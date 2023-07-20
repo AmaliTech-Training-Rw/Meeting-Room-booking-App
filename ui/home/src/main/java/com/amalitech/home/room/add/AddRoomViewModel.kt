@@ -2,7 +2,7 @@ package com.amalitech.home.room.add
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amalitech.home.room.usecase.GetLocation
+import com.amalitech.home.use_case.GetLocation
 import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage
 import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
