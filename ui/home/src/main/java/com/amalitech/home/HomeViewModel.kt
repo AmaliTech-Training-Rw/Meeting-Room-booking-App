@@ -9,7 +9,7 @@ import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.home.calendar.BookingUiState
 import com.amalitech.home.calendar.CalendarUiState
-import com.amalitech.home.components.HomeTab
+import com.amalitech.core_ui.components.Tab
 import com.amalitech.home.model.Booking
 import com.amalitech.home.use_case.HomeUseCase
 import com.kizitonwose.calendar.core.CalendarDay
@@ -109,7 +109,7 @@ class HomeViewModel(
         }
     }
 
-    fun onSelectedTabChange(tab: HomeTab) {
+    fun onSelectedTabChange(tab: Tab) {
         _uiState.value = _uiState.value.copy(selectedTab = tab)
     }
 }

@@ -7,9 +7,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.amalitech.core_ui.components.Tab
+import com.amalitech.core_ui.components.BookingAppTab
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.home.calendar.CalendarScreen
-import com.amalitech.home.components.HomeTab
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -26,7 +27,7 @@ fun HomeScreen(
             .fillMaxSize()
             .padding(spacing.spaceMedium)
     ) {
-        HomeTab(
+        BookingAppTab(
             onTabSelected = { tab ->
                 viewModel.onSelectedTabChange(tab)
             },
@@ -35,10 +36,11 @@ fun HomeScreen(
             modifier = Modifier.height(40.dp)
         )
         when (selectedTab) {
-            HomeTab.Calendar -> {
+            Tab.Calendar -> {
                 CalendarScreen()
             }
-            HomeTab.Rooms -> {}
+            Tab.Rooms -> {}
+            else -> {}
         }
     }
 }

@@ -19,4 +19,7 @@
     <string name="search">Search</string>
     <string name="close_search_textfield">Close search textfield</string>
     <string name="open_search">Open search screen</string>
+    <string name="calendar">Calendar</string>
+    <string name="active">Active</string>
+    <string name="ended">Ended</string>
 </resources>
