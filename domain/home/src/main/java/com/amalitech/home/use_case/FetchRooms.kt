@@ -11,25 +11,25 @@ class FetchRooms {
         return flowOf(
             listOf(
                 Room(
-                    "Room 1",
+                    "Room 3",
                     10,
-                    "Air conditioning, Internet, Whiteboard, Natural light, Drinks",
+                    "Air conditioning, Internet, Whiteboard, Natural light, Drinks, Air conditioning, Internet, Whiteboard, Natural light, Drinks",
                     ""
                 ),
                 Room(
-                    "Room 1",
+                    "Room 5",
                     500,
                     "Air conditioning, Internet, Whiteboard, Natural light, Drinks",
                     ""
                 ),
                 Room(
-                    "Room 1",
-                    82,
+                    "Room 7",
+                    8200,
                     "Air conditioning, Internet, Whiteboard, Natural light, Drinks",
                     ""
                 ),
                 Room(
-                    "Room 1",
+                    "Room 12",
                     5,
                     "Air conditioning, Internet, Whiteboard, Natural light, Drinks",
                     ""
