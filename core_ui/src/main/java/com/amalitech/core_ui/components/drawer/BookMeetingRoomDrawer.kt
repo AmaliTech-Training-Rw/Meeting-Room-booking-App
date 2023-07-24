@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -31,7 +33,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination.Companion.hierarchy
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
@@ -58,18 +59,21 @@ fun BookMeetingRoomDrawer(
         gesturesEnabled = true,
         drawerContent = {
             ModalDrawerSheet(
-                drawerContainerColor = MaterialTheme.colorScheme.onPrimary
-            ) {
-                DrawerHeader()
-                NavigationItem.createItems().forEach { item ->
-                    DrawerNavigationItem(
-                        appState,
-                        item,
-                        onClick,
-                        selectedItem
-                    )
+                drawerContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                content = {
+                    DrawerHeader()
+                    LazyColumn {
+                        items(NavigationItem.createItems()) { item ->
+                            DrawerNavigationItem(
+                                appState,
+                                item,
+                                onClick,
+                                selectedItem
+                            )
+                        }
+                    }
                 }
-            }
+            )
         },
         content = {
             BookMeetingRoomApp(
@@ -101,9 +105,7 @@ fun DrawerNavigationItem(
             )
         },
         label = { Text(item.title) },
-        selected = appState.currentDestination?.hierarchy?.any {
-            it.route == item.route
-        } == true,
+        selected = selectedItem.value == item.title,
         onClick = {
             coroutineScope.launch { appState.drawerState.close() }
             selectedItem.value = item.title

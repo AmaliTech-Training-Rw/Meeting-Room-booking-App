@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
+import com.amalitech.booking.BookingScreen
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
 import com.amalitech.home.HomeScreen
 import com.amalitech.onboarding.OnboardingScreen
@@ -169,8 +170,7 @@ fun NavGraphBuilder.mainNavGraph() {
             Text("Invitations screen")
         }
         composable(BottomNavItem.Bookings.route) {
-            // TODO (ADD BOOKINGS SCREEN COMPOSABLE HERE)
-            Text("Bookings screen")
+            BookingScreen()
         }
     }
 }
