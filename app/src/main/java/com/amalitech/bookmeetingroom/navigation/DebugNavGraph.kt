@@ -25,6 +25,7 @@ import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
+import com.amalitech.user.UserScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
@@ -83,6 +84,10 @@ fun NavigationGraph(navController: NavHostController) {
 
         composable(route = NavigationTarget.ADDROOM.route) {
             AddRoomScreen()
+        }
+
+        composable(route = NavigationTarget.USER.route) {
+            UserScreen()
         }
 
         composable(route = NavigationTarget.APPBAR.route) {
