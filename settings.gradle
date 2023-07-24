@@ -31,4 +31,5 @@ include ':ui:admin'
 include ':ui:admin'
 include ':ui:home'
 include 'domain:home'
-
+include ':ui:booking'
+include ':domain:booking'
