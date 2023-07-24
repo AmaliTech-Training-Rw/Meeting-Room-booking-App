@@ -3,12 +3,27 @@ package com.amalitech.user
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.amalitech.core_ui.swipe_animation.SwipeableCardSideContents
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 
 @Composable
 fun UserScreen() {
-    Text(
-        "user screen"
+    SwipeableCardSideContents(
+        leftContent = {
+            Text(
+                "leftContent"
+            )
+        },
+        rightContent = {
+            Text(
+                "rightContent"
+            )
+        },
+        content = {
+            Text(
+                "user screen"
+            )
+        }
     )
 }
 
