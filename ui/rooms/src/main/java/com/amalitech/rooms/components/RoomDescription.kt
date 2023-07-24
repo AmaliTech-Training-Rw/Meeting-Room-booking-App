@@ -49,13 +49,7 @@ fun RoomDescription(
             modifier = Modifier
                 .fillMaxHeight()
                 .aspectRatio(1f)
-                .clip(
-                    RoundedCornerShape(
-                        topEnd = spacing.spaceMedium,
-                        bottomEnd = spacing.spaceMedium
-                    )
-                )
-
+                .clip(RoundedCornerShape(spacing.spaceMedium))
         )
         Spacer(modifier = Modifier.width(spacing.spaceMedium))
         Column(
