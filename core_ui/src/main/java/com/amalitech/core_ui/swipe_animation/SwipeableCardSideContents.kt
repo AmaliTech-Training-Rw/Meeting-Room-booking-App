@@ -26,7 +26,7 @@ fun SwipeableCardSideContents(
     swipeThreshold: Float = 120f,
     leftContent: @Composable () -> Unit,
     rightContent: @Composable () -> Unit,
-    content: @Composable () -> Unit,
+    content: @Composable (Boolean, Boolean) -> Unit,
     isLeftVisible: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     isRightVisible: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
 ) {
@@ -57,7 +57,11 @@ fun SwipeableCardSideContents(
                 onSwipeEnd = {
                     swipeDirection.value = SwipeDirection.NONE
                 },
-                content = content
+                content = {
+                    content(
+                        isRightVisible.value, isLeftVisible.value
+                    )
+                }
             )
             if (isRightVisible.value) {
                 Box(

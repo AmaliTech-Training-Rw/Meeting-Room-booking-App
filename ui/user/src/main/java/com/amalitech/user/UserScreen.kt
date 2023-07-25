@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import com.amalitech.core_ui.swipe_animation.SwipeableCardSideContents
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
+import com.amalitech.core_ui.theme.deleteUser
 import com.amalitech.ui.user.R
 
 @Composable
@@ -48,24 +50,61 @@ fun UserScreen() {
             )
         },
         rightContent = {
-            Text(
-                "rightContent"
-            )
+            Delete()
         },
-        content = {
-            UserItem()
+        content = { isRightVisible, isLeftVisible ->
+            UserItem(isRightVisible, isLeftVisible)
         }
     )
 }
 
 @Composable
-fun UserItem() {
+fun Delete() {
+    Box(
+        Modifier
+            .background(deleteUser)
+            .fillMaxSize()
+    ) {
+        Image(
+            painter = painterResource(com.amalitech.core_ui.R.drawable.bin),
+            contentDescription = stringResource(id = R.string.bin),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(28.dp)
+                .clickable {  },
+        )
+    }
+}
+
+@Composable
+fun UserItem(
+    isRightVisible: Boolean,
+    isLeftVisible: Boolean
+) {
     val spacing = LocalSpacing.current
+    val cardBg = if (isRightVisible || isLeftVisible) {
+        MaterialTheme.colorScheme.tertiary
+    } else {
+        MaterialTheme.colorScheme.background
+    }
+
+    val activeText = if (isRightVisible || isLeftVisible) {
+        R.string.inactive
+    } else {
+        R.string.active
+    }
+
+    val activeTextBg = if (isRightVisible || isLeftVisible) {
+        MaterialTheme.colorScheme.onSurface
+    } else {
+        MaterialTheme.colorScheme.tertiaryContainer
+    }
+
     Row(
         modifier = Modifier
             .fillMaxSize()
             .clip(RoundedCornerShape(spacing.spaceSmall))
-            .background(MaterialTheme.colorScheme.background)
+            .background(cardBg)
             .padding(spacing.spaceSmall),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -126,7 +165,7 @@ fun UserItem() {
 
         // TODO: change the text and bg color when swiped
         Text(
-            text = stringResource(id = R.string.active),
+            text = stringResource(id = activeText),
             modifier = Modifier
                 .border(
                     border = BorderStroke(
@@ -136,14 +175,14 @@ fun UserItem() {
                 )
                 .clip(RoundedCornerShape(spacing.spaceMedium))
                 .padding(spacing.spaceExtraSmall)
-                .clickable {  },
+                .clickable { },
             style = TextStyle(
                 color = Color.White,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.W400,
                 textAlign = TextAlign.Center,
                 lineHeight = 14.sp,
-                background = MaterialTheme.colorScheme.tertiaryContainer
+                background = activeTextBg
             )
         )
     }
@@ -153,7 +192,7 @@ fun UserItem() {
 @Composable
 fun UserItemPreview() {
     BookMeetingRoomTheme {
-        UserItem()
+        UserItem(true, true)
     }
 }
 

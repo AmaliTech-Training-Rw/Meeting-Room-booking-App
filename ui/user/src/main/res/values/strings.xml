@@ -3,6 +3,7 @@
     <string name="username">User name</string>
     <string name="email">email@gmail.com</string>
     <string name="user_image">User image</string>
+    <string name="bin">Bin</string>
     <string name="active">Active</string>
     <string name="inactive">In Active</string>
 </resources>
