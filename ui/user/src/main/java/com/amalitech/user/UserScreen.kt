@@ -1,9 +1,7 @@
 package com.amalitech.user
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +18,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,7 +41,7 @@ import com.amalitech.core_ui.theme.deleteUser
 import com.amalitech.ui.user.R
 import org.koin.androidx.compose.koinViewModel
 
-// TODO: connect the vm while working on users list
+// TODO: connect the vm while working on users list task
 @Composable
 fun UserScreen(
     viewModel: UserViewModel = koinViewModel()
@@ -59,7 +59,8 @@ fun UserScreen(
         },
         content = { isRightVisible, isLeftVisible ->
             UserItem(isRightVisible, isLeftVisible)
-        }
+        },
+        isLeftVisible = rememberSaveable { mutableStateOf(false) }
     )
 }
 
@@ -128,13 +129,7 @@ fun UserItem(
                 .weight(2f)) {
             Text(
                 text = stringResource(id = R.string.username),
-                modifier = Modifier
-                    .border(
-                        border = BorderStroke(
-                            1.dp,
-                            Color.Cyan
-                        )
-                    ),
+                modifier = Modifier,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = TextStyle(

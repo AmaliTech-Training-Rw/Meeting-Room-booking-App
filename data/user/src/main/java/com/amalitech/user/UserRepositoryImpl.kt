@@ -9,24 +9,28 @@ import kotlinx.coroutines.flow.flowOf
 class UserRepositoryImpl: UserRepository {
     override fun getUsers(): Flow<User> = flowOf(
         User(
+            "1",
             "cool",
             "User Name",
             "example@gmail.com",
             true
         ),
         User(
+            "2",
             "cool",
             "User Name",
             "example@gmail.com",
             true
         ),
         User(
+            "3",
             "cool",
             "User Name",
             "example@gmail.com",
             true
         ),
         User(
+            "4",
             "cool",
             "User Name",
             "example@gmail.com",
