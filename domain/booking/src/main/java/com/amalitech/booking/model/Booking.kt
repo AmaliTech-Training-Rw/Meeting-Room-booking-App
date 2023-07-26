@@ -8,5 +8,6 @@ data class Booking(
     val date: LocalDate,
     val startTime: LocalTime,
     val endTime: LocalTime,
-    val imgUrl: String
+    val imgUrl: String,
+    val bookedBy: String = ""
 )
