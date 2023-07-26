@@ -17,18 +17,30 @@
             <option value="$PROJECT_DIR$/core_ui" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/data/onboarding" />
+<<<<<<< HEAD
             <option value="$PROJECT_DIR$/data/user" />
+=======
+            <option value="$PROJECT_DIR$/data/rooms" />
+>>>>>>> develop
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/domain/booking" />
             <option value="$PROJECT_DIR$/domain/home" />
             <option value="$PROJECT_DIR$/domain/onboarding" />
+<<<<<<< HEAD
             <option value="$PROJECT_DIR$/domain/user" />
+=======
+            <option value="$PROJECT_DIR$/domain/rooms" />
+>>>>>>> develop
             <option value="$PROJECT_DIR$/ui" />
             <option value="$PROJECT_DIR$/ui/admin" />
             <option value="$PROJECT_DIR$/ui/booking" />
             <option value="$PROJECT_DIR$/ui/home" />
             <option value="$PROJECT_DIR$/ui/onboarding" />
+<<<<<<< HEAD
             <option value="$PROJECT_DIR$/ui/user" />
+=======
+            <option value="$PROJECT_DIR$/ui/rooms" />
+>>>>>>> develop
           </set>
         </option>
       </GradleProjectSettings>

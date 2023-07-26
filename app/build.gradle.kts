@@ -104,6 +104,13 @@ dependencies {
     implementation(project(Modules.coreUI))
 
 
+
+    implementation(project(Modules.uiRooms))
+    implementation(project(Modules.dataRoom))
+    implementation(project(Modules.domainRoom))
+   
+    implementation(project(Modules.uiAdmin))
+
     implementation(project(Modules.uiAdmin))
     implementation(project(Modules.uiHome))
     implementation(project(Modules.uiUser))
@@ -112,6 +119,7 @@ dependencies {
     implementation(project(Modules.domainHome))
     implementation(project(Modules.domainBooking))
     implementation(project(Modules.uiBooking))
+
 
     implementation(AndroidX.coreKtx)
 
@@ -138,6 +146,7 @@ dependencies {
     testImplementation(Testing.mockk)
     testImplementation(Testing.mockWebServer)
 
+
     androidTestImplementation(Testing.junit4)
     androidTestImplementation(Testing.junitAndroidExt)
     androidTestImplementation(Testing.truth)
@@ -146,6 +155,7 @@ dependencies {
     androidTestImplementation(Testing.mockkAndroid)
     androidTestImplementation(Testing.mockWebServer)
     androidTestImplementation(Testing.testRunner)
+
 
     //     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Rooms</string>
+    <string name="up_to_people">up to %d people</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="question_delete_room">Are you sure you want to delete %s Room</string>
+</resources>

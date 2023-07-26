@@ -467,6 +467,7 @@ fun RoomTextFieldPreview() {
     }
 }
 
+@Preview
 @Composable
 fun AddRoomScreenPreview() {
     BookMeetingRoomTheme {
@@ -474,6 +475,7 @@ fun AddRoomScreenPreview() {
     }
 }
 
+@Preview
 @Composable
 fun RoomCounterPreview() {
     BookMeetingRoomTheme {
