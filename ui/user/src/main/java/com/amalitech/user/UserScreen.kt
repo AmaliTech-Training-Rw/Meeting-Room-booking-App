@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,25 +33,29 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core_ui.swipe_animation.SwipeableCardSideContents
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.deleteUser
 import com.amalitech.ui.user.R
+import org.koin.androidx.compose.koinViewModel
 
+// TODO: connect the vm while working on users list
 @Composable
-fun UserScreen() {
+fun UserScreen(
+    viewModel: UserViewModel = koinViewModel()
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
     SwipeableCardSideContents(
         modifier = Modifier
             .fillMaxWidth()
             .height(77.dp),
-        leftContent = {
-            Text(
-                "leftContent"
-            )
-        },
         rightContent = {
-            Delete()
+            Delete(
+                viewModel::onDelete
+            )
         },
         content = { isRightVisible, isLeftVisible ->
             UserItem(isRightVisible, isLeftVisible)
@@ -59,7 +64,9 @@ fun UserScreen() {
 }
 
 @Composable
-fun Delete() {
+fun Delete(
+    onDelete: () -> Unit
+) {
     Box(
         Modifier
             .background(deleteUser)
@@ -71,7 +78,7 @@ fun Delete() {
             modifier = Modifier
                 .align(Alignment.Center)
                 .size(28.dp)
-                .clickable {  },
+                .clickable { onDelete() },
         )
     }
 }
@@ -118,12 +125,6 @@ fun UserItem(
 
         Column(
             modifier = Modifier
-                .border(
-                    border = BorderStroke(
-                        1.dp,
-                        Color.Blue
-                    )
-                )
                 .weight(2f)) {
             Text(
                 text = stringResource(id = R.string.username),
@@ -145,13 +146,7 @@ fun UserItem(
             )
             Text(
                 text = stringResource(id = R.string.email),
-                modifier = Modifier
-                    .border(
-                        border = BorderStroke(
-                            1.dp,
-                            Color.Red
-                        )
-                    ),
+                modifier = Modifier,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = TextStyle(
@@ -167,12 +162,6 @@ fun UserItem(
         Text(
             text = stringResource(id = activeText),
             modifier = Modifier
-                .border(
-                    border = BorderStroke(
-                        1.dp,
-                        Color.Yellow
-                    )
-                )
                 .clip(RoundedCornerShape(spacing.spaceMedium))
                 .padding(spacing.spaceExtraSmall)
                 .clickable { },

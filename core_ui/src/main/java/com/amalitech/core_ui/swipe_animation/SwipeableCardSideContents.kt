@@ -24,8 +24,8 @@ import com.amalitech.core_ui.swipe_animation.util.SwipeDirection
 fun SwipeableCardSideContents(
     modifier: Modifier = Modifier,
     swipeThreshold: Float = 120f,
-    leftContent: @Composable () -> Unit,
-    rightContent: @Composable () -> Unit,
+    leftContent: @Composable () -> Unit = {},
+    rightContent: @Composable () -> Unit = {},
     content: @Composable (Boolean, Boolean) -> Unit,
     isLeftVisible: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     isRightVisible: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
