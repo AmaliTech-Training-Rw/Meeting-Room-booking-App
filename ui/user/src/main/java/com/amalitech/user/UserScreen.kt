@@ -52,15 +52,16 @@ fun UserScreen(
         modifier = Modifier
             .fillMaxWidth()
             .height(77.dp),
+        isLeftContentVisible = false,
+        onSwipeEnd = {},
         rightContent = {
             Delete(
                 viewModel::onDelete
             )
         },
-        content = { isRightVisible, isLeftVisible ->
-            UserItem(isRightVisible, isLeftVisible)
-        },
-        isLeftVisible = rememberSaveable { mutableStateOf(false) }
+        content = { isRightVisible ->
+            UserItem(isRightVisible)
+        }
     )
 }
 
@@ -86,23 +87,22 @@ fun Delete(
 
 @Composable
 fun UserItem(
-    isRightVisible: Boolean,
-    isLeftVisible: Boolean
+    isRightVisible: Boolean
 ) {
     val spacing = LocalSpacing.current
-    val cardBg = if (isRightVisible || isLeftVisible) {
+    val cardBg = if (isRightVisible) {
         MaterialTheme.colorScheme.tertiary
     } else {
         MaterialTheme.colorScheme.background
     }
 
-    val activeText = if (isRightVisible || isLeftVisible) {
+    val activeText = if (isRightVisible) {
         R.string.inactive
     } else {
         R.string.active
     }
 
-    val activeTextBg = if (isRightVisible || isLeftVisible) {
+    val activeTextBg = if (isRightVisible) {
         MaterialTheme.colorScheme.onSurface
     } else {
         MaterialTheme.colorScheme.tertiaryContainer
@@ -176,7 +176,7 @@ fun UserItem(
 @Composable
 fun UserItemPreview() {
     BookMeetingRoomTheme {
-        UserItem(true, true)
+        UserItem(true)
     }
 }
 

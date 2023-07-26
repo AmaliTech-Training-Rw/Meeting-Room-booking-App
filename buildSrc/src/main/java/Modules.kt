@@ -1,15 +1,11 @@
 object Modules {
     const val app = ":app"
-
     const val core = ":core"
 
     const val data = ":data"
     const val dataOnboarding = ":data:onboarding"
-<<<<<<< HEAD
     const val dataUser = ":data:user"
-=======
     const val dataRoom = ":data:rooms"
->>>>>>> develop
 
     const val domain = ":domain"
     const val domainOnboarding = ":domain:onboarding"

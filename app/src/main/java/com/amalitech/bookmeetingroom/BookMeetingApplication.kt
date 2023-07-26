@@ -12,14 +12,11 @@ import com.amalitech.home.di.uiHomeModule
 import com.amalitech.onboarding.di.onboardingDomainModule
 import com.amalitech.onboarding.di.onboardingPresentationModule
 import com.amalitech.onboarding_data.di.onboardingDataModule
-<<<<<<< HEAD
 import com.amalitech.user.di.userModule
 import com.amalitech.user.di.userPresentationModule
-=======
 import com.amalitech.rooms.di.dataRoomModule
 import com.amalitech.rooms.di.domainRoomModule
 import com.amalitech.rooms.di.roomPresentationModule
->>>>>>> develop
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 
