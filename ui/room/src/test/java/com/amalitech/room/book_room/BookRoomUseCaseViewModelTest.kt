@@ -6,9 +6,9 @@ import com.amalitech.core.util.Response
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.room.MainDispatcherRule
-import com.amalitech.room.book_room.model.Room
-import com.amalitech.room.book_room.use_case.BookRoomUseCasesWrapper
-import com.amalitech.room.book_room.util.toBookRoomUi
+import com.amalitech.rooms.book_room.model.Room
+import com.amalitech.rooms.book_room.use_case.BookRoomUseCasesWrapper
+import com.amalitech.rooms.book_room.util.toBookRoomUi
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -27,10 +27,10 @@ import java.time.LocalTime
 @OptIn(ExperimentalCoroutinesApi::class)
 class BookRoomUseCaseViewModelTest {
 
-    private lateinit var viewModel: BookRoomViewModel
+    private lateinit var viewModel: com.amalitech.rooms.book_room.BookRoomViewModel
 
     @MockK
-    private lateinit var useCase: BookRoomUseCasesWrapper
+    private lateinit var useCase: com.amalitech.rooms.book_room.use_case.BookRoomUseCasesWrapper
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
@@ -38,13 +38,13 @@ class BookRoomUseCaseViewModelTest {
     @Before
     fun setUp() {
         useCase = mockk()
-        viewModel = BookRoomViewModel(useCase)
+        viewModel = com.amalitech.rooms.book_room.BookRoomViewModel(useCase)
     }
 
     @Test
     fun `ensures getAvailableStartTimes works`() {
         val selectedDate = LocalDate.of(2023, 5, 1)
-        val room = Room(
+        val room = com.amalitech.rooms.book_room.model.Room(
             name = "Room 1",
             description = "Meeting Room",
             features = listOf("Projector", "Whiteboard"),
@@ -76,7 +76,7 @@ class BookRoomUseCaseViewModelTest {
                     attendees = emptyList(),
                     note = ""
                 ),
-                ),
+            ),
             imgUrl = ""
         )
         coEvery {
@@ -117,7 +117,7 @@ class BookRoomUseCaseViewModelTest {
     @Test
     fun `ensures getAvailableEndTimes works when there is a meeting`() {
         val selectedDate = LocalDate.of(2023, 5, 1)
-        val room = Room(
+        val room = com.amalitech.rooms.book_room.model.Room(
             name = "Room 1",
             description = "Meeting Room",
             features = listOf("Projector", "Whiteboard"),
@@ -166,7 +166,7 @@ class BookRoomUseCaseViewModelTest {
     @Test
     fun `ensures getAvailableEndTimes works for a booking withing two meeting`() {
         val selectedDate = LocalDate.of(2023, 5, 1)
-        val room = Room(
+        val room = com.amalitech.rooms.book_room.model.Room(
             name = "Room 1",
             description = "Meeting Room",
             features = listOf("Projector", "Whiteboard"),
@@ -220,7 +220,7 @@ class BookRoomUseCaseViewModelTest {
     @Test
     fun `ensures getAvailableEndTimes works when there is no meeting`() {
         val selectedDate = LocalDate.of(2023, 5, 1)
-        val room = Room(
+        val room = com.amalitech.rooms.book_room.model.Room(
             name = "Room 1",
             description = "Meeting Room",
             features = listOf("Projector", "Whiteboard"),
@@ -284,7 +284,7 @@ class BookRoomUseCaseViewModelTest {
 
     @Test
     fun `ensures getBookableRoom works when the result is Success`() = runTest {
-        val room = Room(
+        val room = com.amalitech.rooms.book_room.model.Room(
             name = "Room",
             description = "description",
             features = listOf("Internet", "Drinks", "Air conditional"),
@@ -343,7 +343,7 @@ class BookRoomUseCaseViewModelTest {
     @Test
     fun `ensures that isDateAvailable returns false when there is no slot available`() {
         val date = LocalDate.of(2023, 5, 1)
-        val room = Room(
+        val room = com.amalitech.rooms.book_room.model.Room(
             name = "No Available Slots Room",
             description = "Meeting Room with No Available Slots",
             features = listOf("Projector", "Whiteboard"),
@@ -368,7 +368,7 @@ class BookRoomUseCaseViewModelTest {
     @Test
     fun `ensures that isDateAvailable returns true when there is available slots`() {
         val date = LocalDate.of(2023, 5, 1)
-        val room = Room(
+        val room = com.amalitech.rooms.book_room.model.Room(
             name = "No Available Slots Room",
             description = "Meeting Room with No Available Slots",
             features = listOf("Projector", "Whiteboard"),
@@ -393,7 +393,7 @@ class BookRoomUseCaseViewModelTest {
     @Test
     fun `ensures that isDateAvailable returns true when there is available slots after the last booking`() {
         val date = LocalDate.of(2023, 5, 1)
-        val room = Room(
+        val room = com.amalitech.rooms.book_room.model.Room(
             name = "No Available Slots Room",
             description = "Meeting Room with No Available Slots",
             features = listOf("Projector", "Whiteboard"),
@@ -418,7 +418,7 @@ class BookRoomUseCaseViewModelTest {
     @Test
     fun `ensures that isDateAvailable returns true when there is no booking`() {
         val date = LocalDate.of(2023, 5, 1)
-        val room = Room(
+        val room = com.amalitech.rooms.book_room.model.Room(
             name = "No Available Slots Room",
             description = "Meeting Room with No Available Slots",
             features = listOf("Projector", "Whiteboard"),
@@ -499,7 +499,7 @@ class BookRoomUseCaseViewModelTest {
         viewModel.onBook("id")
 
         assertEquals(true, viewModel.uiStateFlow.value is UiState.Success)
-        assertEquals(UiState.Success(RoomUiState(canNavigate = true)), (viewModel.uiStateFlow.value) as UiState.Success)
+        assertEquals(UiState.Success(com.amalitech.rooms.book_room.RoomUiState(canNavigate = true)), (viewModel.uiStateFlow.value) as UiState.Success)
     }
 
     @Test
@@ -520,7 +520,7 @@ class BookRoomUseCaseViewModelTest {
         viewModel.onBook("id")
 
         assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
+        assertEquals(UiState.Error<com.amalitech.rooms.book_room.RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
     }
 
     @Test
@@ -540,7 +540,7 @@ class BookRoomUseCaseViewModelTest {
         viewModel.onBook("id")
 
         assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
+        assertEquals(UiState.Error<com.amalitech.rooms.book_room.RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
     }
 
     @Test
@@ -560,7 +560,7 @@ class BookRoomUseCaseViewModelTest {
         viewModel.onBook("id")
 
         assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
+        assertEquals(UiState.Error<com.amalitech.rooms.book_room.RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
     }
 
     @Test
@@ -580,7 +580,7 @@ class BookRoomUseCaseViewModelTest {
         viewModel.onBook("id")
 
         assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
+        assertEquals(UiState.Error<com.amalitech.rooms.book_room.RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
     }
 
     @Test
@@ -598,7 +598,7 @@ class BookRoomUseCaseViewModelTest {
         viewModel.onBook("id")
 
         assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
+        assertEquals(UiState.Error<com.amalitech.rooms.book_room.RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
     }
 
     @Test
@@ -636,6 +636,6 @@ class BookRoomUseCaseViewModelTest {
         viewModel.updateStateWithError(error)
 
         assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
+        assertEquals(UiState.Error<com.amalitech.rooms.book_room.RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
     }
 }

@@ -48,7 +48,7 @@ val onboardingDomainModule = module {
     }
 
     single {
-        ResetPasswordUseCasesWrapper(get(), get())
+        ResetPasswordUseCasesWrapper(get(), get(), get())
     }
 
     single {

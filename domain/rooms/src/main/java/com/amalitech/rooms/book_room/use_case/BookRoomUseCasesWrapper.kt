@@ -1,4 +1,4 @@
-package com.amalitech.room.book_room.use_case
+package com.amalitech.rooms.book_room.use_case
 
 import com.amalitech.core.domain.use_case.ValidateEmailUseCase
 

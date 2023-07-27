@@ -1,8 +1,8 @@
-package com.amalitech.room.book_room.use_case
+package com.amalitech.rooms.book_room.use_case
 
 import com.amalitech.core.domain.model.Booking
 import com.amalitech.core.util.Response
-import com.amalitech.room.book_room.model.Room
+import com.amalitech.rooms.book_room.model.Room
 import kotlinx.coroutines.delay
 import java.time.LocalDate
 import java.time.LocalTime

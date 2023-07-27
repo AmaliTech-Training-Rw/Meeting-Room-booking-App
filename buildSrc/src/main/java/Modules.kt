@@ -9,7 +9,7 @@ object Modules {
 
     const val domain = ":domain"
     const val domainOnboarding = ":domain:onboarding"
-    const val domainRoom = ":domain:rooms"
+    const val domainRooms = ":domain:rooms"
     const val domainHome = ":domain:home"
     const val domainRoom = ":domain:room"
     const val domainBooking = ":domain:booking"
@@ -18,7 +18,6 @@ object Modules {
     const val uiOnboarding = ":ui:onboarding"
     const val uiAdmin = ":ui:admin"
     const val uiHome = ":ui:home"
-    const val uiRoom = ":ui:room"
     const val uiBooking = ":ui:booking"
 
     const val coreUI = ":core_ui"

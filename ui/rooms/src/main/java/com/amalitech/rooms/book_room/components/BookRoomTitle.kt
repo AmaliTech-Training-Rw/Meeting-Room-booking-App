@@ -1,4 +1,4 @@
-package com.amalitech.room.book_room.components
+package com.amalitech.rooms.book_room.components
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text

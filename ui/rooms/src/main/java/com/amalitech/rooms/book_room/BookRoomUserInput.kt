@@ -1,4 +1,4 @@
-package com.amalitech.room.book_room
+package com.amalitech.rooms.book_room
 
 import java.time.LocalDate
 import java.time.LocalTime

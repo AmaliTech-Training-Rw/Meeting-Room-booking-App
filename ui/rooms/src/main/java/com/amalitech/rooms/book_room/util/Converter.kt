@@ -1,7 +1,7 @@
-package com.amalitech.room.book_room.util
+package com.amalitech.rooms.book_room.util
 
-import com.amalitech.room.book_room.RoomUiState
-import com.amalitech.room.book_room.model.Room
+import com.amalitech.rooms.book_room.RoomUiState
+import com.amalitech.rooms.book_room.model.Room
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 

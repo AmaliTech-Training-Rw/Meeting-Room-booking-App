@@ -1,4 +1,4 @@
-package com.amalitech.room.book_room.components
+package com.amalitech.rooms.book_room.components
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import com.amalitech.ui.room.R
+import com.amalitech.ui.rooms.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

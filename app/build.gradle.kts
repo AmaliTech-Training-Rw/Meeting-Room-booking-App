@@ -107,12 +107,10 @@ dependencies {
 
     implementation(project(Modules.uiRooms))
     implementation(project(Modules.dataRoom))
-    implementation(project(Modules.domainRoom))
+    implementation(project(Modules.domainRooms))
    
     implementation(project(Modules.uiAdmin))
 
-    implementation(project(Modules.domainRoom))
-    implementation(project(Modules.uiRoom))
     implementation(project(Modules.uiAdmin))
     implementation(project(Modules.uiHome))
     implementation(project(Modules.domainHome))

@@ -1,4 +1,4 @@
-package com.amalitech.room.book_room.components
+package com.amalitech.rooms.book_room.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,8 +23,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.formatDate
-import com.amalitech.ui.room.R
-import com.amalitech.room.book_room.TimeUi
+import com.amalitech.ui.rooms.R
+import com.amalitech.rooms.book_room.TimeUi
 import java.time.LocalDate
 import java.time.LocalTime
 

@@ -3,14 +3,14 @@ package com.amalitech.home
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.amalitech.core.domain.model.Booking
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.R
+import com.amalitech.core_ui.components.Tab
 import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.home.calendar.BookingUiState
 import com.amalitech.home.calendar.CalendarUiState
-import com.amalitech.core_ui.components.Tab
-import com.amalitech.home.model.Booking
 import com.amalitech.home.use_case.HomeUseCase
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition

@@ -1,4 +1,4 @@
-package com.amalitech.room.book_room
+package com.amalitech.rooms.book_room
 
 data class SlotSelectionManager(
     val availableStartTimes: List<TimeUi> = emptyList(),

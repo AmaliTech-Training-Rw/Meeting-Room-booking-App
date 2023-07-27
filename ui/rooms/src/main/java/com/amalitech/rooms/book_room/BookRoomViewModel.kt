@@ -1,4 +1,4 @@
-package com.amalitech.room.book_room
+package com.amalitech.rooms.book_room
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -7,9 +7,9 @@ import com.amalitech.core.domain.model.Booking
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
-import com.amalitech.room.book_room.use_case.BookRoomUseCasesWrapper
-import com.amalitech.room.book_room.util.toBookRoomUi
-import com.amalitech.ui.room.R
+import com.amalitech.rooms.book_room.use_case.BookRoomUseCasesWrapper
+import com.amalitech.rooms.book_room.util.toBookRoomUi
+import com.amalitech.ui.rooms.R
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Duration

@@ -74,16 +74,13 @@ class ResetPasswordViewModel(
             _uiStateFlow.update {
                 UiState.Loading()
             }
-            val passwordValid = resetPasswordUseCase.validatePassword(_uiState.value.newPassword)
-            val passwordsCheck = resetPasswordUseCase.checkPasswordsMatch(
+            val passwordValid = resetPasswordUseCasesWrapper.validatePasswordUseCase(_uiState.value.newPassword)
             val passwordsCheck = resetPasswordUseCasesWrapper.checkPasswordsMatchUseCase(
                 _uiState.value.newPassword,
                 _uiState.value.passwordConfirmation)
 
-            if (passwordsCheck == null) {
-                val apiResult = resetPasswordUseCasesWrapper.resetPasswordUseCase(
             if (passwordsCheck == null && passwordValid == null) {
-                val apiResult = resetPasswordUseCase.resetPassword(
+                val apiResult = resetPasswordUseCasesWrapper.resetPasswordUseCase(
                     _uiState.value.newPassword,
                     _uiState.value.passwordConfirmation
                 )

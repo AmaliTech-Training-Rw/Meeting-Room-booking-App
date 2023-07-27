@@ -1,4 +1,4 @@
-package com.amalitech.room.book_room
+package com.amalitech.rooms.book_room
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -62,14 +62,14 @@ import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.NoRippleTheme
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.core_ui.util.formatTime
-import com.amalitech.room.book_room.components.AttendeeItem
-import com.amalitech.room.book_room.components.BookRoomTitle
-import com.amalitech.room.book_room.components.FeatureItem
-import com.amalitech.room.book_room.components.SelectDateBox
-import com.amalitech.room.book_room.components.TimeSelector
-import com.amalitech.room.book_room.util.NavArguments
-import com.amalitech.room.book_room.util.formatDate
-import com.amalitech.ui.room.R
+import com.amalitech.rooms.book_room.components.AttendeeItem
+import com.amalitech.rooms.book_room.components.BookRoomTitle
+import com.amalitech.rooms.book_room.components.FeatureItem
+import com.amalitech.rooms.book_room.components.SelectDateBox
+import com.amalitech.rooms.book_room.components.TimeSelector
+import com.amalitech.rooms.book_room.util.NavArguments
+import com.amalitech.rooms.book_room.util.formatDate
+import com.amalitech.ui.rooms.R
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
