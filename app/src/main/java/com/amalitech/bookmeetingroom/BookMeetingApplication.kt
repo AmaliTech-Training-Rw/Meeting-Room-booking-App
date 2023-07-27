@@ -15,7 +15,7 @@ import com.amalitech.onboarding_data.di.onboardingDataModule
 import com.amalitech.user.di.userModule
 import com.amalitech.user.di.userPresentationModule
 import com.amalitech.rooms.di.dataRoomModule
-import com.amalitech.rooms.di.domainRoomModule
+import com.amalitech.rooms.di.domainRoomsModule
 import com.amalitech.rooms.di.roomPresentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
@@ -34,7 +34,6 @@ class BookMeetingApplication : Application() {
                 appModule,
                 roomPresentationModule,
                 dataRoomModule,
-                domainRoomModule,
                 adminPresentationModule,
                 domainHomeModule,
                 uiHomeModule,
@@ -42,6 +41,8 @@ class BookMeetingApplication : Application() {
                 presentationBookingModule,
                 userPresentationModule,
                 userModule,
+                uiHomeModule,
+                domainRoomsModule,
             )
         }
     }

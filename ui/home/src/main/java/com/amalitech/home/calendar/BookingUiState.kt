@@ -1,9 +1,11 @@
 package com.amalitech.home.calendar
 
-import java.time.LocalDateTime
+import java.time.LocalDate
+import java.time.LocalTime
 
 data class BookingUiState(
-    val startTime: LocalDateTime,
-    val endTime: LocalDateTime,
-    val roomName: String
+    val startTime: LocalTime,
+    val endTime: LocalTime,
+    val roomName: String,
+    val date: LocalDate
 )
