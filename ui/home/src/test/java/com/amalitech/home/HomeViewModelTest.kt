@@ -1,19 +1,17 @@
 package com.amalitech.home
 
-import com.amalitech.core_ui.util.UiState
-import com.amalitech.home.components.HomeTab
 import com.amalitech.core.domain.model.Booking
-import com.amalitech.core_ui.components.Tab
-import com.amalitech.home.model.Booking
-import com.amalitech.home.use_case.HomeUseCase
 import com.amalitech.core.util.Response
+import com.amalitech.core_ui.components.Tab
+import com.amalitech.core_ui.util.UiState
+import com.amalitech.home.use_case.HomeUseCase
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -22,7 +20,6 @@ import java.time.LocalTime
 import java.time.Month
 import kotlin.random.Random
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModelTest {
     private lateinit var viewModel: HomeViewModel
 
