@@ -1,11 +1,10 @@
 package com.amalitech.onboarding.signup
 
 import com.amalitech.core.R
+import com.amalitech.core.util.ApiResult
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.MainDispatcherRule
-import com.amalitech.onboarding.signup.use_case.SignupUseCase
-import com.amalitech.core.util.ApiResult
 import com.amalitech.onboarding.signup.use_case.SignupUseCasesWrapper
 import io.mockk.coEvery
 import io.mockk.every
@@ -20,7 +19,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class SignupUseCaseViewModelTest {
+class SignupViewModelTest {
 
     private lateinit var viewModel: SignupViewModel
 
@@ -35,11 +34,8 @@ class SignupUseCaseViewModelTest {
         signupUseCasesWrapper = mockk()
         coEvery {
             signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
-        } returns Response(data = listOf())
-        viewModel = SignupViewModel(signupUseCasesWrapper)
-            signupUseCase.fetchOrganizationsType()
         } returns ApiResult(data = listOf())
-        viewModel = SignupViewModel(signupUseCase)
+        viewModel = SignupViewModel(signupUseCasesWrapper)
     }
 
     @Test
@@ -137,8 +133,6 @@ class SignupUseCaseViewModelTest {
 
         coEvery {
             signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
-        } returns Response(data = listOf())
-            signupUseCase.fetchOrganizationsType()
         } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
@@ -179,8 +173,6 @@ class SignupUseCaseViewModelTest {
 
         coEvery {
             signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
-        } returns Response(data = listOf())
-            signupUseCase.fetchOrganizationsType()
         } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
@@ -222,10 +214,8 @@ class SignupUseCaseViewModelTest {
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns ApiResult(data = listOf())
             signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
-        } returns Response(data = listOf())
+        } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -266,10 +256,8 @@ class SignupUseCaseViewModelTest {
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns ApiResult(data = listOf())
             signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
-        } returns Response(data = listOf())
+        } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -309,10 +297,8 @@ class SignupUseCaseViewModelTest {
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns ApiResult(data = listOf())
             signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
-        } returns Response(data = listOf())
+        } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -354,8 +340,6 @@ class SignupUseCaseViewModelTest {
 
         coEvery {
             signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
-        } returns Response(data = listOf())
-            signupUseCase.fetchOrganizationsType()
         } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
@@ -398,10 +382,8 @@ class SignupUseCaseViewModelTest {
         } returns error
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
+        signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
         } returns ApiResult(data = listOf())
-            signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
-        } returns Response(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -442,10 +424,8 @@ class SignupUseCaseViewModelTest {
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
+        signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
         } returns ApiResult(data = listOf())
-            signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
-        } returns Response(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -487,8 +467,6 @@ class SignupUseCaseViewModelTest {
 
         coEvery {
             signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
-        } returns Response(data = listOf())
-            signupUseCase.fetchOrganizationsType()
         } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
@@ -641,10 +619,8 @@ class SignupUseCaseViewModelTest {
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns ApiResult(data = listOf())
             signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
-        } returns Response(data = listOf())
+        } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
 

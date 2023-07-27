@@ -98,6 +98,10 @@ class ResetPasswordUseCaseViewModelTest {
             resetPasswordUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns null
 
+        every {
+            resetPasswordUseCasesWrapper.validatePasswordUseCase(any())
+        } returns null
+
         viewModel.onResetPassword()
 
         val state = viewModel.uiStateFlow
@@ -114,6 +118,10 @@ class ResetPasswordUseCaseViewModelTest {
         every {
             resetPasswordUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns UiText.StringResource(R.string.error_passwords_dont_match)
+
+        every {
+            resetPasswordUseCasesWrapper.validatePasswordUseCase(any())
+        } returns null
 
         // WHEN - onResetPassword is called
         viewModel.onResetPassword()
