@@ -60,6 +60,8 @@ dependencies {
     implementation Compose.materialIconsExtended
     implementation Coil.coilCompose
 
+    implementation Coil.coilCompose
+
     implementation Accompanist.systemuiController
     implementation Koin.koin
     implementation Lifecycle.composeLifecycle
