@@ -3,7 +3,6 @@ package com.amalitech.user
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,16 +13,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -34,55 +39,70 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.amalitech.core_ui.swipe_animation.SwipeAction
 import com.amalitech.core_ui.swipe_animation.SwipeableCardSideContents
+import com.amalitech.core_ui.swipe_animation.util.SwipeDirection
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
-import com.amalitech.core_ui.theme.deleteUser
 import com.amalitech.ui.user.R
 import org.koin.androidx.compose.koinViewModel
 
-// TODO: connect the vm while working on users list task
 @Composable
 fun UserScreen(
     viewModel: UserViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val spacing = LocalSpacing.current
+
+    var isLeftContentVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    var isRightContentVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     SwipeableCardSideContents(
         modifier = Modifier
             .fillMaxWidth()
             .height(77.dp),
-        isLeftContentVisible = false,
-        onSwipeEnd = {},
+        isLeftContentVisible = isLeftContentVisible,
+        isRightContentVisible = isRightContentVisible,
+        onSwipeEnd = { direction ->
+            when (direction) {
+                SwipeDirection.LEFT -> {
+                    if (isRightContentVisible)
+                        isRightContentVisible = false
+                    else
+                        isLeftContentVisible = false
+                }
+
+                SwipeDirection.NONE -> {
+                    isLeftContentVisible = false
+                    isRightContentVisible = false
+                }
+
+                SwipeDirection.RIGHT -> {
+                    if (isLeftContentVisible)
+                        isLeftContentVisible = false
+                    else
+                        isRightContentVisible = true
+                }
+            }
+        },
         rightContent = {
-            Delete(
-                viewModel::onDelete
+            SwipeAction(
+                backgroundColor = MaterialTheme.colorScheme.error,
+                icon = Icons.Filled.Delete,
+                onActionClick = viewModel::onDelete,
+                modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
             )
         },
-        content = { isRightVisible ->
-            UserItem(isRightVisible)
+        leftContent = {},
+        content = {
+            UserItem(isRightContentVisible)
         }
     )
-}
-
-@Composable
-fun Delete(
-    onDelete: () -> Unit
-) {
-    Box(
-        Modifier
-            .background(deleteUser)
-            .fillMaxSize()
-    ) {
-        Image(
-            painter = painterResource(com.amalitech.core_ui.R.drawable.bin),
-            contentDescription = stringResource(id = R.string.bin),
-            modifier = Modifier
-                .align(Alignment.Center)
-                .size(28.dp)
-                .clickable { onDelete() },
-        )
-    }
 }
 
 @Composable
@@ -96,6 +116,7 @@ fun UserItem(
         MaterialTheme.colorScheme.background
     }
 
+    // TODO: is inactive an attribute coming from the server? or is it triggered by a swipe gesture?
     val activeText = if (isRightVisible) {
         R.string.inactive
     } else {

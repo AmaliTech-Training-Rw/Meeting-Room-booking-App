@@ -63,5 +63,4 @@ val md_theme_dark_outlineVariant = Color(0xFFFFFFFF)
 val md_theme_dark_scrim = Color(0xFFFFFFFF)
 
 val add_room_icon_button_bg = Color(0xFFD9D9D9)
-val deleteUser = Color(0xFFFF4747)
 

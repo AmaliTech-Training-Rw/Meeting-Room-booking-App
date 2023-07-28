@@ -11,14 +11,14 @@ import com.amalitech.core_ui.swipe_animation.util.SwipeDirection
 
 @Composable
 fun SwipeableCardSideContents(
-    modifier: Modifier = Modifier,
-    isLeftContentVisible: Boolean = false,
-    isRightContentVisible: Boolean = false,
+    isLeftContentVisible: Boolean,
+    isRightContentVisible: Boolean,
     onSwipeEnd: (SwipeDirection) -> Unit,
+    modifier: Modifier = Modifier,
     swipeThreshold: Float = 120f,
-    leftContent: @Composable () -> Unit = {},
-    rightContent: @Composable () -> Unit = {},
-    content: @Composable (Boolean) -> Unit,
+    leftContent: @Composable () -> Unit,
+    rightContent: @Composable () -> Unit,
+    content: @Composable () -> Unit,
 ) {
     Row(
         modifier = modifier,
@@ -41,11 +41,7 @@ fun SwipeableCardSideContents(
             onSwipeEnd = { direction ->
                 onSwipeEnd(direction)
             },
-            content = {
-                content(
-                    isRightContentVisible
-                )
-            }
+            content = content
         )
         if (isRightContentVisible) {
             Box(
@@ -58,4 +54,3 @@ fun SwipeableCardSideContents(
         }
     }
 }
-

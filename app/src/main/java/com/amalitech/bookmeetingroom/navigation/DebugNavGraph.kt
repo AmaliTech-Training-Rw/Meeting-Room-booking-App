@@ -28,8 +28,8 @@ import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
-import com.amalitech.user.UserScreen
 import com.amalitech.rooms.book_room.BookRoomScreen
+import com.amalitech.user.UserScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
@@ -89,32 +89,8 @@ fun NavigationGraph(navController: NavHostController) {
                 AppScaffold(shouldShowOnboarding = false)
             }
 
-        composable(route = NavigationTarget.USER.route) {
-            UserScreen()
-        }
-
-        composable(route = NavigationTarget.APPBAR.route) {
-            val appState = rememberBookMeetingRoomAppState()
-            var query by rememberSaveable {
-                mutableStateOf("")
-            }
-            var isSearchTextFieldVisible by rememberSaveable {
-                mutableStateOf(false)
-            }
-            BookMeetingRoomDrawer(
-                appState = appState,
-                onClick = {
-                    // TODO: cadet: please navigate to screen here, using navigate()
-                },
-                searchQuery = query,
-                onSearchQueryChange = { query = it },
-                {},
-                isSearchTextFieldVisible = isSearchTextFieldVisible,
-                onSearchTextFieldVisibilityChange = { isVisible ->
-                    isSearchTextFieldVisible = isVisible
-
-                  composable(route = NavigationTarget.ADDROOM.route) {
-                AddRoomScreen()
+            composable(route = NavigationTarget.USER.route) {
+                UserScreen()
             }
 
             composable(route = NavigationTarget.APPBAR.route) {
@@ -136,37 +112,64 @@ fun NavigationGraph(navController: NavHostController) {
                     isSearchTextFieldVisible = isSearchTextFieldVisible,
                     onSearchTextFieldVisibilityChange = { isVisible ->
                         isSearchTextFieldVisible = isVisible
+
+                        composable(route = NavigationTarget.ADDROOM.route) {
+                            AddRoomScreen()
+                        }
+
+                        composable(route = NavigationTarget.APPBAR.route) {
+                            val appState = rememberBookMeetingRoomAppState()
+                            var query by rememberSaveable {
+                                mutableStateOf("")
+                            }
+                            var isSearchTextFieldVisible by rememberSaveable {
+                                mutableStateOf(false)
+                            }
+                            BookMeetingRoomDrawer(
+                                appState = appState,
+                                onClick = {
+                                    // TODO: cadet: please navigate to screen here, using navigate()
+                                },
+                                searchQuery = query,
+                                onSearchQueryChange = { query = it },
+                                {},
+                                isSearchTextFieldVisible = isSearchTextFieldVisible,
+                                onSearchTextFieldVisibilityChange = { isVisible ->
+                                    isSearchTextFieldVisible = isVisible
+                                }
+                            )
+                        }
+
+                        composable(route = NavigationTarget.ADDROOM.route) {
+                            AddRoomScreen()
+                        }
+
+                        composable(route = NavigationTarget.CALENDAR.route) {
+                            CalendarScreen()
+                        }
+
+                        composable(route = NavigationTarget.HOME.route) {
+                            AppScaffold(shouldShowOnboarding = false)
+                        }
+
+                        composable(route = NavigationTarget.SIGNUP.route) { entry ->
+                            SignupScreen(
+                                onNavigateToLogin = { navController.navigate(NavigationTarget.LOGIN.route) },
+                                navBackStackEntry = entry
+                            )
+                        }
+
+                        composable(route = NavigationTarget.BOOK_ROOM.route) { entry ->
+                            BookRoomScreen(navBackStackEntry = entry) {
+                                navController.navigateUp()
+                            }
+                        }
+
+                        composable(route = NavigationTarget.BOOKING.route) {
+                            BookingScreen()
+                        }
                     }
                 )
-            }
-
-            composable(route = NavigationTarget.ADDROOM.route) {
-                AddRoomScreen()
-            }
-
-            composable(route = NavigationTarget.CALENDAR.route) {
-                CalendarScreen()
-            }
-
-            composable(route = NavigationTarget.HOME.route) {
-                AppScaffold(shouldShowOnboarding = false)
-            }
-
-            composable(route = NavigationTarget.SIGNUP.route) { entry ->
-                SignupScreen(
-                    onNavigateToLogin = { navController.navigate(NavigationTarget.LOGIN.route) },
-                    navBackStackEntry = entry
-                )
-            }
-
-            composable(route = NavigationTarget.BOOK_ROOM.route) { entry ->
-                BookRoomScreen(navBackStackEntry = entry) {
-                    navController.navigateUp()
-                }
-            }
-
-            composable(route = NavigationTarget.BOOKING.route) {
-                BookingScreen()
             }
         }
     }

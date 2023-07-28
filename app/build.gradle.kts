@@ -103,8 +103,6 @@ dependencies {
     implementation(project(Modules.uiOnboarding))
     implementation(project(Modules.coreUI))
 
-
-
     implementation(project(Modules.uiRooms))
     implementation(project(Modules.dataRoom))
     implementation(project(Modules.domainRooms))
@@ -119,7 +117,6 @@ dependencies {
     implementation(project(Modules.domainHome))
     implementation(project(Modules.domainBooking))
     implementation(project(Modules.uiBooking))
-
 
     implementation(AndroidX.coreKtx)
 

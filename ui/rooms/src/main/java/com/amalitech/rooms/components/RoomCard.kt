@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.amalitech.core.data.model.Room
+import com.amalitech.core_ui.swipe_animation.SwipeAction
 import com.amalitech.core_ui.swipe_animation.SwipeableCardSideContents
 import com.amalitech.core_ui.swipe_animation.util.SwipeDirection
 import com.amalitech.core_ui.theme.LocalSpacing
@@ -103,25 +104,4 @@ fun RoomCard(
             }
         }
     )
-}
-
-@Composable
-private fun SwipeAction(
-    backgroundColor: Color,
-    icon: ImageVector,
-    onActionClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    IconButton(
-        onClick = onActionClick,
-        modifier = modifier
-            .fillMaxSize()
-            .background(backgroundColor)
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.surface
-        )
-    }
 }
