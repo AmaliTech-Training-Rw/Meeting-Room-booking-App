@@ -8,12 +8,12 @@ import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.signup.model.User
-import com.amalitech.onboarding.signup.use_case.SignupUseCase
+import com.amalitech.onboarding.signup.use_case.SignupUseCasesWrapper
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SignupViewModel(
-    private val signupUseCase: SignupUseCase
+    private val signupUseCasesWrapper: SignupUseCasesWrapper
 ) : BaseViewModel<SignupUiState>() {
 
     private val _userInput = mutableStateOf(UserInput())
@@ -109,7 +109,7 @@ class SignupViewModel(
             _uiStateFlow.update {
                 UiState.Loading()
             }
-            val result = signupUseCase.fetchOrganizationsType()
+            val result = signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
             if (result.data != null) {
                 _uiStateFlow.update {
                     UiState.Success(
@@ -146,7 +146,7 @@ class SignupViewModel(
             }
             validateData()
             if (_uiStateFlow.value !is UiState.Error) {
-                val result = signupUseCase.signup(
+                val result = signupUseCasesWrapper.signupUseCase(
                     user = User(
                         _userInput.value.username,
                         _userInput.value.organizationName,
@@ -176,9 +176,9 @@ class SignupViewModel(
      * it updates the viewModel state with it.
      */
     private fun validateData() {
-        val emailValidationResult = signupUseCase.validateEmail(_userInput.value.email)
-        val passwordValidationResult = signupUseCase.validatePassword(_userInput.value.password)
-        val valuesNotBlankResult = signupUseCase.checkValuesNotBlank(
+        val emailValidationResult = signupUseCasesWrapper.validateEmailUseCase(_userInput.value.email)
+        val passwordValidationResult = signupUseCasesWrapper.validatePasswordUseCase(_userInput.value.password)
+        val valuesNotBlankResult = signupUseCasesWrapper.checkValuesNotBlankUseCase(
             _userInput.value.email,
             _userInput.value.password,
             _userInput.value.passwordConfirmation,
@@ -186,7 +186,7 @@ class SignupViewModel(
             _userInput.value.username,
             _userInput.value.selectedOrganizationType
         )
-        val passwordsMatchResult = signupUseCase.checkPasswordsMatch(
+        val passwordsMatchResult = signupUseCasesWrapper.checkPasswordsMatchUseCase(
             _userInput.value.password,
             _userInput.value.passwordConfirmation
         )
@@ -201,9 +201,9 @@ class SignupViewModel(
             )
 
             else -> {
-                val isEmailAvailable = signupUseCase.isEmailAvailable(_userInput.value.email)
+                val isEmailAvailable = signupUseCasesWrapper.isEmailAvailableUseCase(_userInput.value.email)
                 val isUsernameAvailable =
-                    signupUseCase.isUsernameAvailable(_userInput.value.username)
+                    signupUseCasesWrapper.isUsernameAvailableUseCase(_userInput.value.username)
 
                 if (!isEmailAvailable) {
                     updateStateWithError(UiText.StringResource(R.string.error_email_address_already_taken))

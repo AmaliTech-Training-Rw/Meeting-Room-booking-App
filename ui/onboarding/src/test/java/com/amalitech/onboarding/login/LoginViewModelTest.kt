@@ -4,7 +4,7 @@ import com.amalitech.core.util.UiText
 import com.amalitech.core.R
 import com.amalitech.onboarding.MainDispatcherRule
 import com.amalitech.core_ui.util.UiState
-import com.amalitech.onboarding.login.use_case.LoginUseCase
+import com.amalitech.onboarding.login.use_case.LoginUseCasesWrapper
 import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -22,7 +22,7 @@ class LoginViewModelTest {
     private lateinit var viewModel: LoginViewModel
 
     @MockK
-    private lateinit var loginUseCase: LoginUseCase
+    private lateinit var loginUseCasesWrapper: LoginUseCasesWrapper
 
     @MockK
     private lateinit var sharedPreferences: OnboardingSharedPreferences
@@ -32,9 +32,9 @@ class LoginViewModelTest {
 
     @Before
     fun setUp() {
-        loginUseCase = mockk()
+        loginUseCasesWrapper = mockk()
         sharedPreferences = mockk()
-        viewModel = LoginViewModel(loginUseCase, sharedPreferences)
+        viewModel = LoginViewModel(loginUseCasesWrapper, sharedPreferences)
     }
 
     @Test
@@ -58,19 +58,19 @@ class LoginViewModelTest {
     @Test
     fun `when onLoginClick is called with valid email and password the state is updated accordingly`() {
         every {
-            loginUseCase.validateEmail(any())
+            loginUseCasesWrapper.validateEmailUseCase(any())
         } returns null
 
         every {
-            loginUseCase.validatePassword(any())
+            loginUseCasesWrapper.validatePasswordUseCase(any())
         } returns null
 
         every {
-            loginUseCase.logIn(any(), any())
+            loginUseCasesWrapper.logInUseCase(any(), any())
         } returns null
 
         every {
-            loginUseCase.isUserAdmin()
+            loginUseCasesWrapper.isUserAdminUseCase()
         } returns false
 
         justRun {
@@ -89,11 +89,11 @@ class LoginViewModelTest {
     @Test
     fun ` when onLoginClick is called with valid email and invalid password an error is added to state`() {
         every {
-            loginUseCase.validateEmail(any())
+            loginUseCasesWrapper.validateEmailUseCase(any())
         } returns null
 
         every {
-            loginUseCase.validatePassword(any())
+            loginUseCasesWrapper.validatePasswordUseCase(any())
         } returns UiText.StringResource(R.string.error_password_is_not_valid)
 
         viewModel.onLoginClick()
@@ -109,11 +109,11 @@ class LoginViewModelTest {
     @Test
     fun `when on login click is called with invalid email and valid password an error is added to state`() {
         every {
-            loginUseCase.validateEmail(any())
+            loginUseCasesWrapper.validateEmailUseCase(any())
         } returns UiText.StringResource(R.string.error_email_not_valid)
 
         every {
-            loginUseCase.validatePassword(any())
+            loginUseCasesWrapper.validatePasswordUseCase(any())
         } returns null
 
         viewModel.onLoginClick()
@@ -129,15 +129,15 @@ class LoginViewModelTest {
     @Test
     fun `when onLoginClick is called with wrong credentials an error is added to state`() {
         every {
-            loginUseCase.validateEmail(any())
+            loginUseCasesWrapper.validateEmailUseCase(any())
         } returns null
 
         every {
-            loginUseCase.validatePassword(any())
+            loginUseCasesWrapper.validatePasswordUseCase(any())
         } returns null
 
         every {
-            loginUseCase.logIn(any(), any())
+            loginUseCasesWrapper.logInUseCase(any(), any())
         } returns UiText.StringResource(androidx.compose.ui.R.string.default_error_message)
 
 

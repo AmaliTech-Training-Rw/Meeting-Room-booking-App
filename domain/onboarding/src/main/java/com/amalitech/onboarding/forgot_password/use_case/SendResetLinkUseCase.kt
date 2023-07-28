@@ -1,0 +1,18 @@
+package com.amalitech.onboarding.forgot_password.use_case
+
+import com.amalitech.core.util.UiText
+
+class SendResetLinkUseCase {
+
+    /**
+     * Sends a reset link to the provided email address
+     * by making an API call
+     * @param email the provided email
+     * @return an instance of UiText when there is an error returned
+     * by the API, otherwise, null.
+     */
+    operator fun invoke(email: String): UiText? {
+        // TODO(use the api to log into the account)
+        return UiText.DynamicString("The api is not yet available")
+    }
+}

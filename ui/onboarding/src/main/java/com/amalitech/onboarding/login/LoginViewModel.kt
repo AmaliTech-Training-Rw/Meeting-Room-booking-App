@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
-import com.amalitech.onboarding.login.use_case.LoginUseCase
+import com.amalitech.onboarding.login.use_case.LoginUseCasesWrapper
 import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val loginUseCase: LoginUseCase,
+    private val loginUseCasesWrapper: LoginUseCasesWrapper,
     private val sharedPreferences: OnboardingSharedPreferences
 ) : BaseViewModel<LoginUiState>() {
     private val _uiState = MutableStateFlow(
@@ -64,10 +64,10 @@ class LoginViewModel(
             _uiStateFlow.update {
                 UiState.Loading()
             }
-            val emailValidation = loginUseCase.validateEmail(_uiState.value.email)
-            val passwordValidation = loginUseCase.validatePassword(_uiState.value.password)
+            val emailValidation = loginUseCasesWrapper.validateEmailUseCase(_uiState.value.email)
+            val passwordValidation = loginUseCasesWrapper.validatePasswordUseCase(_uiState.value.password)
             if (emailValidation == null && passwordValidation == null) {
-                val apiResult = loginUseCase.logIn(
+                val apiResult = loginUseCasesWrapper.logInUseCase(
                     email = _uiState.value.email,
                     password = _uiState.value.password
                 )

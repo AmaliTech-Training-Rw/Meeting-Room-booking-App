@@ -1,16 +1,14 @@
 package com.amalitech.onboarding.signup.use_case
 
-import com.amalitech.onboarding.login.use_case.ValidateEmail
-import com.amalitech.onboarding.login.use_case.ValidatePassword
-import com.amalitech.onboarding.reset_password.CheckPasswordsMatch
+import com.amalitech.core.util.UiText
+import com.amalitech.onboarding.signup.model.User
+import kotlinx.coroutines.delay
 
-data class SignupUseCase(
-    val isEmailAvailable: IsEmailAvailable,
-    val isUsernameAvailable: IsUsernameAvailable,
-    val fetchOrganizationsType: FetchOrganizationsType,
-    val signup: Signup,
-    val validatePassword: ValidatePassword,
-    val validateEmail: ValidateEmail,
-    val checkPasswordsMatch: CheckPasswordsMatch,
-    val checkValuesNotBlank: CheckValuesNotBlank
-)
+class SignupUseCase {
+
+    suspend operator fun invoke(user: User): UiText? {
+        // TODO("SIGN UP USING THE GIVEN INFORMATION")
+        delay(5000)
+        return null
+    }
+}
