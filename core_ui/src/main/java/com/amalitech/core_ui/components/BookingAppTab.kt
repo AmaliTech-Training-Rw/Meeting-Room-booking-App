@@ -1,4 +1,4 @@
-package com.amalitech.home.components
+package com.amalitech.core_ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,14 +18,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.amalitech.core.util.UiText
-import com.amalitech.ui.home.R
+import com.amalitech.core_ui.R
 
 @Composable
-fun HomeTab(
-    onTabSelected: (tab: HomeTab) -> Unit,
-    selectedTab: HomeTab,
+fun BookingAppTab(
+    onTabSelected: (tab: Tab) -> Unit,
+    selectedTab: Tab,
     modifier: Modifier = Modifier,
-    tabs: List<HomeTab> = HomeTab.createHomeTabsList(),
+    tabs: List<Tab> = Tab.createHomeTabsList(),
     underlineColor: Color = MaterialTheme.colorScheme.primary,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
 ) {
@@ -51,8 +51,8 @@ fun HomeTab(
 
 @Composable
 fun TabItem(
-    tab: HomeTab,
-    onTabSelected: (tab: HomeTab) -> Unit,
+    tab: Tab,
+    onTabSelected: (tab: Tab) -> Unit,
     textStyle: TextStyle,
     underlineColor: Color,
     modifier: Modifier = Modifier,
@@ -82,11 +82,15 @@ fun TabItem(
     }
 }
 
-sealed class HomeTab(val name: UiText.StringResource) {
-    object Rooms : HomeTab(UiText.StringResource(R.string.rooms))
-    object Calendar : HomeTab(UiText.StringResource(R.string.calendar))
+sealed class Tab(val name: UiText.StringResource) {
+    object Rooms : Tab(UiText.StringResource(R.string.rooms))
+    object Calendar : Tab(UiText.StringResource(R.string.calendar))
+
+    object ActiveBookings: Tab(UiText.StringResource(R.string.active))
+    object EndedBookings: Tab(UiText.StringResource(R.string.ended))
 
     companion object {
         fun createHomeTabsList() = listOf(Rooms, Calendar)
+        fun createBookingTabsList() = listOf(ActiveBookings, EndedBookings)
     }
 }

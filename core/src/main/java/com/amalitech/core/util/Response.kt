@@ -1,6 +1,4 @@
-package com.amalitech.onboarding.util
-
-import com.amalitech.core.util.UiText
+package com.amalitech.core.util
 
 data class Response<T>(
     val data: T? = null,

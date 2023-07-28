@@ -22,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
+import com.amalitech.booking.BookingScreen
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
 import com.amalitech.core_ui.components.drawer.BookMeetingRoomDrawer
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
@@ -203,8 +204,7 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
             Text("Invitations screen")
         }
         composable(BottomNavItem.Bookings.route) {
-            // TODO (ADD BOOKINGS SCREEN COMPOSABLE HERE)
-            Text("Bookings screen")
+            BookingScreen()
         }
     }
 }

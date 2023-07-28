@@ -1,6 +1,9 @@
 package com.amalitech.admin.room
 
 import android.view.KeyEvent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,12 +45,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -61,7 +63,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.amalitech.core_ui.R
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.amalitech.core_ui.components.BookMeetingRoomDropDown
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
@@ -69,6 +72,7 @@ import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.add_room_icon_button_bg
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun AddRoomScreen(
     viewModel: AddRoomViewModel = koinViewModel()
@@ -79,6 +83,13 @@ fun AddRoomScreen(
         mutableStateOf(false)
     }
     val focusManager: FocusManager = LocalFocusManager.current
+
+    val galleryLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) {
+            viewModel.onRoomImages(it)
+        }
+
+    val spacing = LocalSpacing.current
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -121,10 +132,21 @@ fun AddRoomScreen(
                         ),
                         shape = RoundedCornerShape(4.dp)
                     )
-                    .padding(14.dp, 12.dp, 14.dp, 12.dp)
+                    .padding(
+                        spacing.spaceMedium,
+                        spacing.spaceSmall,
+                        spacing.spaceMedium,
+                        spacing.spaceSmall
+                    )
             ) {
                 IconButton(
-                    onClick = { /* ... */ },
+                    onClick = {
+                        galleryLauncher.launch(
+                            PickVisualMediaRequest(
+                                mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
+                            )
+                        )
+                    },
                     modifier = Modifier
                         .align(Alignment.Center)
                         .size(57.dp, 42.dp)
@@ -133,16 +155,15 @@ fun AddRoomScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Add,
-                        contentDescription = null,
+                        contentDescription = stringResource(
+                            id = com.amalitech.core.R.string.add_room_button
+                        ),
                         modifier = Modifier.size(50.dp),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
 
-            val list = listOf(
-                "A", "B", "C", "D"
-            ) + ((0..100).map { it.toString() })
             LazyRow(
                 modifier = Modifier
                     .constrainAs(images) {
@@ -152,22 +173,46 @@ fun AddRoomScreen(
                         width = Dimension.fillToConstraints
                     }
             ) {
-                items(items = list, itemContent = { item ->
-                    val image: Painter = painterResource(id = R.drawable.room)
-                    Image(
-                        painter = image,
-                        contentDescription = item,
-                        modifier = Modifier
-                            .size(85.dp, 66.dp)
-                            .clip(RoundedCornerShape(4.dp))
-                    )
-                })
+                if (state.imagesList.isEmpty()) {
+                    item {
+                        Text(
+                            text = stringResource(com.amalitech.core.R.string.select_photos),
+                            modifier = Modifier
+                                .constrainAs(add_photos) {
+                                    top.linkTo(parent.top, spacing.spaceMedium) // set to 48.dp
+                                    start.linkTo(parent.start, spacing.spaceMedium)
+                                    end.linkTo(parent.end, spacing.spaceSmall)
+                                    width = Dimension.fillToConstraints
+                                }
+                                .padding(spacing.spaceMedium),
+                            color = MaterialTheme.colorScheme.outlineVariant,
+                            textAlign = TextAlign.Start,
+                            fontWeight = FontWeight.Light,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+                items(
+                    items = state.imagesList,
+                    itemContent = { uri ->
+                        Image(
+                            painter = rememberImagePainter(uri),
+                            contentScale = ContentScale.FillWidth,
+                            contentDescription = stringResource(
+                                id = com.amalitech.core.R.string.features_empty
+                            ),
+                            modifier = Modifier
+                                .size(85.dp, 66.dp)
+                                .clip(RoundedCornerShape(spacing.spaceExtraSmall))
+                                .padding(spacing.spaceExtraSmall)
+                        )
+                    })
             }
 
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(spacing.spaceSmall),
                 contentPadding = PaddingValues(
-                    vertical = 8.dp
+                    vertical = spacing.spaceSmall
                 ),
                 modifier = Modifier
                     .constrainAs(form) {
@@ -188,7 +233,7 @@ fun AddRoomScreen(
                         modifier = Modifier.fillMaxWidth(),
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Go,
-                            keyboardType = KeyboardType.Password
+                            keyboardType = KeyboardType.Text
                         ),
                         onGo = {
                             viewModel.onSaveRoomClick()
@@ -241,34 +286,21 @@ fun AddRoomScreen(
                             .height(118.dp),
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Go,
-                            keyboardType = KeyboardType.Password
+                            keyboardType = KeyboardType.Text
                         ),
                         onGo = {
                             viewModel.onSaveRoomClick()
                         },
                         singleLine = false
                     )
-
-//                    RoomMultiLineTextField(
-//                        placeholder = stringResource(com.amalitech.core.R.string.add_features),
-//                        value = state.features,
-//                        onValueChange = {
-//                            viewModel.onFeatures(it)
-//                        },
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .height(118.dp),
-//                        keyboardOptions = KeyboardOptions(
-//                            imeAction = ImeAction.Go,
-//                            keyboardType = KeyboardType.Password
-//                        ),
-//                    )
                 }
 
                 item {
                     DefaultButton(
                         text = stringResource(com.amalitech.core.R.string.save_room),
-                        onClick = { viewModel.onSaveRoomClick() },
+                        onClick = {
+                            viewModel.onSaveRoomClick()
+                        },
                         modifier = Modifier.fillMaxWidth(),
                         backgroundColor = MaterialTheme.colorScheme.inversePrimary,
                         isLoading = false // TODO: use network ui state here
@@ -285,6 +317,7 @@ fun RoomCounter(
     removeRoom: () -> Unit,
     addRoom: () -> Unit
 ) {
+    val spacing = LocalSpacing.current
     Box(
         Modifier
             .border(
@@ -295,11 +328,13 @@ fun RoomCounter(
                 shape = RoundedCornerShape(5.dp)
             )
             .size(460.dp, 39.dp)
-            .padding(16.dp, 0.dp)
+            .padding(spacing.spaceMedium, spacing.default)
     ) {
         Icon(
             imageVector = Icons.Filled.Remove,
-            contentDescription = null,
+            contentDescription = stringResource(
+                id = com.amalitech.core.R.string.add_room_counter
+            ),
             modifier = Modifier
                 .clickable(
                     onClick = {
@@ -324,7 +359,9 @@ fun RoomCounter(
 
         Icon(
             imageVector = Icons.Filled.Add,
-            contentDescription = null,
+            contentDescription =  stringResource(
+                id = com.amalitech.core.R.string.add_room_counter
+            ),
             modifier = Modifier
                 .clickable(
                     onClick = {
@@ -350,7 +387,7 @@ fun RoomTextField(
     ),
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         imeAction = ImeAction.Next,
-        keyboardType = KeyboardType.Password
+        keyboardType = KeyboardType.Text
     ),
     focusManager: FocusManager = LocalFocusManager.current,
     onGo: () -> Unit = {},
@@ -421,7 +458,7 @@ fun RoomTextFieldPreview() {
             mutableStateOf("")
         }
         RoomTextField(
-            placeholder = "password",
+            placeholder = stringResource(com.amalitech.core.R.string.add_room),
             value = value,
             onValueChange = { value = it },
             modifier = Modifier.fillMaxWidth(),
@@ -430,6 +467,7 @@ fun RoomTextFieldPreview() {
     }
 }
 
+@Preview
 @Composable
 fun AddRoomScreenPreview() {
     BookMeetingRoomTheme {
@@ -437,6 +475,7 @@ fun AddRoomScreenPreview() {
     }
 }
 
+@Preview
 @Composable
 fun RoomCounterPreview() {
     BookMeetingRoomTheme {
