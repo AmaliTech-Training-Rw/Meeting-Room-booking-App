@@ -1,8 +1,8 @@
-package com.amalitech.user.domain.usecases
+package com.amalitech.user.usecases
 
 import com.amalitech.user.repository.UserRepository
 
-class GetUsers constructor(
+class GetUseCase constructor(
     private val userRepository: UserRepository
 ) {
     operator fun invoke() = userRepository.getUsers()

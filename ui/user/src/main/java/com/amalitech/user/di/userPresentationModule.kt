@@ -1,7 +1,7 @@
 package com.amalitech.user.di
 
 import com.amalitech.user.UserViewModel
-import com.amalitech.user.domain.usecases.GetUsers
+import com.amalitech.user.usecases.GetUseCase
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -11,6 +11,6 @@ val userPresentationModule = module {
     }
 
     single {
-        GetUsers(get())
+        GetUseCase(get())
     }
 }
