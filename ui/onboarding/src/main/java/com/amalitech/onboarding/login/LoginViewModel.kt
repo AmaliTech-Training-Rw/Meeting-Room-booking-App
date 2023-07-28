@@ -78,7 +78,7 @@ class LoginViewModel(
                         )
                     }
                 } else {
-                    _isAdmin.value = loginUseCase.isUserAdmin()
+                    _isAdmin.value = loginUseCasesWrapper.isUserAdminUseCase()
                     sharedPreferences.saveShouldShowOnboarding(false)
                     sharedPreferences.saveUserType(_isAdmin.value)
                     _uiStateFlow.update {
