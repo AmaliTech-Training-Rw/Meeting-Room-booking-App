@@ -1,4 +1,4 @@
-package com.amalitech.core_ui.ui
+package com.amalitech.bookmeetingroom.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -9,8 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.amalitech.core_ui.components.BookMeetingTopAppBar
-import com.amalitech.core_ui.navigation.BookMeetingRoomNavHost
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
@@ -24,7 +25,8 @@ fun BookMeetingRoomApp(
     onSearchQueryChange: ((String) -> Unit)? = null,
     onSearchClick: (() -> Unit)? = null,
     isSearchTextFieldVisible: Boolean = false,
-    onSearchTextFieldVisibilityChange: ((Boolean) -> Unit)? = null
+    onSearchTextFieldVisibilityChange: ((Boolean) -> Unit)? = null,
+    mainNavController: NavHostController
 ) {
     Scaffold(
         topBar = {
@@ -46,7 +48,8 @@ fun BookMeetingRoomApp(
             BookMeetingRoomNavHost(
                 innerPadding,
                 NavigationItem.Home.route,
-                appState
+                appState,
+                mainNavController
             )
         },
         snackbarHost = {
@@ -69,8 +72,9 @@ fun BookMeetingTopAppBarPreview() {
     BookMeetingRoomTheme {
         val appState = rememberBookMeetingRoomAppState()
         BookMeetingRoomApp(
-            appState,
-            "Home",
+            appState = appState,
+            title = "Home",
+            mainNavController = rememberNavController()
         )
     }
 }

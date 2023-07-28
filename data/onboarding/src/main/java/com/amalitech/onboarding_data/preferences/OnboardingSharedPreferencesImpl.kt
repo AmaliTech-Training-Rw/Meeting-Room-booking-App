@@ -17,7 +17,7 @@ class OnboardingSharedPreferencesImpl(
         sharedPreferences.edit()
             .putBoolean(
                 IS_USER_ADMIN,
-                false
+                isAdmin
             )
             .apply()
     }
