@@ -5,4 +5,6 @@
     <string name="no_item_found">No item found</string>
     <string name="booked_by">Booked by: %s</string>
     <string name="date_and_time">%s %s - %s</string>
+    <string name="decline">Decline</string>
+    <string name="approve">Approve</string>
 </resources>

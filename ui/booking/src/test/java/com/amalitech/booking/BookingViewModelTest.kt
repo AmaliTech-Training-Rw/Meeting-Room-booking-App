@@ -10,6 +10,7 @@ import com.amalitech.core_ui.util.UiState
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import junit.framework.TestCase
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -95,5 +96,11 @@ class BookingViewModelTest {
         viewModel.onTabSelected(tab)
 
         assertEquals(tab, viewModel.selectedTab.value)
+    }
+
+    @Test
+    fun rien() {
+        val result = viewModel.lengthOfLongestSubstring("pwwkew")
+        TestCase.assertEquals(3, result)
     }
 }
