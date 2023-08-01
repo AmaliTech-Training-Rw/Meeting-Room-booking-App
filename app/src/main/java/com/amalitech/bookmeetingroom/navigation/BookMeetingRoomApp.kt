@@ -1,5 +1,6 @@
 package com.amalitech.bookmeetingroom.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -20,7 +21,6 @@ import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 @Composable
 fun BookMeetingRoomApp(
     appState: BookMeetingRoomAppState,
-    title: String,
     searchQuery: String? = null,
     onSearchQueryChange: ((String) -> Unit)? = null,
     onSearchClick: (() -> Unit)? = null,
@@ -35,7 +35,7 @@ fun BookMeetingRoomApp(
             if (destination != null) {
                 BookMeetingTopAppBar(
                     appState = appState,
-                    title = title,
+                    title = destination.title,
                     searchQuery = searchQuery,
                     onSearchQueryChange = onSearchQueryChange,
                     onSearchClick = onSearchClick,
@@ -73,7 +73,6 @@ fun BookMeetingTopAppBarPreview() {
         val appState = rememberBookMeetingRoomAppState()
         BookMeetingRoomApp(
             appState = appState,
-            title = "Home",
             mainNavController = rememberNavController()
         )
     }

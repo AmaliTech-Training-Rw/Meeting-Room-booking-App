@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
+import com.amalitech.user.UserScreen
 
 @Composable
 fun BookMeetingRoomNavHost(
@@ -34,6 +35,11 @@ fun BookMeetingRoomNavHost(
 
         composable(route = NavigationItem.BookingRequests.route) {
             TestScreen("This is ${NavigationItem.BookingRequests.title}", innerPadding)
+        }
+
+        composable(route = NavigationItem.Users.route) {
+            UserScreen(innerPadding)
+            TestScreen("This is ${NavigationItem.Users.title}", innerPadding)
         }
 
         composable(route = NavigationItem.Profile.route) {

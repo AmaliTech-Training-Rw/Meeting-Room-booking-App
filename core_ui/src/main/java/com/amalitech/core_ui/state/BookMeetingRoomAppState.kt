@@ -102,6 +102,7 @@ class BookMeetingRoomAppState(
             NavigationItem.Profile.route -> NavigationItem.Profile
             NavigationItem.BookingRequests.route -> NavigationItem.BookingRequests
             NavigationItem.Invitations.route -> NavigationItem.Invitations
+            NavigationItem.Users.route -> NavigationItem.Users
             else -> null
         }
 
