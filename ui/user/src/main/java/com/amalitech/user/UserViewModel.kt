@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
+import com.amalitech.user.state.UserUiState
 import com.amalitech.user.usecases.GetUseCase
 import com.amalitech.user.state.UserViewState
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -38,6 +39,10 @@ class UserViewModel (
     }
 
     fun onDelete() {
+
+    }
+
+    fun onAddUser() {
 
     }
 

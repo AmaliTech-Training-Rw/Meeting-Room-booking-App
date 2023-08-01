@@ -23,7 +23,8 @@ fun BookMeetingRoomNavHost(
     innerPadding: PaddingValues,
     startDestination: String,
     appState: BookMeetingRoomAppState,
-    mainNavController: NavHostController
+    mainNavController: NavHostController,
+    setFabOnClick: ((() -> Unit)?) -> Unit
 ) {
     NavHost(
         navController = appState.navController,
@@ -38,8 +39,10 @@ fun BookMeetingRoomNavHost(
         }
 
         composable(route = NavigationItem.Users.route) {
-            UserScreen(innerPadding)
-            TestScreen("This is ${NavigationItem.Users.title}", innerPadding)
+            UserScreen(
+                innerPadding = innerPadding,
+                setFabOnClick = setFabOnClick
+            )
         }
 
         composable(route = NavigationItem.Profile.route) {

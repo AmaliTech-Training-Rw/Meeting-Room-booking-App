@@ -16,11 +16,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,14 +50,20 @@ import com.amalitech.core_ui.swipe_animation.util.SwipeDirection
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.ui.user.R
+import com.amalitech.user.adduser.AddUserScreen
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserScreen(
     innerPadding: PaddingValues,
+    setFabOnClick: (() -> Unit) -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: UserViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+
     val spacing = LocalSpacing.current
 
     var isLeftContentVisible by rememberSaveable {
@@ -61,47 +74,96 @@ fun UserScreen(
         mutableStateOf(false)
     }
 
-    SwipeableCardSideContents(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(77.dp),
-        isLeftContentVisible = isLeftContentVisible,
-        isRightContentVisible = isRightContentVisible,
-        onSwipeEnd = { direction ->
-            when (direction) {
-                SwipeDirection.LEFT -> {
-                    if (isRightContentVisible)
-                        isRightContentVisible = false
-                    else
-                        isLeftContentVisible = false
-                }
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
 
-                SwipeDirection.NONE -> {
-                    isLeftContentVisible = false
-                    isRightContentVisible = false
-                }
-
-                SwipeDirection.RIGHT -> {
-                    if (isLeftContentVisible)
-                        isLeftContentVisible = false
-                    else
-                        isRightContentVisible = true
-                }
-            }
-        },
-        rightContent = {
-            SwipeAction(
-                backgroundColor = MaterialTheme.colorScheme.error,
-                icon = Icons.Filled.Delete,
-                onActionClick = viewModel::onDelete,
-                modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
-            )
-        },
-        leftContent = {},
-        content = {
-            UserItem(isRightContentVisible)
+    // TODO: ask esther is we really need this launched effect here?
+    LaunchedEffect(Unit) {
+        setFabOnClick {
+            // open bottom sheet
+            showBottomSheet = true
+            // SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("add user"))
         }
-    )
+    }
+
+    if (showBottomSheet) {
+//        AddUserScreen(
+//            showBottomSheet,
+//            innerPadding
+//        )
+
+        ModalBottomSheet(
+            onDismissRequest = {
+                showBottomSheet = false
+            },
+            sheetState = sheetState
+        ) {
+            // Sheet content
+            Button(onClick = {
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    if (!sheetState.isVisible) {
+                        showBottomSheet = false
+                    }
+                }
+            }) {
+                Text("Hide bottom sheet")
+            }
+        }
+    }
+
+    Column(
+        modifier = modifier
+            .padding(innerPadding)
+            .fillMaxSize()
+    ) {
+        SwipeableCardSideContents(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(77.dp),
+            isLeftContentVisible = isLeftContentVisible,
+            isRightContentVisible = isRightContentVisible,
+            onSwipeEnd = { direction ->
+                when (direction) {
+                    SwipeDirection.LEFT -> {
+                        if (isRightContentVisible)
+                            isRightContentVisible = false
+                        else
+                            isLeftContentVisible = false
+                    }
+
+                    SwipeDirection.NONE -> {
+                        isLeftContentVisible = false
+                        isRightContentVisible = false
+                    }
+
+                    SwipeDirection.RIGHT -> {
+                        if (isLeftContentVisible)
+                            isLeftContentVisible = false
+                        else
+                            isRightContentVisible = true
+                    }
+                }
+            },
+            rightContent = {
+                SwipeAction(
+                    backgroundColor = MaterialTheme.colorScheme.error,
+                    icon = Icons.Filled.Delete,
+                    onActionClick = viewModel::onDelete,
+                    modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
+                )
+            },
+            leftContent = {},
+            content = {
+                UserItem(isRightContentVisible)
+            }
+        )
+    }
+
+//    LazyColumn(
+//        content = {
+//
+//        })
 }
 
 @Composable
@@ -204,6 +266,8 @@ fun UserItemPreview() {
 @Composable
 fun UserScreenPreview() {
     BookMeetingRoomTheme {
-        UserScreen(PaddingValues(16.dp))
+        UserScreen(
+            PaddingValues(16.dp),
+            {})
     }
 }
