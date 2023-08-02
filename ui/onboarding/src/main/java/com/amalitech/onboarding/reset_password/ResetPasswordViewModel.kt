@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ResetPasswordViewModel(
-    private val resetPasswordUseCase: ResetPasswordUseCase
+    private val resetPasswordUseCasesWrapper: ResetPasswordUseCasesWrapper
 ) : BaseViewModel<ResetPasswordUiState>() {
 
     private val _uiState = MutableStateFlow(
@@ -44,7 +44,7 @@ class ResetPasswordViewModel(
                 passwordConfirmation = password.trim(),
             )
         }
-        val passwordCheck = resetPasswordUseCase.checkPasswordsMatch(
+        val passwordCheck = resetPasswordUseCasesWrapper.checkPasswordsMatchUseCase(
             _uiState.value.newPassword,
             _uiState.value.passwordConfirmation
         )
@@ -74,13 +74,13 @@ class ResetPasswordViewModel(
             _uiStateFlow.update {
                 UiState.Loading()
             }
-            val passwordValid = resetPasswordUseCase.validatePassword(_uiState.value.newPassword)
-            val passwordsCheck = resetPasswordUseCase.checkPasswordsMatch(
+            val passwordValid = resetPasswordUseCasesWrapper.validatePasswordUseCase(_uiState.value.newPassword)
+            val passwordsCheck = resetPasswordUseCasesWrapper.checkPasswordsMatchUseCase(
                 _uiState.value.newPassword,
                 _uiState.value.passwordConfirmation)
 
             if (passwordsCheck == null && passwordValid == null) {
-                val apiResult = resetPasswordUseCase.resetPassword(
+                val apiResult = resetPasswordUseCasesWrapper.resetPasswordUseCase(
                     _uiState.value.newPassword,
                     _uiState.value.passwordConfirmation
                 )
