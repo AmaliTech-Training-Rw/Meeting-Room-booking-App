@@ -1,6 +1,5 @@
 package com.amalitech.user.state
 
-import android.net.Uri
 import com.amalitech.user.models.User
 
 data class UserViewState(

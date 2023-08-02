@@ -6,4 +6,13 @@
     <string name="bin">Bin</string>
     <string name="active">Active</string>
     <string name="inactive">In Active</string>
+    <string name="invite_user">Invite User</string>
+    <string name="cancel">Cancel</string>
+    <string name="invite">Invite</string>
+
+    <string name="first_name_empty">First name value is empty</string>
+    <string name="last_name_empty">Last name value is empty</string>
+    <string name="email_empty">Email value is empty</string>
+    <string name="location_selection_empty">Location value is empty</string>
+
 </resources>
