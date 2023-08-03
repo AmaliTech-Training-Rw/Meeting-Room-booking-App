@@ -13,6 +13,7 @@ class FetchBookingsUseCase {
         return ApiResult(
             data = listOf(
                 Booking(
+                    id = "id",
                     "room 1",
                     LocalDate.now(),
                     LocalTime.now(),
@@ -20,6 +21,7 @@ class FetchBookingsUseCase {
                     "https://via.placeholder.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),Booking(
+                    id = "id",
                     "room 1",
                     LocalDate.now(),
                     LocalTime.now(),
@@ -27,6 +29,7 @@ class FetchBookingsUseCase {
                     "https://via.placeholder.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),Booking(
+                    id = "id",
                     "room 1",
                     LocalDate.now(),
                     LocalTime.now(),
@@ -34,6 +37,7 @@ class FetchBookingsUseCase {
                     "https://via.placeholder.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),Booking(
+                    id = "id",
                     "room 1",
                     LocalDate.now(),
                     LocalTime.now(),
@@ -41,6 +45,7 @@ class FetchBookingsUseCase {
                     "https://via.placeholder.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),Booking(
+                    id = "id",
                     "room 1",
                     LocalDate.now(),
                     LocalTime.now(),
@@ -48,6 +53,7 @@ class FetchBookingsUseCase {
                     "https://via.placeholder.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),Booking(
+                    id = "id",
                     "room 1",
                     LocalDate.now(),
                     LocalTime.now(),
@@ -55,6 +61,7 @@ class FetchBookingsUseCase {
                     "https://via.placeholder.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),Booking(
+                    id = "id",
                     "room 1",
                     LocalDate.now(),
                     LocalTime.now(),
@@ -62,6 +69,7 @@ class FetchBookingsUseCase {
                     "https://via.placeholder.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),Booking(
+                    id = "id",
                     "room 1",
                     LocalDate.now(),
                     LocalTime.now(),

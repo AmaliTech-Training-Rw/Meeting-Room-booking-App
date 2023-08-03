@@ -3,6 +3,7 @@ package com.amalitech.core_ui.state
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.Details
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.People
@@ -24,6 +25,7 @@ sealed class NavigationItem(var title:String, var route:String, var icon: ImageV
     object Dashboard : NavigationItem("Dashboard", "dashboard_route", Icons.Default.Dashboard)
     object Invitations : NavigationItem("invitations", "invitations_route", Icons.Default.Home)
     object Logout : NavigationItem("Logout", "logout_route", Icons.Default.Home)
+    object BookingRequestDetail : NavigationItem("Booking request detail", "booking_request_detail", Icons.Default.Details)
 
     companion object {
         fun createItems(): List<NavigationItem> = listOf(

@@ -38,6 +38,7 @@ import com.amalitech.onboarding.reset_password.ResetPasswordViewModel
 import com.amalitech.onboarding.signup.NavArguments
 import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
+import com.amalitech.rooms.book_room.BookRoomScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -200,8 +201,9 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
 
         }
         composable(BottomNavItem.Invitations.route) {
-            // TODO (ADD INVITATIONS SCREEN COMPOSABLE HERE)
-            Text("Invitations screen")
+            BookRoomScreen(navBackStackEntry = it) {
+                
+            }
         }
         composable(BottomNavItem.Bookings.route) {
             BookingScreen()

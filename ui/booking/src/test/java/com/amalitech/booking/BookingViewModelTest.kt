@@ -10,7 +10,6 @@ import com.amalitech.core_ui.util.UiState
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
-import junit.framework.TestCase
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -52,6 +51,7 @@ class BookingViewModelTest {
         val date = LocalDate.now()
         val bookings = listOf(
             Booking(
+                id = "id",
                 "room1",
                 date,
                 LocalTime.of((0..23).random(), 0),
@@ -59,6 +59,7 @@ class BookingViewModelTest {
                 "https://via.placeholder.com/500.png"
             ),
             Booking(
+                id = "id",
                 "room2",
                 date,
                 LocalTime.of((0..23).random(), 0),
@@ -96,11 +97,5 @@ class BookingViewModelTest {
         viewModel.onTabSelected(tab)
 
         assertEquals(tab, viewModel.selectedTab.value)
-    }
-
-    @Test
-    fun rien() {
-        val result = viewModel.lengthOfLongestSubstring("pwwkew")
-        TestCase.assertEquals(3, result)
     }
 }

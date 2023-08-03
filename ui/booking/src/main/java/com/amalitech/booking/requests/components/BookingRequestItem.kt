@@ -1,6 +1,7 @@
 package com.amalitech.booking.requests.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,14 +36,15 @@ fun BookingRequestItem(
     booking: Booking,
     modifier: Modifier = Modifier,
     swiped: Boolean = false,
-    swipedBackgroundColor: Color = MaterialTheme.colorScheme.surface,
-    unSwipedBackgroundColor: Color = MaterialTheme.colorScheme.background,
+    swipedBackgroundColor: Color = MaterialTheme.colorScheme.tertiary,
+    unSwipedBackgroundColor: Color = MaterialTheme.colorScheme.surface,
     roomNameTextColor: Color = MaterialTheme.colorScheme.inverseOnSurface,
     roomnameTextStyle: TextStyle = MaterialTheme.typography.titleMedium.copy(
         fontWeight = FontWeight.ExtraBold
     ),
     descriptionTextColor: Color = MaterialTheme.colorScheme.onBackground,
-    descriptionTextStyle: TextStyle = MaterialTheme.typography.bodyMedium
+    descriptionTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+    onClick: (booking: Booking) -> Unit
 ) {
     val spacing = LocalSpacing.current
     Row(
@@ -52,7 +54,10 @@ fun BookingRequestItem(
             .background(
                 if (swiped) swipedBackgroundColor
                 else unSwipedBackgroundColor
-            ),
+            )
+            .clickable {
+                onClick(booking)
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(spacing.spaceExtraSmall)
     ) {

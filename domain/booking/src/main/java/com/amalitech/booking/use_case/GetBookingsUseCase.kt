@@ -15,6 +15,7 @@ class GetBookingsUseCase {
             Response(data = emptyList()) else Response(
             data = listOf(
                 Booking(
+                    id = "id",
                     "room3",
                     date,
                     LocalTime.of((0..12).random(), 0),
@@ -22,6 +23,7 @@ class GetBookingsUseCase {
                     "https://via.placeholder.com/400.png"
                 ),
                 Booking(
+                    id = "id",
                     "room2",
                     date,
                     LocalTime.of((0..23).random(), 0),
@@ -29,6 +31,7 @@ class GetBookingsUseCase {
                     "https://via.placeholder.com/400.png"
                 ),
                 Booking(
+                    id = "id",
                     "room1",
                     date,
                     LocalTime.of((0..23).random(), 0),
@@ -36,6 +39,7 @@ class GetBookingsUseCase {
                     "https://via.placeholder.com/400.png"
                 ),
                 Booking(
+                    id = "id",
                     "room1",
                     date,
                     LocalTime.of((0..23).random(), 0),
@@ -43,6 +47,7 @@ class GetBookingsUseCase {
                     "https://via.placeholder.com/400.png"
                 ),
                 Booking(
+                    id = "id",
                     "room2",
                     date,
                     LocalTime.of((0..23).random(), 0),
@@ -50,6 +55,7 @@ class GetBookingsUseCase {
                     "https://via.placeholder.com/400.png"
                 ),
                 Booking(
+                    id = "id",
                     "room2",
                     date,
                     LocalTime.of((0..23).random(), 0),
@@ -57,6 +63,7 @@ class GetBookingsUseCase {
                     "https://via.placeholder.com/400.png"
                 ),
                 Booking(
+                    id = "id",
                     "room1",
                     date,
                     LocalTime.of((0..23).random(), 0),

@@ -5,44 +5,49 @@ import com.amalitech.booking.model.Booking
 import com.amalitech.booking.request.use_case.BookingRequestsUseCaseWrapper
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.BaseViewModel
-import com.amalitech.core_ui.util.UiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class BookingRequestViewModel(
     private val useCaseWrapper: BookingRequestsUseCaseWrapper
-) : BaseViewModel<List<Booking>>() {
+) : BaseViewModel<BookingRequestsUiState>() {
+
+    private val _uiState = MutableStateFlow(BookingRequestsUiState())
+    val uiState: StateFlow<BookingRequestsUiState> get() = _uiState.asStateFlow()
 
     init {
         fetchBookings()
     }
 
-    fun fetchBookings() {
+    internal fun fetchBookings() {
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
-            _uiStateFlow.update {
-                UiState.Loading()
+            _uiState.update {
+                BookingRequestsUiState(
+                    isLoading = true
+                )
             }
 
             val result = useCaseWrapper.fetchBookingsUseCase()
 
             if (result.data != null) {
-                _uiStateFlow.update {
-                    UiState.Success(result.data)
+                _uiState.update {
+                    BookingRequestsUiState(
+                        bookings = result.data ?: emptyList()
+                    )
                 }
             } else if (result.error != null) {
-                _uiStateFlow.update {
-                    UiState.Error(
-                        result.error
-                    )
-                }
+                BookingRequestsUiState(
+                    error = result.error
+                )
             } else {
-                _uiStateFlow.update {
-                    UiState.Error(
-                        UiText.StringResource(com.amalitech.core.R.string.error_default_message)
-                    )
-                }
+                BookingRequestsUiState(
+                    error = UiText.StringResource(com.amalitech.core.R.string.error_default_message)
+                )
             }
         }
     }
@@ -64,30 +69,16 @@ class BookingRequestViewModel(
             if (result == null) {
                 fetchBookings()
             } else {
-                _uiStateFlow.update {
-                    UiState.Error(result)
+                _uiState.update {
+                    it.copy(error = result)
                 }
             }
         }
     }
 
-    fun lengthOfLongestSubstring(s: String): Int {
-        var subStr = ""
-        val currentLength: ArrayList<Int> = ArrayList()
-        var i = 0
-        while(i < s.length - 1) {
-            for (j in i until s.length) {
-                val c = s[j]
-                if (!subStr.contains(c)) {
-                    subStr += c
-                } else {
-                    currentLength.add(subStr.length)
-                }
-            }
-            i++
+    fun clearError() {
+        _uiState.update {
+            it.copy(error = null)
         }
-        val arr = currentLength.toTypedArray()
-        print(arr)
-        return arr.maxOrNull() ?: 0
     }
 }

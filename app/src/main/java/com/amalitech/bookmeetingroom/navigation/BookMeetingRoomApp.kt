@@ -49,7 +49,7 @@ fun BookMeetingRoomApp(
                 innerPadding,
                 NavigationItem.Home.route,
                 appState,
-                mainNavController
+                mainNavController,
             )
         },
         snackbarHost = {

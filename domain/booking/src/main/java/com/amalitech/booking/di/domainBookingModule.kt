@@ -1,5 +1,8 @@
 package com.amalitech.booking.di
 
+import com.amalitech.booking.request.use_case.BookingRequestsUseCaseWrapper
+import com.amalitech.booking.request.use_case.FetchBookingsUseCase
+import com.amalitech.booking.request.use_case.UpdateBookingStatusUseCase
 import com.amalitech.booking.use_case.BookingUseCase
 import com.amalitech.booking.use_case.GetBookingsUseCase
 import org.koin.dsl.module
@@ -11,5 +14,17 @@ val domainBookingModule = module {
 
     single {
         GetBookingsUseCase()
+    }
+
+    single {
+        FetchBookingsUseCase()
+    }
+
+    single {
+        UpdateBookingStatusUseCase()
+    }
+
+    single {
+        BookingRequestsUseCaseWrapper(get(), get())
     }
 }

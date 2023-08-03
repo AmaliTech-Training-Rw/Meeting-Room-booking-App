@@ -12,8 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.amalitech.booking.requests.BookingRequestScreen
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
 
@@ -27,13 +30,24 @@ fun BookMeetingRoomNavHost(
     NavHost(
         navController = appState.navController,
         startDestination = startDestination,
+        modifier = Modifier.padding(innerPadding)
     ) {
         composable(route = NavigationItem.Home.route) {
             TestScreen("This is ${NavigationItem.Home.title}", innerPadding)
         }
 
         composable(route = NavigationItem.BookingRequests.route) {
-            TestScreen("This is ${NavigationItem.BookingRequests.title}", innerPadding)
+            BookingRequestScreen() { booking ->
+                appState.navController.navigate("${NavigationItem.BookingRequestDetail.route}/${booking.id}")
+            }
+        }
+
+        composable(
+            route = "${NavigationItem.BookingRequestDetail.route}/{booking}",
+            arguments = listOf(navArgument("booking") { type = NavType.StringType})
+        ) { backStackEntry ->
+
+            Text("coming soon\nbooking id: ${backStackEntry.arguments?.getString("booking")}")
         }
 
         composable(route = NavigationItem.Profile.route) {
