@@ -8,5 +8,6 @@ data class RoomUiState(
     val features: List<String> = emptyList(),
     val bookings: List<Booking> = emptyList(),
     val canNavigate: Boolean = false,
-    val imgUrl: String = ""
+    val imgUrl: String = "",
+    val capacity: Int = 0
 )

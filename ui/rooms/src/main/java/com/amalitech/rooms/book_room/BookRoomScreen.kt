@@ -140,7 +140,7 @@ fun BookRoomScreen(
                         placeholder = painterResource(id = R.drawable.baseline_refresh_24),
                         contentScale = ContentScale.Crop
                     )
-                    Text(text = room.description)
+                    Text(text = stringResource(id = R.string.meeting_room_for_x_people, room.capacity))
                     SlotSelectionSection(
                         viewModel = viewModel,
                         userInput = userInput,

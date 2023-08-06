@@ -36,7 +36,8 @@ class GetRoomUseCase {
                         date = LocalDate.now()
                     )
                 ),
-                imgUrl = "https://via.placehor.com/500.png"
+                imgUrl = "https://via.placehor.com/500.png",
+                capacity = 10
             )
         )
     }

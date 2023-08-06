@@ -11,7 +11,8 @@ fun Room.toBookRoomUi(): RoomUiState {
         description,
         features,
         bookings,
-        imgUrl = imgUrl
+        imgUrl = imgUrl,
+        capacity = capacity
     )
 }
 
