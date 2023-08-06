@@ -43,9 +43,7 @@ fun SearchIcon(
             IconButton(onClick = { onSearchTextFieldVisibilityChanged(true) }) {
                 Icon(
                     painter = searchIcon,
-                    contentDescription = stringResource(
-                        R.string.open_search
-                    )
+                    contentDescription = stringResource(R.string.open_search)
                 )
             }
         } else {

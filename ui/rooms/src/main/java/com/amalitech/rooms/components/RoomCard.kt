@@ -55,7 +55,7 @@ fun RoomCard(
         },
         leftContent = {
             SwipeAction(
-                backgroundColor = MaterialTheme.colorScheme.inversePrimary,
+                backgroundColor = MaterialTheme.colorScheme.primary,
                 icon = Icons.Filled.Edit,
                 onActionClick = onLeftContentClick,
                 modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)

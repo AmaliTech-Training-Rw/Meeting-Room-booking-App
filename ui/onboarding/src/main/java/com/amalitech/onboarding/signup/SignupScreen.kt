@@ -245,7 +245,7 @@ fun SignupScreen(
         if (!invitedUser) {
             Spacer(modifier = Modifier.height(spacing.spaceSmall))
             val text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.scrim)) {
+                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
                     append(stringResource(id = R.string.question_already_have_an_account))
                     append(" ")
                 }
@@ -255,7 +255,7 @@ fun SignupScreen(
                 )
                 withStyle(
                     style = SpanStyle(
-                        color = MaterialTheme.colorScheme.inverseOnSurface,
+                        color = MaterialTheme.colorScheme.scrim,
                     )
                 ) {
                     append(stringResource(id = R.string.log_in))

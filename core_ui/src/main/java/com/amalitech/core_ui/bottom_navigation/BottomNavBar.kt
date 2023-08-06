@@ -43,6 +43,8 @@ fun BottomNavBar(
     contentColor: Color = MaterialTheme.colorScheme.onBackground,
     badgeBackgroundColor: Color = MaterialTheme.colorScheme.error,
     badgeTextColor: Color = MaterialTheme.colorScheme.onError,
+    unselectedTextColor: Color = MaterialTheme.colorScheme.onBackground,
+    unselectedIconColor: Color = MaterialTheme.colorScheme.onBackground,
     currentDestination: NavDestination?,
     onClick: (screen: BottomNavItem) -> Unit
 ) {
@@ -107,6 +109,8 @@ fun BottomNavBar(
                     selectedIconColor = selectedIconColor,
                     selectedTextColor = selectedTextColor,
                     indicatorColor = indicatorColor,
+                    unselectedTextColor = unselectedTextColor,
+                    unselectedIconColor = unselectedIconColor,
                 )
             )
         }

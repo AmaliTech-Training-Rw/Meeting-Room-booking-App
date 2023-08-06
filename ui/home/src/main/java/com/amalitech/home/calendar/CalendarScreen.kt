@@ -25,12 +25,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
+import com.amalitech.core_ui.util.formatDate
 import com.amalitech.home.HomeViewModel
 import com.amalitech.home.calendar.components.BookingItem
 import com.amalitech.home.calendar.components.Day
 import com.amalitech.home.calendar.components.MonthHeader
 import com.amalitech.home.calendar.components.SimpleCalendarTitle
-import com.amalitech.core_ui.util.formatDate
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -55,7 +55,7 @@ fun CalendarScreen(
     selectedDayBackgroundColor: Color = MaterialTheme.colorScheme.primary,
     bookingsTitleBackgroundColor: Color = MaterialTheme.colorScheme.tertiary,
     bookingsTitleContentColor: Color = MaterialTheme.colorScheme.onTertiaryContainer,
-    bookingsContentColor: Color = MaterialTheme.colorScheme.scrim,
+    bookingsContentColor: Color = MaterialTheme.colorScheme.onBackground,
     buttonBackgroundColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     bookingsContentBackgroundColor: Color = MaterialTheme.colorScheme.surface,
     dotsContentColor: Color = MaterialTheme.colorScheme.outline

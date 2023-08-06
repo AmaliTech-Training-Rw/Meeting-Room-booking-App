@@ -302,7 +302,6 @@ fun AddRoomScreen(
                             viewModel.onSaveRoomClick()
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        backgroundColor = MaterialTheme.colorScheme.inversePrimary,
                         isLoading = false // TODO: use network ui state here
                     )
                 }

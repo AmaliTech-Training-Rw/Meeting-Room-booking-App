@@ -150,7 +150,7 @@ fun LoginScreen(
                 Text(
                     text = stringResource(R.string.question_forgot_password),
                     textAlign = TextAlign.Right,
-                    color = MaterialTheme.colorScheme.inverseOnSurface,
+                    color = MaterialTheme.colorScheme.scrim,
                     modifier = Modifier.clickable {
                         onNavigateToForgotPassword()
                     }
@@ -168,7 +168,7 @@ fun LoginScreen(
             )
         }
         val text = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.scrim)) {
+            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
                 append(stringResource(id = R.string.question_dont_have_account))
                 append(" ")
             }
@@ -178,7 +178,7 @@ fun LoginScreen(
             )
             withStyle(
                 style = SpanStyle(
-                    color = MaterialTheme.colorScheme.inverseOnSurface,
+                    color = MaterialTheme.colorScheme.scrim,
                 )
             ) {
                 append(stringResource(id = R.string.sign_up))

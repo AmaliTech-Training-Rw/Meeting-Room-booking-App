@@ -122,7 +122,7 @@ fun ForgotPasswordScreen(
             enabled = baseResult !is UiState.Loading
         )
         val text = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.scrim)) {
+            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
                 append(stringResource(id = R.string.question_already_have_an_account))
                 append(" ")
             }
@@ -132,7 +132,7 @@ fun ForgotPasswordScreen(
             )
             withStyle(
                 style = SpanStyle(
-                    color = MaterialTheme.colorScheme.inverseOnSurface,
+                    color = MaterialTheme.colorScheme.scrim,
                 )
             ) {
                 append(stringResource(id = R.string.log_in))

@@ -103,8 +103,8 @@ fun DrawerNavigationItem(
             unselectedContainerColor = Color.Transparent,
             selectedTextColor = MaterialTheme.colorScheme.primary,
             selectedIconColor = MaterialTheme.colorScheme.primary,
-            unselectedTextColor = MaterialTheme.colorScheme.scrim,
-            unselectedIconColor = MaterialTheme.colorScheme.scrim
+            unselectedTextColor = MaterialTheme.colorScheme.onBackground,
+            unselectedIconColor = MaterialTheme.colorScheme.onBackground
         )
     )
 }
@@ -125,13 +125,13 @@ fun DrawerHeader() {
                 .clip(CircleShape)
         )
         Spacer(Modifier.height(12.dp))
-        Text("Firstname   Lastname", color = MaterialTheme.colorScheme.scrim)
+        Text("Firstname   Lastname", color = MaterialTheme.colorScheme.onBackground)
         Spacer(Modifier.height(12.dp))
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(2.dp)
-                .background(MaterialTheme.colorScheme.scrim)
+                .background(MaterialTheme.colorScheme.onBackground)
         )
     }
 }
