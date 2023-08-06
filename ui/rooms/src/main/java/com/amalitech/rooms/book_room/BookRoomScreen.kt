@@ -28,8 +28,6 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -78,6 +76,7 @@ import java.time.LocalDate
 
 @Composable
 fun BookRoomScreen(
+    snackbarHostState: SnackbarHostState,
     viewModel: BookRoomViewModel = koinViewModel(),
     navBackStackEntry: NavBackStackEntry,
     onNavigate: () -> Unit
@@ -85,9 +84,6 @@ fun BookRoomScreen(
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     val arguments = navBackStackEntry.arguments
     val roomId = arguments?.getString(NavArguments.roomId)
-    val snackbarHostState = remember {
-        SnackbarHostState()
-    }
     val context = LocalContext.current
     var roomUi: RoomUiState? by remember {
         mutableStateOf(null)
@@ -126,94 +122,87 @@ fun BookRoomScreen(
         }
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(spacing.spaceMedium)
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            roomUi?.let { room ->
-                if (!canShowEndTimes && !canShowStartTimes) {
-                    Column(Modifier.verticalScroll(rememberScrollState())) {
-                        AsyncImage(
-                            model = room.imgUrl,
-                            contentDescription = room.description,
+    ) {
+        roomUi?.let { room ->
+            if (!canShowEndTimes && !canShowStartTimes) {
+                Column(Modifier.verticalScroll(rememberScrollState())) {
+                    AsyncImage(
+                        model = room.imgUrl,
+                        contentDescription = room.description,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(spacing.spaceExtraSmall)),
+                        error = painterResource(id = R.drawable.baseline_broken_image_24),
+                        placeholder = painterResource(id = R.drawable.baseline_refresh_24),
+                        contentScale = ContentScale.Crop
+                    )
+                    Text(text = room.description)
+                    SlotSelectionSection(
+                        viewModel = viewModel,
+                        userInput = userInput,
+                        onSelectStartTimeClick = {
+                            viewModel.onShowStartTimesRequest()
+                        }
+                    ) {
+                        viewModel.onShowEndTimeRequest()
+                    }
+                    Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
+                    FeatureSection(
+                        roomUiState = room
+                    )
+                    Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
+                    AttendeesSection(
+                        viewModel = viewModel,
+                        userInput = userInput
+                    )
+                    Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
+                    NoteSection(
+                        viewModel = viewModel,
+                        userInput = userInput
+                    )
+                    Spacer(Modifier.height(spacing.spaceMedium))
+                    CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+                        Button(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(RoundedCornerShape(spacing.spaceExtraSmall)),
-                            error = painterResource(id = R.drawable.baseline_broken_image_24),
-                            placeholder = painterResource(id = R.drawable.baseline_refresh_24),
-                            contentScale = ContentScale.Crop
-                        )
-                        Text(text = room.description)
-                        SlotSelectionSection(
-                            viewModel = viewModel,
-                            userInput = userInput,
-                            onSelectStartTimeClick = {
-                                viewModel.onShowStartTimesRequest()
-                            }
+                                .clip(RectangleShape)
+                                .background(MaterialTheme.colorScheme.primary),
+                            onClick = { viewModel.onBook(roomId ?: "") }
                         ) {
-                            viewModel.onShowEndTimeRequest()
-                        }
-                        Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
-                        FeatureSection(
-                            roomUiState = room
-                        )
-                        Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
-                        AttendeesSection(
-                            viewModel = viewModel,
-                            userInput = userInput
-                        )
-                        Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
-                        NoteSection(
-                            viewModel = viewModel,
-                            userInput = userInput
-                        )
-                        Spacer(Modifier.height(spacing.spaceMedium))
-                        CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-                            Button(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clip(RectangleShape)
-                                    .background(MaterialTheme.colorScheme.primary),
-                                onClick = { viewModel.onBook(roomId ?: "") }
-                            ) {
-                                Text(
-                                    text = stringResource(id = R.string.book),
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
-                            }
+                            Text(
+                                text = stringResource(id = R.string.book),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
                     }
                 }
-                if (canShowStartTimes) {
-                    TimeSelector(
-                        availableTimes = availableStartTime,
-                        onDismiss = { viewModel.onStopShowingStartTime() },
-                        selectedTime = userInput.startTime,
-                        onTimeSelected = { viewModel.onStartTimeSelected(it) },
-                        selectedDate = userInput.date
-                    )
-                }
-                if (canShowEndTimes) {
-                    TimeSelector(
-                        availableTimes = availableEndTime,
-                        onDismiss = { viewModel.onStopShowingEndTime() },
-                        selectedTime = userInput.endTime,
-                        onTimeSelected = { viewModel.onEndTimeSelected(it) },
-                        selectedDate = userInput.date
-                    )
-
-                }
             }
-            if (uiState is UiState.Loading)
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            if (canShowStartTimes) {
+                TimeSelector(
+                    availableTimes = availableStartTime,
+                    onDismiss = { viewModel.onStopShowingStartTime() },
+                    selectedTime = userInput.startTime,
+                    onTimeSelected = { viewModel.onStartTimeSelected(it) },
+                    selectedDate = userInput.date
+                )
+            }
+            if (canShowEndTimes) {
+                TimeSelector(
+                    availableTimes = availableEndTime,
+                    onDismiss = { viewModel.onStopShowingEndTime() },
+                    selectedTime = userInput.endTime,
+                    onTimeSelected = { viewModel.onEndTimeSelected(it) },
+                    selectedDate = userInput.date
+                )
+
+            }
         }
+        if (uiState is UiState.Loading)
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
     }
 }
 

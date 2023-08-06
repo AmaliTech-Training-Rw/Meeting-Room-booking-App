@@ -2,8 +2,11 @@ package com.amalitech.bookmeetingroom
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -16,6 +19,9 @@ fun AppScaffold(shouldShowOnboarding: Boolean) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination
+    val snackbarHostState = remember {
+        SnackbarHostState()
+    }
     Scaffold(
         bottomBar = {
             if (BottomNavItem.createItems().any { it.route == currentRoute?.route }) {
@@ -31,12 +37,16 @@ fun AppScaffold(shouldShowOnboarding: Boolean) {
                     }
                 })
             }
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
         }
     ) { paddingValues ->
         AppNavHost(
             navController = navController,
             shouldShowOnboarding = shouldShowOnboarding,
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues),
+            snackbarHostState = snackbarHostState
         )
     }
 

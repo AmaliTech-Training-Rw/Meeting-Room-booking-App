@@ -1,5 +1,6 @@
 package com.amalitech.rooms
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,11 +15,16 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -31,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -47,7 +54,9 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun RoomListScreen(
     viewModel: RoomViewModel = koinViewModel(),
-    onNavigateToAddRoom: (room: Room) -> Unit
+    onNavigateToAddRoom: () -> Unit,
+    onComposing: (FloatingActionButton) -> Unit,
+    onNavigateBack: () -> Unit
 ) {
     val spacing = LocalSpacing.current
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
@@ -78,6 +87,33 @@ fun RoomListScreen(
             else -> {}
         }
     }
+
+    BackHandler {
+        onComposing(FloatingActionButton())
+        onNavigateBack()
+    }
+
+    LaunchedEffect(key1 = true) {
+        onComposing(
+            FloatingActionButton(action = {
+                FloatingActionButton(
+                    onClick = {
+                        onNavigateToAddRoom()
+                        onComposing(FloatingActionButton())
+                    },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.clip(CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(id = com.amalitech.core.R.string.add_room)
+                    )
+                }
+            })
+        )
+    }
+
     Box(
         Modifier
             .fillMaxSize()
@@ -93,7 +129,10 @@ fun RoomListScreen(
                         RoomCard(
                             room = room,
                             modifier = Modifier.height(150.dp),
-                            onLeftContentClick = { onNavigateToAddRoom(room) },
+                            onLeftContentClick = {
+                                onNavigateToAddRoom()
+                                onComposing(FloatingActionButton())
+                            },
                             onRightContentClick = {
                                 openDialog = true
                                 selectedRoom = room
@@ -121,7 +160,10 @@ fun RoomListScreen(
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
-                            text = stringResource(id = R.string.question_delete_room, selectedRoom!!.roomName)
+                            text = stringResource(
+                                id = R.string.question_delete_room,
+                                selectedRoom!!.roomName
+                            )
                         )
                         Spacer(modifier = Modifier.height(spacing.spaceMedium))
 
@@ -145,5 +187,4 @@ fun RoomListScreen(
             }
         }
     }
-    // TODO("ADD FLOATING ACTION BUTTON ONCE ICONS CAN BE ADDED DYNAMICALLY")
 }

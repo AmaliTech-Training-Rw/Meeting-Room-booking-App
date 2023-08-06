@@ -14,19 +14,24 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.amalitech.admin.room.AddRoomScreen
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
+import com.amalitech.rooms.FloatingActionButton
+import com.amalitech.rooms.RoomListScreen
 
 @Composable
 fun BookMeetingRoomNavHost(
     innerPadding: PaddingValues,
     startDestination: String,
     appState: BookMeetingRoomAppState,
-    mainNavController: NavHostController
+    mainNavController: NavHostController,
+    onComposing: (FloatingActionButton) -> Unit
 ) {
     NavHost(
         navController = appState.navController,
         startDestination = startDestination,
+        modifier = Modifier.padding(innerPadding)
     ) {
         composable(route = NavigationItem.Home.route) {
             TestScreen("This is ${NavigationItem.Home.title}", innerPadding)
@@ -64,6 +69,30 @@ fun BookMeetingRoomNavHost(
         composable(route = NavigationItem.Invitations.route) {
             TestScreen(
                 "This is ${NavigationItem.Invitations.title}", innerPadding
+            )
+        }
+
+        composable(route = NavigationItem.Invitations.route) {
+            TestScreen(
+                "This is ${NavigationItem.Invitations.title}", innerPadding
+            )
+        }
+
+        composable(route = Route.ADD_ROOM_SCREEN) {
+            AddRoomScreen()
+        }
+
+        composable(route = NavigationItem.Rooms.route) {
+            RoomListScreen(
+                onNavigateToAddRoom = {
+                    appState.navController.navigate(Route.ADD_ROOM_SCREEN)
+                },
+                onComposing = {
+                    onComposing(it)
+                },
+                onNavigateBack = {
+                    appState.navController.navigateUp()
+                }
             )
         }
     }

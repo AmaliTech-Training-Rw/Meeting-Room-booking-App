@@ -3,6 +3,7 @@ package com.amalitech.bookmeetingroom.navigation
 import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,6 +39,7 @@ import com.amalitech.onboarding.reset_password.ResetPasswordViewModel
 import com.amalitech.onboarding.signup.NavArguments
 import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
+import com.amalitech.rooms.book_room.BookRoomScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -45,22 +47,24 @@ import org.koin.compose.koinInject
 fun AppNavHost(
     navController: NavHostController,
     shouldShowOnboarding: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState
 ) {
     NavHost(
         navController = navController,
         startDestination = Route.ONBOARDING_SCREENS,
         modifier = modifier
     ) {
-        onboardingGraph(navController, shouldShowOnboarding)
-        mainNavGraph(navController)
-        dashboardNavGraph(navController)
+        onboardingGraph(navController, shouldShowOnboarding, snackbarHostState)
+        mainNavGraph(navController, snackbarHostState)
+        dashboardNavGraph(navController, snackbarHostState)
     }
 }
 
 fun NavGraphBuilder.onboardingGraph(
     navController: NavHostController,
-    shouldShowOnboarding: Boolean
+    shouldShowOnboarding: Boolean,
+    snackbarHostState: SnackbarHostState
 ) {
     navigation(
         startDestination =
@@ -93,9 +97,20 @@ fun NavGraphBuilder.onboardingGraph(
                         }
                     }
                 },
-                onNavigateToForgotPassword = { navController.navigate(Route.FORGOT_PASSWORD) },
-                onNavigateToSignUp = { navController.navigate(Route.SIGNUP) },
-                viewModel = viewModel
+                onNavigateToForgotPassword = {
+                    navController.navigate(Route.FORGOT_PASSWORD) {
+                        launchSingleTop = true
+                        popUpTo(Route.LOGIN)
+                    }
+                },
+                onNavigateToSignUp = {
+                    navController.navigate(Route.SIGNUP) {
+                        launchSingleTop = true
+                        popUpTo(Route.LOGIN)
+                    }
+                },
+                viewModel = viewModel,
+                snackBarHostState = snackbarHostState
             )
         }
 
@@ -103,9 +118,20 @@ fun NavGraphBuilder.onboardingGraph(
             val viewModel: ForgotPasswordViewModel =
                 it.sharedViewModel(navController = navController)
             ForgotPasswordScreen(
-                onNavigateToLogin = { navController.navigate(Route.LOGIN) },
-                onNavigateToReset = { navController.navigate(Route.RESET_PASSWORD) },
-                viewModel = viewModel
+                onNavigateToLogin = {
+                    navController.navigate(Route.LOGIN) {
+                        launchSingleTop = true
+                        popUpTo(Route.LOGIN)
+                    }
+                },
+                onNavigateToReset = {
+                    navController.navigate(Route.RESET_PASSWORD) {
+                        launchSingleTop = true
+                        popUpTo(Route.LOGIN)
+                    }
+                },
+                viewModel = viewModel,
+                snackbarHostState = snackbarHostState
             )
         }
 
@@ -138,8 +164,14 @@ fun NavGraphBuilder.onboardingGraph(
             )
         ) { entry ->
             SignupScreen(
-                onNavigateToLogin = { navController.navigate(Route.LOGIN) },
-                navBackStackEntry = entry
+                onNavigateToLogin = {
+                    navController.navigate(Route.LOGIN) {
+                        launchSingleTop = true
+                        popUpTo(Route.LOGIN)
+                    }
+                },
+                navBackStackEntry = entry,
+                snackbarHostState = snackbarHostState
             )
         }
 
@@ -165,19 +197,44 @@ fun NavGraphBuilder.onboardingGraph(
             val viewModel: ResetPasswordViewModel =
                 it.sharedViewModel(navController = navController)
             ResetPasswordScreen(
+                snackbarHostState = snackbarHostState,
                 viewModel = viewModel,
-                onNavigateToLogin = { navController.navigate(Route.LOGIN) })
+                onNavigateToLogin = {
+                    navController.navigate(Route.LOGIN) {
+                        launchSingleTop = true
+                        popUpTo(Route.LOGIN)
+                    }
+                })
         }
     }
 }
 
-fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.mainNavGraph(
+    navController: NavHostController,
+    snackbarHostState: SnackbarHostState
+) {
     navigation(
         startDestination = BottomNavItem.Home.route,
         route = Route.HOME_SCREENS
     ) {
         composable(BottomNavItem.Home.route) {
-            HomeScreen()
+            HomeScreen() {
+                navController.navigate("${Route.BOOK_ROOM_SCREEN}/$it")
+            }
+        }
+
+        composable(
+            route = "${Route.BOOK_ROOM_SCREEN}/{roomId}",
+            arguments = listOf(navArgument("roomId") {
+                type = NavType.StringType
+            })
+        ) {
+            BookRoomScreen(
+                snackbarHostState = snackbarHostState,
+                navBackStackEntry = it
+            ) {
+                navController.navigate(BottomNavItem.Home.route)
+            }
         }
         composable(BottomNavItem.Profile.route) {
             // TODO (ADD PROFILE SCREEN COMPOSABLE HERE)
@@ -209,7 +266,10 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
     }
 }
 
-fun NavGraphBuilder.dashboardNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.dashboardNavGraph(
+    navController: NavHostController,
+    snackbarHostState: SnackbarHostState
+) {
     navigation(
         startDestination = Route.ADMIN_DASHBOARD,
         route = Route.DASHBOARD_SCREENS

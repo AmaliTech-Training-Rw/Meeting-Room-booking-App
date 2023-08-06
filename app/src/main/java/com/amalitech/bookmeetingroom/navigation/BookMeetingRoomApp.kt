@@ -6,6 +6,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -16,6 +20,7 @@ import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
+import com.amalitech.rooms.FloatingActionButton
 
 @Composable
 fun BookMeetingRoomApp(
@@ -28,6 +33,10 @@ fun BookMeetingRoomApp(
     onSearchTextFieldVisibilityChange: ((Boolean) -> Unit)? = null,
     mainNavController: NavHostController
 ) {
+    var floatingActionButton by remember {
+        mutableStateOf(FloatingActionButton())
+    }
+
     Scaffold(
         topBar = {
             // Show the top app bar on top level destinations.
@@ -49,7 +58,8 @@ fun BookMeetingRoomApp(
                 innerPadding,
                 NavigationItem.Home.route,
                 appState,
-                mainNavController
+                mainNavController,
+                onComposing = { floatingActionButton = it }
             )
         },
         snackbarHost = {
@@ -62,6 +72,9 @@ fun BookMeetingRoomApp(
                     )
                 }
             )
+        },
+        floatingActionButton = {
+            floatingActionButton.action?.invoke()
         }
     )
 }

@@ -11,4 +11,6 @@ object Route {
     const val RESET_PASSWORD = "reset_password"
     const val ADMIN_DASHBOARD = "admin_dashboard"
     const val ONBOARDING_SCREENS = "onboarding_screens"
+    const val BOOK_ROOM_SCREEN = "book_room_screen"
+    const val ADD_ROOM_SCREEN = "book_room_screen"
 }
