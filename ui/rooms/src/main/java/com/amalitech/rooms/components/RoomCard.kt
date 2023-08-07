@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.amalitech.core.data.model.Room
@@ -50,7 +51,21 @@ fun RoomCard(
                 backgroundColor = MaterialTheme.colorScheme.error,
                 icon = Icons.Filled.Delete,
                 onActionClick = onRightContentClick,
-                modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
+                modifier = Modifier
+                    .clip(
+                        RoundedCornerShape(
+                            topEnd = spacing.spaceMedium,
+                            bottomEnd = spacing.spaceMedium
+                        )
+                    )
+                    .padding(vertical = spacing.spaceExtraSmall)
+                    .shadow(
+                        elevation = spacing.spaceExtraSmall,
+                        RoundedCornerShape(
+                            topEnd = spacing.spaceMedium,
+                            bottomEnd = spacing.spaceMedium
+                        )
+                    )
             )
         },
         leftContent = {
@@ -58,13 +73,39 @@ fun RoomCard(
                 backgroundColor = MaterialTheme.colorScheme.primary,
                 icon = Icons.Filled.Edit,
                 onActionClick = onLeftContentClick,
-                modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
+                modifier = Modifier
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = spacing.spaceMedium,
+                            bottomStart = spacing.spaceMedium
+                        )
+                    )
+                    .padding(vertical = spacing.spaceExtraSmall)
+                    .shadow(
+                        elevation = spacing.spaceExtraSmall,
+                        RoundedCornerShape(
+                            topStart = spacing.spaceMedium,
+                            bottomStart = spacing.spaceMedium
+                        )
+                    )
             )
         },
         content = {
             RoomDescription(
                 room, modifier = Modifier
-                    .clip(RoundedCornerShape(spacing.spaceMedium))
+                    .clip(
+                        if (isLeftContentVisible)
+                            RoundedCornerShape(
+                                topEnd = spacing.spaceMedium,
+                                bottomEnd = spacing.spaceMedium
+                            )
+                        else if (isRightContentVisible)
+                            RoundedCornerShape(
+                                topStart = spacing.spaceMedium,
+                                bottomStart = spacing.spaceMedium
+                            )
+                        else RectangleShape
+                    )
                     .padding(
                         start = if (isLeftContentVisible) 0.dp else spacing.spaceExtraSmall,
                         end = if (isRightContentVisible) 0.dp else spacing.spaceExtraSmall,
@@ -73,7 +114,17 @@ fun RoomCard(
                     )
                     .shadow(
                         elevation = spacing.spaceExtraSmall,
-                        shape = RoundedCornerShape(spacing.spaceMedium)
+                        shape = if (isLeftContentVisible)
+                            RoundedCornerShape(
+                                topEnd = spacing.spaceMedium,
+                                bottomEnd = spacing.spaceMedium
+                            )
+                        else if (isRightContentVisible)
+                            RoundedCornerShape(
+                                topStart = spacing.spaceMedium,
+                                bottomStart = spacing.spaceMedium
+                            )
+                        else RoundedCornerShape(spacing.spaceMedium)
                     )
                     .background(MaterialTheme.colorScheme.surface)
             )
