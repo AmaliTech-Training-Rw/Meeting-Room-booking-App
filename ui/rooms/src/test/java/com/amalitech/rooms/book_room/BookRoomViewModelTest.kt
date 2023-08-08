@@ -4,7 +4,6 @@ import com.amalitech.core.R
 import com.amalitech.core.domain.model.Booking
 import com.amalitech.core.util.Response
 import com.amalitech.core.util.UiText
-import com.amalitech.core_ui.util.UiState
 import com.amalitech.rooms.MainDispatcherRule
 import com.amalitech.rooms.book_room.model.Room
 import com.amalitech.rooms.book_room.use_case.BookRoomUseCasesWrapper
@@ -25,7 +24,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class BookRoomUseCaseViewModelTest {
+class BookRoomViewModelTest {
 
     private lateinit var viewModel: BookRoomViewModel
 
@@ -319,9 +318,7 @@ class BookRoomUseCaseViewModelTest {
         viewModel.getRoom("id")
         advanceUntilIdle()
 
-
-        assertTrue(viewModel.uiStateFlow.value is UiState.Success)
-        assertEquals(room.toBookRoomUi(), (viewModel.uiStateFlow.value as UiState.Success).data)
+        assertEquals(room.toBookRoomUi(), viewModel.uiState.value.bookRoomUi)
     }
 
     @Test
@@ -335,9 +332,7 @@ class BookRoomUseCaseViewModelTest {
         viewModel.getRoom("id")
         advanceUntilIdle()
 
-
-        assertTrue(viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(error, (viewModel.uiStateFlow.value as UiState.Error).error)
+        assertEquals(error, viewModel.uiState.value.error)
     }
 
     @Test
@@ -498,8 +493,8 @@ class BookRoomUseCaseViewModelTest {
 
         viewModel.onBook("id")
 
-        assertEquals(true, viewModel.uiStateFlow.value is UiState.Success)
-        assertEquals(UiState.Success(RoomUiState(canNavigate = true)), (viewModel.uiStateFlow.value) as UiState.Success)
+        assertEquals(false, viewModel.uiState.value.isLoading)
+        assertEquals(true, viewModel.uiState.value.bookRoomUi.canNavigate)
     }
 
     @Test
@@ -519,8 +514,7 @@ class BookRoomUseCaseViewModelTest {
 
         viewModel.onBook("id")
 
-        assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
+        assertEquals(error, viewModel.uiState.value.error)
     }
 
     @Test
@@ -539,8 +533,7 @@ class BookRoomUseCaseViewModelTest {
 
         viewModel.onBook("id")
 
-        assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
+        assertEquals(error, viewModel.uiState.value.error)
     }
 
     @Test
@@ -559,8 +552,7 @@ class BookRoomUseCaseViewModelTest {
 
         viewModel.onBook("id")
 
-        assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
+        assertEquals(error, viewModel.uiState.value.error)
     }
 
     @Test
@@ -579,8 +571,7 @@ class BookRoomUseCaseViewModelTest {
 
         viewModel.onBook("id")
 
-        assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
+        assertEquals(error, viewModel.uiState.value.error)
     }
 
     @Test
@@ -597,8 +588,7 @@ class BookRoomUseCaseViewModelTest {
 
         viewModel.onBook("id")
 
-        assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
+        assertEquals(error, viewModel.uiState.value.error)
     }
 
     @Test
@@ -635,7 +625,6 @@ class BookRoomUseCaseViewModelTest {
 
         viewModel.updateStateWithError(error)
 
-        assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(UiState.Error<RoomUiState>(error), (viewModel.uiStateFlow.value) as UiState.Error)
+        assertEquals(error, viewModel.uiState.value.error)
     }
 }

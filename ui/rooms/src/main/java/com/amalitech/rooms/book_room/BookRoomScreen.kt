@@ -1,6 +1,5 @@
 package com.amalitech.rooms.book_room
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -65,7 +64,6 @@ import androidx.navigation.NavBackStackEntry
 import coil.compose.AsyncImage
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.NoRippleTheme
-import com.amalitech.core_ui.util.UiState
 import com.amalitech.core_ui.util.formatTime
 import com.amalitech.core_ui.util.longToLocalDate
 import com.amalitech.rooms.book_room.components.AttendeeItem
@@ -86,13 +84,10 @@ fun BookRoomScreen(
     navBackStackEntry: NavBackStackEntry,
     onNavigate: () -> Unit
 ) {
-    val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val arguments = navBackStackEntry.arguments
     val roomId = arguments?.getString(NavArguments.roomId)
     val context = LocalContext.current
-    var roomUi: RoomUiState? by remember {
-        mutableStateOf(null)
-    }
     val spacing = LocalSpacing.current
     val userInput by viewModel.userInput
     val slotSelectionManager by viewModel.slotManager
@@ -106,24 +101,16 @@ fun BookRoomScreen(
     }
 
     LaunchedEffect(key1 = uiState) {
-        Log.d("uiState", "uiState = $uiState, room: $roomUi")
-        when (uiState) {
-            is UiState.Success -> {
-                roomUi = (uiState as UiState.Success<RoomUiState>).data
-                if (roomUi?.canNavigate == true)
-                    onNavigate()
+        if (uiState.bookRoomUi.canNavigate) {
+            onNavigate()
+        }
+        if (uiState.error != null) {
+            uiState.error?.let {
+                snackbarHostState.showSnackbar(
+                    it.asString(context)
+                )
+                viewModel.onClearError()
             }
-
-            is UiState.Error -> {
-                (uiState as UiState.Error<RoomUiState>).error?.let {
-                    snackbarHostState.showSnackbar(
-                        it.asString(context)
-                    )
-                    viewModel.onSnackBarShown()
-                }
-            }
-
-            else -> {}
         }
     }
 
@@ -132,7 +119,7 @@ fun BookRoomScreen(
             .fillMaxSize()
             .padding(spacing.spaceMedium)
     ) {
-        roomUi?.let { room ->
+        uiState.bookRoomUi.let { room ->
             if (!canShowEndTimes && !canShowStartTimes) {
                 Column(Modifier.verticalScroll(rememberScrollState())) {
                     AsyncImage(
@@ -211,7 +198,7 @@ fun BookRoomScreen(
 
             }
         }
-        if (uiState is UiState.Loading)
+        if (uiState.isLoading)
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
     }
 }
@@ -340,7 +327,7 @@ fun SlotSelectionSection(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FeatureSection(
-    roomUiState: RoomUiState
+    roomUiState: BookRoomUi
 ) {
     val spacing = LocalSpacing.current
     Column {
