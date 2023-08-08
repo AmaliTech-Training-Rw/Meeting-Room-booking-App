@@ -1,4 +1,4 @@
-package com.amalitech.room.book_room
+package com.amalitech.rooms.book_room
 
 import com.amalitech.core.R
 import com.amalitech.core.domain.model.Booking
@@ -6,8 +6,6 @@ import com.amalitech.core.util.Response
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.rooms.MainDispatcherRule
-import com.amalitech.rooms.book_room.BookRoomViewModel
-import com.amalitech.rooms.book_room.RoomUiState
 import com.amalitech.rooms.book_room.model.Room
 import com.amalitech.rooms.book_room.use_case.BookRoomUseCasesWrapper
 import com.amalitech.rooms.book_room.util.toBookRoomUi

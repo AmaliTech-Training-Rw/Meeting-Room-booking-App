@@ -24,14 +24,21 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -60,6 +67,7 @@ import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.NoRippleTheme
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.core_ui.util.formatTime
+import com.amalitech.core_ui.util.longToLocalDate
 import com.amalitech.rooms.book_room.components.AttendeeItem
 import com.amalitech.rooms.book_room.components.BookRoomTitle
 import com.amalitech.rooms.book_room.components.FeatureItem
@@ -68,9 +76,6 @@ import com.amalitech.rooms.book_room.components.TimeSelector
 import com.amalitech.rooms.book_room.util.NavArguments
 import com.amalitech.rooms.book_room.util.formatDate
 import com.amalitech.ui.rooms.R
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.datetime.date.datepicker
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
 
@@ -140,7 +145,12 @@ fun BookRoomScreen(
                         placeholder = painterResource(id = R.drawable.baseline_refresh_24),
                         contentScale = ContentScale.Crop
                     )
-                    Text(text = stringResource(id = R.string.meeting_room_for_x_people, room.capacity))
+                    Text(
+                        text = stringResource(
+                            id = R.string.meeting_room_for_x_people,
+                            room.capacity
+                        )
+                    )
                     SlotSelectionSection(
                         viewModel = viewModel,
                         userInput = userInput,
@@ -206,6 +216,7 @@ fun BookRoomScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SlotSelectionSection(
     viewModel: BookRoomViewModel,
@@ -214,25 +225,54 @@ fun SlotSelectionSection(
     onSelectEndTimeClick: (isSelecting: Boolean) -> Unit,
 ) {
     val spacing = LocalSpacing.current
-    val dateDialogState = rememberMaterialDialogState()
 
-    MaterialDialog(
-        dialogState = dateDialogState,
-        buttons = {
-            positiveButton(text = stringResource(id = R.string.ok))
-            negativeButton(text = stringResource(id = R.string.cancel))
+    val openDialog = remember { mutableStateOf(false) }
+    val state = rememberDatePickerState(
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                val localDate = longToLocalDate(utcTimeMillis)
+                return viewModel.isDateAvailable(localDate) && (LocalDate.now()
+                    .isBefore(localDate) || localDate.isEqual(LocalDate.now()))
+            }
         }
-    ) {
-        datepicker(
-            title = stringResource(id = R.string.pick_date),
-            allowedDateValidator = { date ->
-                viewModel.isDateAvailable(
-                    date,
-                ) && LocalDate.now() <= date
+    )
+
+    if (openDialog.value) {
+        DatePickerDialog(
+            onDismissRequest = { openDialog.value = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    openDialog.value = false
+                    state.selectedDateMillis?.let { timestamp ->
+                        val selectedDate = longToLocalDate(timestamp)
+                        viewModel.onSelectedDate(selectedDate)
+                    }
+                }) {
+                    Text(text = stringResource(R.string.ok))
+                }
             },
-            initialDate = userInput.date ?: LocalDate.now()
-        ) { date ->
-            viewModel.onSelectedDate(date)
+            colors = DatePickerDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.background,
+                titleContentColor = MaterialTheme.colorScheme.onBackground,
+                headlineContentColor = MaterialTheme.colorScheme.onBackground,
+                selectedDayContainerColor = MaterialTheme.colorScheme.background,
+                selectedYearContainerColor = MaterialTheme.colorScheme.background,
+            )
+        ) {
+            DatePicker(
+                state = state,
+                colors = DatePickerDefaults.colors(
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    headlineContentColor = MaterialTheme.colorScheme.onBackground,
+                    selectedDayContainerColor = MaterialTheme.colorScheme.primary,
+                    selectedYearContainerColor = MaterialTheme.colorScheme.primary,
+                    navigationContentColor = MaterialTheme.colorScheme.onBackground,
+                    selectedYearContentColor = MaterialTheme.colorScheme.onPrimary,
+                    selectedDayContentColor = MaterialTheme.colorScheme.onPrimary,
+                    yearContentColor = MaterialTheme.colorScheme.onBackground,
+                    containerColor = MaterialTheme.colorScheme.background,
+                )
+            )
         }
     }
     Column(
@@ -252,7 +292,7 @@ fun SlotSelectionSection(
             )
             Spacer(Modifier.width(spacing.spaceSmall))
             SelectDateBox(
-                onClick = { dateDialogState.show() },
+                onClick = { openDialog.value = true },
                 text = date,
                 modifier = Modifier
                     .height(30.dp)
@@ -278,7 +318,7 @@ fun SlotSelectionSection(
             )
             Spacer(Modifier.width(spacing.spaceSmall))
             SelectDateBox(
-                onClick = { dateDialogState.show() },
+                onClick = { openDialog.value = true },
                 text = date,
                 modifier = Modifier
                     .height(30.dp)
