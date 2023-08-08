@@ -74,7 +74,7 @@ fun BookMeetingRoomDrawer(
         content = {
             content()
         },
-        scrimColor = MaterialTheme.colorScheme.outline
+        scrimColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
     )
 }
 
