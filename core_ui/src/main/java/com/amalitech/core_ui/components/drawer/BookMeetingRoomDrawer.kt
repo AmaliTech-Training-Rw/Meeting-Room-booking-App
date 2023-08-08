@@ -54,7 +54,7 @@ fun BookMeetingRoomDrawer(
         gesturesEnabled = true,
         drawerContent = {
             ModalDrawerSheet(
-                drawerContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                drawerContentColor = MaterialTheme.colorScheme.onBackground,
                 content = {
                     DrawerHeader()
                     LazyColumn {
@@ -67,12 +67,14 @@ fun BookMeetingRoomDrawer(
                             )
                         }
                     }
-                }
+                },
+                drawerContainerColor = MaterialTheme.colorScheme.background
             )
         },
         content = {
             content()
-        }
+        },
+        scrimColor = MaterialTheme.colorScheme.outline
     )
 }
 

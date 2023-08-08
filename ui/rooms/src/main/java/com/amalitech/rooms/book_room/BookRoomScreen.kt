@@ -51,7 +51,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -117,7 +116,6 @@ fun BookRoomScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(spacing.spaceMedium)
     ) {
         uiState.bookRoomUi.let { room ->
             if (!canShowEndTimes && !canShowStartTimes) {
@@ -130,50 +128,58 @@ fun BookRoomScreen(
                             .clip(RoundedCornerShape(spacing.spaceExtraSmall)),
                         error = painterResource(id = R.drawable.baseline_broken_image_24),
                         placeholder = painterResource(id = R.drawable.baseline_refresh_24),
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.FillWidth
                     )
-                    Text(
-                        text = stringResource(
-                            id = R.string.meeting_room_for_x_people,
-                            room.capacity
-                        )
-                    )
-                    SlotSelectionSection(
-                        viewModel = viewModel,
-                        userInput = userInput,
-                        onSelectStartTimeClick = {
-                            viewModel.onShowStartTimesRequest()
-                        }
-                    ) {
-                        viewModel.onShowEndTimeRequest()
-                    }
-                    Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
-                    FeatureSection(
-                        roomUiState = room
-                    )
-                    Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
-                    AttendeesSection(
-                        viewModel = viewModel,
-                        userInput = userInput
-                    )
-                    Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
-                    NoteSection(
-                        viewModel = viewModel,
-                        userInput = userInput
-                    )
-                    Spacer(Modifier.height(spacing.spaceMedium))
-                    CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-                        Button(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RectangleShape)
-                                .background(MaterialTheme.colorScheme.primary),
-                            onClick = { viewModel.onBook(roomId ?: "") }
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.book),
-                                color = MaterialTheme.colorScheme.onPrimary
+                    Column(modifier = Modifier.padding(spacing.spaceMedium)) {
+                        Text(
+                            text = stringResource(
+                                id = R.string.meeting_room_for_x_people,
+                                room.capacity
                             )
+                        )
+                        Spacer(Modifier.height(spacing.spaceMedium))
+                        SlotSelectionSection(
+                            viewModel = viewModel,
+                            userInput = userInput,
+                            onSelectStartTimeClick = {
+                                viewModel.onShowStartTimesRequest()
+                            }
+                        ) {
+                            viewModel.onShowEndTimeRequest()
+                        }
+                        Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
+                        FeatureSection(
+                            roomUiState = room
+                        )
+                        Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
+                        AttendeesSection(
+                            viewModel = viewModel,
+                            userInput = userInput
+                        )
+                        Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
+                        NoteSection(
+                            viewModel = viewModel,
+                            userInput = userInput
+                        )
+                        Spacer(Modifier.height(spacing.spaceMedium))
+                        CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+                            Box(Modifier
+                                .fillMaxWidth()) {
+                                Button(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = spacing.spaceExtraLarge)
+                                        .clip(RoundedCornerShape(spacing.spaceSmall))
+                                        .background(MaterialTheme.colorScheme.primary)
+                                        .align(Alignment.Center),
+                                    onClick = { viewModel.onBook(roomId ?: "") },
+                                ) {
+                                    Text(
+                                        text = stringResource(id = R.string.book),
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -195,7 +201,6 @@ fun BookRoomScreen(
                     onTimeSelected = { viewModel.onEndTimeSelected(it) },
                     selectedDate = userInput.date
                 )
-
             }
         }
         if (uiState.isLoading)
@@ -269,9 +274,11 @@ fun SlotSelectionSection(
         val startTime = if (userInput.startTime != null) formatTime(userInput.startTime) else ""
         val endTime = if (userInput.endTime != null) formatTime(userInput.endTime) else ""
         BookRoomTitle(text = stringResource(id = R.string.select_date_and_time))
+        Spacer(Modifier.height(spacing.spaceLarge))
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.padding(horizontal = spacing.spaceLarge)
         ) {
             Text(
                 text = stringResource(R.string.start),
@@ -297,7 +304,8 @@ fun SlotSelectionSection(
         Spacer(Modifier.height(spacing.spaceMedium))
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.padding(horizontal = spacing.spaceLarge)
         ) {
             Text(
                 text = stringResource(R.string.end),
@@ -321,6 +329,7 @@ fun SlotSelectionSection(
             )
         }
     }
+    Spacer(Modifier.height(spacing.spaceLarge))
 }
 
 
@@ -341,6 +350,7 @@ fun FeatureSection(
                 Spacer(Modifier.padding(spacing.spaceSmall))
             }
         }
+        Spacer(Modifier.height(spacing.spaceLarge))
     }
 }
 
