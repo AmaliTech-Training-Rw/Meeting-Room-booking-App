@@ -27,14 +27,12 @@ sealed class NavigationItem(var title:String, var route:String, var icon: ImageV
 
     companion object {
         fun createItems(): List<NavigationItem> = listOf(
-            Home,
             BookingRequests,
             Users,
             Rooms,
             BookingHistory,
             Profile,
             Dashboard,
-            Invitations,
             Logout
         )
     }
