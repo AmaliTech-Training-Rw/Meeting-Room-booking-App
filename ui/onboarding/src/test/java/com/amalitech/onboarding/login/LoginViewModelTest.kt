@@ -6,9 +6,11 @@ import com.amalitech.core.util.Response
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.MainDispatcherRule
-import com.amalitech.core_ui.util.UiState
+import com.amalitech.onboarding.login.model.UserProfile
 import com.amalitech.onboarding.login.use_case.LoginUseCasesWrapper
-import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
+import com.amalitech.user.profile.use_case.ProfileUseCaseWrapper
+import io.mockk.coEvery
+import io.mockk.coJustRun
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.justRun
@@ -44,7 +46,7 @@ class LoginViewModelTest {
         coJustRun {
             userProfileUseCaseWrapper.saveUserUseCase(any())
         }
-        viewModel = LoginViewModel(loginUseCase, sharedPreferences, userProfileUseCaseWrapper)
+        viewModel = LoginViewModel(sharedPreferences, userProfileUseCaseWrapper, loginUseCasesWrapper)
     }
 
     @Test
@@ -89,7 +91,7 @@ class LoginViewModelTest {
         justRun {
             sharedPreferences.saveShouldShowOnboarding(any())
         }
-        coEvery { loginUseCase.loadProfileInformationUseCase(any()) } returns Response(
+        coEvery { loginUseCasesWrapper.loadProfileInformationUseCase(any()) } returns Response(
             data = UserProfile(
                 email = "email",
                 firstName = "Ngomdé Cadet",

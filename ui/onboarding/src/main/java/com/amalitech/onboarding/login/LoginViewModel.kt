@@ -1,27 +1,21 @@
 package com.amalitech.onboarding.login
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
-import com.amalitech.onboarding.login.use_case.LoginUseCase
+import com.amalitech.onboarding.login.use_case.LoginUseCasesWrapper
 import com.amalitech.user.profile.model.dto.UserDto
 import com.amalitech.user.profile.use_case.ProfileUseCaseWrapper
-import com.amalitech.onboarding.login.use_case.LoginUseCasesWrapper
-import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val loginUseCase: LoginUseCase,
     private val sharedPreferences: OnboardingSharedPreferences,
-    private val userProfileUseCaseWrapper: ProfileUseCaseWrapper
+    private val userProfileUseCaseWrapper: ProfileUseCaseWrapper,
     private val loginUseCasesWrapper: LoginUseCasesWrapper,
-    private val sharedPreferences: OnboardingSharedPreferences
 ) : BaseViewModel<LoginUiState>() {
     private val _uiState = MutableStateFlow(
         LoginUiState()
@@ -85,9 +79,9 @@ class LoginViewModel(
                         )
                     }
                 } else {
-                    val isAdmin = loginUseCase.isUserAdmin()
+                    val isAdmin = loginUseCasesWrapper.isUserAdminUseCase()
                     val profileInfo =
-                        loginUseCase.loadProfileInformationUseCase(_uiState.value.email)
+                        loginUseCasesWrapper.loadProfileInformationUseCase(_uiState.value.email)
 
                     profileInfo.data?.let {
                         userProfileUseCaseWrapper.saveUserUseCase(

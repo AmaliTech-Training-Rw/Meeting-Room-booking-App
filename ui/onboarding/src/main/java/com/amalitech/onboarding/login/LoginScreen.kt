@@ -217,7 +217,7 @@ fun LoginScreen(
 @Composable
 fun Prev() {
     LoginScreen(
-        onNavigateToNext = {},
+        onNavigateToHome = {},
         onNavigateToForgotPassword = {},
         onNavigateToSignUp = {}
     )

@@ -1,9 +1,6 @@
 package com.amalitech.bookmeetingroom.navigation
 
 import android.content.Intent
-import androidx.compose.material3.Switch
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,16 +30,13 @@ import com.amalitech.onboarding.forgot_password.ForgotPasswordScreen
 import com.amalitech.onboarding.forgot_password.ForgotPasswordViewModel
 import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.login.LoginViewModel
-import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordViewModel
 import com.amalitech.onboarding.signup.NavArguments
 import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
 import com.amalitech.user.profile.ProfileScreen
-import com.amalitech.user.profile.ProfileViewModel
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
 
 @Composable
 fun AppNavHost(
