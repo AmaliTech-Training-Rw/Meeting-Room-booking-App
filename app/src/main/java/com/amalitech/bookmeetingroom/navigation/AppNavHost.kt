@@ -1,8 +1,6 @@
 package com.amalitech.bookmeetingroom.navigation
 
 import android.content.Intent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,14 +30,13 @@ import com.amalitech.onboarding.forgot_password.ForgotPasswordScreen
 import com.amalitech.onboarding.forgot_password.ForgotPasswordViewModel
 import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.login.LoginViewModel
-import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordViewModel
 import com.amalitech.onboarding.signup.NavArguments
 import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
+import com.amalitech.user.profile.ProfileScreen
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
 
 @Composable
 fun AppNavHost(
@@ -78,8 +75,8 @@ fun NavGraphBuilder.onboardingGraph(
         composable(Route.LOGIN) {
             val viewModel: LoginViewModel = it.sharedViewModel(navController = navController)
             LoginScreen(
-                onNavigateToNext = { isAdmin ->
-                    if (isAdmin) {
+                onNavigateToHome = { goToAdmin ->
+                    if (goToAdmin) {
                         navController.navigate(Route.DASHBOARD_SCREENS) {
                             popUpTo(Route.ONBOARDING_SCREENS) {
                                 inclusive = true
@@ -180,24 +177,25 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
             HomeScreen()
         }
         composable(BottomNavItem.Profile.route) {
-            // TODO (ADD PROFILE SCREEN COMPOSABLE HERE)
-            val pref: OnboardingSharedPreferences = koinInject()
-            val isAdmin = pref.isUserAdmin()
-            Column {
-                Text("Profile Screen")
-                if (isAdmin) {
-                    Button(onClick = {
+            ProfileScreen(
+                onUpdateProfileClick = {
+                    /*TODO("Navigate to Update profile screen")*/
+                },
+                onToggleButtonClick = { goToAdmin ->
+                    if (goToAdmin)
                         navController.navigate(Route.DASHBOARD_SCREENS) {
                             popUpTo(Route.HOME_SCREENS) {
                                 inclusive = true
                             }
                         }
-                    }) {
-                        Text("Switch to admin user")
-                    }
+                    else
+                        navController.navigate(Route.HOME_SCREENS) {
+                            popUpTo(Route.DASHBOARD_SCREENS) {
+                                inclusive = true
+                            }
+                        }
                 }
-            }
-
+            )
         }
         composable(BottomNavItem.Invitations.route) {
             // TODO (ADD INVITATIONS SCREEN COMPOSABLE HERE)

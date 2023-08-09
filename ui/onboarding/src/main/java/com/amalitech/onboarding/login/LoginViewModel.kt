@@ -1,27 +1,28 @@
 package com.amalitech.onboarding.login
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.login.use_case.LoginUseCasesWrapper
-import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
+import com.amalitech.user.profile.model.dto.UserDto
+import com.amalitech.user.profile.use_case.ProfileUseCaseWrapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
+    private val sharedPreferences: OnboardingSharedPreferences,
+    private val userProfileUseCaseWrapper: ProfileUseCaseWrapper,
     private val loginUseCasesWrapper: LoginUseCasesWrapper,
-    private val sharedPreferences: OnboardingSharedPreferences
 ) : BaseViewModel<LoginUiState>() {
     private val _uiState = MutableStateFlow(
         LoginUiState()
     )
     val uiState = _uiState.asStateFlow()
-    private val _isAdmin = mutableStateOf(false)
-    val isAdmin: State<Boolean> get() = _isAdmin
+
+    val isUsingAdminDashboard = sharedPreferences.loadAdminUserScreen()
 
     /**
      * onNewEmail - trims and adds value of email entered by the user in our state
@@ -78,9 +79,25 @@ class LoginViewModel(
                         )
                     }
                 } else {
-                    _isAdmin.value = loginUseCasesWrapper.isUserAdminUseCase()
+                    val isAdmin = loginUseCasesWrapper.isUserAdminUseCase()
+                    val profileInfo =
+                        loginUseCasesWrapper.loadProfileInformationUseCase(_uiState.value.email)
+
+                    profileInfo.data?.let {
+                        userProfileUseCaseWrapper.saveUserUseCase(
+                            UserDto(
+                                uid = 0,
+                                firstName = it.firstName,
+                                lastName = it.lastName,
+                                email = it.email,
+                                title = it.title,
+                                profileImgUrl = it.profileImgUrl
+                            )
+                        )
+                    }
                     sharedPreferences.saveShouldShowOnboarding(false)
-                    sharedPreferences.saveUserType(_isAdmin.value)
+                    sharedPreferences.saveUserType(isAdmin)
+                    sharedPreferences.saveLoggedInUserEmail(_uiState.value.email)
                     _uiStateFlow.update {
                         UiState.Success()
                     }
