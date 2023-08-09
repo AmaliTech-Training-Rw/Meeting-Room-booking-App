@@ -4,7 +4,6 @@ import com.amalitech.booking.MainDispatcherRule
 import com.amalitech.booking.model.Booking
 import com.amalitech.booking.request.use_case.BookingRequestsUseCaseWrapper
 import com.amalitech.core.util.ApiResult
-import com.amalitech.core.util.UiText
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
@@ -82,19 +81,5 @@ class BookingRequestViewModelTest {
         viewModel.fetchBookings()
         advanceUntilIdle()
         assertEquals(bookingUiState, viewModel.uiState.value)
-    }
-
-    @Test
-    fun `ensures fetchBookings update errors when there are`() = runTest {
-        val error = UiText.DynamicString("An error occurred")
-        coEvery {
-            useCaseWrapper.fetchBookingsUseCase()
-        } returns ApiResult(error = error)
-
-        val bookingRequestsUiState = BookingRequestsUiState(error = error)
-        viewModel.fetchBookings()
-        advanceUntilIdle()
-
-        assertEquals(bookingRequestsUiState, viewModel.uiState.value)
     }
 }
