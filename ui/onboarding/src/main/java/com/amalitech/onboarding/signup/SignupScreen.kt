@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import com.amalitech.core.R
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.BookMeetingRoomDropDown
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
@@ -55,7 +56,8 @@ fun SignupScreen(
     modifier: Modifier = Modifier,
     navBackStackEntry: NavBackStackEntry,
     snackbarHostState: SnackbarHostState,
-    viewModel: SignupViewModel = koinViewModel()
+    viewModel: SignupViewModel = koinViewModel(),
+    onComposing: (AppBarState) -> Unit
 ) {
     val arguments = navBackStackEntry.arguments
     val userInput by viewModel.userInput
@@ -105,6 +107,9 @@ fun SignupScreen(
 
             else -> {}
         }
+    }
+    LaunchedEffect(key1 = true) {
+        onComposing(AppBarState(hasTopBar = false))
     }
 
     Column(

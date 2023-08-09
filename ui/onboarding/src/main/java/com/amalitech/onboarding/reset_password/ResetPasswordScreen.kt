@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core.R
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
@@ -41,7 +42,8 @@ import org.koin.androidx.compose.koinViewModel
 fun ResetPasswordScreen(
     snackbarHostState: SnackbarHostState,
     viewModel: ResetPasswordViewModel = koinViewModel(),
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onComposing: (AppBarState) -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -67,6 +69,9 @@ fun ResetPasswordScreen(
 
             else -> {}
         }
+    }
+    LaunchedEffect(key1 = true) {
+        onComposing(AppBarState(hasTopBar = false))
     }
 
     Column(
@@ -136,7 +141,7 @@ fun ResetPasswordScreen(
 @Preview
 @Composable
 fun Prev() {
-    ResetPasswordScreen(SnackbarHostState()) {
+    ResetPasswordScreen(SnackbarHostState(), onNavigateToLogin = {
 
-    }
+    }, onComposing = {})
 }

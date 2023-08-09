@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core.R
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
@@ -46,6 +47,7 @@ fun ForgotPasswordScreen(
     onNavigateToReset: () -> Unit,
     snackbarHostState: SnackbarHostState,
     viewModel: ForgotPasswordViewModel = koinViewModel(),
+    onComposing: (AppBarState) -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val spacing = LocalSpacing.current
@@ -70,6 +72,10 @@ fun ForgotPasswordScreen(
 
             else -> {}
         }
+    }
+
+    LaunchedEffect(key1 = true) {
+        onComposing(AppBarState(hasTopBar = false))
     }
 
     Column(
@@ -158,6 +164,7 @@ fun Preview() {
     ForgotPasswordScreen(
         onNavigateToLogin = {},
         onNavigateToReset = {},
-        snackbarHostState = SnackbarHostState()
+        snackbarHostState = SnackbarHostState(),
+        onComposing = {}
     )
 }

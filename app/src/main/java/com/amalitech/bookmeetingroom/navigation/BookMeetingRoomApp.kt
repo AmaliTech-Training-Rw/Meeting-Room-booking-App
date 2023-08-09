@@ -15,12 +15,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.BookMeetingTopAppBar
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
-import com.amalitech.rooms.FloatingActionButton
 
 @Composable
 fun BookMeetingRoomApp(
@@ -31,27 +31,25 @@ fun BookMeetingRoomApp(
     onSearchClick: (() -> Unit)? = null,
     isSearchTextFieldVisible: Boolean = false,
     onSearchTextFieldVisibilityChange: ((Boolean) -> Unit)? = null,
-    mainNavController: NavHostController
+    mainNavController: NavHostController,
+    onFinishActivity: () -> Unit,
 ) {
-    var floatingActionButton by remember {
-        mutableStateOf(FloatingActionButton())
+    var appBarState by remember {
+        mutableStateOf(AppBarState())
     }
 
     Scaffold(
         topBar = {
-            // Show the top app bar on top level destinations.
-            val destination = appState.currentTopLevelDestination
-            if (destination != null) {
-                BookMeetingTopAppBar(
-                    appState = appState,
-                    title = title,
-                    searchQuery = searchQuery,
-                    onSearchQueryChange = onSearchQueryChange,
-                    onSearchClick = onSearchClick,
-                    isSearchTextFieldVisible = isSearchTextFieldVisible,
-                    onSearchTextFieldVisibilityChange = onSearchTextFieldVisibilityChange
-                )
-            }
+            BookMeetingTopAppBar(
+                appState = appState,
+                title = title,
+                searchQuery = searchQuery,
+                onSearchQueryChange = onSearchQueryChange,
+                onSearchClick = onSearchClick,
+                isSearchTextFieldVisible = isSearchTextFieldVisible,
+                onSearchTextFieldVisibilityChange = onSearchTextFieldVisibilityChange,
+                appBarState = appBarState
+            )
         },
         content = { innerPadding ->
             BookMeetingRoomNavHost(
@@ -59,7 +57,8 @@ fun BookMeetingRoomApp(
                 NavigationItem.Home.route,
                 appState,
                 mainNavController,
-                onComposing = { floatingActionButton = it }
+                onComposing = { appBarState = it },
+                onFinishActivity = onFinishActivity
             )
         },
         snackbarHost = {
@@ -74,7 +73,7 @@ fun BookMeetingRoomApp(
             )
         },
         floatingActionButton = {
-            floatingActionButton.action?.invoke()
+            appBarState.floatingActionButton?.invoke()
         }
     )
 }
@@ -87,7 +86,8 @@ fun BookMeetingTopAppBarPreview() {
         BookMeetingRoomApp(
             appState = appState,
             title = "Home",
-            mainNavController = rememberNavController()
+            mainNavController = rememberNavController(),
+            onFinishActivity = {  }
         )
     }
 }

@@ -25,6 +25,7 @@ import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.amalitech.booking.BookingScreen
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.drawer.BookMeetingRoomDrawer
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.home.HomeScreen
@@ -48,23 +49,26 @@ fun AppNavHost(
     navController: NavHostController,
     shouldShowOnboarding: Boolean,
     modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    onComposing: (AppBarState) -> Unit,
+    onFinishActivity: () -> Unit
 ) {
     NavHost(
         navController = navController,
         startDestination = Route.ONBOARDING_SCREENS,
         modifier = modifier
     ) {
-        onboardingGraph(navController, shouldShowOnboarding, snackbarHostState)
-        mainNavGraph(navController, snackbarHostState)
-        dashboardNavGraph(navController, snackbarHostState)
+        onboardingGraph(navController, shouldShowOnboarding, snackbarHostState, onComposing)
+        mainNavGraph(navController, snackbarHostState, onComposing, onFinishActivity)
+        dashboardNavGraph(navController, onFinishActivity)
     }
 }
 
 fun NavGraphBuilder.onboardingGraph(
     navController: NavHostController,
     shouldShowOnboarding: Boolean,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    onComposing: (AppBarState) -> Unit
 ) {
     navigation(
         startDestination =
@@ -74,7 +78,7 @@ fun NavGraphBuilder.onboardingGraph(
         route = Route.ONBOARDING_SCREENS
     ) {
         composable(Route.ONBOARDING) {
-            OnboardingScreen {
+            OnboardingScreen(onComposing = onComposing) {
                 navController.navigate(Route.LOGIN)
             }
         }
@@ -82,6 +86,7 @@ fun NavGraphBuilder.onboardingGraph(
         composable(Route.LOGIN) {
             val viewModel: LoginViewModel = it.sharedViewModel(navController = navController)
             LoginScreen(
+                onComposing = onComposing,
                 onNavigateToNext = { isAdmin ->
                     if (isAdmin) {
                         navController.navigate(Route.DASHBOARD_SCREENS) {
@@ -118,6 +123,7 @@ fun NavGraphBuilder.onboardingGraph(
             val viewModel: ForgotPasswordViewModel =
                 it.sharedViewModel(navController = navController)
             ForgotPasswordScreen(
+                onComposing = onComposing,
                 onNavigateToLogin = {
                     navController.navigate(Route.LOGIN) {
                         launchSingleTop = true
@@ -164,6 +170,7 @@ fun NavGraphBuilder.onboardingGraph(
             )
         ) { entry ->
             SignupScreen(
+                onComposing = onComposing,
                 onNavigateToLogin = {
                     navController.navigate(Route.LOGIN) {
                         launchSingleTop = true
@@ -176,27 +183,30 @@ fun NavGraphBuilder.onboardingGraph(
         }
 
         composable(Route.SPLASH) {
-            SplashScreen(onNavigate = { isUserAdmin ->
-                if (isUserAdmin) {
-                    navController.navigate(Route.DASHBOARD_SCREENS) {
-                        popUpTo(Route.SPLASH) {
-                            inclusive = true
+            SplashScreen(
+                onComposing = onComposing,
+                onNavigate = { isUserAdmin ->
+                    if (isUserAdmin) {
+                        navController.navigate(Route.DASHBOARD_SCREENS) {
+                            popUpTo(Route.SPLASH) {
+                                inclusive = true
+                            }
+                        }
+                    } else {
+                        navController.navigate(Route.HOME_SCREENS) {
+                            popUpTo(Route.SPLASH) {
+                                inclusive = true
+                            }
                         }
                     }
-                } else {
-                    navController.navigate(Route.HOME_SCREENS) {
-                        popUpTo(Route.SPLASH) {
-                            inclusive = true
-                        }
-                    }
-                }
-            })
+                })
         }
 
         composable(Route.RESET_PASSWORD) {
             val viewModel: ResetPasswordViewModel =
                 it.sharedViewModel(navController = navController)
             ResetPasswordScreen(
+                onComposing = onComposing,
                 snackbarHostState = snackbarHostState,
                 viewModel = viewModel,
                 onNavigateToLogin = {
@@ -211,16 +221,25 @@ fun NavGraphBuilder.onboardingGraph(
 
 fun NavGraphBuilder.mainNavGraph(
     navController: NavHostController,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    onComposing: (AppBarState) -> Unit,
+    onFinishActivity: () -> Unit
 ) {
     navigation(
         startDestination = BottomNavItem.Home.route,
         route = Route.HOME_SCREENS
     ) {
         composable(BottomNavItem.Home.route) {
-            HomeScreen() {
-                navController.navigate("${Route.BOOK_ROOM_SCREEN}/$it")
-            }
+            HomeScreen(
+                onComposing = onComposing,
+                navigateToProfileScreen = {
+                    // TODO (NAVIGATE TO THE PROFILE SCREEN)
+                },
+                navigateToBookRoomScreen = {
+                    navController.navigate("${Route.BOOK_ROOM_SCREEN}/$it")
+                },
+                navigateUp = onFinishActivity
+            )
         }
 
         composable(
@@ -231,7 +250,11 @@ fun NavGraphBuilder.mainNavGraph(
         ) {
             BookRoomScreen(
                 snackbarHostState = snackbarHostState,
-                navBackStackEntry = it
+                navBackStackEntry = it,
+                onComposing = onComposing,
+                navigateBack = {
+                    navController.navigateUp()
+                }
             ) {
                 navController.navigate(BottomNavItem.Home.route)
             }
@@ -268,7 +291,7 @@ fun NavGraphBuilder.mainNavGraph(
 
 fun NavGraphBuilder.dashboardNavGraph(
     navController: NavHostController,
-    snackbarHostState: SnackbarHostState
+    onFinishActivity: () -> Unit
 ) {
     navigation(
         startDestination = Route.ADMIN_DASHBOARD,
@@ -296,7 +319,8 @@ fun NavGraphBuilder.dashboardNavGraph(
                         onSearchTextFieldVisibilityChange = { isVisible ->
                             isSearchTextFieldVisible = isVisible
                         },
-                        mainNavController = navController
+                        mainNavController = navController,
+                        onFinishActivity = onFinishActivity
                     )
                 }
             )

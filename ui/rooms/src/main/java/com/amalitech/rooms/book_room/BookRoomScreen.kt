@@ -20,6 +20,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -61,6 +63,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import coil.compose.AsyncImage
+import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.NavigationButton
+import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.NoRippleTheme
 import com.amalitech.core_ui.util.formatTime
@@ -78,9 +83,12 @@ import java.time.LocalDate
 
 @Composable
 fun BookRoomScreen(
-    snackbarHostState: SnackbarHostState,
+    snackbarHostState: SnackbarHostState? = null,
+    appState: BookMeetingRoomAppState? = null,
     viewModel: BookRoomViewModel = koinViewModel(),
     navBackStackEntry: NavBackStackEntry,
+    navigateBack: () -> Unit,
+    onComposing: (AppBarState) -> Unit,
     onNavigate: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -94,20 +102,40 @@ fun BookRoomScreen(
     val canShowStartTimes = slotSelectionManager.canShowStartTimes
     val availableStartTime = slotSelectionManager.availableStartTimes
     val availableEndTime = slotSelectionManager.availableEndTimes
+    var appBarState by remember{
+        mutableStateOf(AppBarState())
+    }
 
     LaunchedEffect(key1 = true) {
         viewModel.getRoom(roomId ?: "")
+        appBarState = appBarState.copy(
+            title = uiState.bookRoomUi.name,
+            navigationIcon = {
+                NavigationButton(
+                    contentDescription = stringResource(id = com.amalitech.core_ui.R.string.navigate_back),
+                    imageVector = Icons.Filled.ArrowBack,
+                ) {
+                    navigateBack()
+                }
+            }
+        )
+        onComposing(appBarState)
     }
 
     LaunchedEffect(key1 = uiState) {
+        if (appBarState.title != uiState.bookRoomUi.name) {
+            appBarState = appBarState.copy(title = uiState.bookRoomUi.name)
+            onComposing(appBarState)
+        }
         if (uiState.bookRoomUi.canNavigate) {
             onNavigate()
         }
         if (uiState.error != null) {
             uiState.error?.let {
-                snackbarHostState.showSnackbar(
+                snackbarHostState?.showSnackbar(
                     it.asString(context)
                 )
+                appState?.snackbarHostState?.showSnackbar(it.asString(context))
                 viewModel.onClearError()
             }
         }

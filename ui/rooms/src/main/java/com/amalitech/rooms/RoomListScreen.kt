@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core.data.model.Room
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.rooms.components.DialogButton
@@ -55,7 +56,7 @@ import org.koin.androidx.compose.koinViewModel
 fun RoomListScreen(
     viewModel: RoomViewModel = koinViewModel(),
     onNavigateToAddRoom: () -> Unit,
-    onComposing: (FloatingActionButton) -> Unit,
+    onComposing: (AppBarState) -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val spacing = LocalSpacing.current
@@ -89,17 +90,18 @@ fun RoomListScreen(
     }
 
     BackHandler {
-        onComposing(FloatingActionButton())
+        onComposing(AppBarState())
         onNavigateBack()
     }
 
     LaunchedEffect(key1 = true) {
         onComposing(
-            FloatingActionButton(action = {
+            AppBarState(
+                floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
                         onNavigateToAddRoom()
-                        onComposing(FloatingActionButton())
+                        onComposing(AppBarState())
                     },
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -131,7 +133,7 @@ fun RoomListScreen(
                             modifier = Modifier.height(150.dp),
                             onLeftContentClick = {
                                 onNavigateToAddRoom()
-                                onComposing(FloatingActionButton())
+                                onComposing(AppBarState())
                             },
                             onRightContentClick = {
                                 openDialog = true

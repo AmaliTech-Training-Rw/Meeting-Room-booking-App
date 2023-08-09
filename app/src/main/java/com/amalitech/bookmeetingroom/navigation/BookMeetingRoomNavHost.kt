@@ -12,13 +12,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.amalitech.admin.room.AddRoomScreen
+import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
-import com.amalitech.rooms.FloatingActionButton
+import com.amalitech.home.HomeScreen
 import com.amalitech.rooms.RoomListScreen
+import com.amalitech.rooms.book_room.BookRoomScreen
 
 @Composable
 fun BookMeetingRoomNavHost(
@@ -26,7 +31,8 @@ fun BookMeetingRoomNavHost(
     startDestination: String,
     appState: BookMeetingRoomAppState,
     mainNavController: NavHostController,
-    onComposing: (FloatingActionButton) -> Unit
+    onComposing: (AppBarState) -> Unit,
+    onFinishActivity: () -> Unit,
 ) {
     NavHost(
         navController = appState.navController,
@@ -34,8 +40,36 @@ fun BookMeetingRoomNavHost(
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(route = NavigationItem.Home.route) {
-            TestScreen("This is ${NavigationItem.Home.title}", innerPadding)
+            HomeScreen(
+                onComposing = onComposing,
+                navigateToProfileScreen = {
+                    // TODO("NAVIGATE TO THE PROFILE SCREEN")
+                },
+                appState = appState,
+                navigateUp = onFinishActivity
+            ) {
+                mainNavController.navigate("${Route.BOOK_ROOM_SCREEN}/$it")
+            }
         }
+
+        composable(
+            route = "${Route.BOOK_ROOM_SCREEN}/{roomId}",
+            arguments = listOf(navArgument("roomId") {
+                type = NavType.StringType
+            })
+        ) {
+            BookRoomScreen(
+                appState = appState,
+                navBackStackEntry = it,
+                onComposing = onComposing,
+                navigateBack = {
+                    mainNavController.navigateUp()
+                }
+            ) {
+                mainNavController.navigate(BottomNavItem.Home.route)
+            }
+        }
+
 
         composable(route = NavigationItem.BookingRequests.route) {
             TestScreen("This is ${NavigationItem.BookingRequests.title}", innerPadding)
@@ -115,4 +149,3 @@ fun TestScreen(
         )
     }
 }
-
