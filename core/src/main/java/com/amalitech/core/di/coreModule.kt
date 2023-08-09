@@ -7,6 +7,7 @@ import com.amalitech.core.data.preferences.OnboardingSharedPreferencesImpl
 import com.amalitech.core.domain.BookMeetingRepository
 import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import org.koin.android.ext.koin.androidContext
+import com.amalitech.core.domain.use_case.ValidateEmailUseCase
 import org.koin.dsl.module
 
 val coreModule = module {
@@ -20,5 +21,12 @@ val coreModule = module {
 
     single<OnboardingSharedPreferences> {
         OnboardingSharedPreferencesImpl(get())
+    }
+    single<BookMeetingRepository> {
+        BookMeetingRepositoryImpl(get())
+    }
+
+    single {
+        ValidateEmailUseCase()
     }
 }

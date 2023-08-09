@@ -28,11 +28,13 @@ fun DebugScreen(onNavigate: (NavigationTarget) -> Unit) {
             NavigationTarget.CARD,
             NavigationTarget.DASHBOARD,
             NavigationTarget.DRAWER,
+            NavigationTarget.USER,
             NavigationTarget.ADDROOM,
             NavigationTarget.SIGNUP,
             NavigationTarget.CALENDAR,
             NavigationTarget.HOME,
             NavigationTarget.SIGNUP,
+            NavigationTarget.BOOKING
         )
 
     LazyColumn(
@@ -41,13 +43,16 @@ fun DebugScreen(onNavigate: (NavigationTarget) -> Unit) {
             .padding(16.dp)
     ) {
         items(actionButtons) { navigationTarget ->
-            Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Center) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.Center
+            ) {
                 DefaultButton(
                     modifier = Modifier.align(CenterVertically),
                     text = navigationTarget.route,
                     textColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                    onClick = { onNavigate.invoke(navigationTarget) })
-
+                    onClick = { onNavigate.invoke(navigationTarget) }
+                )
             }
             Spacer(modifier = Modifier.size(16.dp))
         }

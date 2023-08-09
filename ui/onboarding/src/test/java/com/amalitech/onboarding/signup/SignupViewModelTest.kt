@@ -1,11 +1,11 @@
 package com.amalitech.onboarding.signup
 
 import com.amalitech.core.R
+import com.amalitech.core.util.ApiResult
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.MainDispatcherRule
-import com.amalitech.onboarding.signup.use_case.SignupUseCase
-import com.amalitech.onboarding.util.Response
+import com.amalitech.onboarding.signup.use_case.SignupUseCasesWrapper
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -24,18 +24,18 @@ class SignupViewModelTest {
     private lateinit var viewModel: SignupViewModel
 
     @MockK
-    private lateinit var signupUseCase: SignupUseCase
+    private lateinit var signupUseCasesWrapper: SignupUseCasesWrapper
 
     @get:Rule
     var mainDispatcherRule = MainDispatcherRule()
 
     @Before
     fun setUp() {
-        signupUseCase = mockk()
+        signupUseCasesWrapper = mockk()
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns Response(data = listOf())
-        viewModel = SignupViewModel(signupUseCase)
+            signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
+        } returns ApiResult(data = listOf())
+        viewModel = SignupViewModel(signupUseCasesWrapper)
     }
 
     @Test
@@ -87,7 +87,7 @@ class SignupViewModelTest {
     fun `ensures passwordConfirmation is held by state`() {
         val passwordConfirmation = "passwordConfirmation"
         every {
-            signupUseCase.checkPasswordsMatch(any(), any())
+            signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns null
 
         viewModel.onNewPasswordConfirmation(passwordConfirmation)
@@ -109,31 +109,31 @@ class SignupViewModelTest {
         viewModel.onSelectedOrganizationType("organization2")
 
         every {
-            signupUseCase.checkValuesNotBlank(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
         } returns null
         every {
-            signupUseCase.checkPasswordsMatch(any(), any())
+            signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns null
         every {
-            signupUseCase.validateEmail(any())
+            signupUseCasesWrapper.validateEmailUseCase(any())
         } returns null
         every {
-            signupUseCase.validatePassword(any())
+            signupUseCasesWrapper.validatePasswordUseCase(any())
         } returns null
         every {
-            signupUseCase.isEmailAvailable(any())
+            signupUseCasesWrapper.isEmailAvailableUseCase(any())
         } returns true
         every {
-            signupUseCase.isUsernameAvailable(any())
+            signupUseCasesWrapper.isUsernameAvailableUseCase(any())
         } returns true
 
         coEvery {
-            signupUseCase.signup(any())
+            signupUseCasesWrapper.signupUseCase(any())
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns Response(data = listOf())
+            signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
+        } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -149,31 +149,31 @@ class SignupViewModelTest {
         viewModel.onSelectedOrganizationType("organization2")
 
         every {
-            signupUseCase.checkValuesNotBlank(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
         } returns null
         every {
-            signupUseCase.checkPasswordsMatch(any(), any())
+            signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns null
         every {
-            signupUseCase.validateEmail(any())
+            signupUseCasesWrapper.validateEmailUseCase(any())
         } returns null
         every {
-            signupUseCase.validatePassword(any())
+            signupUseCasesWrapper.validatePasswordUseCase(any())
         } returns null
         every {
-            signupUseCase.isEmailAvailable(any())
+            signupUseCasesWrapper.isEmailAvailableUseCase(any())
         } returns true
         every {
-            signupUseCase.isUsernameAvailable(any())
+            signupUseCasesWrapper.isUsernameAvailableUseCase(any())
         } returns true
 
         coEvery {
-            signupUseCase.signup(any())
+            signupUseCasesWrapper.signupUseCase(any())
         } returns UiText.StringResource(R.string.your_account_is_created)
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns Response(data = listOf())
+            signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
+        } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -190,32 +190,32 @@ class SignupViewModelTest {
         viewModel.onSelectedOrganizationType("organization2")
 
         every {
-            signupUseCase.checkValuesNotBlank(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
         } returns null
 
         every {
-            signupUseCase.checkPasswordsMatch(any(), any())
+            signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns null
         every {
-            signupUseCase.validateEmail(any())
+            signupUseCasesWrapper.validateEmailUseCase(any())
         } returns error
         every {
-            signupUseCase.validatePassword(any())
+            signupUseCasesWrapper.validatePasswordUseCase(any())
         } returns null
         every {
-            signupUseCase.isEmailAvailable(any())
+            signupUseCasesWrapper.isEmailAvailableUseCase(any())
         } returns true
         every {
-            signupUseCase.isUsernameAvailable(any())
+            signupUseCasesWrapper.isUsernameAvailableUseCase(any())
         } returns true
 
         coEvery {
-            signupUseCase.signup(any())
+            signupUseCasesWrapper.signupUseCase(any())
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns Response(data = listOf())
+            signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
+        } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -232,32 +232,32 @@ class SignupViewModelTest {
         viewModel.onSelectedOrganizationType("organization2")
 
         every {
-            signupUseCase.checkValuesNotBlank(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
         } returns null
 
         every {
-            signupUseCase.checkPasswordsMatch(any(), any())
+            signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns null
         every {
-            signupUseCase.validateEmail(any())
+            signupUseCasesWrapper.validateEmailUseCase(any())
         } returns null
         every {
-            signupUseCase.validatePassword(any())
+            signupUseCasesWrapper.validatePasswordUseCase(any())
         } returns error
         every {
-            signupUseCase.isEmailAvailable(any())
+            signupUseCasesWrapper.isEmailAvailableUseCase(any())
         } returns true
         every {
-            signupUseCase.isUsernameAvailable(any())
+            signupUseCasesWrapper.isUsernameAvailableUseCase(any())
         } returns true
 
         coEvery {
-            signupUseCase.signup(any())
+            signupUseCasesWrapper.signupUseCase(any())
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns Response(data = listOf())
+            signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
+        } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -274,31 +274,31 @@ class SignupViewModelTest {
         viewModel.onSelectedOrganizationType("organization2")
 
         every {
-            signupUseCase.checkValuesNotBlank(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
         } returns null
         every {
-            signupUseCase.checkPasswordsMatch(any(), any())
+            signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns error
         every {
-            signupUseCase.validateEmail(any())
+            signupUseCasesWrapper.validateEmailUseCase(any())
         } returns null
         every {
-            signupUseCase.validatePassword(any())
+            signupUseCasesWrapper.validatePasswordUseCase(any())
         } returns null
         every {
-            signupUseCase.isEmailAvailable(any())
+            signupUseCasesWrapper.isEmailAvailableUseCase(any())
         } returns true
         every {
-            signupUseCase.isUsernameAvailable(any())
+            signupUseCasesWrapper.isUsernameAvailableUseCase(any())
         } returns true
 
         coEvery {
-            signupUseCase.signup(any())
+            signupUseCasesWrapper.signupUseCase(any())
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns Response(data = listOf())
+            signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
+        } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -316,31 +316,31 @@ class SignupViewModelTest {
         viewModel.onSelectedOrganizationType("organization2")
 
         every {
-            signupUseCase.checkValuesNotBlank(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
         } returns null
         every {
-            signupUseCase.checkPasswordsMatch(any(), any())
+            signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns null
         every {
-            signupUseCase.validateEmail(any())
+            signupUseCasesWrapper.validateEmailUseCase(any())
         } returns null
         every {
-            signupUseCase.validatePassword(any())
+            signupUseCasesWrapper.validatePasswordUseCase(any())
         } returns null
         every {
-            signupUseCase.isEmailAvailable(any())
+            signupUseCasesWrapper.isEmailAvailableUseCase(any())
         } returns false
         every {
-            signupUseCase.isUsernameAvailable(any())
+            signupUseCasesWrapper.isUsernameAvailableUseCase(any())
         } returns true
 
         coEvery {
-            signupUseCase.signup(any())
+            signupUseCasesWrapper.signupUseCase(any())
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns Response(data = listOf())
+            signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
+        } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -358,32 +358,32 @@ class SignupViewModelTest {
         viewModel.onSelectedOrganizationType("organization2")
 
         every {
-            signupUseCase.checkPasswordsMatch(any(), any())
+            signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns null
         every {
-            signupUseCase.validateEmail(any())
+            signupUseCasesWrapper.validateEmailUseCase(any())
         } returns null
         every {
-            signupUseCase.validatePassword(any())
+            signupUseCasesWrapper.validatePasswordUseCase(any())
         } returns null
         every {
-            signupUseCase.isEmailAvailable(any())
+            signupUseCasesWrapper.isEmailAvailableUseCase(any())
         } returns false
         every {
-            signupUseCase.isUsernameAvailable(any())
+            signupUseCasesWrapper.isUsernameAvailableUseCase(any())
         } returns true
 
         coEvery {
-            signupUseCase.signup(any())
+            signupUseCasesWrapper.signupUseCase(any())
         } returns null
 
         every {
-            signupUseCase.checkValuesNotBlank(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
         } returns error
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns Response(data = listOf())
+        signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
+        } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -401,31 +401,31 @@ class SignupViewModelTest {
         viewModel.onSelectedOrganizationType("organization2")
 
         every {
-            signupUseCase.checkValuesNotBlank(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
         } returns null
         every {
-            signupUseCase.checkPasswordsMatch(any(), any())
+            signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns null
         every {
-            signupUseCase.validateEmail(any())
+            signupUseCasesWrapper.validateEmailUseCase(any())
         } returns null
         every {
-            signupUseCase.validatePassword(any())
+            signupUseCasesWrapper.validatePasswordUseCase(any())
         } returns null
         every {
-            signupUseCase.isEmailAvailable(any())
+            signupUseCasesWrapper.isEmailAvailableUseCase(any())
         } returns true
         every {
-            signupUseCase.isUsernameAvailable(any())
+            signupUseCasesWrapper.isUsernameAvailableUseCase(any())
         } returns false
 
         coEvery {
-            signupUseCase.signup(any())
+            signupUseCasesWrapper.signupUseCase(any())
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns Response(data = listOf())
+        signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
+        } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -441,33 +441,33 @@ class SignupViewModelTest {
         val error =
             UiText.StringResource(R.string.error_no_organization_type_selected)
         every {
-            signupUseCase.checkPasswordsMatch(any(), any())
+            signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns null
 
         every {
-            signupUseCase.checkValuesNotBlank(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
         } returns null
 
         every {
-            signupUseCase.validateEmail(any())
+            signupUseCasesWrapper.validateEmailUseCase(any())
         } returns null
         every {
-            signupUseCase.validatePassword(any())
+            signupUseCasesWrapper.validatePasswordUseCase(any())
         } returns null
         every {
-            signupUseCase.isEmailAvailable(any())
+            signupUseCasesWrapper.isEmailAvailableUseCase(any())
         } returns true
         every {
-            signupUseCase.isUsernameAvailable(any())
+            signupUseCasesWrapper.isUsernameAvailableUseCase(any())
         } returns true
 
         coEvery {
-            signupUseCase.signup(any())
+            signupUseCasesWrapper.signupUseCase(any())
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns Response(data = listOf())
+            signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
+        } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
 
@@ -596,31 +596,31 @@ class SignupViewModelTest {
         viewModel.onSelectedOrganizationType("organization2")
 
         every {
-            signupUseCase.checkValuesNotBlank(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
         } returns null
         every {
-            signupUseCase.checkPasswordsMatch(any(), any())
+            signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns null
         every {
-            signupUseCase.validateEmail(any())
+            signupUseCasesWrapper.validateEmailUseCase(any())
         } returns null
         every {
-            signupUseCase.validatePassword(any())
+            signupUseCasesWrapper.validatePasswordUseCase(any())
         } returns null
         every {
-            signupUseCase.isEmailAvailable(any())
+            signupUseCasesWrapper.isEmailAvailableUseCase(any())
         } returns true
         every {
-            signupUseCase.isUsernameAvailable(any())
+            signupUseCasesWrapper.isUsernameAvailableUseCase(any())
         } returns true
 
         coEvery {
-            signupUseCase.signup(any())
+            signupUseCasesWrapper.signupUseCase(any())
         } returns null
 
         coEvery {
-            signupUseCase.fetchOrganizationsType()
-        } returns Response(data = listOf())
+            signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
+        } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
 

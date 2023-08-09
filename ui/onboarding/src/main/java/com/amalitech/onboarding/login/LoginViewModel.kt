@@ -1,5 +1,7 @@
 package com.amalitech.onboarding.login
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import com.amalitech.core_ui.util.BaseViewModel
@@ -7,6 +9,8 @@ import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.login.use_case.LoginUseCase
 import com.amalitech.user.profile.model.dto.UserDto
 import com.amalitech.user.profile.use_case.ProfileUseCaseWrapper
+import com.amalitech.onboarding.login.use_case.LoginUseCasesWrapper
+import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -16,6 +20,8 @@ class LoginViewModel(
     private val loginUseCase: LoginUseCase,
     private val sharedPreferences: OnboardingSharedPreferences,
     private val userProfileUseCaseWrapper: ProfileUseCaseWrapper
+    private val loginUseCasesWrapper: LoginUseCasesWrapper,
+    private val sharedPreferences: OnboardingSharedPreferences
 ) : BaseViewModel<LoginUiState>() {
     private val _uiState = MutableStateFlow(
         LoginUiState()
@@ -65,10 +71,10 @@ class LoginViewModel(
             _uiStateFlow.update {
                 UiState.Loading()
             }
-            val emailValidation = loginUseCase.validateEmail(_uiState.value.email)
-            val passwordValidation = loginUseCase.validatePassword(_uiState.value.password)
+            val emailValidation = loginUseCasesWrapper.validateEmailUseCase(_uiState.value.email)
+            val passwordValidation = loginUseCasesWrapper.validatePasswordUseCase(_uiState.value.password)
             if (emailValidation == null && passwordValidation == null) {
-                val apiResult = loginUseCase.logIn(
+                val apiResult = loginUseCasesWrapper.logInUseCase(
                     email = _uiState.value.email,
                     password = _uiState.value.password
                 )

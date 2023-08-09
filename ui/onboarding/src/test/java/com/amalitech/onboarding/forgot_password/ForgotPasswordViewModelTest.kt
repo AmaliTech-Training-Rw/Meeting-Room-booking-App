@@ -3,7 +3,7 @@ package com.amalitech.onboarding.forgot_password
 import com.amalitech.core.util.UiText
 import com.amalitech.core.R
 import com.amalitech.core_ui.util.UiState
-import com.amalitech.onboarding.forgot_password.use_case.ForgotPasswordUseCase
+import com.amalitech.onboarding.forgot_password.use_case.ForgotPasswordUseCasesWrapper
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
@@ -23,14 +23,14 @@ class ForgotPasswordViewModelTest {
     private lateinit var viewModel: ForgotPasswordViewModel
 
     @MockK
-    private lateinit var forgotPasswordUseCase: ForgotPasswordUseCase
+    private lateinit var forgotPasswordUseCasesWrapper: ForgotPasswordUseCasesWrapper
 
     @Before
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        forgotPasswordUseCase = mockk()
+        forgotPasswordUseCasesWrapper = mockk()
         viewModel = ForgotPasswordViewModel(
-            forgotPasswordUseCase
+            forgotPasswordUseCasesWrapper
         )
     }
 
@@ -52,11 +52,11 @@ class ForgotPasswordViewModelTest {
     fun `when sendResetLink is called with valid email address, state is updated accordingly`() {
         // GIVEN - a mock authentication use case that assume email is valid and onResetLinkEvent event
         every {
-            forgotPasswordUseCase.validateEmail(any())
+            forgotPasswordUseCasesWrapper.validateEmailUseCase(any())
         } returns null
 
         every {
-            forgotPasswordUseCase.sendResetLink(any())
+            forgotPasswordUseCasesWrapper.sendResetLinkUseCase(any())
         } returns null
 
         // WHEN - onSendResetLink is called
@@ -71,11 +71,11 @@ class ForgotPasswordViewModelTest {
     fun `when sendResetLink is called with an email address that does not exist in DB, an error is added to state`() {
         // GIVEN - a mock authentication use case that assume email does not exist in DB
         every {
-            forgotPasswordUseCase.validateEmail(any())
+            forgotPasswordUseCasesWrapper.validateEmailUseCase(any())
         } returns null
 
         every {
-            forgotPasswordUseCase.sendResetLink(any())
+            forgotPasswordUseCasesWrapper.sendResetLinkUseCase(any())
         } returns UiText.StringResource(androidx.compose.ui.R.string.default_error_message)
 
         // WHEN - onSendResetLink is called
@@ -94,7 +94,7 @@ class ForgotPasswordViewModelTest {
     fun `Ensures that an error is added to state when the email address is invalid`() {
         // GIVEN - a mock authentication use case that assume email does not exist in DB
         every {
-            forgotPasswordUseCase.validateEmail(any())
+            forgotPasswordUseCasesWrapper.validateEmailUseCase(any())
         } returns UiText.StringResource(R.string.error_email_not_valid)
 
         // WHEN - onSendResetLink is called

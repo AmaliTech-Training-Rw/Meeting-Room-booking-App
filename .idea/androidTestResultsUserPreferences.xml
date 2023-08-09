@@ -32,6 +32,20 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="219800999">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="AUDUT20721007363" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="HUAWEI&#10; JNY-LX1" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

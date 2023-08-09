@@ -2,9 +2,15 @@ package com.amalitech.bookmeetingroom.navigation
 
 import android.content.Intent
 import androidx.compose.material3.Switch
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
@@ -17,13 +23,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
+import com.amalitech.booking.BookingScreen
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
+import com.amalitech.core_ui.components.drawer.BookMeetingRoomDrawer
+import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.home.HomeScreen
 import com.amalitech.onboarding.OnboardingScreen
 import com.amalitech.onboarding.forgot_password.ForgotPasswordScreen
 import com.amalitech.onboarding.forgot_password.ForgotPasswordViewModel
 import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.login.LoginViewModel
+import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordViewModel
 import com.amalitech.onboarding.signup.NavArguments
@@ -32,6 +42,7 @@ import com.amalitech.onboarding.splash_screen.SplashScreen
 import com.amalitech.user.profile.ProfileScreen
 import com.amalitech.user.profile.ProfileViewModel
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun AppNavHost(
@@ -197,8 +208,7 @@ fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
             Text("Invitations screen")
         }
         composable(BottomNavItem.Bookings.route) {
-            // TODO (ADD BOOKINGS SCREEN COMPOSABLE HERE)
-            Text("Bookings screen")
+            BookingScreen()
         }
     }
 }
@@ -209,17 +219,30 @@ fun NavGraphBuilder.dashboardNavGraph(navController: NavHostController) {
         route = Route.DASHBOARD_SCREENS
     ) {
         composable(Route.ADMIN_DASHBOARD) {
-            val profileViewModel: ProfileViewModel = koinViewModel()
-            // TODO (ADD DASHBOARD SCREEN COMPOSABLE HERE)
-            Text("Admin dashboard")
-            Switch(checked = true, onCheckedChange = {
-                profileViewModel.updateAdminUserScreen(false)
-                navController.navigate(Route.HOME_SCREENS) {
-                    popUpTo(Route.DASHBOARD_SCREENS) {
-                        inclusive = true
-                    }
+            val appState = rememberBookMeetingRoomAppState()
+            var query by rememberSaveable {
+                mutableStateOf("")
+            }
+            var isSearchTextFieldVisible by rememberSaveable {
+                mutableStateOf(false)
+            }
+            BookMeetingRoomDrawer(
+                appState = appState,
+                onClick = { appState.navController.navigate(it.route) },
+                content = {
+                    BookMeetingRoomApp(
+                        appState = appState,
+                        searchQuery = query,
+                        onSearchQueryChange = { query = it },
+                        onSearchClick = {},
+                        isSearchTextFieldVisible = isSearchTextFieldVisible,
+                        onSearchTextFieldVisibilityChange = { isVisible ->
+                            isSearchTextFieldVisible = isVisible
+                        },
+                        mainNavController = navController
+                    )
                 }
-            })
+            )
         }
     }
 }

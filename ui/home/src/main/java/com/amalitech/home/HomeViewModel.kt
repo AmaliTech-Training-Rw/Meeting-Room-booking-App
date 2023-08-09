@@ -3,18 +3,20 @@ package com.amalitech.home
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.amalitech.core.domain.model.Booking
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.R
+import com.amalitech.core_ui.components.Tab
 import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.home.calendar.BookingUiState
 import com.amalitech.home.calendar.CalendarUiState
-import com.amalitech.home.components.HomeTab
-import com.amalitech.home.model.Booking
 import com.amalitech.home.use_case.HomeUseCase
 import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.DayPosition
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class HomeViewModel(
     private val homeUseCase: HomeUseCase
@@ -24,6 +26,7 @@ class HomeViewModel(
 
     init {
         refreshBookings()
+        onCurrentDayChange(CalendarDay(LocalDate.now(), position = DayPosition.MonthDate))
     }
 
     /**
@@ -75,11 +78,12 @@ class HomeViewModel(
                 BookingUiState(
                     booking.startTime,
                     booking.endTime,
-                    booking.roomName
+                    booking.roomName,
+                    booking.date
                 )
             }
             .groupBy {
-                it.startTime.toLocalDate()
+                it.date
             }
 
     fun onCurrentDayChange(day: CalendarDay?) {
@@ -109,7 +113,7 @@ class HomeViewModel(
         }
     }
 
-    fun onSelectedTabChange(tab: HomeTab) {
+    fun onSelectedTabChange(tab: Tab) {
         _uiState.value = _uiState.value.copy(selectedTab = tab)
     }
 }

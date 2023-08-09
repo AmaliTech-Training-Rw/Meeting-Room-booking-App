@@ -106,14 +106,22 @@ dependencies {
     implementation(project(Modules.coreUI))
     implementation(project(Modules.uiUser))
 
+    implementation(project(Modules.uiRooms))
+    implementation(project(Modules.dataRoom))
+    implementation(project(Modules.domainRooms))
+   
+    implementation(project(Modules.uiAdmin))
 
     implementation(project(Modules.uiAdmin))
     implementation(project(Modules.uiHome))
+    implementation(project(Modules.uiUser))
+    implementation(project(Modules.dataUser))
+    implementation(project(Modules.domainUser))
     implementation(project(Modules.domainHome))
+    implementation(project(Modules.domainBooking))
+    implementation(project(Modules.uiBooking))
 
     implementation(AndroidX.coreKtx)
-
-    implementation(Coil.coilCompose)
 
     implementation(Google.material)
 

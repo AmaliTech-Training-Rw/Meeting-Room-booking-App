@@ -8,7 +8,6 @@ dependencies {
     "implementation"(project(Modules.domainOnboarding))
     "implementation"(project(Modules.domainUser))
 
-    "implementation"(Coil.coilCompose)
     "implementation"(Kotlin.coreKtx)
     "implementation"(Lifecycle.composeLifecycle)
     "implementation"(Compose.constraintLayout)

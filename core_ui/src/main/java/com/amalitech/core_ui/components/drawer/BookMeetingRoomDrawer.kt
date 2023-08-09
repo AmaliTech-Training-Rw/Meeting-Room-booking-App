@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -31,13 +33,11 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination.Companion.hierarchy
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
-import com.amalitech.core_ui.ui.BookMeetingRoomApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -45,11 +45,7 @@ import kotlinx.coroutines.launch
 fun BookMeetingRoomDrawer(
     appState: BookMeetingRoomAppState,
     onClick: (screen: NavigationItem) -> Unit,
-    searchQuery: String? = null,
-    onSearchQueryChange: ((query: String) -> Unit)? = null,
-    onSearchClick: (() -> Unit)? = null,
-    isSearchTextFieldVisible: Boolean = false,
-    onSearchTextFieldVisibilityChange: ((Boolean) -> Unit)? = null
+    content: @Composable () -> Unit
 ) {
     val selectedItem = remember { mutableStateOf(NavigationItem.Home.title) }
 
@@ -58,29 +54,24 @@ fun BookMeetingRoomDrawer(
         gesturesEnabled = true,
         drawerContent = {
             ModalDrawerSheet(
-                drawerContainerColor = MaterialTheme.colorScheme.onPrimary
-            ) {
-                DrawerHeader()
-                NavigationItem.createItems().forEach { item ->
-                    DrawerNavigationItem(
-                        appState,
-                        item,
-                        onClick,
-                        selectedItem
-                    )
+                drawerContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                content = {
+                    DrawerHeader()
+                    LazyColumn {
+                        items(NavigationItem.createItems()) { item ->
+                            DrawerNavigationItem(
+                                appState,
+                                item,
+                                onClick,
+                                selectedItem
+                            )
+                        }
+                    }
                 }
-            }
+            )
         },
         content = {
-            BookMeetingRoomApp(
-                appState = appState,
-                title = selectedItem.value,
-                searchQuery = searchQuery,
-                onSearchQueryChange = onSearchQueryChange,
-                onSearchClick = onSearchClick,
-                isSearchTextFieldVisible = isSearchTextFieldVisible,
-                onSearchTextFieldVisibilityChange = onSearchTextFieldVisibilityChange
-            )
+            content()
         }
     )
 }
@@ -101,9 +92,7 @@ fun DrawerNavigationItem(
             )
         },
         label = { Text(item.title) },
-        selected = appState.currentDestination?.hierarchy?.any {
-            it.route == item.route
-        } == true,
+        selected = selectedItem.value == item.title,
         onClick = {
             coroutineScope.launch { appState.drawerState.close() }
             selectedItem.value = item.title
@@ -162,6 +151,7 @@ fun BookMeetingRoomDrawerPreview() {
     BookMeetingRoomTheme {
         BookMeetingRoomDrawer(
             appState,
-            {})
+            {}
+        ) {}
     }
 }
