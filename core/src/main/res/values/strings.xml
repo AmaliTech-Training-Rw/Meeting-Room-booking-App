@@ -64,4 +64,7 @@
     <string name="set_up">Set up</string>
     <string name="error_default_message">An unexpected error occurred, please retry later</string>
     <string name="confirm_password">Confirm password</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="is_admin">Is Admin</string>
 </resources>

@@ -228,7 +228,6 @@ fun NavGraphBuilder.dashboardNavGraph(navController: NavHostController) {
                 content = {
                     BookMeetingRoomApp(
                         appState = appState,
-                        title = "",
                         searchQuery = query,
                         onSearchQueryChange = { query = it },
                         onSearchClick = {},
