@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Rooms</string>
-    <string name="up_to_people">up to %d people</string>
     <string name="question_delete_room">Are you sure you want to delete %s Room</string>
     <string name="error_no_date_selected">No date selected, please select one before proceeding</string>
     <string name="ok">OK</string>

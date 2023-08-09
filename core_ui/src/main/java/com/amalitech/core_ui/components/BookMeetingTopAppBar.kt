@@ -11,20 +11,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.amalitech.core_ui.state.BookMeetingRoomAppState
-import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookMeetingTopAppBar(
-    appState: BookMeetingRoomAppState,
-    title: String,
-    searchQuery: String? = null,
-    onSearchQueryChange: ((query: String) -> Unit)? = null,
-    onSearchClick: (() -> Unit)? = null,
-    isSearchTextFieldVisible: Boolean = false,
-    onSearchTextFieldVisibilityChange: ((Boolean) -> Unit)? = null,
     appBarState: AppBarState
 ) {
     if (appBarState.hasTopBar)
@@ -42,39 +33,9 @@ fun BookMeetingTopAppBar(
             modifier = Modifier.shadow(elevation = 24.dp),
             navigationIcon = {
                 appBarState.navigationIcon?.invoke()
-//            IconButton(onClick = {
-//                if (appState.drawerState.isClosed) {
-//                    coroutineScope.launch {
-//                        appState.drawerState.open()
-//                    }
-//                } else {
-//                    coroutineScope.launch {
-//                        appState.drawerState.close()
-//                    }
-//                }
-//            }) {
-//                Icon(
-//                    imageVector = Icons.Filled.Menu,
-//                    contentDescription = "Localized description"
-//                )
-//            }
             },
             actions = {
                 appBarState.actions?.invoke(this)
-//            SearchIcon(
-//                searchQuery = searchQuery,
-//                onSearch = onSearchClick,
-//                onSearchQueryChange = onSearchQueryChange,
-//                isSearchTextFieldVisible = isSearchTextFieldVisible,
-//                onSearchTextFieldVisibilityChanged = onSearchTextFieldVisibilityChange,
-//            )
-//            IconButton(onClick = { /* doSomething() */ }) {
-//                Image(
-//                    painter = painterResource(id = R.drawable.drawer_user),
-//                    contentDescription = "user account",
-//                    modifier = Modifier.size(32.dp)
-//                )
-//            }
             }
         )
     }
@@ -84,9 +45,6 @@ fun BookMeetingTopAppBar(
 @Composable
 fun BookMeetingTopAppBarPreview() {
     BookMeetingRoomTheme {
-        val appState = rememberBookMeetingRoomAppState()
-        BookMeetingTopAppBar(appState, "Home", "search", {}, {
-
-        }, appBarState = AppBarState())
+        BookMeetingTopAppBar(appBarState = AppBarState())
     }
 }

@@ -6,11 +6,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
@@ -299,26 +295,12 @@ fun NavGraphBuilder.dashboardNavGraph(
     ) {
         composable(Route.ADMIN_DASHBOARD) {
             val appState = rememberBookMeetingRoomAppState()
-            var query by rememberSaveable {
-                mutableStateOf("")
-            }
-            var isSearchTextFieldVisible by rememberSaveable {
-                mutableStateOf(false)
-            }
             BookMeetingRoomDrawer(
                 appState = appState,
                 onClick = { appState.navController.navigate(it.route) },
                 content = {
                     BookMeetingRoomApp(
                         appState = appState,
-                        title = "",
-                        searchQuery = query,
-                        onSearchQueryChange = { query = it },
-                        onSearchClick = {},
-                        isSearchTextFieldVisible = isSearchTextFieldVisible,
-                        onSearchTextFieldVisibilityChange = { isVisible ->
-                            isSearchTextFieldVisible = isVisible
-                        },
                         mainNavController = navController,
                         onFinishActivity = onFinishActivity
                     )

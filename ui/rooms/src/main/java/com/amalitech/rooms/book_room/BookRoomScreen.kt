@@ -153,8 +153,8 @@ fun BookRoomScreen(
                         contentDescription = room.description,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(spacing.spaceExtraSmall)),
-                        error = painterResource(id = R.drawable.baseline_broken_image_24),
+                            .clip(RoundedCornerShape(spacing.spaceSmall)),
+                        error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
                         placeholder = painterResource(id = R.drawable.baseline_refresh_24),
                         contentScale = ContentScale.FillWidth
                     )

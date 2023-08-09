@@ -1,4 +1,4 @@
-package com.amalitech.rooms.components
+package com.amalitech.home.room.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,12 +8,16 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -24,15 +28,18 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.amalitech.core.data.model.Room
 import com.amalitech.core_ui.theme.LocalSpacing
+import com.amalitech.ui.home.R
 
 @Composable
-fun RoomDescription(
+fun RoomItem(
     room: Room,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBookRoom: (Room) -> Unit
 ) {
     val spacing = LocalSpacing.current
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .padding(end = spacing.spaceMedium),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
@@ -44,20 +51,21 @@ fun RoomDescription(
             contentDescription = room.roomName,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxHeight()
+                .width(150.dp)
                 .aspectRatio(1f)
-//                .clip(RoundedCornerShape(spacing.spaceMedium))
+                .clip(RoundedCornerShape(spacing.spaceMedium))
+                .align(Alignment.CenterVertically)
         )
         Spacer(modifier = Modifier.width(spacing.spaceMedium))
         Column(
             modifier = Modifier
                 .align(Alignment.CenterVertically)
-                .weight(1f)
+                .weight(2f)
                 .padding(vertical = spacing.spaceMedium)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(0.4f)
+                modifier = Modifier.height(50.dp)
             ) {
                 Divider(
                     color = MaterialTheme.colorScheme.primary,
@@ -72,7 +80,10 @@ fun RoomDescription(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = stringResource(id = com.amalitech.core_ui.R.string.up_to_people, room.numberOfPeople),
+                        text = stringResource(
+                            id = com.amalitech.core_ui.R.string.up_to_people,
+                            room.numberOfPeople
+                        ),
                         style = MaterialTheme.typography.bodyMedium,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -95,9 +106,24 @@ fun RoomDescription(
                 style = MaterialTheme.typography.bodyMedium,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
-                    .weight(0.6f)
-                    .padding(start = spacing.spaceExtraSmall)
+                    .padding(start = spacing.spaceExtraSmall),
+                maxLines = 3
             )
+            Spacer(Modifier.height(spacing.spaceSmall))
+            Button(
+                onClick = { onBookRoom(room) },
+                modifier = Modifier
+                    .align(Alignment.End)
+//                    .clip(RoundedCornerShape(spacing.spaceExtraSmall))
+//                    .padding(1.dp)
+//                    .shadow(1.dp, RoundedCornerShape(spacing.spaceExtraSmall))
+//                    .padding(1.dp)
+                ,
+                shape = RoundedCornerShape(spacing.spaceExtraSmall),
+                elevation = ButtonDefaults.buttonElevation(1.dp)
+            ) {
+                Text(stringResource(id = R.string.book))
+            }
         }
     }
 }

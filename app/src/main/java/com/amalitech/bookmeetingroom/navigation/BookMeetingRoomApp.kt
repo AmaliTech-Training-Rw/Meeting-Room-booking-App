@@ -25,12 +25,6 @@ import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 @Composable
 fun BookMeetingRoomApp(
     appState: BookMeetingRoomAppState,
-    title: String,
-    searchQuery: String? = null,
-    onSearchQueryChange: ((String) -> Unit)? = null,
-    onSearchClick: (() -> Unit)? = null,
-    isSearchTextFieldVisible: Boolean = false,
-    onSearchTextFieldVisibilityChange: ((Boolean) -> Unit)? = null,
     mainNavController: NavHostController,
     onFinishActivity: () -> Unit,
 ) {
@@ -41,13 +35,6 @@ fun BookMeetingRoomApp(
     Scaffold(
         topBar = {
             BookMeetingTopAppBar(
-                appState = appState,
-                title = title,
-                searchQuery = searchQuery,
-                onSearchQueryChange = onSearchQueryChange,
-                onSearchClick = onSearchClick,
-                isSearchTextFieldVisible = isSearchTextFieldVisible,
-                onSearchTextFieldVisibilityChange = onSearchTextFieldVisibilityChange,
                 appBarState = appBarState
             )
         },
@@ -85,10 +72,8 @@ fun BookMeetingTopAppBarPreview() {
         val appState = rememberBookMeetingRoomAppState()
         BookMeetingRoomApp(
             appState = appState,
-            title = "Home",
-            mainNavController = rememberNavController(),
-            onFinishActivity = {  }
-        )
+            mainNavController = rememberNavController()
+        ) { }
     }
 }
 

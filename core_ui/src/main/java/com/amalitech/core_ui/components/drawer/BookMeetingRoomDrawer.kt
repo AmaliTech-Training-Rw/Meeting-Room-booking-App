@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -68,7 +69,8 @@ fun BookMeetingRoomDrawer(
                         }
                     }
                 },
-                drawerContainerColor = MaterialTheme.colorScheme.background
+                drawerContainerColor = MaterialTheme.colorScheme.background,
+                modifier = Modifier.width(300.dp)
             )
         },
         content = {
@@ -118,7 +120,7 @@ fun DrawerHeader() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val image: Painter = painterResource(id = R.drawable.drawer_user)
+        val image: Painter = painterResource(id = R.drawable.john_doe)
         Image(
             painter = image,
             contentDescription = "",
@@ -127,7 +129,7 @@ fun DrawerHeader() {
                 .clip(CircleShape)
         )
         Spacer(Modifier.height(12.dp))
-        Text("Firstname   Lastname", color = MaterialTheme.colorScheme.onBackground)
+        Text("Joh Doe", color = MaterialTheme.colorScheme.onBackground)
         Spacer(Modifier.height(12.dp))
         Divider(
             modifier = Modifier

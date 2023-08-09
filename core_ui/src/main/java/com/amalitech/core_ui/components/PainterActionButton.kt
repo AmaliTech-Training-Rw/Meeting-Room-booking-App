@@ -13,7 +13,7 @@ import com.amalitech.core_ui.R
 fun PainterActionButton(
     modifier: Modifier = Modifier,
     contentDescription: String = stringResource(id = R.string.open_profile_screen),
-    painter: Painter = painterResource(id = R.drawable.drawer_user),
+    painter: Painter = painterResource(id = R.drawable.john_doe),
     onClick: () -> Unit,
 ) {
     IconButton(onClick = onClick) {
