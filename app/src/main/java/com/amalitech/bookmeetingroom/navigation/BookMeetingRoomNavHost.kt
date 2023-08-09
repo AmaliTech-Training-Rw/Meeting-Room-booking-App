@@ -16,6 +16,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.amalitech.admin.DashboardScreen
 import com.amalitech.admin.room.AddRoomScreen
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
 import com.amalitech.core_ui.components.AppBarState
@@ -128,6 +129,10 @@ fun BookMeetingRoomNavHost(
                     appState.navController.navigateUp()
                 }
             )
+        }
+
+        composable(route = NavigationItem.Dashboard.route) {
+            DashboardScreen()
         }
     }
 }

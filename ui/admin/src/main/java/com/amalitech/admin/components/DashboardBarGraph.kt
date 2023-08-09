@@ -10,13 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.amalitech.admin.R
@@ -42,7 +41,7 @@ fun DashboardBarGraph(
     animateXDuration: Int = 3000,
     animateYDuration: Int = 3000,
     setDrawValue: Boolean = true,
-    titleTextStyle: TextStyle = MaterialTheme.typography.titleMedium
+    titleTextStyle: TextStyle = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
 ) {
     val spacing = LocalSpacing.current
     Column(
@@ -55,8 +54,6 @@ fun DashboardBarGraph(
         Text(
             stringResource(id = com.amalitech.core_ui.R.string.rooms_against_booked_time),
             style = titleTextStyle,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.align(CenterHorizontally),
         )
         Spacer(Modifier.height(spacing.spaceMedium))
         AndroidView(
