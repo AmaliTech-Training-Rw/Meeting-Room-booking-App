@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import com.amalitech.core_ui.swipe_animation.components.SwipeableCard
 import com.amalitech.core_ui.swipe_animation.util.SwipeDirection
 
-
 @Composable
 fun SwipeableCardSideContents(
     isLeftContentVisible: Boolean,

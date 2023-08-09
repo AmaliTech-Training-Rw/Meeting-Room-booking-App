@@ -19,13 +19,15 @@ import androidx.navigation.navArgument
 import com.amalitech.booking.requests.BookingRequestScreen
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
+import com.amalitech.user.UserScreen
 
 @Composable
 fun BookMeetingRoomNavHost(
     innerPadding: PaddingValues,
     startDestination: String,
     appState: BookMeetingRoomAppState,
-    mainNavController: NavHostController
+    mainNavController: NavHostController,
+    setFabOnClick: ((() -> Unit)?) -> Unit
 ) {
     NavHost(
         navController = appState.navController,
@@ -48,6 +50,13 @@ fun BookMeetingRoomNavHost(
         ) { backStackEntry ->
 
             Text("coming soon\nbooking id: ${backStackEntry.arguments?.getString("booking")}")
+        }
+
+        composable(route = NavigationItem.Users.route) {
+            UserScreen(
+                innerPadding = innerPadding,
+                setFabOnClick = setFabOnClick
+            )
         }
 
         composable(route = NavigationItem.Profile.route) {

@@ -87,7 +87,6 @@ class AddRoomViewModel(
         }
     }
 
-    // TODO: cadet => these snack bar error messages will only show after the feature has been connected to the scaffold
     fun onSaveRoomClick() {
         when {
             _uiState.value.name.isBlank() -> {
@@ -128,6 +127,7 @@ class AddRoomViewModel(
         }
     }
 
+    // TODO: crate a share mapping logic/function
     private fun mapRoomToDomain(
         name: String,
         location: String,
