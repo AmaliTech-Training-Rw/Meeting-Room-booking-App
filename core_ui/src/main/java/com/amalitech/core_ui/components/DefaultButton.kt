@@ -1,6 +1,8 @@
 package com.amalitech.core_ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -15,6 +17,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.theme.LocalSpacing
 
 @Composable
@@ -27,7 +31,9 @@ fun DefaultButton(
     onClick: () -> Unit,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     enabled: Boolean = true,
-    isLoading: Boolean = false
+    isLoading: Boolean = false,
+    borderWidth: Dp = 0.dp,
+    borderColor: Color = Color.Transparent
 ) {
     val spacing = LocalSpacing.current
     Box(
@@ -37,6 +43,12 @@ fun DefaultButton(
             .clickable(enabled = enabled) {
                 onClick()
             }
+            .border(
+                border = BorderStroke(
+                    width = borderWidth,
+                    color = borderColor
+                )
+            )
             .padding(spacing.spaceSmall),
         contentAlignment = Alignment.Center
     ) {
