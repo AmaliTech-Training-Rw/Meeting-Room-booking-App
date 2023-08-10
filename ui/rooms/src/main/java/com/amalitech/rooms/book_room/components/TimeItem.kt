@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.theme.LocalSpacing
-import com.amalitech.core_ui.util.formatLocalTime
+import com.amalitech.core_ui.util.formatTime
 import java.time.LocalTime
 
 @Composable
@@ -56,7 +56,7 @@ fun TimeItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        val timeString = formatLocalTime(time)
+        val timeString = formatTime(time)
         Text(
             text = timeString,
             style = textStyle,

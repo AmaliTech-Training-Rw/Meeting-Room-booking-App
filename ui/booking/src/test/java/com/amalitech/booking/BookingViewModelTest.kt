@@ -51,6 +51,7 @@ class BookingViewModelTest {
         val date = LocalDate.now()
         val bookings = listOf(
             Booking(
+                id = "id",
                 "room1",
                 date,
                 LocalTime.of((0..23).random(), 0),
@@ -58,6 +59,7 @@ class BookingViewModelTest {
                 "https://via.placeholder.com/500.png"
             ),
             Booking(
+                id = "id",
                 "room2",
                 date,
                 LocalTime.of((0..23).random(), 0),

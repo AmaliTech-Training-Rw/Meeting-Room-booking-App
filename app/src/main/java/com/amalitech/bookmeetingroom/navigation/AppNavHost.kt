@@ -297,8 +297,9 @@ fun NavGraphBuilder.mainNavGraph(
             }
         }
         composable(BottomNavItem.Invitations.route) {
-            // TODO (ADD INVITATIONS SCREEN COMPOSABLE HERE)
-            Text("Invitations screen")
+            BookRoomScreen(navBackStackEntry = it) {
+                
+            }
         }
         composable(BottomNavItem.Bookings.route) {
             BookingScreen()

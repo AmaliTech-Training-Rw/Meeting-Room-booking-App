@@ -51,4 +51,24 @@ class BookingViewModel(
     fun onTabSelected(tab: Tab) {
         _selectedTab.value = tab
     }
+
+    fun lengthOfLongestSubstring(s: String): Int {
+        var subStr = ""
+        val currentLength: ArrayList<Int> = ArrayList()
+        var i = 0
+        while(i < s.length - 1) {
+            for (j in i until s.length) {
+                val c = s[j]
+                if (!subStr.contains(c)) {
+                    subStr += c
+                } else {
+                    currentLength.add(subStr.length)
+                }
+            }
+            i++
+        }
+        val arr = currentLength.toTypedArray()
+        print(arr)
+        return arr.maxOrNull() ?: 0
+    }
 }

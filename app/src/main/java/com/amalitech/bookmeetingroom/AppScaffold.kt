@@ -91,5 +91,4 @@ fun AppScaffold(shouldShowOnboarding: Boolean, onFinishActivity: () -> Unit) {
             onFinishActivity = onFinishActivity
         )
     }
-
 }

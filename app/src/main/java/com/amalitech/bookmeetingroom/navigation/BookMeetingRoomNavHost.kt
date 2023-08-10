@@ -1,6 +1,5 @@
 package com.amalitech.bookmeetingroom.navigation
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -23,6 +23,8 @@ import com.amalitech.admin.DashboardScreen
 import com.amalitech.admin.room.AddRoomScreen
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
 import com.amalitech.core_ui.components.AppBarState
+import androidx.navigation.navArgument
+import com.amalitech.booking.requests.BookingRequestScreen
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
 import com.amalitech.home.HomeScreen
@@ -85,7 +87,17 @@ fun BookMeetingRoomNavHost(
 
 
         composable(route = NavigationItem.BookingRequests.route) {
-            TestScreen("This is ${NavigationItem.BookingRequests.title}", innerPadding)
+            BookingRequestScreen() { booking ->
+                appState.navController.navigate("${NavigationItem.BookingRequestDetail.route}/${booking.id}")
+            }
+        }
+
+        composable(
+            route = "${NavigationItem.BookingRequestDetail.route}/{booking}",
+            arguments = listOf(navArgument("booking") { type = NavType.StringType})
+        ) { backStackEntry ->
+
+            Text("coming soon\nbooking id: ${backStackEntry.arguments?.getString("booking")}")
         }
 
         composable(route = NavigationItem.Users.route) {

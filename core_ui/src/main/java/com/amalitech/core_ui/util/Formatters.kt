@@ -17,9 +17,9 @@ fun formatTime(localDateTime: LocalTime): String {
     return localDateTime.format(formatter)
 }
 
-fun formatLocalTime(time: LocalTime): String {
-    val formatter = DateTimeFormatter.ofPattern("H:mm")
-    return time.format(formatter)
+fun formatDate1(date: LocalDate): String {
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    return date.format(formatter)
 }
 
 fun longToLocalDate(utcTimeMillis: Long): LocalDate{
