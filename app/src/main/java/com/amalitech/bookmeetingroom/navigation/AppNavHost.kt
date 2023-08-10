@@ -2,7 +2,6 @@ package com.amalitech.bookmeetingroom.navigation
 
 import android.content.Intent
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -239,7 +238,7 @@ fun NavGraphBuilder.mainNavGraph(
             HomeScreen(
                 onComposing = onComposing,
                 navigateToProfileScreen = {
-                    // TODO (NAVIGATE TO THE PROFILE SCREEN)
+                    navigateToProfileScreen(navController)
                 },
                 navigateToBookRoomScreen = {
                     navController.navigate("${Route.BOOK_ROOM_SCREEN}/$it")
@@ -279,7 +278,8 @@ fun NavGraphBuilder.mainNavGraph(
                         launchSingleTop = true
                     }
                 },
-                navigateToProfileScreen = {}
+                navigateToProfileScreen = {},
+                onFinishActivity = onFinishActivity
             ) { goToAdmin ->
                 if (goToAdmin) {
                     navController.navigate(Route.DASHBOARD_SCREENS) {
@@ -297,9 +297,13 @@ fun NavGraphBuilder.mainNavGraph(
             }
         }
         composable(BottomNavItem.Invitations.route) {
-            BookRoomScreen(navBackStackEntry = it) {
-                
-            }
+            BookRoomScreen(
+                navBackStackEntry = it,
+                navigateBack = {
+                    navController.navigateUp()
+                },
+                onComposing = onComposing
+            ) {}
         }
         composable(BottomNavItem.Bookings.route) {
             BookingScreen()

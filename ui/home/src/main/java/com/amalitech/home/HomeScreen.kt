@@ -12,6 +12,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -20,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.amalitech.core.data.model.Room
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.BookingAppTab
+import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.components.Tab
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
@@ -27,6 +30,7 @@ import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.CustomBackHandler
 import com.amalitech.home.calendar.CalendarScreen
 import com.amalitech.home.room.components.RoomItem
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import kotlin.random.Random
 
@@ -44,6 +48,8 @@ fun HomeScreen(
     val selectedTab = uiState.selectedTab
     val tabs = uiState.tabs
     val homeTitle = stringResource(id = com.amalitech.core_ui.R.string.home)
+    val isUsingAdminDashboard by viewModel.isUsingAdminDashboard
+    val scope = rememberCoroutineScope()
 
     CustomBackHandler(appState = appState, onComposing = onComposing) {
         navigateUp()
@@ -52,7 +58,15 @@ fun HomeScreen(
         onComposing(
             AppBarState(
                 title = homeTitle,
-                // TODO("CHECK IF THE USER IS USING ADMIN SCREENS TO ADD THE NAVIGATION BUTTON")
+                navigationIcon = {
+                    if(isUsingAdminDashboard) {
+                        NavigationButton {
+                            scope.launch {
+                                appState?.drawerState?.open()
+                            }
+                        }
+                    }
+                },
                 actions = {
                     PainterActionButton {
                         navigateToProfileScreen()

@@ -7,4 +7,5 @@
     <string name="date_and_time">%s %s - %s</string>
     <string name="decline">Decline</string>
     <string name="approve">Approve</string>
+    <string name="booking_request">Booking Requests</string>
 </resources>

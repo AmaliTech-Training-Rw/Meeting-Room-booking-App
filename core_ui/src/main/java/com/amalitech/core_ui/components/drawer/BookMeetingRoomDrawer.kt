@@ -1,6 +1,5 @@
 package com.amalitech.core_ui.components.drawer
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -103,7 +102,6 @@ fun DrawerNavigationItem(
         onClick = {
             coroutineScope.launch { appState.drawerState.close() }
             onClick(item)
-            Log.d("Drawer", "currentdestination: $currentRoute")
         },
         colors = NavigationDrawerItemDefaults.colors(
             selectedContainerColor = Color.Transparent,

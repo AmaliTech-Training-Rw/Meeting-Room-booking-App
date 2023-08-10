@@ -1,5 +1,6 @@
 package com.amalitech.user.profile
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -52,6 +54,7 @@ import org.koin.androidx.compose.koinViewModel
 fun ProfileScreen(
     appState: BookMeetingRoomAppState? = null,
     viewModel: ProfileViewModel = koinViewModel(),
+    onFinishActivity: () -> Unit,
     navigateToProfileScreen: () -> Unit,
     onNavigateBack: () -> Unit,
     onComposing: (AppBarState) -> Unit,
@@ -188,13 +191,27 @@ fun ProfileScreen(
                     }
                 }
                 Spacer(Modifier.height(spacing.spaceExtraLarge))
-                DefaultButton(
-                    text = stringResource(id = R.string.update_profile),
-                    onClick = onUpdateProfileClick,
-                    modifier = Modifier
-                        .width(spacing.spaceExtraLarge * 4)
-                        .clip(RoundedCornerShape(spacing.spaceMedium))
-                )
+                Row(
+                    modifier = Modifier.width(spacing.spaceExtraLarge * 4),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    DefaultButton(
+                        text = stringResource(id = R.string.update_profile),
+                        onClick = onUpdateProfileClick,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(spacing.spaceMedium))
+                    )
+                    DefaultButton(
+                        text = stringResource(id = R.string.logout),
+                        onClick = {
+                            viewModel.logout()
+                            onFinishActivity()
+                        },
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(spacing.spaceMedium)),
+                        backgroundColor = MaterialTheme.colorScheme.error
+                    )
+                }
             }
         }
         if (isLoading) {

@@ -24,4 +24,5 @@
     <string name="show_bottom_sheet">Show bottom sheet</string>
     <string name="users">Users</string>
     <string name="my_profile">My profile</string>
+    <string name="logout">Log out</string>
 </resources>
