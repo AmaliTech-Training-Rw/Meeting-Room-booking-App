@@ -94,7 +94,6 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserScreen(
-    innerPadding: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: UserViewModel = koinViewModel(),
     addUserViewModel: AddUserViewModel = koinViewModel(),
@@ -315,7 +314,6 @@ fun UserScreen(
 
     UsersList(
         modifier,
-        innerPadding,
         viewModel,
         spacing
     )
@@ -324,7 +322,6 @@ fun UserScreen(
 @Composable
 fun UsersList(
     modifier: Modifier,
-    innerPadding: PaddingValues,
     viewModel: UserViewModel,
     spacing: Dimensions
 ) {
@@ -342,7 +339,6 @@ fun UsersList(
     LazyColumn(
         modifier = modifier
             .fillMaxHeight()
-            .padding(innerPadding)
     ) {
         items(items = state.users, itemContent = { item ->
             SwipeableCardSideContents(
@@ -580,11 +576,10 @@ fun UserItemPreview() {
 fun UserScreenPreview() {
     BookMeetingRoomTheme {
         UserScreen(
-            innerPadding = PaddingValues(16.dp),
-            navigateUp = {},
-            onOpenDrawer = {},
             appState = rememberBookMeetingRoomAppState(),
-            navigateToProfileScreen = {}
+            onOpenDrawer = {},
+            navigateToProfileScreen = {},
+            navigateUp = {}
         ) {}
     }
 }

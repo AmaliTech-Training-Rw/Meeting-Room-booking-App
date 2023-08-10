@@ -90,16 +90,15 @@ fun BookMeetingRoomNavHost(
 
         composable(route = NavigationItem.Users.route) {
             UserScreen(
-                innerPadding = innerPadding,
-                onComposing = onComposing,
+                appState = appState,
                 onOpenDrawer = { openDrawer(scope, appState) },
-                navigateUp = {
-                    navigateToDashboard(appState)
-                },
                 navigateToProfileScreen = {
                     navigateToProfileScreen(appState)
                 },
-                appState = appState
+                navigateUp = {
+                    navigateToDashboard(appState)
+                },
+                onComposing = onComposing
             )
         }
 
