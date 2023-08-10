@@ -4,9 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +22,8 @@ import com.amalitech.core_ui.state.NavigationItem
 import com.amalitech.home.HomeScreen
 import com.amalitech.rooms.RoomListScreen
 import com.amalitech.rooms.book_room.BookRoomScreen
+import com.amalitech.user.UserScreen
+import com.amalitech.user.profile.ProfileScreen
 
 @Composable
 fun BookMeetingRoomNavHost(
@@ -34,6 +33,8 @@ fun BookMeetingRoomNavHost(
     mainNavController: NavHostController,
     onComposing: (AppBarState) -> Unit,
     onFinishActivity: () -> Unit,
+    mainNavController: NavHostController,
+    setFabOnClick: ((() -> Unit)?) -> Unit
 ) {
     NavHost(
         navController = appState.navController,
@@ -76,29 +77,28 @@ fun BookMeetingRoomNavHost(
             TestScreen("This is ${NavigationItem.BookingRequests.title}", innerPadding)
         }
 
-        composable(route = NavigationItem.Profile.route) {
-            Column {
-                TestScreen(
-                    "This is ${NavigationItem.Profile.title}",
-                    innerPadding,
-                    modifier = Modifier.weight(1f)
-                )
-                Button(
-                    onClick = {
-                        mainNavController.navigate(Route.HOME_SCREENS) {
-                            popUpTo(Route.DASHBOARD_SCREENS) {
-                                inclusive = true
-                            }
-                        }
-                    }, modifier = Modifier
-                        .weight(1f)
-                        .wrapContentHeight()
-                        .wrapContentWidth()
-                ) {
-                    Text("Switch to normal user")
-                }
+        composable(route = NavigationItem.Users.route) {
+            UserScreen(
+                innerPadding = innerPadding,
+                setFabOnClick = setFabOnClick
+            )
+        }
 
-            }
+        composable(route = NavigationItem.Profile.route) {
+            ProfileScreen(onUpdateProfileClick = { }, onToggleButtonClick = { goToAdmin ->
+                if (goToAdmin)
+                    mainNavController.navigate(Route.DASHBOARD_SCREENS) {
+                        popUpTo(Route.HOME_SCREENS) {
+                            inclusive = true
+                        }
+                    }
+                else
+                    mainNavController.navigate(Route.HOME_SCREENS) {
+                        popUpTo(Route.DASHBOARD_SCREENS) {
+                            inclusive = true
+                        }
+                    }
+            })
         }
 
         composable(route = NavigationItem.Invitations.route) {

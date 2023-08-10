@@ -51,7 +51,7 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginScreen(
-    onNavigateToNext: (isAdmin: Boolean) -> Unit,
+    onNavigateToHome: (isUsingAdminDashboard: Boolean) -> Unit,
     onNavigateToForgotPassword: () -> Unit,
     onNavigateToSignUp: () -> Unit,
     snackBarHostState: SnackbarHostState,
@@ -67,11 +67,12 @@ fun LoginScreen(
         keyboardController?.hide()
     }
     val baseResult by viewModel.uiStateFlow.collectAsStateWithLifecycle()
+    val isUsingAdminDashboard = viewModel.isUsingAdminDashboard
 
     LaunchedEffect(key1 = baseResult) {
         when (baseResult) {
             is UiState.Success -> {
-                onNavigateToNext(viewModel.isAdmin.value)
+                onNavigateToHome(isUsingAdminDashboard)
             }
 
             is UiState.Error -> {
@@ -213,7 +214,7 @@ fun LoginScreen(
 @Composable
 fun Prev() {
     LoginScreen(
-        onNavigateToNext = {},
+        onNavigateToHome = {},
         onNavigateToForgotPassword = {},
         onNavigateToSignUp = {},
         snackBarHostState = SnackbarHostState(),

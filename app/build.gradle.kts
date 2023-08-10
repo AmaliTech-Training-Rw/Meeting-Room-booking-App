@@ -99,11 +99,12 @@ dependencies {
     implementation(project(Modules.core))
 
     implementation(project(Modules.dataOnboarding))
+    implementation(project(Modules.dataUser))
     implementation(project(Modules.domainOnboarding))
+    implementation(project(Modules.domainUser))
     implementation(project(Modules.uiOnboarding))
     implementation(project(Modules.coreUI))
-
-
+    implementation(project(Modules.uiUser))
 
     implementation(project(Modules.uiRooms))
     implementation(project(Modules.dataRoom))
@@ -113,10 +114,12 @@ dependencies {
 
     implementation(project(Modules.uiAdmin))
     implementation(project(Modules.uiHome))
+    implementation(project(Modules.uiUser))
+    implementation(project(Modules.dataUser))
+    implementation(project(Modules.domainUser))
     implementation(project(Modules.domainHome))
     implementation(project(Modules.domainBooking))
     implementation(project(Modules.uiBooking))
-
 
     implementation(AndroidX.coreKtx)
 

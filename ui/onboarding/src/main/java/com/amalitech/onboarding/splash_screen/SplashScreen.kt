@@ -30,7 +30,7 @@ fun SplashScreen(
     }
 
     SplashAnimation(
-        onNavigate = { onNavigate(state.isUserAdmin) },
+        onNavigate = { onNavigate(state.isUsingAdminDashboard) },
         canShowFadeoutAnim = canShowFadeOutAnim,
         onVisibilityChange = {
             isAnimationVisible = it
