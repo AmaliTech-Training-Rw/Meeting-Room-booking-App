@@ -1,5 +1,6 @@
 package com.amalitech.bookmeetingroom.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,8 +8,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,18 +30,23 @@ import com.amalitech.rooms.RoomListScreen
 import com.amalitech.rooms.book_room.BookRoomScreen
 import com.amalitech.user.UserScreen
 import com.amalitech.user.profile.ProfileScreen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun BookMeetingRoomNavHost(
     innerPadding: PaddingValues,
     startDestination: String,
     appState: BookMeetingRoomAppState,
-    mainNavController: NavHostController,
     onComposing: (AppBarState) -> Unit,
     onFinishActivity: () -> Unit,
-    mainNavController: NavHostController,
-    setFabOnClick: ((() -> Unit)?) -> Unit
+    mainNavController: NavHostController
 ) {
+    val isDrawerOpen by remember {
+        mutableStateOf(appState.drawerState.isOpen)
+    }
+    val scope = rememberCoroutineScope()
+
     NavHost(
         navController = appState.navController,
         startDestination = startDestination,
@@ -80,25 +91,41 @@ fun BookMeetingRoomNavHost(
         composable(route = NavigationItem.Users.route) {
             UserScreen(
                 innerPadding = innerPadding,
-                setFabOnClick = setFabOnClick
+                onComposing = onComposing,
+                onOpenDrawer = { openDrawer(scope, appState) },
+                navigateUp = {
+                    navigateToDashboard(appState)
+                },
+                navigateToProfileScreen = {
+                    navigateToProfileScreen(appState)
+                },
+                appState = appState
             )
         }
 
         composable(route = NavigationItem.Profile.route) {
-            ProfileScreen(onUpdateProfileClick = { }, onToggleButtonClick = { goToAdmin ->
+            ProfileScreen(
+                appState = appState,
+                navigateToProfileScreen = { },
+                onNavigateBack = { navigateToDashboard(appState) },
+                onComposing = onComposing,
+                onUpdateProfileClick = { }
+            ) { goToAdmin ->
                 if (goToAdmin)
                     mainNavController.navigate(Route.DASHBOARD_SCREENS) {
                         popUpTo(Route.HOME_SCREENS) {
                             inclusive = true
                         }
                     }
-                else
+                else {
                     mainNavController.navigate(Route.HOME_SCREENS) {
                         popUpTo(Route.DASHBOARD_SCREENS) {
                             inclusive = true
                         }
                     }
-            })
+                    onComposing(AppBarState(hasTopBar = false))
+                }
+            }
         }
 
         composable(route = NavigationItem.Invitations.route) {
@@ -114,7 +141,9 @@ fun BookMeetingRoomNavHost(
         }
 
         composable(route = Route.ADD_ROOM_SCREEN) {
-            AddRoomScreen()
+            AddRoomScreen(onComposing = onComposing) {
+                appState.navController.navigateUp()
+            }
         }
 
         composable(route = NavigationItem.Rooms.route) {
@@ -126,14 +155,52 @@ fun BookMeetingRoomNavHost(
                     onComposing(it)
                 },
                 onNavigateBack = {
-                    appState.navController.navigateUp()
-                }
+                    navigateToDashboard(appState)
+                },
+                appState = appState,
+                onOpenDrawer = { openDrawer(scope, appState) },
+                navigateToProfileScreen = { navigateToProfileScreen(appState) }
             )
         }
 
         composable(route = NavigationItem.Dashboard.route) {
-            DashboardScreen()
+            DashboardScreen(
+                appState = appState,
+                onOpenDrawer = { openDrawer(scope, appState) },
+                onComposing = onComposing,
+                navigateUp = {
+                    onFinishActivity()
+                    Log.d("Drawer", "$isDrawerOpen")
+                }
+            ) {
+                navigateToProfileScreen(appState)
+            }
         }
+    }
+}
+
+private fun navigateToDashboard(appState: BookMeetingRoomAppState) {
+    appState.navController.navigate(NavigationItem.Dashboard.route) {
+        popToDashboard()
+    }
+}
+
+private fun navigateToProfileScreen(appState: BookMeetingRoomAppState) {
+    appState.navController.navigate(NavigationItem.Profile.route) {
+        popToDashboard()
+    }
+}
+
+fun NavOptionsBuilder.popToDashboard() {
+    popUpTo(NavigationItem.Dashboard.route) {
+        inclusive = true
+    }
+    launchSingleTop
+}
+
+fun openDrawer(scope: CoroutineScope, appState: BookMeetingRoomAppState) {
+    scope.launch {
+        appState.drawerState.open()
     }
 }
 

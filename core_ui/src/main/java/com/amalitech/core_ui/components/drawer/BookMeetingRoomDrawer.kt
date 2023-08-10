@@ -1,5 +1,6 @@
 package com.amalitech.core_ui.components.drawer
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,9 +23,7 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +33,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
@@ -48,8 +49,6 @@ fun BookMeetingRoomDrawer(
     onClick: (screen: NavigationItem) -> Unit,
     content: @Composable () -> Unit
 ) {
-    val selectedItem = remember { mutableStateOf(NavigationItem.Home.title) }
-
     ModalNavigationDrawer(
         drawerState = appState.drawerState,
         gesturesEnabled = true,
@@ -63,8 +62,7 @@ fun BookMeetingRoomDrawer(
                             DrawerNavigationItem(
                                 appState,
                                 item,
-                                onClick,
-                                selectedItem
+                                onClick
                             )
                         }
                     }
@@ -84,10 +82,12 @@ fun BookMeetingRoomDrawer(
 fun DrawerNavigationItem(
     appState: BookMeetingRoomAppState,
     item: NavigationItem,
-    onClick: (screen: NavigationItem) -> Unit,
-    selectedItem: MutableState<String>
+    onClick: (screen: NavigationItem) -> Unit
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val navBackStackEntry by appState.navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination
+
     NavigationDrawerItem(
         icon = {
             Icon(
@@ -96,11 +96,13 @@ fun DrawerNavigationItem(
             )
         },
         label = { Text(item.title) },
-        selected = selectedItem.value == item.title,
+        selected = currentRoute?.hierarchy?.any {
+            it.route == item.route
+        } == true,
         onClick = {
             coroutineScope.launch { appState.drawerState.close() }
-            selectedItem.value = item.title
             onClick(item)
+            Log.d("Drawer", "currentdestination: $currentRoute")
         },
         colors = NavigationDrawerItemDefaults.colors(
             selectedContainerColor = Color.Transparent,
@@ -129,7 +131,7 @@ fun DrawerHeader() {
                 .clip(CircleShape)
         )
         Spacer(Modifier.height(12.dp))
-        Text("Joh Doe", color = MaterialTheme.colorScheme.onBackground)
+        Text("John Doe", color = MaterialTheme.colorScheme.onBackground)
         Spacer(Modifier.height(12.dp))
         Divider(
             modifier = Modifier

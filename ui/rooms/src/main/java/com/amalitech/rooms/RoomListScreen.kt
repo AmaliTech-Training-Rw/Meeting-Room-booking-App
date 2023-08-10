@@ -1,6 +1,5 @@
 package com.amalitech.rooms
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,7 +43,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core.data.model.Room
 import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.NavigationButton
+import com.amalitech.core_ui.components.PainterActionButton
+import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.theme.LocalSpacing
+import com.amalitech.core_ui.util.CustomBackHandler
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.rooms.components.DialogButton
 import com.amalitech.rooms.components.RoomCard
@@ -54,9 +57,12 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomListScreen(
+    appState: BookMeetingRoomAppState,
     viewModel: RoomViewModel = koinViewModel(),
     onNavigateToAddRoom: () -> Unit,
     onComposing: (AppBarState) -> Unit,
+    onOpenDrawer: () -> Unit,
+    navigateToProfileScreen: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val spacing = LocalSpacing.current
@@ -74,6 +80,7 @@ fun RoomListScreen(
     var rooms: List<Room>? by remember {
         mutableStateOf(null)
     }
+    val title = stringResource(id = com.amalitech.core_ui.R.string.rooms)
 
     LaunchedEffect(key1 = uiState) {
         when (uiState) {
@@ -89,8 +96,7 @@ fun RoomListScreen(
         }
     }
 
-    BackHandler {
-        onComposing(AppBarState())
+    CustomBackHandler(appState = appState, onComposing = onComposing) {
         onNavigateBack()
     }
 
@@ -98,21 +104,33 @@ fun RoomListScreen(
         onComposing(
             AppBarState(
                 floatingActionButton = {
-                FloatingActionButton(
-                    onClick = {
-                        onNavigateToAddRoom()
-                        onComposing(AppBarState())
-                    },
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.clip(CircleShape)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(id = com.amalitech.core.R.string.add_room)
-                    )
+                    FloatingActionButton(
+                        onClick = {
+                            onNavigateToAddRoom()
+                            onComposing(AppBarState())
+                        },
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.clip(CircleShape)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = stringResource(id = com.amalitech.core.R.string.add_room)
+                        )
+                    }
+                },
+                title = title,
+                actions = {
+                    PainterActionButton {
+                        navigateToProfileScreen()
+                    }
+                },
+                navigationIcon = {
+                    NavigationButton {
+                        onOpenDrawer()
+                    }
                 }
-            })
+            )
         )
     }
 

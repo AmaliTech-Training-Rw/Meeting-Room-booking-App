@@ -21,4 +21,7 @@
     <string name="profile_image">Profile Image</string>
     <string name="admin">Admin</string>
     <string name="update_profile">Update profile</string>
+    <string name="show_bottom_sheet">Show bottom sheet</string>
+    <string name="users">Users</string>
+    <string name="my_profile">My profile</string>
 </resources>

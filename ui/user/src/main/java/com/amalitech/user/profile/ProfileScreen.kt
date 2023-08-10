@@ -22,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,19 +34,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.DefaultButton
+import com.amalitech.core_ui.components.NavigationButton
+import com.amalitech.core_ui.components.PainterActionButton
+import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.theme.LocalSpacing
+import com.amalitech.core_ui.util.CustomBackHandler
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.ui.user.R
 import com.amalitech.user.profile.components.ProfileDescriptionItem
 import com.amalitech.user.profile.model.dto.UserDto
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ProfileScreen(
+    appState: BookMeetingRoomAppState? = null,
     viewModel: ProfileViewModel = koinViewModel(),
+    navigateToProfileScreen: () -> Unit,
+    onNavigateBack: () -> Unit,
+    onComposing: (AppBarState) -> Unit,
     onUpdateProfileClick: () -> Unit,
-    onToggleButtonClick: (goToAdmin: Boolean) -> Unit
+    onToggleButtonClick: (goToAdmin: Boolean) -> Unit,
 ) {
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     var user: UserDto? by remember {
@@ -61,7 +72,34 @@ fun ProfileScreen(
     val spacing = LocalSpacing.current
     val isAdmin: Boolean by viewModel.isAdmin
     val isUsingAdminDashboard: Boolean by viewModel.isUsingAdminDashboard
+    val title = stringResource(id = R.string.my_profile)
 
+    CustomBackHandler(appState = appState, onComposing = onComposing) {
+        onNavigateBack()
+    }
+
+    LaunchedEffect(key1 = true) {
+        onComposing(
+            AppBarState(
+                title = title,
+                actions = {
+                    PainterActionButton {
+                        navigateToProfileScreen()
+                    }
+                },
+                navigationIcon = {
+                    if (isUsingAdminDashboard) {
+                        val scope = rememberCoroutineScope()
+                        NavigationButton {
+                            scope.launch {
+                                appState?.drawerState?.open()
+                            }
+                        }
+                    }
+                }
+            )
+        )
+    }
     LaunchedEffect(key1 = uiState) {
         when (uiState) {
             is UiState.Success -> {

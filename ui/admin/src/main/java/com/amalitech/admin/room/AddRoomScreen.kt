@@ -25,6 +25,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,12 +35,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
@@ -63,19 +64,22 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import com.amalitech.admin.R
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.BookMeetingRoomDropDown
 import com.amalitech.core_ui.components.DefaultButton
+import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.add_room_icon_button_bg
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun AddRoomScreen(
-    viewModel: AddRoomViewModel = koinViewModel()
+    viewModel: AddRoomViewModel = koinViewModel(),
+    onComposing: (AppBarState) -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -88,9 +92,26 @@ fun AddRoomScreen(
         rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) {
             viewModel.onRoomImages(it)
         }
-
     val spacing = LocalSpacing.current
+    val title = stringResource(id = R.string.add_room)
+    val contentDescription = stringResource(id = com.amalitech.core_ui.R.string.navigate_back)
 
+    LaunchedEffect(key1 = true) {
+        onComposing(
+            AppBarState(
+                title = title,
+                navigationIcon = {
+                    NavigationButton(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = contentDescription
+                    ) {
+                        onNavigateBack()
+                    }
+                },
+                isGestureEnabled = false
+            )
+        )
+    }
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -99,12 +120,12 @@ fun AddRoomScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            val (add_photos, photo_selector, images, form) = createRefs()
+            val (addPhotos, photoSelector, images, form) = createRefs()
 
             Text(
                 text = stringResource(com.amalitech.core.R.string.add_photos),
                 modifier = Modifier
-                    .constrainAs(add_photos) {
+                    .constrainAs(addPhotos) {
                         top.linkTo(parent.top, 16.dp) // set to 48.dp
                         start.linkTo(parent.start, 16.dp)
                         end.linkTo(parent.end, 8.dp)
@@ -119,9 +140,9 @@ fun AddRoomScreen(
             Box(
                 contentAlignment = Alignment.CenterEnd,
                 modifier = Modifier
-                    .constrainAs(photo_selector) {
-                        top.linkTo(add_photos.bottom, 33.dp)
-                        start.linkTo(add_photos.start)
+                    .constrainAs(photoSelector) {
+                        top.linkTo(addPhotos.bottom, 33.dp)
+                        start.linkTo(addPhotos.start)
                         width = Dimension.wrapContent
                     }
                     .size(85.dp, 66.dp)
@@ -167,9 +188,9 @@ fun AddRoomScreen(
             LazyRow(
                 modifier = Modifier
                     .constrainAs(images) {
-                        top.linkTo(add_photos.bottom, 33.dp)
-                        start.linkTo(photo_selector.end)
-                        end.linkTo(add_photos.end)
+                        top.linkTo(addPhotos.bottom, 33.dp)
+                        start.linkTo(photoSelector.end)
+                        end.linkTo(addPhotos.end)
                         width = Dimension.fillToConstraints
                     }
             ) {
@@ -178,7 +199,7 @@ fun AddRoomScreen(
                         Text(
                             text = stringResource(com.amalitech.core.R.string.select_photos),
                             modifier = Modifier
-                                .constrainAs(add_photos) {
+                                .constrainAs(addPhotos) {
                                     top.linkTo(parent.top, spacing.spaceMedium) // set to 48.dp
                                     start.linkTo(parent.start, spacing.spaceMedium)
                                     end.linkTo(parent.end, spacing.spaceSmall)
@@ -196,7 +217,7 @@ fun AddRoomScreen(
                     items = state.imagesList,
                     itemContent = { uri ->
                         Image(
-                            painter = rememberImagePainter(uri),
+                            painter = rememberAsyncImagePainter(uri),
                             contentScale = ContentScale.FillWidth,
                             contentDescription = stringResource(
                                 id = com.amalitech.core.R.string.features_empty
@@ -216,8 +237,8 @@ fun AddRoomScreen(
                 ),
                 modifier = Modifier
                     .constrainAs(form) {
-                        top.linkTo(photo_selector.bottom, 33.dp)
-                        start.linkTo(photo_selector.start)
+                        top.linkTo(photoSelector.bottom, 33.dp)
+                        start.linkTo(photoSelector.start)
                         end.linkTo(images.end)
                         width = Dimension.fillToConstraints
                     }
@@ -358,7 +379,7 @@ fun RoomCounter(
 
         Icon(
             imageVector = Icons.Filled.Add,
-            contentDescription =  stringResource(
+            contentDescription = stringResource(
                 id = com.amalitech.core.R.string.add_room_counter
             ),
             modifier = Modifier
@@ -373,7 +394,6 @@ fun RoomCounter(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RoomTextField(
     placeholder: String,
@@ -470,7 +490,7 @@ fun RoomTextFieldPreview() {
 @Composable
 fun AddRoomScreenPreview() {
     BookMeetingRoomTheme {
-        AddRoomScreen()
+        AddRoomScreen(onComposing = {}) {}
     }
 }
 

@@ -9,6 +9,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LightColors = lightColorScheme(
     primary = md_theme_light_primary,
@@ -99,6 +100,17 @@ fun BookMeetingRoomTheme(
             typography = Typography,
             shapes = Shapes,
             content = content
+        )
+    }
+
+    val systemUiController = rememberSystemUiController()
+    if (darkTheme) {
+        systemUiController.setSystemBarsColor(
+            color = Color.Black
+        )
+    } else {
+        systemUiController.setSystemBarsColor(
+            color = Color.White
         )
     }
 }

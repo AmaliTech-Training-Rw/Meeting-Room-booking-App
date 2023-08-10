@@ -1,8 +1,6 @@
 package com.amalitech.bookmeetingroom.navigation
 
 import android.content.Intent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,6 +11,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -82,7 +81,7 @@ fun NavGraphBuilder.onboardingGraph(
             val viewModel: LoginViewModel = it.sharedViewModel(navController = navController)
             LoginScreen(
                 onComposing = onComposing,
-                onNavigateToNext = { isAdmin ->
+                onNavigateToHome = { isAdmin ->
                     if (isAdmin) {
                         navController.navigate(Route.DASHBOARD_SCREENS) {
                             popUpTo(Route.ONBOARDING_SCREENS) {
@@ -259,21 +258,32 @@ fun NavGraphBuilder.mainNavGraph(
                 onUpdateProfileClick = {
                     /*TODO("Navigate to Update profile screen")*/
                 },
-                onToggleButtonClick = { goToAdmin ->
-                    if (goToAdmin)
-                        navController.navigate(Route.DASHBOARD_SCREENS) {
-                            popUpTo(Route.HOME_SCREENS) {
-                                inclusive = true
-                            }
+                onComposing = onComposing,
+                onNavigateBack = {
+                    navController.navigate(BottomNavItem.Home.route) {
+                        popUpTo(BottomNavItem.Home.route) {
+                            inclusive = true
                         }
-                    else
-                        navController.navigate(Route.HOME_SCREENS) {
-                            popUpTo(Route.DASHBOARD_SCREENS) {
-                                inclusive = true
-                            }
+                        launchSingleTop = true
+                    }
+                },
+                navigateToProfileScreen = {}
+            ) { goToAdmin ->
+                if (goToAdmin) {
+                    navController.navigate(Route.DASHBOARD_SCREENS) {
+                        popUpTo(Route.HOME_SCREENS) {
+                            inclusive = true
                         }
+                    }
+                    onComposing(AppBarState(hasTopBar = false))
                 }
-            )
+                else
+                    navController.navigate(Route.HOME_SCREENS) {
+                        popUpTo(Route.DASHBOARD_SCREENS) {
+                            inclusive = true
+                        }
+                    }
+            }
         }
         composable(BottomNavItem.Invitations.route) {
             // TODO (ADD INVITATIONS SCREEN COMPOSABLE HERE)
@@ -297,7 +307,11 @@ fun NavGraphBuilder.dashboardNavGraph(
             val appState = rememberBookMeetingRoomAppState()
             BookMeetingRoomDrawer(
                 appState = appState,
-                onClick = { appState.navController.navigate(it.route) },
+                onClick = {
+                    appState.navController.navigate(it.route) {
+                        popToDashboard()
+                    }
+                },
                 content = {
                     BookMeetingRoomApp(
                         appState = appState,
@@ -317,4 +331,17 @@ inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(navControll
         navController.getBackStackEntry(navGraphRoute)
     }
     return koinViewModel(viewModelStoreOwner = parentEntry)
+}
+
+private fun navigateToProfileScreen(navController: NavHostController) {
+    navController.navigate(BottomNavItem.Profile.route) {
+        popToHome()
+    }
+}
+
+private fun NavOptionsBuilder.popToHome() {
+    popUpTo(BottomNavItem.Profile.route) {
+        inclusive = true
+    }
+    launchSingleTop
 }
