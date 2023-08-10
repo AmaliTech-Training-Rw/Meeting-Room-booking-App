@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -45,9 +44,8 @@ fun HomeScreen(
     val selectedTab = uiState.selectedTab
     val tabs = uiState.tabs
     val homeTitle = stringResource(id = com.amalitech.core_ui.R.string.home)
-    val scope = rememberCoroutineScope()
 
-    CustomBackHandler(appState = appState, scope = scope, onComposing = onComposing) {
+    CustomBackHandler(appState = appState, onComposing = onComposing) {
         navigateUp()
     }
     LaunchedEffect(key1 = true) {
