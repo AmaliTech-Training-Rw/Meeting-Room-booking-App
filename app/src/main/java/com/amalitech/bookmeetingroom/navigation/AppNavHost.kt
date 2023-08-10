@@ -4,7 +4,11 @@ import android.content.Intent
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
@@ -47,6 +51,9 @@ fun AppNavHost(
     onComposing: (AppBarState) -> Unit,
     onFinishActivity: () -> Unit
 ) {
+    var isGestureEnabled by rememberSaveable {
+        mutableStateOf(true)
+    }
     NavHost(
         navController = navController,
         startDestination = Route.ONBOARDING_SCREENS,
@@ -54,7 +61,12 @@ fun AppNavHost(
     ) {
         onboardingGraph(navController, shouldShowOnboarding, snackbarHostState, onComposing)
         mainNavGraph(navController, snackbarHostState, onComposing, onFinishActivity)
-        dashboardNavGraph(navController, onFinishActivity)
+        dashboardNavGraph(
+            navController,
+            isGestureEnabled,
+            { isGestureEnabled = it },
+            onFinishActivity
+        )
     }
 }
 
@@ -276,8 +288,7 @@ fun NavGraphBuilder.mainNavGraph(
                         }
                     }
                     onComposing(AppBarState(hasTopBar = false))
-                }
-                else
+                } else
                     navController.navigate(Route.HOME_SCREENS) {
                         popUpTo(Route.DASHBOARD_SCREENS) {
                             inclusive = true
@@ -297,6 +308,8 @@ fun NavGraphBuilder.mainNavGraph(
 
 fun NavGraphBuilder.dashboardNavGraph(
     navController: NavHostController,
+    isGestureEnabled: Boolean,
+    onGestureStateChange: (isEnabled: Boolean) -> Unit,
     onFinishActivity: () -> Unit
 ) {
     navigation(
@@ -316,9 +329,11 @@ fun NavGraphBuilder.dashboardNavGraph(
                     BookMeetingRoomApp(
                         appState = appState,
                         mainNavController = navController,
-                        onFinishActivity = onFinishActivity
+                        onFinishActivity = onFinishActivity,
+                        onGestureStateChange = onGestureStateChange
                     )
-                }
+                },
+                isGestureEnabled = isGestureEnabled
             )
         }
     }

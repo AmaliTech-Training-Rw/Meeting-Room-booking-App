@@ -140,7 +140,7 @@ fun ProfileScreen(
                         model = user!!.profileImgUrl,
                         contentDescription = stringResource(id = R.string.profile_image),
                         placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
-                        error = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_broken_image_24),
+                        error = painterResource(id = com.amalitech.core_ui.R.drawable.john_doe),
                         modifier = Modifier
                             .width(150.dp)
                             .aspectRatio(1f)

@@ -19,49 +19,49 @@ class GetBookingsUseCase {
                     date,
                     LocalTime.of((0..12).random(), 0),
                     LocalTime.of((0..23).random(), 0),
-                    "https://via.placeholder.com/400.png"
+                    "https://via.placehol.com/400.png"
                 ),
                 Booking(
                     "room2",
                     date,
                     LocalTime.of((0..23).random(), 0),
                     LocalTime.of((0..23).random(), 0),
-                    "https://via.placeholder.com/400.png"
+                    "https://via.placehol.com/400.png"
                 ),
                 Booking(
                     "room1",
                     date,
                     LocalTime.of((0..23).random(), 0),
                     LocalTime.of((0..23).random(), 0),
-                    "https://via.placeholder.com/400.png"
+                    "https://via.placehol.com/400.png"
                 ),
                 Booking(
                     "room1",
                     date,
                     LocalTime.of((0..23).random(), 0),
                     LocalTime.of((0..23).random(), 0),
-                    "https://via.placeholder.com/400.png"
+                    "https://via.placehol.com/400.png"
                 ),
                 Booking(
                     "room2",
                     date,
                     LocalTime.of((0..23).random(), 0),
                     LocalTime.of((0..23).random(), 0),
-                    "https://via.placeholder.com/400.png"
+                    "https://via.placehol.com/400.png"
                 ),
                 Booking(
                     "room2",
                     date,
                     LocalTime.of((0..23).random(), 0),
                     LocalTime.of((0..23).random(), 0),
-                    "https://via.placeholder.com/400.png"
+                    "https://via.placehol.com/400.png"
                 ),
                 Booking(
                     "room1",
                     date,
                     LocalTime.of((0..23).random(), 0),
                     LocalTime.of((0..23).random(), 0),
-                    "https://via.placeholder.com/400.png"
+                    "https://via.placehol.com/400.png"
                 ),
             )
         )

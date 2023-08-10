@@ -46,12 +46,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun BookMeetingRoomDrawer(
     appState: BookMeetingRoomAppState,
+    isGestureEnabled: Boolean,
     onClick: (screen: NavigationItem) -> Unit,
     content: @Composable () -> Unit
 ) {
     ModalNavigationDrawer(
         drawerState = appState.drawerState,
-        gesturesEnabled = true,
+        gesturesEnabled = isGestureEnabled,
         drawerContent = {
             ModalDrawerSheet(
                 drawerContentColor = MaterialTheme.colorScheme.onBackground,
@@ -157,6 +158,7 @@ fun BookMeetingRoomDrawerPreview() {
     BookMeetingRoomTheme {
         BookMeetingRoomDrawer(
             appState,
+            true,
             {}
         ) {}
     }
