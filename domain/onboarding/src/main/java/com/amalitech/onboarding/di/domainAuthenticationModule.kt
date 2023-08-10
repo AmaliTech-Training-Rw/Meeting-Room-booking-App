@@ -3,6 +3,7 @@ package com.amalitech.onboarding.di
 import com.amalitech.onboarding.forgot_password.use_case.ForgotPasswordUseCasesWrapper
 import com.amalitech.onboarding.forgot_password.use_case.SendResetLinkUseCase
 import com.amalitech.onboarding.login.use_case.IsUserAdminUseCase
+import com.amalitech.onboarding.login.use_case.LoadProfileInformationUseCase
 import com.amalitech.onboarding.login.use_case.LogInUseCase
 import com.amalitech.onboarding.login.use_case.LoginUseCasesWrapper
 import com.amalitech.onboarding.login.use_case.ValidatePasswordUseCase
@@ -35,12 +36,17 @@ val onboardingDomainModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         )
     }
 
     single {
         CheckPasswordsMatchUseCase()
+    }
+
+    single {
+        LoadProfileInformationUseCase()
     }
 
     single {

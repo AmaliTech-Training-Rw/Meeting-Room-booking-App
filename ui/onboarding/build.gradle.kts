@@ -6,6 +6,7 @@ dependencies {
     "implementation"(project(Modules.core))
     "implementation"(project(Modules.coreUI))
     "implementation"(project(Modules.domainOnboarding))
+    "implementation"(project(Modules.domainUser))
 
     "implementation"(Kotlin.coreKtx)
     "implementation"(Lifecycle.composeLifecycle)

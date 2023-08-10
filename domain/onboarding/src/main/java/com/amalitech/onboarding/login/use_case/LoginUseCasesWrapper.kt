@@ -6,5 +6,6 @@ data class LoginUseCasesWrapper(
     val logInUseCase: LogInUseCase,
     val validateEmailUseCase: ValidateEmailUseCase,
     val validatePasswordUseCase: ValidatePasswordUseCase,
-    val isUserAdminUseCase: IsUserAdminUseCase
+    val isUserAdminUseCase: IsUserAdminUseCase,
+    val loadProfileInformationUseCase: LoadProfileInformationUseCase
 )

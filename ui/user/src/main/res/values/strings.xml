@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="username">User name</string>
-    <string name="email">email@gmail.com</string>
     <string name="user_image">User image</string>
     <string name="bin">Bin</string>
     <string name="active">Active</string>
@@ -15,4 +14,11 @@
     <string name="email_empty">Email value is empty</string>
     <string name="location_selection_empty">Location value is empty</string>
 
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="title">Title</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="admin">Admin</string>
+    <string name="update_profile">Update profile</string>
 </resources>

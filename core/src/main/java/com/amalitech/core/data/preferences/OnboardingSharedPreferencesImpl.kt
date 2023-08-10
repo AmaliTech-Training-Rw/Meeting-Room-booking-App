@@ -1,7 +1,7 @@
-package com.amalitech.onboarding_data.preferences
+package com.amalitech.core.data.preferences
 
 import android.content.SharedPreferences
-import com.amalitech.onboarding.preferences.OnboardingSharedPreferences
+import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 
 class OnboardingSharedPreferencesImpl(
     private val sharedPreferences: SharedPreferences
@@ -34,8 +34,38 @@ class OnboardingSharedPreferencesImpl(
         true
     )
 
+    override fun saveLoggedInUserEmail(email: String) {
+        sharedPreferences.edit().putString(
+            EMAIL_ADDRESS,
+            email
+        ).apply()
+    }
+
+    override fun loadLoggedInUserEmail(): String {
+        return sharedPreferences.getString(
+            EMAIL_ADDRESS,
+            ""
+        ) ?: ""
+    }
+
+    override fun saveAdminUserScreen(isUsingAdminDashboard: Boolean) {
+        sharedPreferences.edit().putBoolean(
+            ADMIN_USER_SCREEN,
+            isUsingAdminDashboard
+        ).apply()
+    }
+
+    override fun loadAdminUserScreen(): Boolean {
+        return sharedPreferences.getBoolean(
+            ADMIN_USER_SCREEN,
+            true
+        )
+    }
+
     companion object {
         const val SHOULD_SHOW_ON_BOARDING = "should_show_onboarding"
         const val IS_USER_ADMIN = "is_user_admin"
+        const val EMAIL_ADDRESS = "email_address"
+        const val ADMIN_USER_SCREEN = "admin_user_screen"
     }
 }
