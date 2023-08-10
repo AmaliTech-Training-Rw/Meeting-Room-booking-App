@@ -38,14 +38,12 @@ fun SwipeableCard(
                 onDragStopped = {
                     if (offsetX < -swipeThreshold) {
                         onSwipeEnd(SwipeDirection.RIGHT)
-                        offsetX = 0f
                     } else if (offsetX > swipeThreshold) {
                         onSwipeEnd(SwipeDirection.LEFT)
-                        offsetX = 0f
                     } else {
-                        offsetX = 0f
                         onSwipeEnd(SwipeDirection.NONE)
                     }
+                    offsetX = 0f
                 }
             )
     ) {

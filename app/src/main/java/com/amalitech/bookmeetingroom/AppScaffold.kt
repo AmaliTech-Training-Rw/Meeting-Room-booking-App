@@ -39,5 +39,4 @@ fun AppScaffold(shouldShowOnboarding: Boolean) {
             modifier = Modifier.padding(paddingValues)
         )
     }
-
 }
