@@ -75,7 +75,7 @@ fun AppScaffold(shouldShowOnboarding: Boolean, onFinishActivity: () -> Unit) {
                     actions = {
                         appBarState.actions?.invoke(this)
                     },
-                    modifier = Modifier.shadow(elevation = 24.dp)
+                    modifier = Modifier.shadow(elevation = 2.dp)
                 )
             }
         }

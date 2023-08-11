@@ -18,7 +18,7 @@ class FetchBookingsUseCase {
                     LocalDate.now(),
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
-                    "https://via.placeholder.com/200.png",
+                    "https://via.placeho.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),Booking(
                     id = "id",
@@ -26,7 +26,7 @@ class FetchBookingsUseCase {
                     LocalDate.now(),
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
-                    "https://via.placeholder.com/200.png",
+                    "https://via.placeho.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),Booking(
                     id = "id",
@@ -34,7 +34,7 @@ class FetchBookingsUseCase {
                     LocalDate.now(),
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
-                    "https://via.placeholder.com/200.png",
+                    "https://via.placeho.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),Booking(
                     id = "id",
@@ -42,7 +42,7 @@ class FetchBookingsUseCase {
                     LocalDate.now(),
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
-                    "https://via.placeholder.com/200.png",
+                    "https://via.placeho.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),Booking(
                     id = "id",
@@ -50,7 +50,7 @@ class FetchBookingsUseCase {
                     LocalDate.now(),
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
-                    "https://via.placeholder.com/200.png",
+                    "https://via.placeho.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),Booking(
                     id = "id",
@@ -58,7 +58,7 @@ class FetchBookingsUseCase {
                     LocalDate.now(),
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
-                    "https://via.placeholder.com/200.png",
+                    "https://via.placeho.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),Booking(
                     id = "id",
@@ -66,7 +66,7 @@ class FetchBookingsUseCase {
                     LocalDate.now(),
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
-                    "https://via.placeholder.com/200.png",
+                    "https://via.placeho.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),Booking(
                     id = "id",
@@ -74,7 +74,7 @@ class FetchBookingsUseCase {
                     LocalDate.now(),
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
-                    "https://via.placeholder.com/200.png",
+                    "https://via.placeho.com/200.png",
                     "Ngomde Cadet Kamdaou"
                 ),
             )

@@ -36,6 +36,7 @@ fun DashboardBarGraph(
     backgroundColor: Int = MaterialTheme.colorScheme.background.toArgb(),
     barColor: Int = MaterialTheme.colorScheme.primary.toArgb(),
     selectedColor: Int = MaterialTheme.colorScheme.secondary.toArgb(),
+    descriptionColor: Int = MaterialTheme.colorScheme.onBackground.toArgb(),
     maxNumberOnScreen: Float = MAX_NUMBER_OF_BAR_ON_THE_SCREEN,
     axisPosition: AxisPosition = AxisPosition.Bottom,
     animateXDuration: Int = 3000,
@@ -63,18 +64,23 @@ fun DashboardBarGraph(
                 val data = generateBarData(
                     barColor = barColor,
                     items = items.toMutableList(),
-                    selectedColor = selectedColor
+                    selectedColor = selectedColor,
+                    contentColor = descriptionColor
                 )
 
                 chart.data = data
                 chart.setBackgroundColor(backgroundColor)
                 chart.animateXY(animateXDuration, animateYDuration)
+                chart.setDescriptionColor(descriptionColor)
                 chart.setVisibleXRangeMaximum(maxNumberOnScreen)
                 chart.xAxis.position = when (axisPosition) {
                     AxisPosition.Bottom -> XAxis.XAxisPosition.BOTTOM
                     AxisPosition.Top -> XAxis.XAxisPosition.TOP
                 }
                 chart.xAxis.setLabelsToSkip(0)
+                chart.xAxis.textColor = descriptionColor
+                chart.axisLeft.textColor = descriptionColor
+                chart.axisRight.textColor = descriptionColor
                 chart.setDrawValueAboveBar(setDrawValue)
                 chart.invalidate()
 
@@ -87,7 +93,8 @@ fun DashboardBarGraph(
 fun generateBarData(
     barColor: Int,
     items: MutableList<RoomsBookedTime>,
-    selectedColor: Int
+    selectedColor: Int,
+    contentColor: Int
 ): BarData {
     val xValues = ArrayList<String>()
     val barEntries = ArrayList<BarEntry>()
@@ -99,7 +106,9 @@ fun generateBarData(
 
     val barDataSet = BarDataSet(barEntries, "")
     barDataSet.color = barColor
+    barDataSet.valueTextColor = contentColor
     barDataSet.highLightColor = selectedColor
+    barDataSet.barShadowColor = contentColor
 
     return BarData(xValues, barDataSet)
 }

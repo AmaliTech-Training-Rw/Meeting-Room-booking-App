@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -103,7 +104,7 @@ fun RoomItem(
             }
             Text(
                 text = features,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodySmall,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .padding(start = spacing.spaceExtraSmall),
@@ -114,13 +115,10 @@ fun RoomItem(
                 onClick = { onBookRoom(room) },
                 modifier = Modifier
                     .align(Alignment.End)
-//                    .clip(RoundedCornerShape(spacing.spaceExtraSmall))
-//                    .padding(1.dp)
-//                    .shadow(1.dp, RoundedCornerShape(spacing.spaceExtraSmall))
-//                    .padding(1.dp)
+                    .wrapContentHeight()
                 ,
-                shape = RoundedCornerShape(spacing.spaceExtraSmall),
-                elevation = ButtonDefaults.buttonElevation(1.dp)
+                shape = RoundedCornerShape(spacing.spaceSmall),
+                elevation = ButtonDefaults.buttonElevation(spacing.spaceExtraSmall)
             ) {
                 Text(stringResource(id = R.string.book))
             }

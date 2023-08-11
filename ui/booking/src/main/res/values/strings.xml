@@ -8,4 +8,5 @@
     <string name="decline">Decline</string>
     <string name="approve">Approve</string>
     <string name="booking_request">Booking Requests</string>
+    <string name="my_bokings">My Bookings</string>
 </resources>

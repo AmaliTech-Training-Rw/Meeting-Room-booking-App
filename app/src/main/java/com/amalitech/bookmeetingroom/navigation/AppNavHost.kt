@@ -3,11 +3,7 @@ package com.amalitech.bookmeetingroom.navigation
 import android.content.Intent
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
@@ -24,6 +20,7 @@ import androidx.navigation.navigation
 import com.amalitech.booking.BookingScreen
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
 import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.components.drawer.BookMeetingRoomDrawer
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.home.HomeScreen
@@ -50,9 +47,6 @@ fun AppNavHost(
     onComposing: (AppBarState) -> Unit,
     onFinishActivity: () -> Unit
 ) {
-    var isGestureEnabled by rememberSaveable {
-        mutableStateOf(true)
-    }
     NavHost(
         navController = navController,
         startDestination = Route.ONBOARDING_SCREENS,
@@ -62,8 +56,6 @@ fun AppNavHost(
         mainNavGraph(navController, snackbarHostState, onComposing, onFinishActivity)
         dashboardNavGraph(
             navController,
-            isGestureEnabled,
-            { isGestureEnabled = it },
             onFinishActivity
         )
     }
@@ -259,6 +251,7 @@ fun NavGraphBuilder.mainNavGraph(
                 onComposing = onComposing,
                 navigateBack = {
                     navController.navigateUp()
+                    onComposing(AppBarState(hasTopBar = false))
                 }
             ) {
                 navController.navigate(BottomNavItem.Home.route)
@@ -266,9 +259,7 @@ fun NavGraphBuilder.mainNavGraph(
         }
         composable(BottomNavItem.Profile.route) {
             ProfileScreen(
-                onUpdateProfileClick = {
-                    /*TODO("Navigate to Update profile screen")*/
-                },
+                onUpdateProfileClick = {},
                 onComposing = onComposing,
                 onNavigateBack = {
                     navController.navigate(BottomNavItem.Home.route) {
@@ -297,24 +288,28 @@ fun NavGraphBuilder.mainNavGraph(
             }
         }
         composable(BottomNavItem.Invitations.route) {
-            BookRoomScreen(
-                navBackStackEntry = it,
-                navigateBack = {
-                    navController.navigateUp()
-                },
-                onComposing = onComposing
-            ) {}
+            onComposing(
+                AppBarState(
+                    title = "Invitations",
+                    actions = {
+                        PainterActionButton {
+                            navigateToProfileScreen(navController)
+                        }
+                    }
+                )
+            )
         }
         composable(BottomNavItem.Bookings.route) {
-            BookingScreen()
+            BookingScreen(
+                navigateToProfileScreen = { navigateToProfileScreen(navController) },
+                onComposing = onComposing
+            )
         }
     }
 }
 
 fun NavGraphBuilder.dashboardNavGraph(
     navController: NavHostController,
-    isGestureEnabled: Boolean,
-    onGestureStateChange: (isEnabled: Boolean) -> Unit,
     onFinishActivity: () -> Unit
 ) {
     navigation(
@@ -329,17 +324,14 @@ fun NavGraphBuilder.dashboardNavGraph(
                     appState.navController.navigate(it.route) {
                         popToDashboard()
                     }
-                },
-                content = {
-                    BookMeetingRoomApp(
-                        appState = appState,
-                        mainNavController = navController,
-                        onFinishActivity = onFinishActivity,
-                        onGestureStateChange = onGestureStateChange
-                    )
-                },
-                isGestureEnabled = isGestureEnabled
-            )
+                }
+            ) {
+                BookMeetingRoomApp(
+                    appState = appState,
+                    mainNavController = navController,
+                    onFinishActivity = onFinishActivity
+                )
+            }
         }
     }
 }

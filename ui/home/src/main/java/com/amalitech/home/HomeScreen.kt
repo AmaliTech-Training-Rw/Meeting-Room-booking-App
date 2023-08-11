@@ -15,7 +15,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -120,10 +119,12 @@ fun HomeScreen(
                             room = room,
                             modifier = Modifier
                                 .height(200.dp)
-                                .clip(RoundedCornerShape(spacing.spaceMedium))
-                                .padding(1.dp)
-                                .shadow(1.dp, RoundedCornerShape(spacing.spaceMedium))
-                                .padding(2.dp)
+                                .padding(
+                                    start = spacing.spaceExtraSmall,
+                                    end = spacing.spaceExtraSmall,
+                                    bottom = spacing.spaceExtraSmall,
+                                )
+                                .shadow(spacing.spaceExtraSmall, RoundedCornerShape(spacing.spaceMedium))
                                 .background(MaterialTheme.colorScheme.background),
                             onBookRoom = { navigateToBookRoomScreen(room.id) }
                         )

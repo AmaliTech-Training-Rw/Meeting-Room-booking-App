@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -193,13 +194,17 @@ fun ProfileScreen(
                 Spacer(Modifier.height(spacing.spaceExtraLarge))
                 Row(
                     modifier = Modifier.width(spacing.spaceExtraLarge * 4),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.spacedBy(spacing.spaceMedium),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     DefaultButton(
                         text = stringResource(id = R.string.update_profile),
                         onClick = onUpdateProfileClick,
                         modifier = Modifier
                             .clip(RoundedCornerShape(spacing.spaceMedium))
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .padding(spacing.spaceExtraSmall)
                     )
                     DefaultButton(
                         text = stringResource(id = R.string.logout),
@@ -208,7 +213,10 @@ fun ProfileScreen(
                             onFinishActivity()
                         },
                         modifier = Modifier
-                            .clip(RoundedCornerShape(spacing.spaceMedium)),
+                            .clip(RoundedCornerShape(spacing.spaceMedium))
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .padding(spacing.spaceExtraSmall),
                         backgroundColor = MaterialTheme.colorScheme.error
                     )
                 }

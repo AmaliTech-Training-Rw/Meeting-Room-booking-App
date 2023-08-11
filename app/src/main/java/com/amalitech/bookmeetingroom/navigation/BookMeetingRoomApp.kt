@@ -26,7 +26,6 @@ import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 fun BookMeetingRoomApp(
     appState: BookMeetingRoomAppState,
     mainNavController: NavHostController,
-    onGestureStateChange: (isEnabled: Boolean) -> Unit,
     onFinishActivity: () -> Unit
 ) {
     var appBarState by remember {
@@ -46,7 +45,6 @@ fun BookMeetingRoomApp(
                 appState = appState,
                 onComposing = {
                     appBarState = it
-                    onGestureStateChange(it.isGestureEnabled)
                 },
                 onFinishActivity = onFinishActivity,
                 mainNavController
@@ -76,8 +74,7 @@ fun BookMeetingTopAppBarPreview() {
         val appState = rememberBookMeetingRoomAppState()
         BookMeetingRoomApp(
             appState = appState,
-            mainNavController = rememberNavController(),
-            onGestureStateChange = {}
+            mainNavController = rememberNavController()
         ) { }
     }
 }

@@ -27,7 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.booking.components.BookingItem
 import com.amalitech.booking.model.Booking
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.BookingAppTab
+import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.components.Tab
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
@@ -36,7 +38,9 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun BookingScreen(
-    viewModel: BookingViewModel = koinViewModel()
+    viewModel: BookingViewModel = koinViewModel(),
+    navigateToProfileScreen: () -> Unit,
+    onComposing: (AppBarState) -> Unit,
 ) {
     val spacing = LocalSpacing.current
     val selectedTab by viewModel.selectedTab
@@ -51,7 +55,21 @@ fun BookingScreen(
     var isLoading by rememberSaveable {
         mutableStateOf(false)
     }
+    val title = stringResource(id = R.string.my_bokings)
 
+    LaunchedEffect(key1 = true) {
+        onComposing(
+            AppBarState(
+                title = title,
+                actions = {
+                    PainterActionButton {
+                        navigateToProfileScreen()
+                    }
+                }
+            )
+        )
+    }
+    
     LaunchedEffect(key1 = uiState) {
         when (uiState) {
             is UiState.Error -> {

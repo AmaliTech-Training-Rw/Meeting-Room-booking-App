@@ -30,7 +30,7 @@ fun BookMeetingTopAppBar(
                     overflow = TextOverflow.Ellipsis
                 )
             },
-            modifier = Modifier.shadow(elevation = 24.dp),
+            modifier = Modifier.shadow(elevation = 2.dp),
             navigationIcon = {
                 appBarState.navigationIcon?.invoke()
             },
