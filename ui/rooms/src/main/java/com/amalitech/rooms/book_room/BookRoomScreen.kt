@@ -64,6 +64,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import coil.compose.AsyncImage
 import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.FeatureItem
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.theme.LocalSpacing
@@ -72,7 +73,6 @@ import com.amalitech.core_ui.util.formatTime
 import com.amalitech.core_ui.util.longToLocalDate
 import com.amalitech.rooms.book_room.components.AttendeeItem
 import com.amalitech.rooms.book_room.components.BookRoomTitle
-import com.amalitech.rooms.book_room.components.FeatureItem
 import com.amalitech.rooms.book_room.components.SelectDateBox
 import com.amalitech.rooms.book_room.components.TimeSelector
 import com.amalitech.rooms.book_room.util.NavArguments

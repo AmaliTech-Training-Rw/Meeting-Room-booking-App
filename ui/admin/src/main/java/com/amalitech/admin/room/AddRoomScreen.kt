@@ -107,8 +107,7 @@ fun AddRoomScreen(
                     ) {
                         onNavigateBack()
                     }
-                },
-                isGestureEnabled = false
+                }
             )
         )
     }

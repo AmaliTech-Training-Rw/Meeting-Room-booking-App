@@ -8,6 +8,5 @@ data class AppBarState(
     val actions: (@Composable RowScope.() -> Unit)? = null,
     val navigationIcon: (@Composable () -> Unit)? = null,
     val floatingActionButton: (@Composable () -> Unit)? = null,
-    val isGestureEnabled: Boolean = true,
     val hasTopBar: Boolean = true
 )

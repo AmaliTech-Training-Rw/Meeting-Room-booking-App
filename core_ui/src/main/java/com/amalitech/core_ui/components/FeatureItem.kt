@@ -1,4 +1,4 @@
-package com.amalitech.rooms.book_room.components
+package com.amalitech.core_ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

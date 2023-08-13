@@ -82,7 +82,7 @@ fun BookingRequestItem(
             )
             Spacer(Modifier.height(spacing.spaceExtraSmall))
             Text(
-                text = stringResource(R.string.booked_by, booking.bookedBy),
+                text = stringResource(R.string.booked_by_person_name, booking.bookedBy),
                 color = descriptionTextColor,
                 style = descriptionTextStyle,
                 overflow = TextOverflow.Ellipsis,

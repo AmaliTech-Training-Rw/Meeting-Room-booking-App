@@ -270,7 +270,9 @@ fun NavGraphBuilder.mainNavGraph(
                     }
                 },
                 navigateToProfileScreen = {},
-                onFinishActivity = onFinishActivity
+                onNavigateToLogin = {
+                    navController.navigateToLogin()
+                }
             ) { goToAdmin ->
                 if (goToAdmin) {
                     navController.navigate(Route.DASHBOARD_SCREENS) {
@@ -356,4 +358,19 @@ private fun NavOptionsBuilder.popToHome() {
         inclusive = true
     }
     launchSingleTop
+}
+
+fun NavHostController.navigateToLogin() {
+    navigate(Route.ONBOARDING_SCREENS) {
+            popUpTo(Route.ONBOARDING_SCREENS) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    navigate(Route.LOGIN) {
+            popUpTo(Route.DASHBOARD_SCREENS) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
 }

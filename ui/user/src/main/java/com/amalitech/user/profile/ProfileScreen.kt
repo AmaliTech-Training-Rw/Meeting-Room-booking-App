@@ -55,7 +55,7 @@ import org.koin.androidx.compose.koinViewModel
 fun ProfileScreen(
     appState: BookMeetingRoomAppState? = null,
     viewModel: ProfileViewModel = koinViewModel(),
-    onFinishActivity: () -> Unit,
+    onNavigateToLogin: () -> Unit,
     navigateToProfileScreen: () -> Unit,
     onNavigateBack: () -> Unit,
     onComposing: (AppBarState) -> Unit,
@@ -138,7 +138,7 @@ fun ProfileScreen(
             Column {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.width(spacing.spaceExtraLarge * 4)
+                    modifier = Modifier.fillMaxWidth(0.8f)
                 ) {
                     AsyncImage(
                         model = user!!.profileImgUrl,
@@ -193,7 +193,7 @@ fun ProfileScreen(
                 }
                 Spacer(Modifier.height(spacing.spaceExtraLarge))
                 Row(
-                    modifier = Modifier.width(spacing.spaceExtraLarge * 4),
+                    modifier = Modifier.fillMaxWidth(0.8f),
                     horizontalArrangement = Arrangement.spacedBy(spacing.spaceMedium),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -210,7 +210,7 @@ fun ProfileScreen(
                         text = stringResource(id = R.string.logout),
                         onClick = {
                             viewModel.logout()
-                            onFinishActivity()
+                            onNavigateToLogin()
                         },
                         modifier = Modifier
                             .clip(RoundedCornerShape(spacing.spaceMedium))

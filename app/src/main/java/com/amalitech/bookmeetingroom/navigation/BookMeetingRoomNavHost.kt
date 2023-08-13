@@ -4,15 +4,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.NavType
@@ -22,13 +19,13 @@ import androidx.navigation.navArgument
 import com.amalitech.admin.DashboardScreen
 import com.amalitech.admin.room.AddRoomScreen
 import com.amalitech.booking.requests.BookingRequestScreen
+import com.amalitech.booking.requests.detail.BookingRequestDetailScreen
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
 import com.amalitech.core_ui.components.AppBarState
-import com.amalitech.core_ui.components.NavigationButton
-import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
-import com.amalitech.core_ui.util.CustomBackHandler
+import com.amalitech.core_ui.util.SnackbarManager
+import com.amalitech.core_ui.util.SnackbarMessage
 import com.amalitech.home.HomeScreen
 import com.amalitech.rooms.RoomListScreen
 import com.amalitech.rooms.book_room.BookRoomScreen
@@ -102,31 +99,13 @@ fun BookMeetingRoomNavHost(
             route = "${NavigationItem.BookingRequestDetail.route}/{booking}",
             arguments = listOf(navArgument("booking") { type = NavType.StringType })
         ) { backStackEntry ->
-            CustomBackHandler(appState = appState, onComposing = onComposing) {
-                appState.navController.navigateUp()
-            }
-            LaunchedEffect(key1 = true) {
-                onComposing(
-                    AppBarState(
-                        title = "Booking Detail",
-                        navigationIcon = {
-                            NavigationButton(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = stringResource(id = com.amalitech.core_ui.R.string.navigate_back)
-                            ) {
-                                appState.navController.navigateUp()
-                            }
-                        },
-                        actions = {
-                            PainterActionButton {
-                                navigateToProfileScreen(appState)
-                            }
-                        },
-                        isGestureEnabled = false
-                    )
-                )
-            }
-            Text("coming soon\nbooking id: ${backStackEntry.arguments?.getString("booking")}")
+            val id = backStackEntry.arguments?.getString("booking")
+            BookingRequestDetailScreen(
+                id = id ?: "",
+                onComposing = onComposing,
+                onNavigateUp = { appState.navController.navigateUp() },
+                showSnackBar = { SnackbarManager.showMessage(SnackbarMessage.StringSnackbar(it)) }
+            )
         }
 
         composable(route = NavigationItem.Users.route) {
@@ -150,7 +129,9 @@ fun BookMeetingRoomNavHost(
                 onNavigateBack = { navigateToDashboard(appState) },
                 onComposing = onComposing,
                 onUpdateProfileClick = { },
-                onFinishActivity = onFinishActivity
+                onNavigateToLogin = {
+                    mainNavController.navigateToLogin()
+                }
             ) { goToAdmin ->
                 if (goToAdmin)
                     mainNavController.navigate(Route.DASHBOARD_SCREENS) {
@@ -220,7 +201,9 @@ fun BookMeetingRoomNavHost(
         composable(route = NavigationItem.Logout.route) {
             val profileViewModel: ProfileViewModel = koinViewModel()
             profileViewModel.logout()
-            onFinishActivity()
+            LaunchedEffect(key1 = true) {
+                mainNavController.navigateToLogin()
+            }
         }
     }
 }
