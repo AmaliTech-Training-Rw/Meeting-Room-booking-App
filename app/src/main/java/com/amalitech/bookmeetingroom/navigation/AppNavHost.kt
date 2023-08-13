@@ -323,9 +323,10 @@ fun NavGraphBuilder.dashboardNavGraph(
             BookMeetingRoomDrawer(
                 appState = appState,
                 onClick = {
-                    appState.navController.navigate(it.route) {
-                        popToDashboard()
-                    }
+                    if (appState.navController.currentDestination?.route != it.route)
+                        appState.navController.navigate(it.route) {
+                            popToDashboard()
+                        }
                 }
             ) {
                 BookMeetingRoomApp(
@@ -362,15 +363,15 @@ private fun NavOptionsBuilder.popToHome() {
 
 fun NavHostController.navigateToLogin() {
     navigate(Route.ONBOARDING_SCREENS) {
-            popUpTo(Route.ONBOARDING_SCREENS) {
-                inclusive = true
-            }
-            launchSingleTop = true
+        popUpTo(Route.ONBOARDING_SCREENS) {
+            inclusive = true
         }
+        launchSingleTop = true
+    }
     navigate(Route.LOGIN) {
-            popUpTo(Route.DASHBOARD_SCREENS) {
-                inclusive = true
-            }
-            launchSingleTop = true
+        popUpTo(Route.DASHBOARD_SCREENS) {
+            inclusive = true
         }
+        launchSingleTop = true
+    }
 }

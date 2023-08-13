@@ -118,7 +118,7 @@ fun HomeScreen(
                         RoomItem(
                             room = room,
                             modifier = Modifier
-                                .height(200.dp)
+                                .height(150.dp)
                                 .padding(
                                     start = spacing.spaceExtraSmall,
                                     end = spacing.spaceExtraSmall,

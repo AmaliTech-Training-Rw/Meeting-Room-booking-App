@@ -155,7 +155,8 @@ fun UserScreen(
                 SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("works"))
                 onComposing(appBarState)
             },
-            sheetState = sheetState
+            sheetState = sheetState,
+            scrimColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
         ) {
             Column(
                 modifier = Modifier

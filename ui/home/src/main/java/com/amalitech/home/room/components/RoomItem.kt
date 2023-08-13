@@ -52,7 +52,7 @@ fun RoomItem(
             contentDescription = room.roomName,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .width(150.dp)
+                .fillMaxHeight()
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(spacing.spaceMedium))
                 .align(Alignment.CenterVertically)
@@ -62,7 +62,6 @@ fun RoomItem(
             modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .weight(2f)
-                .padding(vertical = spacing.spaceMedium)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -115,10 +114,9 @@ fun RoomItem(
                 onClick = { onBookRoom(room) },
                 modifier = Modifier
                     .align(Alignment.End)
-                    .wrapContentHeight()
-                ,
+                    .wrapContentHeight(),
                 shape = RoundedCornerShape(spacing.spaceSmall),
-                elevation = ButtonDefaults.buttonElevation(spacing.spaceExtraSmall)
+                elevation = ButtonDefaults.buttonElevation(spacing.spaceExtraSmall),
             ) {
                 Text(stringResource(id = R.string.book))
             }

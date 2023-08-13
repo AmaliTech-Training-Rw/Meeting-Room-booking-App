@@ -50,7 +50,7 @@ fun BookMeetingRoomDrawer(
 ) {
     ModalNavigationDrawer(
         drawerState = appState.drawerState,
-        gesturesEnabled = false,
+        gesturesEnabled = true,
         drawerContent = {
             ModalDrawerSheet(
                 drawerContentColor = MaterialTheme.colorScheme.onBackground,
