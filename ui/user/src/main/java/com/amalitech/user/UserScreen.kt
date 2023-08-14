@@ -114,7 +114,6 @@ fun UserScreen(
             FloatingActionButton(
                 onClick = {
                     showBottomSheet = true
-                    onComposing(AppBarState())
                 },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -153,10 +152,9 @@ fun UserScreen(
             onDismissRequest = {
                 showBottomSheet = false
                 SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("works"))
-                onComposing(appBarState)
             },
             sheetState = sheetState,
-            scrimColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+            scrimColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
         ) {
             Column(
                 modifier = Modifier

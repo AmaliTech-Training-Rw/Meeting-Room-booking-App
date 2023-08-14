@@ -20,7 +20,7 @@ class RoomRepositoryImpl : RoomRepository {
                 "Natural light",
                 "Drinks"
             ),
-            imageUrl = "https://res.cloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png"
+            imageUrl = "https://rescloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png"
         ),
         Room(
             id = "id2",
@@ -33,7 +33,7 @@ class RoomRepositoryImpl : RoomRepository {
                 "Whiteboard",
                 "Snacks"
             ),
-            imageUrl = "https://res.cloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png"
+            imageUrl = "https://rescloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png"
         ),
         Room(
             id = "id3",
@@ -46,7 +46,7 @@ class RoomRepositoryImpl : RoomRepository {
                 "Natural light",
                 "Drinks"
             ),
-            imageUrl = "https://res.cloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png"
+            imageUrl = "https://rescloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png"
         ),
         Room(
             id = "id4",
@@ -59,7 +59,7 @@ class RoomRepositoryImpl : RoomRepository {
                 "Whiteboard",
                 "Snacks"
             ),
-            imageUrl = "https://res.cloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png"
+            imageUrl = "https://rescloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png"
         )
     )
 

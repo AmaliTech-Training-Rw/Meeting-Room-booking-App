@@ -70,7 +70,8 @@ fun BookingRequestCard(
                 booking, modifier = Modifier
                     .fillMaxHeight()
                     .clip(RectangleShape)
-                    .padding()
+                    .padding(),
+                swiped = isLeftContentVisible || isRightContentVisible
             ) {
                 onBookingClicked(booking)
             }

@@ -95,7 +95,7 @@ fun BookingRequestScreen(
             items(uiState.bookings) { booking ->
                 BookingRequestCard(
                     booking = booking,
-                    modifier = Modifier.height(120.dp),
+                    modifier = Modifier.height(80.dp),
                     onRightContentClick = {
                         viewModel.onDecline(booking)
                     },

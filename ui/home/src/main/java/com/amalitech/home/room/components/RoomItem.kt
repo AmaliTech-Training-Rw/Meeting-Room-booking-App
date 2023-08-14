@@ -1,5 +1,8 @@
 package com.amalitech.home.room.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,8 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
@@ -43,7 +46,6 @@ fun RoomItem(
             .padding(end = spacing.spaceMedium),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(room.imageUrl)
@@ -52,20 +54,23 @@ fun RoomItem(
             contentDescription = room.roomName,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxHeight()
+                .wrapContentHeight()
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(spacing.spaceMedium))
-                .align(Alignment.CenterVertically)
+                .align(Alignment.CenterVertically),
+            placeholder = painterResource(com.amalitech.core_ui.R.drawable.baseline_refresh_24),
+            error = painterResource(com.amalitech.core_ui.R.drawable.room_small)
         )
         Spacer(modifier = Modifier.width(spacing.spaceMedium))
         Column(
             modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .weight(2f)
+                .padding(bottom = spacing.spaceExtraSmall)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.height(50.dp)
+                modifier = Modifier.height(40.dp)
             ) {
                 Divider(
                     color = MaterialTheme.colorScheme.primary,
@@ -110,16 +115,31 @@ fun RoomItem(
                 maxLines = 3
             )
             Spacer(Modifier.height(spacing.spaceSmall))
-            Button(
-                onClick = { onBookRoom(room) },
+//            Button(
+//                onClick = { onBookRoom(room) },
+//                modifier = Modifier
+//                    .align(Alignment.End)
+//                    .height(30.dp),
+//                shape = RoundedCornerShape(spacing.spaceSmall),
+//                elevation = ButtonDefaults.buttonElevation(spacing.spaceExtraSmall),
+//            ) {
+//                Text(stringResource(id = R.string.book))
+//            }
+            Box(
                 modifier = Modifier
-                    .align(Alignment.End)
-                    .wrapContentHeight(),
-                shape = RoundedCornerShape(spacing.spaceSmall),
-                elevation = ButtonDefaults.buttonElevation(spacing.spaceExtraSmall),
+                    .height(25.dp)
+                    .clickable {
+                        onBookRoom(room)
+                    }
+                    .shadow(spacing.spaceExtraSmall, RoundedCornerShape(spacing.spaceSmall))
+                    .background(MaterialTheme.colorScheme.primary)
+                    .padding(horizontal = spacing.spaceSmall)
+                    .align(Alignment.End),
+                contentAlignment = Alignment.Center
             ) {
-                Text(stringResource(id = R.string.book))
+                Text(stringResource(id = R.string.book), color = MaterialTheme.colorScheme.onPrimary)
             }
+//            Spacer(Modifier.height(spacing.spaceExtraSmall))
         }
     }
 }
