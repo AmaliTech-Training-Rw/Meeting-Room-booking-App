@@ -4,18 +4,23 @@ import com.amalitech.core.domain.model.Booking
 import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import com.amalitech.core.util.Response
 import com.amalitech.core_ui.components.Tab
+import com.amalitech.core_ui.util.UiState
 import com.amalitech.home.use_case.HomeUseCase
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.DayPosition
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.Month
+import kotlin.random.Random
 
 class HomeViewModelTest {
     private lateinit var viewModel: HomeViewModel
@@ -39,7 +44,7 @@ class HomeViewModelTest {
         viewModel = HomeViewModel(homeUseCase, sharedPref)
     }
 
-    /*@Test
+    @Test
     fun `ensures value of current day is held by state`() {
         val currentDay = CalendarDay(
             date = LocalDate.now().plusDays(Random.nextLong(1, 28)),
@@ -49,9 +54,9 @@ class HomeViewModelTest {
         viewModel.onCurrentDayChange(currentDay)
 
         assertEquals(currentDay, viewModel.uiState.value.currentSelectedDate)
-    }*/
+    }
 
-    /*@Test
+    @Test
     fun `ensures bookings are updated with right values`() {
         val generatedBookings = generateBookings()
         val selectedDate = CalendarDay(
@@ -69,7 +74,7 @@ class HomeViewModelTest {
         assertTrue(viewModel.uiStateFlow.value is UiState.Success)
         assertEquals(expected, (viewModel.uiStateFlow.value as UiState.Success).data?.bookings)
         assertEquals(expected[selectedDate.date], (viewModel.uiStateFlow.value as UiState.Success).data?.bookingsForDay)
-    }*/
+    }
 
     @Test
     fun `ensures onSelectedTabChange works`() {
