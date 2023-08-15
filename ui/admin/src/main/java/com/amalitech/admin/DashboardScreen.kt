@@ -2,6 +2,7 @@ package com.amalitech.admin
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -62,9 +63,12 @@ fun DashboardScreen(
         )
     }
 
-    Column(modifier = Modifier.padding(spacing.spaceMedium)
+    Column(modifier = Modifier
+        .verticalScroll(rememberScrollState())
+        .fillMaxSize()
+        .padding(spacing.spaceMedium)
     ) {
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        Column() {
             Text(text = stringResource(id = R.string.welcome_firstname, "John Doe"))
             Spacer(Modifier.height(spacing.spaceMedium))
             DashBoardCard(

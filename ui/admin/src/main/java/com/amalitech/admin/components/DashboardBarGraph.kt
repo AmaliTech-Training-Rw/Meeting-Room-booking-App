@@ -48,8 +48,8 @@ fun DashboardBarGraph(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(2.dp)
-            .shadow(2.dp)
+            .padding(1.dp)
+            .shadow(1.dp)
             .padding(spacing.spaceMedium)
     ) {
         Text(

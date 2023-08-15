@@ -26,8 +26,6 @@ import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.CustomBackHandler
-import com.amalitech.core_ui.util.SnackbarManager
-import com.amalitech.core_ui.util.SnackbarMessage
 import com.amalitech.ui.booking.R
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -50,9 +48,7 @@ fun BookingRequestScreen(
 
     LaunchedEffect(key1 = uiState) {
         uiState.error?.let {
-            SnackbarManager.showMessage(
-                SnackbarMessage.StringSnackbar(it.asString(context))
-            )
+            appState?.snackbarHostState?.showSnackbar(it.asString(context))
             viewModel.clearError()
         }
     }
