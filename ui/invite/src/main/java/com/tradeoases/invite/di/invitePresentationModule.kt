@@ -1,26 +1,12 @@
-package com.amalitech.user.di
+package com.tradeoases.invite.di
 
-import com.amalitech.user.UserViewModel
-import com.amalitech.user.adduser.AddUserViewModel
-import com.amalitech.user.usecases.AddUserUseCase
-import com.amalitech.user.usecases.GetUseCase
+import com.tradeoases.invite.InvitesViewModel
+import com.tradeoases.invite.usecases.GetInviteUseCase
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val userPresentationModule = module {
+val invitePresentationModule = module {
     viewModel {
-        UserViewModel(get())
-    }
-
-    viewModel {
-        AddUserViewModel(get())
-    }
-
-    single {
-        GetUseCase(get())
-    }
-
-    single {
-        AddUserUseCase(get())
+        InvitesViewModel(get())
     }
 }

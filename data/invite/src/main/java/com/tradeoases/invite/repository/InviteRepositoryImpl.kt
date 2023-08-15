@@ -1,51 +1,61 @@
-package com.amalitech.user
+package com.tradeoases.invite.repository
 
-import com.amalitech.user.models.User
-import com.amalitech.user.repository.UserRepository
+import com.tradeoases.invite.models.Invite
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.Month
 
-// TODO: inject remote and cache here (or some kinda data source)
-class UserRepositoryImpl: UserRepository {
-    override fun getUsers(): Flow<User> = flowOf(
-        User(
-            "1",
-            "cool",
-            "User Name",
-            "example@gmail.com",
-            true
+class InviteRepositoryImpl: InviteRepository {
+    override fun getInvites(): Flow<Invite> = flowOf(
+        Invite(
+            1,
+            "Alpha",
+            LocalDate.of(2020, Month.JANUARY, 8),
+            LocalTime.now(),
+            LocalTime.MIDNIGHT,
+            ""
         ),
-        User(
-            "2",
-            "cool",
-            "User Name",
-            "example@gmail.com",
-            false
+        Invite(
+            2,
+            "Zulu",
+            LocalDate.of(2020, Month.JANUARY, 8),
+            LocalTime.now(),
+            LocalTime.MIDNIGHT,
+            ""
         ),
-        User(
-            "3",
-            "cool",
-            "User Name",
-            "example@gmail.com",
-            true
+        Invite(
+            3,
+            "Tango",
+            LocalDate.of(2020, Month.JANUARY, 8),
+            LocalTime.now(),
+            LocalTime.MIDNIGHT,
+            ""
         ),
-        User(
-            "4",
-            "cool",
-            "User Name",
-            "example@gmail.com",
-            true
+        Invite(
+            4,
+            "Alpha",
+            LocalDate.of(2020, Month.JANUARY, 8),
+            LocalTime.now(),
+            LocalTime.MIDNIGHT,
+            ""
         ),
-        User(
-            "4",
-            "cool",
-            "User Name",
-            "example@gmail.com",
-            false
+        Invite(
+            5,
+            "Zulu",
+            LocalDate.of(2020, Month.JANUARY, 8),
+            LocalTime.now(),
+            LocalTime.MIDNIGHT,
+            ""
+        ),
+        Invite(
+            6,
+            "Tango",
+            LocalDate.of(2020, Month.JANUARY, 8),
+            LocalTime.now(),
+            LocalTime.MIDNIGHT,
+            ""
         )
     )
-
-    override fun addUser(user: User) {
-        // TODO: connect to the data source
-    }
 }

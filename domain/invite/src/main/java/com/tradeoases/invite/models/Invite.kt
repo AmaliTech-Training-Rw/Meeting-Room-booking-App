@@ -1,9 +1,13 @@
-package com.amalitech.user.models
+package com.tradeoases.invite.models
 
-data class User(
-    val userId: String,
-    val profilePic: String,
-    val username: String,
-    val email: String,
-    val isActive: Boolean
+import java.time.LocalDate
+import java.time.LocalTime
+
+data class Invite(
+    val inviteId: Int,
+    val roomName: String,
+    val date: LocalDate,
+    val startTime: LocalTime,
+    val endTime: LocalTime,
+    val imageUrl: String
 )

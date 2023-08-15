@@ -1,16 +1,18 @@
-package com.amalitech.user.state
+package com.tradeoases.invite
 
-import com.amalitech.user.models.User
+import com.tradeoases.invite.models.Invite
 
-data class UserViewState(
+
+data class InviteViewState(
     val loading: Boolean = true,
-    val users: List<User> = emptyList()
+    val invite: List<Invite> = emptyList()
 )
 
-data class UserUiState(
-    val firstName: String = "",
-    val lastName: String = "",
-    val email: String = "",
-    val selectLocation: String = "",
-    val isAdmin: Boolean = false,
+data class InviteUiState(
+    val inviteId: Int = 0,
+    val roomName: String = "",
+    val date: String = "",
+    val startTime: String = "",
+    val endTime: String = "",
+    val imageUrl: String = ""
 )

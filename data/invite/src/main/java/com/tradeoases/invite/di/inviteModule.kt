@@ -1,11 +1,11 @@
-package com.amalitech.user.di
+package com.tradeoases.invite.di
 
-import com.amalitech.user.UserRepositoryImpl
-import com.amalitech.user.repository.UserRepository
+import com.tradeoases.invite.repository.InviteRepository
+import com.tradeoases.invite.repository.InviteRepositoryImpl
 import org.koin.dsl.module
 
-val userModule = module {
-    single<UserRepository> {
-        UserRepositoryImpl()
+val inviteModule = module {
+    single<InviteRepository> {
+        InviteRepositoryImpl()
     }
 }

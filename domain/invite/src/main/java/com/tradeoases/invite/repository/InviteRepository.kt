@@ -1,4 +1,8 @@
 package com.tradeoases.invite.repository
 
-class InviteRepository {
+import com.tradeoases.invite.models.Invite
+import kotlinx.coroutines.flow.Flow
+
+interface InviteRepository {
+    fun getInvites(): Flow<Invite>
 }

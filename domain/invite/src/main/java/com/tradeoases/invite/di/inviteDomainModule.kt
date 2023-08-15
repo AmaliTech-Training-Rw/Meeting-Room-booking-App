@@ -1,20 +1,10 @@
-package com.amalitech.user.di
+package com.tradeoases.invite.di
 
-import com.amalitech.user.profile.use_case.GetUserUseCase
-import com.amalitech.user.profile.use_case.ProfileUseCaseWrapper
-import com.amalitech.user.profile.use_case.SaveUserUseCase
+import com.tradeoases.invite.usecases.GetInviteUseCase
 import org.koin.dsl.module
 
-val domainUserModule = module {
+val domainInviteModule = module {
     single {
-        GetUserUseCase(get())
-    }
-
-    single {
-        SaveUserUseCase(get())
-    }
-
-    single {
-        ProfileUseCaseWrapper(get(), get())
+        GetInviteUseCase(get())
     }
 }

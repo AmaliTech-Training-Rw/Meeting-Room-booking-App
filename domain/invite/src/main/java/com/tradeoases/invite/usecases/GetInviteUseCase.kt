@@ -1,10 +1,10 @@
-package com.amalitech.user.usecases
+package com.tradeoases.invite.usecases
 
-import com.amalitech.user.repository.UserRepository
+import com.tradeoases.invite.repository.InviteRepository
 
-class GetUseCase constructor(
-    private val userRepository: UserRepository
+class GetInviteUseCase constructor(
+    private val inviteRepository: InviteRepository
 ) {
-    operator fun invoke() = userRepository.getUsers()
+    operator fun invoke() = inviteRepository.getInvites()
 }
 

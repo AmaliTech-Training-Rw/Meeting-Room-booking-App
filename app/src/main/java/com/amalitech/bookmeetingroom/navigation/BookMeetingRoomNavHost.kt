@@ -18,6 +18,7 @@ import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
 import com.amalitech.user.UserScreen
 import com.amalitech.user.profile.ProfileScreen
+import com.tradeoases.invite.InviteScreen
 
 @Composable
 fun BookMeetingRoomNavHost(
@@ -75,9 +76,7 @@ fun BookMeetingRoomNavHost(
         }
 
         composable(route = NavigationItem.Invitations.route) {
-            TestScreen(
-                "This is ${NavigationItem.Invitations.title}", innerPadding
-            )
+            InviteScreen()
         }
     }
 }
