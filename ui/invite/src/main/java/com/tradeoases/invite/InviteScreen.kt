@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -47,7 +48,10 @@ fun InviteScreen(
 ) {
     val inviteState by invitesViewModel.uiState.collectAsStateWithLifecycle()
     val spacing = LocalSpacing.current
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)) {
+    LazyColumn(
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)
+    ) {
         inviteState.invite.let {
             item {
                 if (inviteState.invite.isEmpty()) {
