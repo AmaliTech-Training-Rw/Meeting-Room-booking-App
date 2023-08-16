@@ -32,6 +32,7 @@ import com.amalitech.rooms.book_room.BookRoomScreen
 import com.amalitech.user.UserScreen
 import com.amalitech.user.profile.ProfileScreen
 import com.amalitech.user.profile.ProfileViewModel
+import com.amalitech.user.profile.update_profile.UpdateProfileScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -128,9 +129,16 @@ fun BookMeetingRoomNavHost(
                 navigateToProfileScreen = { },
                 onNavigateBack = { navigateToDashboard(appState) },
                 onComposing = onComposing,
-                onUpdateProfileClick = { },
+                onUpdateProfileClick = { email ->
+                    appState.navController.navigate("${NavigationItem.UpdateProfile.route}/$email")
+                },
                 onNavigateToLogin = {
                     mainNavController.navigateToLogin()
+                },
+                showSnackBar = {
+                    scope.launch {
+                        appState.snackbarHostState.showSnackbar(it)
+                    }
                 }
             ) { goToAdmin ->
                 if (goToAdmin)
@@ -204,6 +212,25 @@ fun BookMeetingRoomNavHost(
             LaunchedEffect(key1 = true) {
                 mainNavController.navigateToLogin()
             }
+        }
+
+        composable(
+            "${NavigationItem.UpdateProfile.route}/{email}",
+            arguments = listOf(navArgument("email") {
+                type = NavType.StringType
+            })
+        ) { backStackEntry ->
+            val email = backStackEntry.arguments?.getString("email") ?: ""
+            UpdateProfileScreen(
+                onComposing = onComposing,
+                email = email,
+                showSnackBar = {
+                    scope.launch {
+                        appState.snackbarHostState.showSnackbar(it)
+                    }
+                },
+                onNavigateBack = { appState.navController.navigateUp() }
+            )
         }
     }
 }

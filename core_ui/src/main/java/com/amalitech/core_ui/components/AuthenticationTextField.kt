@@ -1,4 +1,4 @@
-package com.amalitech.onboarding.components
+package com.amalitech.core_ui.components
 
 import android.view.KeyEvent.ACTION_DOWN
 import androidx.compose.foundation.border
@@ -18,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
@@ -36,11 +35,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core.R
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
+import com.amalitech.core_ui.theme.LocalSpacing
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AuthenticationTextField(
     placeholder: String,
@@ -64,7 +62,8 @@ fun AuthenticationTextField(
         onNext = { focusManager.moveFocus(FocusDirection.Down) },
         onDone = { focusManager.clearFocus() },
         onGo = { onGo() }
-    )
+    ),
+    enabled: Boolean = true
 ) {
     val spacing = LocalSpacing.current
     var passwordVisible by rememberSaveable {
@@ -83,9 +82,9 @@ fun AuthenticationTextField(
         trailingIcon = {
             if (isPassword) {
                 val image = if (passwordVisible)
-                    com.amalitech.ui.onboarding.R.drawable.baseline_visibility_off_24
+                    com.amalitech.core_ui.R.drawable.baseline_visibility_off_24
                 else
-                    com.amalitech.ui.onboarding.R.drawable.baseline_visibility_24
+                    com.amalitech.core_ui.R.drawable.baseline_visibility_24
                 val description = if (passwordVisible)
                     stringResource(id = R.string.hide_password)
                 else
@@ -126,6 +125,9 @@ fun AuthenticationTextField(
             unfocusedContainerColor = MaterialTheme.colorScheme.background,
             unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
             focusedContainerColor = MaterialTheme.colorScheme.background,
+            disabledContainerColor = MaterialTheme.colorScheme.background,
+            disabledIndicatorColor = Color.Transparent,
+            disabledTextColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
         ),
         placeholder = {
             Text(
@@ -134,7 +136,8 @@ fun AuthenticationTextField(
             )
         },
         keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions
+        keyboardActions = keyboardActions,
+        enabled = enabled
     )
 }
 

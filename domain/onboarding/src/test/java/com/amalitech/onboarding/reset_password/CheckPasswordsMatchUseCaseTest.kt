@@ -1,6 +1,7 @@
 package com.amalitech.onboarding.reset_password
 
 import com.amalitech.core.R
+import com.amalitech.core.domain.use_case.CheckPasswordsMatchUseCase
 import com.amalitech.core.util.UiText
 import org.junit.Assert.assertEquals
 import org.junit.Test

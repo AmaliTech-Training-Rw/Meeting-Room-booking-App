@@ -34,7 +34,7 @@ import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
-import com.amalitech.onboarding.components.AuthenticationTextField
+import com.amalitech.core_ui.components.AuthenticationTextField
 import com.amalitech.onboarding.util.showSnackBar
 import org.koin.androidx.compose.koinViewModel
 

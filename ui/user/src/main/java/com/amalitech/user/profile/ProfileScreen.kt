@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -55,11 +54,12 @@ import org.koin.androidx.compose.koinViewModel
 fun ProfileScreen(
     appState: BookMeetingRoomAppState? = null,
     viewModel: ProfileViewModel = koinViewModel(),
+    showSnackBar: (message: String) -> Unit,
     onNavigateToLogin: () -> Unit,
     navigateToProfileScreen: () -> Unit,
     onNavigateBack: () -> Unit,
     onComposing: (AppBarState) -> Unit,
-    onUpdateProfileClick: () -> Unit,
+    onUpdateProfileClick: (email: String) -> Unit,
     onToggleButtonClick: (goToAdmin: Boolean) -> Unit,
 ) {
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
@@ -70,9 +70,6 @@ fun ProfileScreen(
         mutableStateOf(true)
     }
     val context = LocalContext.current
-    val snackBarHostState = remember {
-        SnackbarHostState()
-    }
     val spacing = LocalSpacing.current
     val isAdmin: Boolean by viewModel.isAdmin
     val isUsingAdminDashboard: Boolean by viewModel.isUsingAdminDashboard
@@ -117,9 +114,8 @@ fun ProfileScreen(
 
             is UiState.Error -> {
                 (uiState as UiState.Error<ProfileUiState>).error?.let {
-                    snackBarHostState.showSnackbar(
-                        it.asString(context)
-                    )
+                    showSnackBar(it.asString(context))
+                    viewModel.onSnackBarShown()
                 }
                 isLoading = false
             }
@@ -199,7 +195,7 @@ fun ProfileScreen(
                 ) {
                     DefaultButton(
                         text = stringResource(id = R.string.update_profile),
-                        onClick = onUpdateProfileClick,
+                        onClick = { onUpdateProfileClick(user!!.email) },
                         modifier = Modifier
                             .clip(RoundedCornerShape(spacing.spaceMedium))
                             .weight(1f)

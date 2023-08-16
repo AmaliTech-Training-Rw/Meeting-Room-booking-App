@@ -25,4 +25,8 @@
     <string name="users">Users</string>
     <string name="my_profile">My profile</string>
     <string name="logout">Log out</string>
+    <string name="error_unable_to_load_your_profile_information">Unable to load your profile information, check your internet and try again please</string>
+    <string name="change_your_profile_picture">Change your profile picture</string>
+    <string name="old_password">Old password</string>
+    <string name="clear">Clear</string>
 </resources>

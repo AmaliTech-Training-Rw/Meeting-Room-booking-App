@@ -1,7 +1,7 @@
-package com.amalitech.onboarding.login.use_case
+package com.amalitech.core.domain
 
-import com.amalitech.core.util.UiText
 import com.amalitech.core.R
+import com.amalitech.core.util.UiText
 
 
 class ValidatePasswordUseCase {

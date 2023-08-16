@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
@@ -36,6 +37,9 @@ import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
 import com.amalitech.rooms.book_room.BookRoomScreen
 import com.amalitech.user.profile.ProfileScreen
+import com.amalitech.user.profile.update_profile.UpdateProfileScreen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -47,13 +51,14 @@ fun AppNavHost(
     onComposing: (AppBarState) -> Unit,
     onFinishActivity: () -> Unit
 ) {
+    val scope = rememberCoroutineScope()
     NavHost(
         navController = navController,
         startDestination = Route.ONBOARDING_SCREENS,
         modifier = modifier
     ) {
         onboardingGraph(navController, shouldShowOnboarding, snackbarHostState, onComposing)
-        mainNavGraph(navController, snackbarHostState, onComposing, onFinishActivity)
+        mainNavGraph(navController, snackbarHostState, onComposing, onFinishActivity, scope)
         dashboardNavGraph(
             navController,
             onFinishActivity
@@ -220,7 +225,8 @@ fun NavGraphBuilder.mainNavGraph(
     navController: NavHostController,
     snackbarHostState: SnackbarHostState,
     onComposing: (AppBarState) -> Unit,
-    onFinishActivity: () -> Unit
+    onFinishActivity: () -> Unit,
+    scope: CoroutineScope
 ) {
     navigation(
         startDestination = BottomNavItem.Home.route,
@@ -259,7 +265,9 @@ fun NavGraphBuilder.mainNavGraph(
         }
         composable(BottomNavItem.Profile.route) {
             ProfileScreen(
-                onUpdateProfileClick = {},
+                onUpdateProfileClick = { email ->
+                    navController.navigate("${Route.UPDATE_PROFILE}/$email")
+                },
                 onComposing = onComposing,
                 onNavigateBack = {
                     navController.navigate(BottomNavItem.Home.route) {
@@ -272,6 +280,11 @@ fun NavGraphBuilder.mainNavGraph(
                 navigateToProfileScreen = {},
                 onNavigateToLogin = {
                     navController.navigateToLogin()
+                },
+                showSnackBar = {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(it)
+                    }
                 }
             ) { goToAdmin ->
                 if (goToAdmin) {
@@ -305,6 +318,24 @@ fun NavGraphBuilder.mainNavGraph(
             BookingScreen(
                 navigateToProfileScreen = { navigateToProfileScreen(navController) },
                 onComposing = onComposing
+            )
+        }
+        composable(
+            "${Route.UPDATE_PROFILE}/{email}",
+            arguments = listOf(navArgument("email") {
+                type = NavType.StringType
+            })
+        ) { backStackEntry ->
+            val email = backStackEntry.arguments?.getString("email") ?: ""
+            UpdateProfileScreen(
+                onComposing = onComposing,
+                email = email,
+                showSnackBar = {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(it)
+                    }
+                },
+                onNavigateBack = { navController.navigateUp() }
             )
         }
     }

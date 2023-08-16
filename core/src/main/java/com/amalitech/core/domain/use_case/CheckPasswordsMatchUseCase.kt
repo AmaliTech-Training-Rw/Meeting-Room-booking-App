@@ -1,4 +1,4 @@
-package com.amalitech.onboarding.reset_password
+package com.amalitech.core.domain.use_case
 
 import com.amalitech.core.util.UiText
 

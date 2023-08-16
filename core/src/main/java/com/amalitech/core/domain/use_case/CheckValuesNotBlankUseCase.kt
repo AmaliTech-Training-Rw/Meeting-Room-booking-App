@@ -1,7 +1,7 @@
-package com.amalitech.onboarding.signup.use_case
+package com.amalitech.core.domain.use_case
 
-import com.amalitech.core.util.UiText
 import com.amalitech.core.R
+import com.amalitech.core.util.UiText
 
 class CheckValuesNotBlankUseCase {
 
