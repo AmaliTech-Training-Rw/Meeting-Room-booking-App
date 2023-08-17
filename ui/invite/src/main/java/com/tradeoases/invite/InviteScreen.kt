@@ -165,6 +165,6 @@ fun InvitesItemPreview() {
 @Composable
 fun InviteScreenPreview() {
     BookMeetingRoomTheme {
-        InviteScreen()
+        InviteScreen( )
     }
 }

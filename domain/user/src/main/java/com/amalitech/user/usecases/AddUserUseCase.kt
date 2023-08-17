@@ -6,7 +6,7 @@ import com.amalitech.user.repository.UserRepository
 class AddUserUseCase constructor(
     private val userRepository: UserRepository
 ) {
-    operator fun invoke(
+    suspend operator fun invoke(
         user: User
     ) = userRepository.addUser(user)
 }

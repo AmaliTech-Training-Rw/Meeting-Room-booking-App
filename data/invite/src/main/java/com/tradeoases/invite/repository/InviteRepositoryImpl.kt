@@ -8,7 +8,7 @@ import java.time.LocalTime
 import java.time.Month
 
 class InviteRepositoryImpl: InviteRepository {
-    override fun getInvites(): Flow<Invite> = flowOf(
+    override suspend fun getInvites(): Flow<Invite> = flowOf(
         Invite(
             1,
             "Alpha",
@@ -58,4 +58,8 @@ class InviteRepositoryImpl: InviteRepository {
             ""
         )
     )
+
+    override suspend fun addInvite(invite: Invite) {
+        TODO("Not yet implemented")
+    }
 }

@@ -4,5 +4,8 @@ import com.tradeoases.invite.models.Invite
 import kotlinx.coroutines.flow.Flow
 
 interface InviteRepository {
-    fun getInvites(): Flow<Invite>
+    suspend fun getInvites(): Flow<Invite>
+
+    suspend fun addInvite(invite: Invite)
+
 }

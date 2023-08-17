@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
+import com.tradeoases.invite.models.Invite
+import com.tradeoases.invite.usecases.AddInviteUseCase
 import com.tradeoases.invite.usecases.GetInviteUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -12,8 +14,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class InvitesViewModel (
-    private val getInviteUseCase: GetInviteUseCase
+class InvitesViewModel(
+    private val getInviteUseCase: GetInviteUseCase,
+    private val addInviteUseCase: AddInviteUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(
         InviteViewState()
@@ -29,9 +32,15 @@ class InvitesViewModel (
             getInviteUseCase().collect { invite ->
                 val updatedInviteSet = (uiState.value.invite + invite).toSet() // remove dups
                 _uiState.update { oldState ->
-                    oldState.copy( loading = false, invite = updatedInviteSet.toList())
+                    oldState.copy(loading = false, invite = updatedInviteSet.toList())
                 }
             }
+        }
+    }
+
+    fun addInvite(invite: Invite) {
+        launchCatching {
+            addInviteUseCase(invite)
         }
     }
 

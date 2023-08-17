@@ -5,6 +5,6 @@ import com.tradeoases.invite.repository.InviteRepository
 class GetInviteUseCase constructor(
     private val inviteRepository: InviteRepository
 ) {
-    operator fun invoke() = inviteRepository.getInvites()
+    suspend operator fun invoke() = inviteRepository.getInvites()
 }
 

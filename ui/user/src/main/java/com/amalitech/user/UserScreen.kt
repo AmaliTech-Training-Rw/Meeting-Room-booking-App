@@ -25,6 +25,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -66,6 +67,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.amalitech.core.data.model.Room
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.swipe_animation.SwipeAction
 import com.amalitech.core_ui.swipe_animation.SwipeableCardSideContents
@@ -86,10 +88,10 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserScreen(
-    innerPadding: PaddingValues,
     setFabOnClick: (() -> Unit) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: UserViewModel = koinViewModel(),
+    onNavigateToUser: (user: User) -> Unit,
     addUserViewModel: AddUserViewModel = koinViewModel()
 ) {
     val spacing = LocalSpacing.current
@@ -272,22 +274,70 @@ fun UserScreen(
 
     UsersList(
         modifier,
-        innerPadding,
         viewModel,
-        spacing
+        spacing,
+        onNavigateToUser
     )
 }
 
 @Composable
 fun UsersList(
     modifier: Modifier,
-    innerPadding: PaddingValues,
     viewModel: UserViewModel,
-    spacing: Dimensions
+    spacing: Dimensions,
+    onNavigateToUser: (user: User) -> Unit
 ) {
-
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    var selectedUser: User? by remember {
+        mutableStateOf(null)
+    }
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(spacing.spaceMedium)
+    ) {
+
+
+        if (state.loading) {
+            item {
+                CircularProgressIndicator()
+            }
+        }
+
+        items(
+            items = state.users,
+            key = { user ->
+                // Return a stable + unique key for the item
+                user.userId
+            }
+        ) { user ->
+            UserCard(
+                user = user,
+                modifier = Modifier.height(150.dp),
+                onLeftContentClick = { onNavigateToUser(user) },
+                onRightContentClick = {
+                    // do something
+                },
+                onDelete = {
+                    viewModel.onDelete(
+                        it
+                    )
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun UserCard(
+    user: User,
+    modifier: Modifier = Modifier,
+    onLeftContentClick: () -> Unit,
+    onRightContentClick: () -> Unit,
+    onDelete: (userId: String) -> Unit
+) {
     var isLeftContentVisible by rememberSaveable {
         mutableStateOf(false)
     }
@@ -296,58 +346,54 @@ fun UsersList(
         mutableStateOf(false)
     }
 
-    LazyColumn(
+    val spacing = LocalSpacing.current
+
+    SwipeableCardSideContents(
         modifier = Modifier
-            .fillMaxHeight()
-            .padding(innerPadding)
-    ) {
-        items(items = state.users, itemContent = { item ->
-            SwipeableCardSideContents(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(77.dp),
-                isLeftContentVisible = isLeftContentVisible,
-                isRightContentVisible = isRightContentVisible,
-                onSwipeEnd = { direction ->
-                    when (direction) {
-                        SwipeDirection.LEFT -> {
-                            if (isRightContentVisible)
-                                isRightContentVisible = false
-                            else
-                                isLeftContentVisible = false
-                        }
-
-                        SwipeDirection.NONE -> {
-                            isLeftContentVisible = false
-                            isRightContentVisible = false
-                        }
-
-                        SwipeDirection.RIGHT -> {
-                            if (isLeftContentVisible)
-                                isLeftContentVisible = false
-                            else
-                                isRightContentVisible = true
-                        }
-                    }
-                },
-                rightContent = {
-                    SwipeAction(
-                        backgroundColor = MaterialTheme.colorScheme.error,
-                        icon = Icons.Filled.Delete,
-                        onActionClick = viewModel::onDelete,
-                        modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
-                    )
-                },
-                leftContent = {},
-                content = {
-                    UserItem(
-                        isRightContentVisible,
-                        item
-                    )
+            .fillMaxWidth()
+            .height(77.dp),
+        isLeftContentVisible = isLeftContentVisible,
+        isRightContentVisible = isRightContentVisible,
+        onSwipeEnd = { direction ->
+            when (direction) {
+                SwipeDirection.LEFT -> {
+                    if (isRightContentVisible)
+                        isRightContentVisible = false
+                    else
+                        isLeftContentVisible = false
                 }
+
+                SwipeDirection.NONE -> {
+                    isLeftContentVisible = false
+                    isRightContentVisible = false
+                }
+
+                SwipeDirection.RIGHT -> {
+                    if (isLeftContentVisible)
+                        isLeftContentVisible = false
+                    else
+                        isRightContentVisible = true
+                }
+            }
+        },
+        rightContent = {
+            SwipeAction(
+                backgroundColor = MaterialTheme.colorScheme.error,
+                icon = Icons.Filled.Delete,
+                onActionClick = {
+                    onDelete(user.userId)
+                },
+                modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
             )
-        })
-    }
+        },
+        leftContent = {},
+        content = {
+            UserItem(
+                isRightContentVisible,
+                user
+            )
+        }
+    )
 }
 
 @Composable
@@ -536,9 +582,10 @@ fun UserItemPreview() {
 @Composable
 fun UserScreenPreview() {
     BookMeetingRoomTheme {
-        UserScreen(
-            PaddingValues(16.dp),
-            {})
+//        UserScreen(
+//            {},
+//            {_ -> {}}
+//        )
     }
 }
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
+import com.amalitech.user.models.User
 import com.amalitech.user.state.UserUiState
 import com.amalitech.user.usecases.GetUseCase
 import com.amalitech.user.state.UserViewState
@@ -29,8 +30,9 @@ class UserViewModel (
 
     private fun subscribeToUserUpdates() {
         launchCatching {
+            _uiState.value = uiState.value.copy(loading = true)
             getUsers().collect { user ->
-                val updatedUserSet = (uiState.value.users + user).toSet() // remove dups
+                val updatedUserSet = (uiState.value.users + user).toSet()
                 _uiState.update { oldState ->
                     oldState.copy( loading = false, users = updatedUserSet.toList())
                 }
@@ -38,7 +40,7 @@ class UserViewModel (
         }
     }
 
-    fun onDelete() {
+    fun onDelete(userId: String) {
 
     }
 

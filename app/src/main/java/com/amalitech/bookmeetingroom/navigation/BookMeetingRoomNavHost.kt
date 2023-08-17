@@ -53,8 +53,8 @@ fun BookMeetingRoomNavHost(
 
         composable(route = NavigationItem.Users.route) {
             UserScreen(
-                innerPadding = innerPadding,
-                setFabOnClick = setFabOnClick
+                setFabOnClick = setFabOnClick,
+                onNavigateToUser = {}
             )
         }
 
