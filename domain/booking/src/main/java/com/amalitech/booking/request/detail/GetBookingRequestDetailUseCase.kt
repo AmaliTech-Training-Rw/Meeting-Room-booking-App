@@ -11,15 +11,88 @@ import java.time.LocalTime
 class GetBookingRequestDetailUseCase {
     suspend operator fun invoke(id: String): ApiResult<BookingRequestDetail> {
         delay(1000)
+        val images = listOf(
+            "https://picsum.photos/id/29/4855/2000",
+            "https://picsum.photos/id/0/4855/2000",
+            "https://picsum.photos/id/15/4855/2000",
+            "https://picsum.photos/id/26/4855/2000",
+            "https://picsum.photos/id/3/4855/2000",
+            "https://picsum.photos/id/4/4855/2000",
+            "https://picsum.photos/id/5/4855/2000",
+            "https://picsum.photos/id/6/4855/2000",
+            "https://picsum.photos/id/7/4855/2000",
+            "https://picsum.photos/id/8/4855/2000",
+            "https://picsum.photos/id/9/4855/2000",
+            "https://picsum.photos/id/10/4855/2000",
+            "https://picsum.photos/id/11/4855/2000",
+            "https://picsum.photos/id/12/4855/2000",
+            "https://picsum.photos/id/13/4855/2000",
+            "https://picsum.photos/id/1/4855/2000",
+            "https://picsum.photos/id/14/4855/2000",
+            "https://picsum.photos/id/16/4855/2000",
+            "https://picsum.photos/id/17/4855/2000",
+            "https://picsum.photos/id/10/4855/2000",
+            "https://picsum.photos/id/18/4855/2000",
+            "https://picsum.photos/id/19/4855/2000",
+            "https://picsum.photos/id/20/4855/2000",
+            "https://picsum.photos/id/22/4855/2000",
+            "https://picsum.photos/id/9/4855/2000",
+            "https://picsum.photos/id/23/4855/2000",
+            "https://picsum.photos/id/24/4855/2000",
+            "https://picsum.photos/id/25/4855/2000",
+            "https://picsum.photos/id/27/4855/2000",
+            "https://picsum.photos/id/28/4855/2000",
+            "https://picsum.photos/id/33/4855/2000",
+            "https://picsum.photos/id/30/4855/2000",
+            "https://picsum.photos/id/31/4855/2000",
+            "https://picsum.photos/id/32/4855/2000"
+        )
+        val names = listOf(
+            "Vessel Of Light",
+            "Inspiration Lounge",
+            "The Portable Space",
+            "Think Out Loud",
+            "IdeaWorks",
+            "Thought Out",
+            "Living The Story",
+            "Wishpiration",
+            "Nature Lovers",
+            "Sharing Is Caring",
+            "Vision 2020",
+            "Eternal Hopes",
+            "Vision Achievers",
+            "One Goal",
+            "One Vision",
+            "Growing Horizon",
+            "Success Majors",
+            "Smart Choices",
+            "Burning Desire",
+            "Mind Conference",
+            "Achievement Territory",
+            "Fortune Seekers",
+            "Idea Advancements",
+            "Goal Oriented Minds",
+            "Proficiency Group",
+            "Group Effort",
+            "Agents Of Change",
+            "The Good Guys",
+            "Focus Faction",
+            "Success Cartel",
+            "Winners Circle",
+            "Inner Winners",
+            "Stress Success",
+            "Mind Binds"
+        )
+
         return ApiResult(
             BookingRequestDetail(
                 booking = Booking(
                     id = "id",
-                    "room2",
+                    names.random(),
                     LocalDate.now(),
                     LocalTime.of((0..23).random(), 0),
                     LocalTime.of((0..23).random(), 0),
-                    "https://via.placehol.com/400.png",
+                    images.random(),
                     bookedBy = "johndoe@amalitech.org",
                     attendees = listOf(
                         "johndoe@gmail.com",
@@ -31,7 +104,7 @@ class GetBookingRequestDetailUseCase {
                 ),
                 room = Room(
                     id = "id1",
-                    roomName = "Room 1",
+                    roomName = names.random(),
                     numberOfPeople = 5,
                     roomFeatures = listOf(
                         "Air conditioning",
@@ -40,7 +113,7 @@ class GetBookingRequestDetailUseCase {
                         "Natural light",
                         "Drinks"
                     ),
-                    imageUrl = ""
+                    imageUrl = images.random()
                 )
             )
         )

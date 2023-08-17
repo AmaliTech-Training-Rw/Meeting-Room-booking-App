@@ -235,7 +235,11 @@ fun BookMeetingRoomNavHost(
         }
 
         composable(route = NavigationItem.BookingHistory.route) {
-            BookingHistoryScreen(navigateUp = { navigateToDashboard(appState) }, onComposing = onComposing) {
+            BookingHistoryScreen(
+                navigateUp = { navigateToDashboard(appState) },
+                onComposing = onComposing,
+                appState = appState
+            ) {
                 navigateToProfileScreen(appState)
             }
         }
