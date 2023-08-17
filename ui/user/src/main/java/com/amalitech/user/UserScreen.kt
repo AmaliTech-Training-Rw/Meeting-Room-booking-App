@@ -315,11 +315,6 @@ fun UsersList(
         ) { user ->
             UserCard(
                 user = user,
-                modifier = Modifier.height(150.dp),
-                onLeftContentClick = { onNavigateToUser(user) },
-                onRightContentClick = {
-                    // do something
-                },
                 onDelete = {
                     viewModel.onDelete(
                         it
