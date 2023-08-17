@@ -22,4 +22,6 @@
     <string name="calendar">Calendar</string>
     <string name="active">Active</string>
     <string name="ended">Ended</string>
+    <string name="add_invitation">New invitation</string>
+
 </resources>

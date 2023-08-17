@@ -23,7 +23,7 @@ sealed class NavigationItem(var title:String, var route:String, var icon: ImageV
 
     object Profile : NavigationItem("Profile", "profile_route", Icons.Default.PersonOutline)
     object Dashboard : NavigationItem("Dashboard", "dashboard_route", Icons.Default.Dashboard)
-    object Invitations : NavigationItem("invitations", "invitations_route", Icons.Default.Home)
+    object Invitations : NavigationItem("Invitations", "invitations_route", Icons.Default.Home)
     object Logout : NavigationItem("Logout", "logout_route", Icons.Default.Home)
     object BookingRequestDetail : NavigationItem("Booking request detail", "booking_request_detail", Icons.Default.Details)
 

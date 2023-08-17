@@ -35,8 +35,8 @@ fun BookMeetingRoomApp(
     onSearchTextFieldVisibilityChange: ((Boolean) -> Unit)? = null,
     mainNavController: NavHostController
 ) {
-    // TODO: specify for each screen
     val (fabOnClick, setFabOnClick) = remember { mutableStateOf<(() -> Unit)?>(null) }
+    val (inviteFabOnClick, setInviteFabOnClick) = remember { mutableStateOf<(() -> Unit)?>(null) }
 
     Scaffold(
         topBar = {
@@ -60,7 +60,8 @@ fun BookMeetingRoomApp(
                 NavigationItem.Home.route,
                 appState,
                 mainNavController,
-                setFabOnClick
+                setFabOnClick,
+                setInviteFabOnClick
             )
         },
         snackbarHost = {
@@ -80,8 +81,14 @@ fun BookMeetingRoomApp(
             if (destination != null) {
                 FloatingActionButton(
                     onClick = {
-                        if (destination.title == "Users") {
-                            fabOnClick?.invoke()
+                        when(destination.title) {
+                            "Users" -> {
+                                fabOnClick?.invoke()
+                            }
+
+                            "Invitations" -> {
+                                inviteFabOnClick?.invoke()
+                            }
                         }
                     },
                     shape = CircleShape,

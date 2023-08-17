@@ -18,6 +18,20 @@ class InvitesViewModel(
     private val getInviteUseCase: GetInviteUseCase,
     private val addInviteUseCase: AddInviteUseCase
 ): ViewModel() {
+
+    private val _userUiState = MutableStateFlow(
+        InviteUiState()
+    )
+    val addInviteUiState = _userUiState.asStateFlow()
+
+    fun onRoomName(name: String) {
+        _userUiState.update { roomName ->
+            roomName.copy(
+                roomName = name
+            )
+        }
+    }
+
     private val _uiState = MutableStateFlow(
         InviteViewState()
     )
@@ -38,9 +52,9 @@ class InvitesViewModel(
         }
     }
 
-    fun addInvite(invite: Invite) {
+    fun addInvite() {
         launchCatching {
-            addInviteUseCase(invite)
+            // addInviteUseCase(invite)
         }
     }
 
