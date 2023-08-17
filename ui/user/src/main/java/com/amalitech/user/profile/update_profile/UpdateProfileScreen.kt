@@ -237,7 +237,7 @@ fun UpdateProfileScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 DefaultButton(
-                    text = stringResource(R.string.update_profile),
+                    text = stringResource(R.string.save),
                     onClick = { viewModel.updateProfile() },
                     modifier = Modifier
                         .clip(RoundedCornerShape(spacing.spaceMedium))
