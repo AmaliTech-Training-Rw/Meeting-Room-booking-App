@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Coffee
 import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Details
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.People
@@ -18,8 +19,8 @@ sealed class NavigationItem(var title:String, var route:String, var icon: ImageV
 
     object Users : NavigationItem("Users", "users_route", Icons.Default.People)
     object Rooms : NavigationItem("Rooms", "rooms_route", Icons.Default.Coffee)
-//    object BookingHistory :
-//        NavigationItem("Booking History", "booking_history_route", Icons.Default.History)
+    object BookingHistory :
+        NavigationItem("Booking History", "booking_history_route", Icons.Default.History)
 
     object Profile : NavigationItem("Profile", "profile_route", Icons.Default.PersonOutline)
     object Dashboard : NavigationItem("Dashboard", "dashboard_route", Icons.Default.Dashboard)
@@ -35,7 +36,7 @@ sealed class NavigationItem(var title:String, var route:String, var icon: ImageV
             BookingRequests,
             Users,
             Rooms,
-//            BookingHistory,
+            BookingHistory,
             Profile,
             Logout
         )

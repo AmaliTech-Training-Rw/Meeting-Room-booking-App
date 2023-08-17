@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.amalitech.admin.DashboardScreen
 import com.amalitech.admin.room.AddRoomScreen
+import com.amalitech.booking.history.BookingHistoryScreen
 import com.amalitech.booking.requests.BookingRequestScreen
 import com.amalitech.booking.requests.detail.BookingRequestDetailScreen
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
@@ -231,6 +232,12 @@ fun BookMeetingRoomNavHost(
                 },
                 onNavigateBack = { appState.navController.navigateUp() }
             )
+        }
+
+        composable(route = NavigationItem.BookingHistory.route) {
+            BookingHistoryScreen(navigateUp = { navigateToDashboard(appState) }, onComposing = onComposing) {
+                navigateToProfileScreen(appState)
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ class FetchBookingsUseCase {
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
                     "https://via.placeho.com/200.png",
-                    "Ngomde Cadet Kamdaou"
+                    "John Doe"
                 ),Booking(
                     id = "id",
                     "room 1",
@@ -27,7 +27,7 @@ class FetchBookingsUseCase {
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
                     "https://via.placeho.com/200.png",
-                    "Ngomde Cadet Kamdaou"
+                    "John Doe"
                 ),Booking(
                     id = "id",
                     "room 1",
@@ -35,7 +35,7 @@ class FetchBookingsUseCase {
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
                     "https://via.placeho.com/200.png",
-                    "Ngomde Cadet Kamdaou"
+                    "John Doe"
                 ),Booking(
                     id = "id",
                     "room 1",
@@ -43,7 +43,7 @@ class FetchBookingsUseCase {
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
                     "https://via.placeho.com/200.png",
-                    "Ngomde Cadet Kamdaou"
+                    "John Doe"
                 ),Booking(
                     id = "id",
                     "room 1",
@@ -51,7 +51,7 @@ class FetchBookingsUseCase {
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
                     "https://via.placeho.com/200.png",
-                    "Ngomde Cadet Kamdaou"
+                    "John Doe"
                 ),Booking(
                     id = "id",
                     "room 1",
@@ -59,7 +59,7 @@ class FetchBookingsUseCase {
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
                     "https://via.placeho.com/200.png",
-                    "Ngomde Cadet Kamdaou"
+                    "John Doe"
                 ),Booking(
                     id = "id",
                     "room 1",
@@ -67,7 +67,7 @@ class FetchBookingsUseCase {
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
                     "https://via.placeho.com/200.png",
-                    "Ngomde Cadet Kamdaou"
+                    "John Doe"
                 ),Booking(
                     id = "id",
                     "room 1",
@@ -75,7 +75,7 @@ class FetchBookingsUseCase {
                     LocalTime.now(),
                     LocalTime.now().plusHours(4),
                     "https://via.placeho.com/200.png",
-                    "Ngomde Cadet Kamdaou"
+                    "John Doe"
                 ),
             )
         )

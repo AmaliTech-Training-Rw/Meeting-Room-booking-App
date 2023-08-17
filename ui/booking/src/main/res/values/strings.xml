@@ -15,4 +15,5 @@
     <string name="end_time">End time</string>
     <string name="invited_people">Invited people</string>
     <string name="note">Note</string>
+    <string name="booking_history">Booking History</string>
 </resources>
