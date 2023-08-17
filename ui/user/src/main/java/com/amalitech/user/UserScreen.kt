@@ -333,9 +333,6 @@ fun UsersList(
 @Composable
 fun UserCard(
     user: User,
-    modifier: Modifier = Modifier,
-    onLeftContentClick: () -> Unit,
-    onRightContentClick: () -> Unit,
     onDelete: (userId: String) -> Unit
 ) {
     var isLeftContentVisible by rememberSaveable {
