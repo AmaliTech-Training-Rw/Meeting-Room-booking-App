@@ -109,8 +109,7 @@ fun UpdateProfileScreen(
         ) {
             Box(
                 modifier = Modifier
-                    .size(150.dp)
-                    .fillMaxWidth(),
+                    .size(150.dp),
             ) {
                 AsyncImage(
                     model = userInput.profileImage
@@ -120,6 +119,7 @@ fun UpdateProfileScreen(
                     error = painterResource(id = com.amalitech.core_ui.R.drawable.john_doe),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
+                        .fillMaxSize()
                         .clip(CircleShape)
                 )
                 IconButton(
@@ -246,7 +246,7 @@ fun UpdateProfileScreen(
                         .padding(spacing.spaceExtraSmall)
                 )
                 DefaultButton(
-                    text = stringResource(id = R.string.clear),
+                    text = stringResource(id = R.string.reset),
                     onClick = {
                         viewModel.setValues(email)
                     },

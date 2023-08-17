@@ -4,10 +4,10 @@
     android:viewportWidth="24"
     android:viewportHeight="24"
     android:tint="#FFCC47">
-  <group android:scaleX="0.76"
-      android:scaleY="0.76"
-      android:translateX="2.88"
-      android:translateY="2.88">
+  <group android:scaleX="0.47"
+      android:scaleY="0.47"
+      android:translateX="6.36"
+      android:translateY="6.36">
 
       <group
           android:name="chevron_to_hamburger"
