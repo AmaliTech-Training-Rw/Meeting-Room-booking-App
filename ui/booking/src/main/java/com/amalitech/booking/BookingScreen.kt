@@ -101,7 +101,7 @@ fun BookingScreen(
     Box(
         Modifier
             .fillMaxSize()
-            .padding(spacing.spaceMedium)
+            .padding(horizontal = spacing.spaceMedium)
     ) {
         Column {
             BookingAppTab(
@@ -111,10 +111,9 @@ fun BookingScreen(
                     viewModel.fetchBookings(ended = ended)
                 },
                 selectedTab = selectedTab,
-                modifier = Modifier.height(40.dp),
+                modifier = Modifier.height(48.dp),
                 tabs = viewModel.tabs
             )
-            Spacer(modifier = Modifier.height(spacing.spaceSmall))
             if (bookings?.isEmpty() == true) {
                 Text(
                     text = stringResource(R.string.no_item_found),
@@ -123,11 +122,17 @@ fun BookingScreen(
             } else {
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)) {
                     bookings?.let {
+                        item {
+                            Spacer(modifier = Modifier.height(spacing.spaceMedium))
+                        }
                         items(items = it) { item ->
                             BookingItem(
                                 item = item,
-                                modifier = Modifier.height(150.dp)
+                                modifier = Modifier.height(100.dp)
                             )
+                        }
+                        item {
+                            Spacer(modifier = Modifier.height(spacing.spaceMedium))
                         }
                     }
                 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.amalitech.core.data.model.Room
@@ -66,7 +67,6 @@ fun RoomItem(
             modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .weight(2f)
-                .padding(bottom = spacing.spaceExtraSmall)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -106,40 +106,36 @@ fun RoomItem(
                     }
                 }
             }
-            Text(
-                text = features,
-                style = MaterialTheme.typography.bodySmall,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .padding(start = spacing.spaceExtraSmall),
-                maxLines = 3
-            )
-            Spacer(Modifier.height(spacing.spaceSmall))
-//            Button(
-//                onClick = { onBookRoom(room) },
-//                modifier = Modifier
-//                    .align(Alignment.End)
-//                    .height(30.dp),
-//                shape = RoundedCornerShape(spacing.spaceSmall),
-//                elevation = ButtonDefaults.buttonElevation(spacing.spaceExtraSmall),
-//            ) {
-//                Text(stringResource(id = R.string.book))
-//            }
-            Box(
-                modifier = Modifier
-                    .height(25.dp)
-                    .clickable {
-                        onBookRoom(room)
-                    }
-                    .shadow(spacing.spaceExtraSmall, RoundedCornerShape(spacing.spaceSmall))
-                    .background(MaterialTheme.colorScheme.primary)
-                    .padding(horizontal = spacing.spaceSmall)
-                    .align(Alignment.End),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(stringResource(id = R.string.book), color = MaterialTheme.colorScheme.onPrimary)
+            Row {
+                Text(
+                    text = features,
+                    style = MaterialTheme.typography.bodySmall,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .weight(0.7f),
+                    maxLines = 3,
+                )
+                Spacer(modifier = Modifier.width(spacing.spaceSmall))
+                Box(
+                    modifier = Modifier
+                        .weight(0.3f)
+                        .height(35.dp)
+                        .clickable {
+                            onBookRoom(room)
+                        }
+                        .shadow(spacing.spaceExtraSmall, RoundedCornerShape(spacing.spaceSmall))
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(horizontal = spacing.spaceSmall)
+                        .align(Alignment.Bottom),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        stringResource(id = R.string.book),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.sp)
+                    )
+                }
             }
-//            Spacer(Modifier.height(spacing.spaceExtraSmall))
         }
     }
 }

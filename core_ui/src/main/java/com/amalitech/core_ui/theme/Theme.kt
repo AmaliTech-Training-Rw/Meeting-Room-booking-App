@@ -106,11 +106,11 @@ fun BookMeetingRoomTheme(
     val systemUiController = rememberSystemUiController()
     if (darkTheme) {
         systemUiController.setSystemBarsColor(
-            color = Color.Black
+            color = DarkColors.background
         )
     } else {
         systemUiController.setSystemBarsColor(
-            color = Color.White
+            color = LightColors.background
         )
     }
 }
