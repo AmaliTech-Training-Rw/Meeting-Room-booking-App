@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
@@ -24,6 +25,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.amalitech.core.data.model.Room
 import com.amalitech.core_ui.theme.LocalSpacing
+import com.amalitech.ui.rooms.R
 
 @Composable
 fun RoomDescription(
@@ -45,8 +47,9 @@ fun RoomDescription(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxHeight()
-                .aspectRatio(1f)
-//                .clip(RoundedCornerShape(spacing.spaceMedium))
+                .aspectRatio(1f),
+            error = painterResource(id = com.amalitech.core_ui.R.drawable.room_small),
+            placeholder = painterResource(id = R.drawable.baseline_refresh_24)
         )
         Spacer(modifier = Modifier.width(spacing.spaceMedium))
         Column(
