@@ -27,7 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.booking.components.BookingItem
 import com.amalitech.booking.model.Booking
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.BookingAppTab
+import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.components.Tab
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
@@ -36,7 +38,9 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun BookingScreen(
-    viewModel: BookingViewModel = koinViewModel()
+    viewModel: BookingViewModel = koinViewModel(),
+    navigateToProfileScreen: () -> Unit,
+    onComposing: (AppBarState) -> Unit,
 ) {
     val spacing = LocalSpacing.current
     val selectedTab by viewModel.selectedTab
@@ -51,7 +55,21 @@ fun BookingScreen(
     var isLoading by rememberSaveable {
         mutableStateOf(false)
     }
+    val title = stringResource(id = R.string.my_bokings)
 
+    LaunchedEffect(key1 = true) {
+        onComposing(
+            AppBarState(
+                title = title,
+                actions = {
+                    PainterActionButton {
+                        navigateToProfileScreen()
+                    }
+                }
+            )
+        )
+    }
+    
     LaunchedEffect(key1 = uiState) {
         when (uiState) {
             is UiState.Error -> {
@@ -83,7 +101,7 @@ fun BookingScreen(
     Box(
         Modifier
             .fillMaxSize()
-            .padding(spacing.spaceMedium)
+            .padding(horizontal = spacing.spaceMedium)
     ) {
         Column {
             BookingAppTab(
@@ -93,10 +111,9 @@ fun BookingScreen(
                     viewModel.fetchBookings(ended = ended)
                 },
                 selectedTab = selectedTab,
-                modifier = Modifier.height(40.dp),
+                modifier = Modifier.height(48.dp),
                 tabs = viewModel.tabs
             )
-            Spacer(modifier = Modifier.height(spacing.spaceSmall))
             if (bookings?.isEmpty() == true) {
                 Text(
                     text = stringResource(R.string.no_item_found),
@@ -105,11 +122,17 @@ fun BookingScreen(
             } else {
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)) {
                     bookings?.let {
+                        item {
+                            Spacer(modifier = Modifier.height(spacing.spaceMedium))
+                        }
                         items(items = it) { item ->
                             BookingItem(
                                 item = item,
-                                modifier = Modifier.height(150.dp)
+                                modifier = Modifier.height(100.dp)
                             )
+                        }
+                        item {
+                            Spacer(modifier = Modifier.height(spacing.spaceMedium))
                         }
                     }
                 }

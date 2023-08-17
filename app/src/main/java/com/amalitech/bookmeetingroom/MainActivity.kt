@@ -20,7 +20,8 @@ class MainActivity : ComponentActivity() {
             BookMeetingRoomTheme {
                 val shouldShowOnboarding by viewModel.showOnBoarding.collectAsStateWithLifecycle()
                 AppScaffold(
-                    shouldShowOnboarding = shouldShowOnboarding
+                    shouldShowOnboarding = shouldShowOnboarding,
+                    onFinishActivity = { this.finish() }
                 )
             }
         }

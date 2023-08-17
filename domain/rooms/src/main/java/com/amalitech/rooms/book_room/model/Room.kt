@@ -7,5 +7,6 @@ data class Room(
     val description: String,
     val features: List<String>,
     val bookings: List<Booking>,
-    val imgUrl: String
+    val imgUrl: String,
+    val capacity: Int = 0
 )

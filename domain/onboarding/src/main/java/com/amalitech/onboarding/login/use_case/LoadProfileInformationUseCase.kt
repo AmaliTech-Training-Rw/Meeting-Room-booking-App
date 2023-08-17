@@ -10,10 +10,10 @@ class LoadProfileInformationUseCase {
         return Response(
             data = UserProfile(
                 email = email,
-                firstName = "Ngomdé Cadet",
-                lastName = "Kamdaou",
+                firstName = "John",
+                lastName = "Doe",
                 title = "Android dev",
-                profileImgUrl = "https://via.placeholder.com/400.png"
+                profileImgUrl = "https://via.eholder.com/400.png"
             )
         )
     }

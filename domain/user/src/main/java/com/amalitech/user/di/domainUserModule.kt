@@ -3,6 +3,7 @@ package com.amalitech.user.di
 import com.amalitech.user.profile.use_case.GetUserUseCase
 import com.amalitech.user.profile.use_case.ProfileUseCaseWrapper
 import com.amalitech.user.profile.use_case.SaveUserUseCase
+import com.amalitech.user.profile.use_case.UpdateProfileUseCase
 import org.koin.dsl.module
 
 val domainUserModule = module {
@@ -15,6 +16,10 @@ val domainUserModule = module {
     }
 
     single {
-        ProfileUseCaseWrapper(get(), get())
+        UpdateProfileUseCase(get())
+    }
+
+    single {
+        ProfileUseCaseWrapper(get(), get(), get(), get(), get(), get())
     }
 }

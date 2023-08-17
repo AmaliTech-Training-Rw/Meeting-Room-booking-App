@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -21,9 +22,7 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +32,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
@@ -47,14 +48,12 @@ fun BookMeetingRoomDrawer(
     onClick: (screen: NavigationItem) -> Unit,
     content: @Composable () -> Unit
 ) {
-    val selectedItem = remember { mutableStateOf(NavigationItem.Home.title) }
-
     ModalNavigationDrawer(
         drawerState = appState.drawerState,
         gesturesEnabled = true,
         drawerContent = {
             ModalDrawerSheet(
-                drawerContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                drawerContentColor = MaterialTheme.colorScheme.onBackground,
                 content = {
                     DrawerHeader()
                     LazyColumn {
@@ -62,17 +61,19 @@ fun BookMeetingRoomDrawer(
                             DrawerNavigationItem(
                                 appState,
                                 item,
-                                onClick,
-                                selectedItem
+                                onClick
                             )
                         }
                     }
-                }
+                },
+                drawerContainerColor = MaterialTheme.colorScheme.background,
+                modifier = Modifier.width(300.dp)
             )
         },
         content = {
             content()
-        }
+        },
+        scrimColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
     )
 }
 
@@ -80,10 +81,12 @@ fun BookMeetingRoomDrawer(
 fun DrawerNavigationItem(
     appState: BookMeetingRoomAppState,
     item: NavigationItem,
-    onClick: (screen: NavigationItem) -> Unit,
-    selectedItem: MutableState<String>
+    onClick: (screen: NavigationItem) -> Unit
 ) {
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val navBackStackEntry by appState.navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination
+
     NavigationDrawerItem(
         icon = {
             Icon(
@@ -92,10 +95,11 @@ fun DrawerNavigationItem(
             )
         },
         label = { Text(item.title) },
-        selected = selectedItem.value == item.title,
+        selected = currentRoute?.hierarchy?.any {
+            it.route == item.route
+        } == true,
         onClick = {
             coroutineScope.launch { appState.drawerState.close() }
-            selectedItem.value = item.title
             onClick(item)
         },
         colors = NavigationDrawerItemDefaults.colors(
@@ -103,8 +107,8 @@ fun DrawerNavigationItem(
             unselectedContainerColor = Color.Transparent,
             selectedTextColor = MaterialTheme.colorScheme.primary,
             selectedIconColor = MaterialTheme.colorScheme.primary,
-            unselectedTextColor = MaterialTheme.colorScheme.scrim,
-            unselectedIconColor = MaterialTheme.colorScheme.scrim
+            unselectedTextColor = MaterialTheme.colorScheme.onBackground,
+            unselectedIconColor = MaterialTheme.colorScheme.onBackground
         )
     )
 }
@@ -116,7 +120,7 @@ fun DrawerHeader() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val image: Painter = painterResource(id = R.drawable.drawer_user)
+        val image: Painter = painterResource(id = R.drawable.john_doe)
         Image(
             painter = image,
             contentDescription = "",
@@ -125,13 +129,13 @@ fun DrawerHeader() {
                 .clip(CircleShape)
         )
         Spacer(Modifier.height(12.dp))
-        Text("Firstname   Lastname", color = MaterialTheme.colorScheme.scrim)
+        Text("John Doe", color = MaterialTheme.colorScheme.onBackground)
         Spacer(Modifier.height(12.dp))
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(2.dp)
-                .background(MaterialTheme.colorScheme.scrim)
+                .background(MaterialTheme.colorScheme.onBackground)
         )
     }
 }

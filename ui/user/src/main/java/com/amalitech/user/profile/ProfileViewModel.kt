@@ -67,4 +67,8 @@ class ProfileViewModel(
         sharedPref.saveAdminUserScreen(isUsingAdminDashboard)
         _isUsingAdminDashboard.value = isUsingAdminDashboard
     }
+
+    fun logout() {
+        sharedPref.clear()
+    }
 }

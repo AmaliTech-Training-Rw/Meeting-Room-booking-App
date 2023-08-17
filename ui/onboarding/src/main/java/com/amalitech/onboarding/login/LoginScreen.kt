@@ -17,14 +17,11 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -43,10 +40,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core.R
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
-import com.amalitech.onboarding.components.AuthenticationTextField
+import com.amalitech.core_ui.components.AuthenticationTextField
 import com.amalitech.onboarding.util.showSnackBar
 import org.koin.androidx.compose.koinViewModel
 
@@ -56,14 +54,13 @@ fun LoginScreen(
     onNavigateToHome: (isUsingAdminDashboard: Boolean) -> Unit,
     onNavigateToForgotPassword: () -> Unit,
     onNavigateToSignUp: () -> Unit,
-    viewModel: LoginViewModel = koinViewModel()
+    snackBarHostState: SnackbarHostState,
+    viewModel: LoginViewModel = koinViewModel(),
+    onComposing: (AppBarState) -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val spacing = LocalSpacing.current
     val context = LocalContext.current
-    val snackBarHostState = remember {
-        SnackbarHostState()
-    }
     val keyboardController = LocalSoftwareKeyboardController.current
     val onGo = {
         viewModel.onLoginClick()
@@ -92,124 +89,124 @@ fun LoginScreen(
         }
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackBarHostState) }
-    ) { padding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(spacing.spaceMedium)
-                .verticalScroll(rememberScrollState()),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.align(Alignment.Center)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.logo),
-                    contentDescription = stringResource(R.string.logo),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                    modifier = Modifier.size(
-                        spacing.spaceExtraLarge
-                    )
-                )
-                Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
-                Text(
-                    text = stringResource(id = R.string.log_into_account),
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontSize = 24.sp
-                )
-                Spacer(modifier = Modifier.height(spacing.spaceLarge))
-                AuthenticationTextField(
-                    placeholder = stringResource(R.string.email),
-                    value = state.email,
-                    onValueChange = {
-                        viewModel.onNewEmail(it)
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    onGo = {
-                        onGo()
-                    }
-                )
-                Spacer(modifier = Modifier.height(spacing.spaceLarge))
-                AuthenticationTextField(
-                    placeholder = stringResource(R.string.password),
-                    value = state.password,
-                    onValueChange = {
-                        viewModel.onNewPassword(it)
-                    },
-                    isPassword = true,
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Go,
-                        keyboardType = KeyboardType.Password
-                    ),
-                    onGo = {
-                        onGo()
-                    }
-                )
-                Spacer(modifier = Modifier.height(spacing.spaceMedium))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Text(
-                        text = stringResource(R.string.question_forgot_password),
-                        textAlign = TextAlign.Right,
-                        color = MaterialTheme.colorScheme.inverseOnSurface,
-                        modifier = Modifier.clickable {
-                            onNavigateToForgotPassword()
-                        }
-                    )
-                }
-                Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
-                DefaultButton(
-                    text = stringResource(id = R.string.sign_in),
-                    onClick = { onGo() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = spacing.spaceLarge)
-                        .padding(bottom = spacing.spaceLarge),
-                    enabled = baseResult !is UiState.Loading
-                )
-            }
-            val text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.scrim)) {
-                    append(stringResource(id = R.string.question_dont_have_account))
-                    append(" ")
-                }
-                pushStringAnnotation(
-                    tag = "URL",
-                    annotation = stringResource(id = R.string.sign_up)
-                )
-                withStyle(
-                    style = SpanStyle(
-                        color = MaterialTheme.colorScheme.inverseOnSurface,
-                    )
-                ) {
-                    append(stringResource(id = R.string.sign_up))
-                }
-                pop()
-            }
-            ClickableText(
-                text = text,
-                onClick = { offset ->
-                    // check if clicked text has "URL" tag
-                    val url = text.getStringAnnotations("URL", offset, offset).firstOrNull()?.item
-                    if (!url.isNullOrEmpty()) {
-                        onNavigateToSignUp()
-                    }
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(vertical = spacing.spaceLarge)
-            )
 
+    LaunchedEffect(key1 = true) {
+        onComposing(AppBarState(hasTopBar = false))
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(spacing.spaceMedium)
+            .verticalScroll(rememberScrollState()),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.align(Alignment.Center)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = stringResource(R.string.logo),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                modifier = Modifier.size(
+                    spacing.spaceExtraLarge
+                )
+            )
+            Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
+            Text(
+                text = stringResource(id = R.string.log_into_account),
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.titleMedium,
+                fontSize = 24.sp
+            )
+            Spacer(modifier = Modifier.height(spacing.spaceLarge))
+            AuthenticationTextField(
+                placeholder = stringResource(R.string.email),
+                value = state.email,
+                onValueChange = {
+                    viewModel.onNewEmail(it)
+                },
+                modifier = Modifier.fillMaxWidth(),
+                onGo = {
+                    onGo()
+                }
+            )
+            Spacer(modifier = Modifier.height(spacing.spaceLarge))
+            AuthenticationTextField(
+                placeholder = stringResource(R.string.password),
+                value = state.password,
+                onValueChange = {
+                    viewModel.onNewPassword(it)
+                },
+                isPassword = true,
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Go,
+                    keyboardType = KeyboardType.Password
+                ),
+                onGo = {
+                    onGo()
+                }
+            )
+            Spacer(modifier = Modifier.height(spacing.spaceMedium))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Text(
+                    text = stringResource(R.string.question_forgot_password),
+                    textAlign = TextAlign.Right,
+                    color = MaterialTheme.colorScheme.scrim,
+                    modifier = Modifier.clickable {
+                        onNavigateToForgotPassword()
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
+            DefaultButton(
+                text = stringResource(id = R.string.sign_in),
+                onClick = { onGo() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = spacing.spaceLarge)
+                    .padding(bottom = spacing.spaceLarge),
+                enabled = baseResult !is UiState.Loading
+            )
         }
+        val text = buildAnnotatedString {
+            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
+                append(stringResource(id = R.string.question_dont_have_account))
+                append(" ")
+            }
+            pushStringAnnotation(
+                tag = "URL",
+                annotation = stringResource(id = R.string.sign_up)
+            )
+            withStyle(
+                style = SpanStyle(
+                    color = MaterialTheme.colorScheme.scrim,
+                )
+            ) {
+                append(stringResource(id = R.string.sign_up))
+            }
+            pop()
+        }
+        ClickableText(
+            text = text,
+            onClick = { offset ->
+                // check if clicked text has "URL" tag
+                val url = text.getStringAnnotations("URL", offset, offset).firstOrNull()?.item
+                if (!url.isNullOrEmpty()) {
+                    onNavigateToSignUp()
+                }
+            },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(vertical = spacing.spaceLarge)
+        )
+
     }
 }
 
@@ -219,6 +216,8 @@ fun Prev() {
     LoginScreen(
         onNavigateToHome = {},
         onNavigateToForgotPassword = {},
-        onNavigateToSignUp = {}
+        onNavigateToSignUp = {},
+        snackBarHostState = SnackbarHostState(),
+        onComposing = {  }
     )
 }

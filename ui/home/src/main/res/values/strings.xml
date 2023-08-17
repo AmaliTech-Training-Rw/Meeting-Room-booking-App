@@ -5,4 +5,5 @@
     <string name="booking_time">%s - %s</string>
     <string name="rooms">Rooms</string>
     <string name="calendar">Calendar</string>
+    <string name="book">Book</string>
 </resources>

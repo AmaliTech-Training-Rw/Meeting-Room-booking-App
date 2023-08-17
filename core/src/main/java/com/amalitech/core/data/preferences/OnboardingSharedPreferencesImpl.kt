@@ -48,6 +48,10 @@ class OnboardingSharedPreferencesImpl(
         ) ?: ""
     }
 
+    override fun clear() {
+        sharedPreferences.edit().clear().apply()
+    }
+
     override fun saveAdminUserScreen(isUsingAdminDashboard: Boolean) {
         sharedPreferences.edit().putBoolean(
             ADMIN_USER_SCREEN,

@@ -18,8 +18,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.amalitech.core.R
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
@@ -43,10 +46,15 @@ import kotlin.math.roundToInt
 
 @Composable
 fun OnboardingScreen(
+    onComposing: (AppBarState) -> Unit,
     onNavigateToLogin: () -> Unit,
 ) {
     var currentIndex by rememberSaveable {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
+    }
+
+    LaunchedEffect(key1 = true) {
+        onComposing(AppBarState(hasTopBar = false))
     }
 
     when (currentIndex) {
@@ -144,7 +152,7 @@ fun OnBoard(
 ) {
     val spacing = LocalSpacing.current
     var offsetX by remember {
-        mutableStateOf(0f)
+        mutableFloatStateOf(0f)
     }
 
     ConstraintLayout(

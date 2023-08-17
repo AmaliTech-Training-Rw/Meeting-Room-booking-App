@@ -1,5 +1,6 @@
 package com.amalitech.booking.di
 
+import com.amalitech.booking.request.detail.GetBookingRequestDetailUseCase
 import com.amalitech.booking.request.use_case.BookingRequestsUseCaseWrapper
 import com.amalitech.booking.request.use_case.FetchBookingsUseCase
 import com.amalitech.booking.request.use_case.UpdateBookingStatusUseCase
@@ -26,5 +27,8 @@ val domainBookingModule = module {
 
     single {
         BookingRequestsUseCaseWrapper(get(), get())
+    }
+    single {
+        GetBookingRequestDetailUseCase()
     }
 }

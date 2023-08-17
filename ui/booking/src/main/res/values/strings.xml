@@ -3,8 +3,17 @@
     <string name="booking_date">Date: %s</string>
     <string name="booking_start_end_time">Start: %s - End: %s</string>
     <string name="no_item_found">No item found</string>
-    <string name="booked_by">Booked by: %s</string>
+    <string name="booked_by_person_name">Booked by: %s</string>
     <string name="date_and_time">%s %s - %s</string>
     <string name="decline">Decline</string>
     <string name="approve">Approve</string>
+    <string name="booking_request">Booking Requests</string>
+    <string name="my_bokings">My Bookings</string>
+    <string name="booking_detail">Booking Detail</string>
+    <string name="booked_by">Booked by</string>
+    <string name="start_time">Start time</string>
+    <string name="end_time">End time</string>
+    <string name="invited_people">Invited people</string>
+    <string name="note">Note</string>
+    <string name="booking_history">Booking History</string>
 </resources>

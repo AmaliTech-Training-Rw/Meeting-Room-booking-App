@@ -15,7 +15,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,12 +43,14 @@ fun BottomNavBar(
     contentColor: Color = MaterialTheme.colorScheme.onBackground,
     badgeBackgroundColor: Color = MaterialTheme.colorScheme.error,
     badgeTextColor: Color = MaterialTheme.colorScheme.onError,
+    unselectedTextColor: Color = MaterialTheme.colorScheme.onBackground,
+    unselectedIconColor: Color = MaterialTheme.colorScheme.onBackground,
     currentDestination: NavDestination?,
     onClick: (screen: BottomNavItem) -> Unit
 ) {
     val context = LocalContext.current
     val invitations by remember {
-        mutableStateOf(200)
+        mutableIntStateOf(200)
     }
     val spacing = LocalSpacing.current
 
@@ -107,6 +109,8 @@ fun BottomNavBar(
                     selectedIconColor = selectedIconColor,
                     selectedTextColor = selectedTextColor,
                     indicatorColor = indicatorColor,
+                    unselectedTextColor = unselectedTextColor,
+                    unselectedIconColor = unselectedIconColor,
                 )
             )
         }

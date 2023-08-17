@@ -19,14 +19,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -42,7 +46,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
@@ -51,7 +54,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -66,7 +68,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.DefaultButton
+import com.amalitech.core_ui.components.NavigationButton
+import com.amalitech.core_ui.components.PainterActionButton
+import com.amalitech.core_ui.state.BookMeetingRoomAppState
+import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.swipe_animation.SwipeAction
 import com.amalitech.core_ui.swipe_animation.SwipeableCardSideContents
 import com.amalitech.core_ui.swipe_animation.util.SwipeDirection
@@ -74,6 +81,7 @@ import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.Dimensions
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.add_user_divider
+import com.amalitech.core_ui.util.CustomBackHandler
 import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage
 import com.amalitech.ui.user.R
@@ -86,25 +94,57 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserScreen(
-    innerPadding: PaddingValues,
-    setFabOnClick: (() -> Unit) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: UserViewModel = koinViewModel(),
-    addUserViewModel: AddUserViewModel = koinViewModel()
+    addUserViewModel: AddUserViewModel = koinViewModel(),
+    appState: BookMeetingRoomAppState,
+    onOpenDrawer: () -> Unit,
+    navigateToProfileScreen: () -> Unit,
+    navigateUp: () -> Unit,
+    onComposing: (AppBarState) -> Unit
 ) {
     val spacing = LocalSpacing.current
-
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
-    val contextForToast = LocalContext.current.applicationContext
     val addUserState by addUserViewModel.userUiState.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
-
-    // TODO: ask esther is we really need this launched effect here?
-    LaunchedEffect(Unit) {
-        setFabOnClick {
-            showBottomSheet = true
+    val title = stringResource(id = R.string.users)
+    val appBarState = AppBarState(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    showBottomSheet = true
+                },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.clip(CircleShape)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(id = R.string.show_bottom_sheet)
+                )
+            }
+        },
+        title = title,
+        actions = {
+            PainterActionButton {
+                navigateToProfileScreen()
+            }
+        },
+        navigationIcon = {
+            NavigationButton {
+                onOpenDrawer()
+            }
         }
+    )
+
+    CustomBackHandler(
+        appState = appState,
+        onComposing = onComposing,
+        navigateUp = navigateUp
+    )
+    LaunchedEffect(true) {
+        onComposing(appBarState)
     }
 
     if (showBottomSheet) {
@@ -113,7 +153,8 @@ fun UserScreen(
                 showBottomSheet = false
                 SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("works"))
             },
-            sheetState = sheetState
+            sheetState = sheetState,
+            scrimColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
         ) {
             Column(
                 modifier = Modifier
@@ -207,9 +248,9 @@ fun UserScreen(
                 ) {
                     Checkbox(
                         checked = addUserState.isAdmin,
-                        onCheckedChange = { checked_ ->
-                            addUserViewModel.onIsAdminChecked(checked_)
-                            SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("checked_ = $checked_"))
+                        onCheckedChange = { checked ->
+                            addUserViewModel.onIsAdminChecked(checked)
+                            SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("checked_ = $checked"))
                         },
                         modifier = Modifier
                             .padding(spacing.spaceExtraSmall),
@@ -272,7 +313,6 @@ fun UserScreen(
 
     UsersList(
         modifier,
-        innerPadding,
         viewModel,
         spacing
     )
@@ -281,7 +321,6 @@ fun UserScreen(
 @Composable
 fun UsersList(
     modifier: Modifier,
-    innerPadding: PaddingValues,
     viewModel: UserViewModel,
     spacing: Dimensions
 ) {
@@ -297,9 +336,8 @@ fun UsersList(
     }
 
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxHeight()
-            .padding(innerPadding)
     ) {
         items(items = state.users, itemContent = { item ->
             SwipeableCardSideContents(
@@ -393,7 +431,8 @@ fun UserItem(
 
         Column(
             modifier = Modifier
-                .weight(2f)) {
+                .weight(2f)
+        ) {
             Text(
                 text = user.username,
                 modifier = Modifier,
@@ -439,7 +478,6 @@ fun UserItem(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DefaultTextField(
     placeholder: String,
@@ -537,8 +575,11 @@ fun UserItemPreview() {
 fun UserScreenPreview() {
     BookMeetingRoomTheme {
         UserScreen(
-            PaddingValues(16.dp),
-            {})
+            appState = rememberBookMeetingRoomAppState(),
+            onOpenDrawer = {},
+            navigateToProfileScreen = {},
+            navigateUp = {}
+        ) {}
     }
 }
 

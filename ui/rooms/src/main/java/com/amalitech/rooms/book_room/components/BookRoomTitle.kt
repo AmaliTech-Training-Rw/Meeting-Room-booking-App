@@ -6,13 +6,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun BookRoomTitle(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.onBackground,
-    textStyle: TextStyle = MaterialTheme.typography.titleLarge,
+    textStyle: TextStyle = MaterialTheme.typography.titleMedium.copy(
+        fontWeight = FontWeight.ExtraBold
+    ),
 ) {
     Text(
         text = text,

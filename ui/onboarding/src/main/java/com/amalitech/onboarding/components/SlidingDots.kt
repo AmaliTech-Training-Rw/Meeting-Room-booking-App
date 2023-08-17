@@ -40,7 +40,7 @@ fun Dot(
     modifier: Modifier = Modifier,
     selected: Boolean = false,
     selectedColor: Color = MaterialTheme.colorScheme.primary,
-    unSelectedColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    unSelectedColor: Color = MaterialTheme.colorScheme.outline,
     size: Dp = 10.dp
 ) {
     Box(
