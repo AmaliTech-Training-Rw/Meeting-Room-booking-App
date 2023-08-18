@@ -35,7 +35,7 @@ fun AppScaffold(shouldShowOnboarding: Boolean, onFinishActivity: () -> Unit) {
         SnackbarHostState()
     }
     var appBarState by remember {
-        mutableStateOf(AppBarState())
+        mutableStateOf(AppBarState(hasTopBar = false))
     }
 
     Scaffold(
