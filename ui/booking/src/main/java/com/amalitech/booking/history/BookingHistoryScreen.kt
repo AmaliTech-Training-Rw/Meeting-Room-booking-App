@@ -1,6 +1,7 @@
 package com.amalitech.booking.history
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -142,7 +143,8 @@ fun BookingHistoryScreen(
     }
 
     LazyColumn(
-        modifier = Modifier.padding(spacing.spaceMedium),
+        contentPadding = PaddingValues(vertical = spacing.spaceSmall),
+        modifier = Modifier.padding(horizontal = spacing.spaceMedium),
         verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)
     ) {
         items(bookings) { booking ->

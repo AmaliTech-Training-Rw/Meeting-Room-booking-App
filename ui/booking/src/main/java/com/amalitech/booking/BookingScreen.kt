@@ -123,7 +123,7 @@ fun BookingScreen(
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)) {
                     bookings?.let {
                         item {
-                            Spacer(modifier = Modifier.height(spacing.spaceMedium))
+                            Spacer(modifier = Modifier.height(spacing.spaceSmall))
                         }
                         items(items = it) { item ->
                             BookingItem(
@@ -132,7 +132,7 @@ fun BookingScreen(
                             )
                         }
                         item {
-                            Spacer(modifier = Modifier.height(spacing.spaceMedium))
+                            Spacer(modifier = Modifier.height(spacing.spaceSmall))
                         }
                     }
                 }

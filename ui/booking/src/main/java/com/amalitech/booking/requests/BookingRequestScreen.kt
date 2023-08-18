@@ -2,6 +2,7 @@ package com.amalitech.booking.requests
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -79,14 +80,15 @@ fun BookingRequestScreen(
     Box(
         modifier
             .fillMaxSize()
-            .padding(spacing.spaceMedium)
+            .padding(horizontal = spacing.spaceMedium)
     ) {
         if (uiState.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
 
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)
+            verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium),
+            contentPadding = PaddingValues(spacing.spaceSmall)
         ) {
             items(uiState.bookings) { booking ->
                 BookingRequestCard(

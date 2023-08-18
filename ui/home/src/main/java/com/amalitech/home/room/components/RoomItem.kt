@@ -90,7 +90,7 @@ fun RoomItem(
                             id = com.amalitech.core_ui.R.string.up_to_people,
                             room.numberOfPeople
                         ),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp),
                         overflow = TextOverflow.Ellipsis
                     )
                 }
@@ -100,43 +100,44 @@ fun RoomItem(
             val features = buildAnnotatedString {
                 room.roomFeatures.forEachIndexed { index, string ->
                     if (index != 0) {
-                        append(", ")
+                        append(" | ")
                         append(string)
                     } else {
                         append(string)
                     }
                 }
             }
-            Row {
+
+            Text(
+                text = features,
+                style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 2,
+            )
+            Spacer(modifier = Modifier.height(spacing.spaceSmall))
+
+            Box(
+                modifier = Modifier
+                    .height(35.dp)
+                    .clickable {
+                        onBookRoom(room)
+                    }
+                    .shadow(spacing.spaceExtraSmall, RoundedCornerShape(spacing.spaceSmall))
+                    .background(MaterialTheme.colorScheme.primary)
+                    .padding(horizontal = spacing.spaceMedium)
+                    .align(Alignment.End),
+                contentAlignment = Alignment.Center,
+            ) {
                 Text(
-                    text = features,
-                    style = MaterialTheme.typography.bodySmall,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .weight(0.7f),
-                    maxLines = 3,
-                )
-                Spacer(modifier = Modifier.width(spacing.spaceSmall))
-                Box(
-                    modifier = Modifier
-                        .weight(0.3f)
-                        .height(35.dp)
-                        .clickable {
-                            onBookRoom(room)
-                        }
-                        .shadow(spacing.spaceExtraSmall, RoundedCornerShape(spacing.spaceSmall))
-                        .background(MaterialTheme.colorScheme.primary)
-                        .padding(horizontal = spacing.spaceSmall)
-                        .align(Alignment.Bottom),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        stringResource(id = R.string.book),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                    stringResource(id = R.string.book),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.SemiBold
                     )
-                }
+                )
             }
+            Spacer(modifier = Modifier.height(spacing.spaceExtraSmall))
         }
     }
 }
