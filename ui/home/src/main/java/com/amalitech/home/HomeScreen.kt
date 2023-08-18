@@ -175,10 +175,11 @@ fun HomeScreen(
                             roomName = names[it],
                             numberOfPeople = Random.nextInt(2, 20),
                             roomFeatures = listOf(
-                                "Air conditioning",
-                                "Internet",
+                                "AC",
+                                "Wi-Fi",
                                 "Whiteboard",
-                                "Natural light",
+                                "Lighting",
+                                "Speakers",
                                 "Drinks"
                             ),
                             imageUrl = images[it]
