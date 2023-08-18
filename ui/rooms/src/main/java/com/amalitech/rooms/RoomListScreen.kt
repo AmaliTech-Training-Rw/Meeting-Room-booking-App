@@ -137,11 +137,11 @@ fun RoomListScreen(
     Box(
         Modifier
             .fillMaxSize()
-            .padding(spacing.spaceMedium)
+            .padding(horizontal = spacing.spaceMedium)
     ) {
         when (uiState) {
             is UiState.Success -> LazyColumn(
-                contentPadding = PaddingValues(vertical = spacing.spaceMedium),
+                contentPadding = PaddingValues(vertical = spacing.spaceSmall),
                 verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)
             ) {
                 rooms?.let { rooms ->
