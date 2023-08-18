@@ -152,6 +152,5 @@ dependencies {
     androidTestImplementation(Testing.mockkAndroid)
     androidTestImplementation(Testing.mockWebServer)
     androidTestImplementation(Testing.testRunner)
-
-    //     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation(Testing.dexmaker)
 }
