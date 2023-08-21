@@ -107,7 +107,6 @@ fun RoomListScreen(
                     FloatingActionButton(
                         onClick = {
                             onNavigateToAddRoom()
-                            onComposing(AppBarState())
                         },
                         containerColor = MaterialTheme.colorScheme.primary,
                         contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -151,7 +150,6 @@ fun RoomListScreen(
                             modifier = Modifier.height(150.dp),
                             onLeftContentClick = {
                                 onNavigateToAddRoom()
-                                onComposing(AppBarState())
                             },
                             onRightContentClick = {
                                 openDialog = true
