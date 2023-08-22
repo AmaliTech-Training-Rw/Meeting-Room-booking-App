@@ -1,6 +1,5 @@
 package com.amalitech.rooms.book_room
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,19 +20,26 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -47,7 +53,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -58,40 +63,38 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import coil.compose.AsyncImage
+import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.FeatureItem
+import com.amalitech.core_ui.components.NavigationButton
+import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.NoRippleTheme
-import com.amalitech.core_ui.util.UiState
 import com.amalitech.core_ui.util.formatTime
+import com.amalitech.core_ui.util.longToLocalDate
 import com.amalitech.rooms.book_room.components.AttendeeItem
 import com.amalitech.rooms.book_room.components.BookRoomTitle
-import com.amalitech.rooms.book_room.components.FeatureItem
 import com.amalitech.rooms.book_room.components.SelectDateBox
 import com.amalitech.rooms.book_room.components.TimeSelector
 import com.amalitech.rooms.book_room.util.NavArguments
 import com.amalitech.rooms.book_room.util.formatDate
 import com.amalitech.ui.rooms.R
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.datetime.date.datepicker
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
 
 @Composable
 fun BookRoomScreen(
+    snackbarHostState: SnackbarHostState? = null,
+    appState: BookMeetingRoomAppState? = null,
     viewModel: BookRoomViewModel = koinViewModel(),
     navBackStackEntry: NavBackStackEntry,
+    navigateBack: () -> Unit,
+    onComposing: (AppBarState) -> Unit,
     onNavigate: () -> Unit
 ) {
-    val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val arguments = navBackStackEntry.arguments
     val roomId = arguments?.getString(NavArguments.roomId)
-    val snackbarHostState = remember {
-        SnackbarHostState()
-    }
     val context = LocalContext.current
-    var roomUi: RoomUiState? by remember {
-        mutableStateOf(null)
-    }
     val spacing = LocalSpacing.current
     val userInput by viewModel.userInput
     val slotSelectionManager by viewModel.slotManager
@@ -99,58 +102,70 @@ fun BookRoomScreen(
     val canShowStartTimes = slotSelectionManager.canShowStartTimes
     val availableStartTime = slotSelectionManager.availableStartTimes
     val availableEndTime = slotSelectionManager.availableEndTimes
+    var appBarState by remember{
+        mutableStateOf(AppBarState())
+    }
 
     LaunchedEffect(key1 = true) {
         viewModel.getRoom(roomId ?: "")
+        appBarState = appBarState.copy(
+            title = uiState.bookRoomUi.name,
+            navigationIcon = {
+                NavigationButton(
+                    contentDescription = stringResource(id = com.amalitech.core_ui.R.string.navigate_back),
+                    imageVector = Icons.Filled.ArrowBack,
+                ) {
+                    navigateBack()
+                }
+            }
+        )
+        onComposing(appBarState)
     }
 
     LaunchedEffect(key1 = uiState) {
-        Log.d("uiState", "uiState = $uiState, room: $roomUi")
-        when (uiState) {
-            is UiState.Success -> {
-                roomUi = (uiState as UiState.Success<RoomUiState>).data
-                if (roomUi?.canNavigate == true)
-                    onNavigate()
+        if (appBarState.title != uiState.bookRoomUi.name) {
+            appBarState = appBarState.copy(title = uiState.bookRoomUi.name)
+            onComposing(appBarState)
+        }
+        if (uiState.bookRoomUi.canNavigate) {
+            onNavigate()
+        }
+        if (uiState.error != null) {
+            uiState.error?.let {
+                snackbarHostState?.showSnackbar(
+                    it.asString(context)
+                )
+                appState?.snackbarHostState?.showSnackbar(it.asString(context))
+                viewModel.onClearError()
             }
-
-            is UiState.Error -> {
-                (uiState as UiState.Error<RoomUiState>).error?.let {
-                    snackbarHostState.showSnackbar(
-                        it.asString(context)
-                    )
-                    viewModel.onSnackBarShown()
-                }
-            }
-
-            else -> {}
         }
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(spacing.spaceMedium)
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            roomUi?.let { room ->
-                if (!canShowEndTimes && !canShowStartTimes) {
-                    Column(Modifier.verticalScroll(rememberScrollState())) {
-                        AsyncImage(
-                            model = room.imgUrl,
-                            contentDescription = room.description,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(spacing.spaceExtraSmall)),
-                            error = painterResource(id = R.drawable.baseline_broken_image_24),
-                            placeholder = painterResource(id = R.drawable.baseline_refresh_24),
-                            contentScale = ContentScale.Crop
+    ) {
+        uiState.bookRoomUi.let { room ->
+            if (!canShowEndTimes && !canShowStartTimes) {
+                Column(Modifier.verticalScroll(rememberScrollState())) {
+                    AsyncImage(
+                        model = room.imgUrl,
+                        contentDescription = room.description,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(spacing.spaceSmall)),
+                        error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
+                        placeholder = painterResource(id = R.drawable.baseline_refresh_24),
+                        contentScale = ContentScale.FillWidth
+                    )
+                    Column(modifier = Modifier.padding(spacing.spaceMedium)) {
+                        Text(
+                            text = stringResource(
+                                id = R.string.meeting_room_for_x_people,
+                                room.capacity
+                            )
                         )
-                        Text(text = room.description)
+                        Spacer(Modifier.height(spacing.spaceMedium))
                         SlotSelectionSection(
                             viewModel = viewModel,
                             userInput = userInput,
@@ -176,47 +191,52 @@ fun BookRoomScreen(
                         )
                         Spacer(Modifier.height(spacing.spaceMedium))
                         CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-                            Button(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clip(RectangleShape)
-                                    .background(MaterialTheme.colorScheme.primary),
-                                onClick = { viewModel.onBook(roomId ?: "") }
-                            ) {
-                                Text(
-                                    text = stringResource(id = R.string.book),
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
+                            Box(Modifier
+                                .fillMaxWidth()) {
+                                Button(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = spacing.spaceExtraLarge)
+                                        .clip(RoundedCornerShape(spacing.spaceSmall))
+                                        .background(MaterialTheme.colorScheme.primary)
+                                        .align(Alignment.Center),
+                                    onClick = { viewModel.onBook(roomId ?: "") },
+                                ) {
+                                    Text(
+                                        text = stringResource(id = R.string.book),
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                    )
+                                }
                             }
                         }
                     }
                 }
-                if (canShowStartTimes) {
-                    TimeSelector(
-                        availableTimes = availableStartTime,
-                        onDismiss = { viewModel.onStopShowingStartTime() },
-                        selectedTime = userInput.startTime,
-                        onTimeSelected = { viewModel.onStartTimeSelected(it) },
-                        selectedDate = userInput.date
-                    )
-                }
-                if (canShowEndTimes) {
-                    TimeSelector(
-                        availableTimes = availableEndTime,
-                        onDismiss = { viewModel.onStopShowingEndTime() },
-                        selectedTime = userInput.endTime,
-                        onTimeSelected = { viewModel.onEndTimeSelected(it) },
-                        selectedDate = userInput.date
-                    )
-
-                }
             }
-            if (uiState is UiState.Loading)
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            if (canShowStartTimes) {
+                TimeSelector(
+                    availableTimes = availableStartTime,
+                    onDismiss = { viewModel.onStopShowingStartTime() },
+                    selectedTime = userInput.startTime,
+                    onTimeSelected = { viewModel.onStartTimeSelected(it) },
+                    selectedDate = userInput.date
+                )
+            }
+            if (canShowEndTimes) {
+                TimeSelector(
+                    availableTimes = availableEndTime,
+                    onDismiss = { viewModel.onStopShowingEndTime() },
+                    selectedTime = userInput.endTime,
+                    onTimeSelected = { viewModel.onEndTimeSelected(it) },
+                    selectedDate = userInput.date
+                )
+            }
         }
+        if (uiState.isLoading)
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SlotSelectionSection(
     viewModel: BookRoomViewModel,
@@ -225,25 +245,54 @@ fun SlotSelectionSection(
     onSelectEndTimeClick: (isSelecting: Boolean) -> Unit,
 ) {
     val spacing = LocalSpacing.current
-    val dateDialogState = rememberMaterialDialogState()
 
-    MaterialDialog(
-        dialogState = dateDialogState,
-        buttons = {
-            positiveButton(text = stringResource(id = R.string.ok))
-            negativeButton(text = stringResource(id = R.string.cancel))
+    val openDialog = remember { mutableStateOf(false) }
+    val state = rememberDatePickerState(
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                val localDate = longToLocalDate(utcTimeMillis)
+                return viewModel.isDateAvailable(localDate) && (LocalDate.now()
+                    .isBefore(localDate) || localDate.isEqual(LocalDate.now()))
+            }
         }
-    ) {
-        datepicker(
-            title = stringResource(id = R.string.pick_date),
-            allowedDateValidator = { date ->
-                viewModel.isDateAvailable(
-                    date,
-                ) && LocalDate.now() <= date
+    )
+
+    if (openDialog.value) {
+        DatePickerDialog(
+            onDismissRequest = { openDialog.value = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    openDialog.value = false
+                    state.selectedDateMillis?.let { timestamp ->
+                        val selectedDate = longToLocalDate(timestamp)
+                        viewModel.onSelectedDate(selectedDate)
+                    }
+                }) {
+                    Text(text = stringResource(R.string.ok))
+                }
             },
-            initialDate = userInput.date ?: LocalDate.now()
-        ) { date ->
-            viewModel.onSelectedDate(date)
+            colors = DatePickerDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.background,
+                titleContentColor = MaterialTheme.colorScheme.onBackground,
+                headlineContentColor = MaterialTheme.colorScheme.onBackground,
+                selectedDayContainerColor = MaterialTheme.colorScheme.background,
+                selectedYearContainerColor = MaterialTheme.colorScheme.background,
+            )
+        ) {
+            DatePicker(
+                state = state,
+                colors = DatePickerDefaults.colors(
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    headlineContentColor = MaterialTheme.colorScheme.onBackground,
+                    selectedDayContainerColor = MaterialTheme.colorScheme.primary,
+                    selectedYearContainerColor = MaterialTheme.colorScheme.primary,
+                    navigationContentColor = MaterialTheme.colorScheme.onBackground,
+                    selectedYearContentColor = MaterialTheme.colorScheme.onPrimary,
+                    selectedDayContentColor = MaterialTheme.colorScheme.onPrimary,
+                    yearContentColor = MaterialTheme.colorScheme.onBackground,
+                    containerColor = MaterialTheme.colorScheme.background,
+                )
+            )
         }
     }
     Column(
@@ -253,9 +302,11 @@ fun SlotSelectionSection(
         val startTime = if (userInput.startTime != null) formatTime(userInput.startTime) else ""
         val endTime = if (userInput.endTime != null) formatTime(userInput.endTime) else ""
         BookRoomTitle(text = stringResource(id = R.string.select_date_and_time))
+        Spacer(Modifier.height(spacing.spaceLarge))
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.padding(horizontal = spacing.spaceLarge)
         ) {
             Text(
                 text = stringResource(R.string.start),
@@ -263,7 +314,7 @@ fun SlotSelectionSection(
             )
             Spacer(Modifier.width(spacing.spaceSmall))
             SelectDateBox(
-                onClick = { dateDialogState.show() },
+                onClick = { openDialog.value = true },
                 text = date,
                 modifier = Modifier
                     .height(30.dp)
@@ -281,7 +332,8 @@ fun SlotSelectionSection(
         Spacer(Modifier.height(spacing.spaceMedium))
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.padding(horizontal = spacing.spaceLarge)
         ) {
             Text(
                 text = stringResource(R.string.end),
@@ -289,7 +341,7 @@ fun SlotSelectionSection(
             )
             Spacer(Modifier.width(spacing.spaceSmall))
             SelectDateBox(
-                onClick = { dateDialogState.show() },
+                onClick = { openDialog.value = true },
                 text = date,
                 modifier = Modifier
                     .height(30.dp)
@@ -305,13 +357,14 @@ fun SlotSelectionSection(
             )
         }
     }
+    Spacer(Modifier.height(spacing.spaceLarge))
 }
 
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FeatureSection(
-    roomUiState: RoomUiState
+    roomUiState: BookRoomUi
 ) {
     val spacing = LocalSpacing.current
     Column {
@@ -325,6 +378,7 @@ fun FeatureSection(
                 Spacer(Modifier.padding(spacing.spaceSmall))
             }
         }
+        Spacer(Modifier.height(spacing.spaceLarge))
     }
 }
 

@@ -2,6 +2,7 @@ package com.amalitech.onboarding.signup.use_case
 
 
 import com.amalitech.core.R
+import com.amalitech.core.domain.use_case.CheckValuesNotBlankUseCase
 import com.amalitech.core.util.UiText
 import org.junit.Before
 import org.junit.Assert.*

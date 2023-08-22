@@ -40,10 +40,6 @@ class UserViewModel (
         }
     }
 
-    fun onDelete(userId: String) {
-
-    }
-
     fun onAddUser() {
 
     }

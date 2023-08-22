@@ -1,11 +1,13 @@
 package com.amalitech.user.profile
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -14,7 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +24,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,19 +36,31 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.DefaultButton
+import com.amalitech.core_ui.components.NavigationButton
+import com.amalitech.core_ui.components.PainterActionButton
+import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.theme.LocalSpacing
+import com.amalitech.core_ui.util.CustomBackHandler
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.ui.user.R
 import com.amalitech.user.profile.components.ProfileDescriptionItem
 import com.amalitech.user.profile.model.dto.UserDto
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ProfileScreen(
+    appState: BookMeetingRoomAppState? = null,
     viewModel: ProfileViewModel = koinViewModel(),
-    onUpdateProfileClick: () -> Unit,
-    onToggleButtonClick: (goToAdmin: Boolean) -> Unit
+    showSnackBar: (message: String) -> Unit,
+    onNavigateToLogin: () -> Unit,
+    navigateToProfileScreen: () -> Unit,
+    onNavigateBack: () -> Unit,
+    onComposing: (AppBarState) -> Unit,
+    onUpdateProfileClick: (email: String) -> Unit,
+    onToggleButtonClick: (goToAdmin: Boolean) -> Unit,
 ) {
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     var user: UserDto? by remember {
@@ -55,13 +70,37 @@ fun ProfileScreen(
         mutableStateOf(true)
     }
     val context = LocalContext.current
-    val snackBarHostState = remember {
-        SnackbarHostState()
-    }
     val spacing = LocalSpacing.current
     val isAdmin: Boolean by viewModel.isAdmin
     val isUsingAdminDashboard: Boolean by viewModel.isUsingAdminDashboard
+    val title = stringResource(id = R.string.my_profile)
 
+    CustomBackHandler(appState = appState, onComposing = onComposing) {
+        onNavigateBack()
+    }
+
+    LaunchedEffect(key1 = true) {
+        onComposing(
+            AppBarState(
+                title = title,
+                actions = {
+                    PainterActionButton {
+                        navigateToProfileScreen()
+                    }
+                },
+                navigationIcon = {
+                    if (isUsingAdminDashboard) {
+                        val scope = rememberCoroutineScope()
+                        NavigationButton {
+                            scope.launch {
+                                appState?.drawerState?.open()
+                            }
+                        }
+                    }
+                }
+            )
+        )
+    }
     LaunchedEffect(key1 = uiState) {
         when (uiState) {
             is UiState.Success -> {
@@ -75,9 +114,8 @@ fun ProfileScreen(
 
             is UiState.Error -> {
                 (uiState as UiState.Error<ProfileUiState>).error?.let {
-                    snackBarHostState.showSnackbar(
-                        it.asString(context)
-                    )
+                    showSnackBar(it.asString(context))
+                    viewModel.onSnackBarShown()
                 }
                 isLoading = false
             }
@@ -96,13 +134,13 @@ fun ProfileScreen(
             Column {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.width(spacing.spaceExtraLarge * 4)
+                    modifier = Modifier.fillMaxWidth(0.8f)
                 ) {
                     AsyncImage(
                         model = user!!.profileImgUrl,
                         contentDescription = stringResource(id = R.string.profile_image),
                         placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
-                        error = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_broken_image_24),
+                        error = painterResource(id = com.amalitech.core_ui.R.drawable.john_doe),
                         modifier = Modifier
                             .width(150.dp)
                             .aspectRatio(1f)
@@ -150,13 +188,34 @@ fun ProfileScreen(
                     }
                 }
                 Spacer(Modifier.height(spacing.spaceExtraLarge))
-                DefaultButton(
-                    text = stringResource(id = R.string.update_profile),
-                    onClick = onUpdateProfileClick,
-                    modifier = Modifier
-                        .width(spacing.spaceExtraLarge * 4)
-                        .clip(RoundedCornerShape(spacing.spaceMedium))
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(0.8f),
+                    horizontalArrangement = Arrangement.spacedBy(spacing.spaceMedium),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    DefaultButton(
+                        text = stringResource(id = R.string.update_profile),
+                        onClick = { onUpdateProfileClick(user!!.email) },
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(spacing.spaceMedium))
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .padding(spacing.spaceExtraSmall)
+                    )
+                    DefaultButton(
+                        text = stringResource(id = R.string.logout),
+                        onClick = {
+                            viewModel.logout()
+                            onNavigateToLogin()
+                        },
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(spacing.spaceMedium))
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .padding(spacing.spaceExtraSmall),
+                        backgroundColor = MaterialTheme.colorScheme.error
+                    )
+                }
             }
         }
         if (isLoading) {

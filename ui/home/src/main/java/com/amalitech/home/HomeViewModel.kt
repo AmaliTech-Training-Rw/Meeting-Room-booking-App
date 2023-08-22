@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core.domain.model.Booking
+import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.components.Tab
@@ -19,10 +20,14 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class HomeViewModel(
-    private val homeUseCase: HomeUseCase
+    private val homeUseCase: HomeUseCase,
+    sharedPref: OnboardingSharedPreferences
 ) : BaseViewModel<CalendarUiState>() {
     private val _uiState = mutableStateOf(HomeUiState())
-    val uiState: State<HomeUiState> get () = _uiState
+    val uiState: State<HomeUiState> get() = _uiState
+    private val _isUsingAdminDashboard =
+        mutableStateOf(if (sharedPref.isUserAdmin()) sharedPref.loadAdminUserScreen() else false)
+    val isUsingAdminDashboard: State<Boolean> get() = _isUsingAdminDashboard
 
     init {
         refreshBookings()

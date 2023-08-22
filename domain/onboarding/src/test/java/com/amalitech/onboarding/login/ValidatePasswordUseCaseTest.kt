@@ -2,7 +2,7 @@ package com.amalitech.onboarding.login
 
 import com.amalitech.core.R
 import com.amalitech.core.util.UiText
-import com.amalitech.onboarding.login.use_case.ValidatePasswordUseCase
+import com.amalitech.core.domain.ValidatePasswordUseCase
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test

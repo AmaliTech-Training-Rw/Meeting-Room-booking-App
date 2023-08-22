@@ -1,5 +1,6 @@
 package com.amalitech.onboarding.login.use_case
 
+import com.amalitech.core.domain.ValidatePasswordUseCase
 import com.amalitech.core.domain.use_case.ValidateEmailUseCase
 
 data class LoginUseCasesWrapper(

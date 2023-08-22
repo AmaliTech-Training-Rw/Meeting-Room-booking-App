@@ -13,15 +13,12 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,11 +40,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import com.amalitech.core.R
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.BookMeetingRoomDropDown
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
-import com.amalitech.onboarding.components.AuthenticationTextField
+import com.amalitech.core_ui.components.AuthenticationTextField
 import com.amalitech.onboarding.util.showSnackBar
 import org.koin.androidx.compose.koinViewModel
 
@@ -56,8 +54,10 @@ import org.koin.androidx.compose.koinViewModel
 fun SignupScreen(
     onNavigateToLogin: () -> Unit,
     modifier: Modifier = Modifier,
+    navBackStackEntry: NavBackStackEntry,
+    snackbarHostState: SnackbarHostState,
     viewModel: SignupViewModel = koinViewModel(),
-    navBackStackEntry: NavBackStackEntry
+    onComposing: (AppBarState) -> Unit
 ) {
     val arguments = navBackStackEntry.arguments
     val userInput by viewModel.userInput
@@ -68,9 +68,6 @@ fun SignupScreen(
     val invitedUser = viewModel.isInvitedUser(email, organizationName, location, typeOfOrganization)
     val spacing = LocalSpacing.current
     val context = LocalContext.current
-    val hostState = remember {
-        SnackbarHostState()
-    }
     var isDropDownExpanded by rememberSaveable {
         mutableStateOf(false)
     }
@@ -101,7 +98,7 @@ fun SignupScreen(
             is UiState.Error -> {
                 showSnackBar(
                     snackBarValue = (uiState as UiState.Error<SignupUiState>).error,
-                    snackbarHostState = hostState,
+                    snackbarHostState = snackbarHostState,
                     context = context
                 ) {
                     viewModel.onSnackBarShown()
@@ -111,178 +108,176 @@ fun SignupScreen(
             else -> {}
         }
     }
+    LaunchedEffect(key1 = true) {
+        onComposing(AppBarState(hasTopBar = false))
+    }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(hostState) }
-    ) { padding ->
-        Column(
-            modifier = modifier
-                .padding(padding)
-                .padding(
-                    vertical = spacing.spaceMedium,
-                    horizontal = spacing.spaceLarge
-                )
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = stringResource(R.string.logo),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                modifier = Modifier.size(
-                    spacing.spaceExtraLarge
-                )
+    Column(
+        modifier = modifier
+            .padding(
+                vertical = spacing.spaceMedium,
+                horizontal = spacing.spaceLarge
             )
-            Spacer(modifier = Modifier.height(spacing.spaceLarge))
-            val header = if (!invitedUser) {
-                stringResource(id = R.string.create_your_account)
-            } else {
-                stringResource(id = R.string.get_started)
-            }
-            Text(
-                text = header,
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.titleMedium,
-                fontSize = 24.sp
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = stringResource(R.string.logo),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+            modifier = Modifier.size(
+                spacing.spaceExtraLarge
             )
-            Spacer(modifier = Modifier.height(spacing.spaceLarge))
+        )
+        Spacer(modifier = Modifier.height(spacing.spaceLarge))
+        val header = if (!invitedUser) {
+            stringResource(id = R.string.create_your_account)
+        } else {
+            stringResource(id = R.string.get_started)
+        }
+        Text(
+            text = header,
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.titleMedium,
+            fontSize = 24.sp
+        )
+        Spacer(modifier = Modifier.height(spacing.spaceLarge))
+        AuthenticationTextField(
+            onGo = { onGo() },
+            placeholder = stringResource(id = R.string.username),
+            value = userInput.username,
+            onValueChange = {
+                viewModel.onNewUsername(it)
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+        if (!invitedUser) {
+            Spacer(modifier = Modifier.height(spacing.spaceSmall))
             AuthenticationTextField(
                 onGo = { onGo() },
-                placeholder = stringResource(id = R.string.username),
-                value = userInput.username,
+                placeholder = stringResource(id = R.string.organization_name),
+                value = userInput.organizationName,
                 onValueChange = {
-                    viewModel.onNewUsername(it)
+                    viewModel.onNewOrganizationName(it)
                 },
                 modifier = Modifier.fillMaxWidth()
             )
-            if (!invitedUser) {
-                Spacer(modifier = Modifier.height(spacing.spaceSmall))
-                AuthenticationTextField(
-                    onGo = { onGo() },
-                    placeholder = stringResource(id = R.string.organization_name),
-                    value = userInput.organizationName,
-                    onValueChange = {
-                        viewModel.onNewOrganizationName(it)
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(spacing.spaceSmall))
-                AuthenticationTextField(
-                    onGo = { onGo() },
-                    placeholder = stringResource(id = R.string.email),
-                    value = userInput.email,
-                    onValueChange = {
-                        viewModel.onNewEmail(it)
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next,
-                        keyboardType = KeyboardType.Email
-                    )
-                )
-                Spacer(modifier = Modifier.height(spacing.spaceSmall))
-                BookMeetingRoomDropDown(
-                    isDropDownExpanded = isDropDownExpanded,
-                    items = organizationType,
-                    onSelectedItemChange = {
-                        viewModel.onSelectedOrganizationType(it)
-                    },
-                    onIsExpandedStateChange = { isDropDownExpanded = it },
-                    selectedItem = selectedItem,
-                    focusManager = focusManager,
-                    R.string.type_of_organization,
-                ) { isDropDownExpanded = it }
-                Spacer(Modifier.height(spacing.spaceSmall))
-                AuthenticationTextField(
-                    onGo = { onGo() },
-                    placeholder = stringResource(id = R.string.location),
-                    value = userInput.location,
-                    onValueChange = {
-                        viewModel.onNewLocation(it)
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            } else {
-                if (organizationName != null && typeOfOrganization != null && location != null && email != null) {
-                    viewModel.submitValues(
-                        organizationName,
-                        typeOfOrganization,
-                        location,
-                        email
-                    )
-                }
-            }
             Spacer(modifier = Modifier.height(spacing.spaceSmall))
             AuthenticationTextField(
                 onGo = { onGo() },
-                placeholder = stringResource(id = R.string.password),
-                value = userInput.password,
+                placeholder = stringResource(id = R.string.email),
+                value = userInput.email,
                 onValueChange = {
-                    viewModel.onNewPassword(it)
+                    viewModel.onNewEmail(it)
                 },
                 modifier = Modifier.fillMaxWidth(),
-                isPassword = true
-            )
-            Spacer(modifier = Modifier.height(spacing.spaceSmall))
-            AuthenticationTextField(
-                onGo = { onGo() },
-                placeholder = stringResource(id = R.string.confirm_password),
-                value = userInput.passwordConfirmation,
-                onValueChange = {
-                    viewModel.onNewPasswordConfirmation(it)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                isPassword = true,
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Go,
-                    keyboardType = KeyboardType.Password
+                    imeAction = ImeAction.Next,
+                    keyboardType = KeyboardType.Email
                 )
             )
-            Spacer(modifier = Modifier.height(spacing.spaceMedium))
-            val buttonText = if (!invitedUser) {
-                stringResource(id = R.string.sign_up)
-            } else {
-                stringResource(id = R.string.set_up)
-            }
-            DefaultButton(
-                text = buttonText,
-                onClick = { onGo() },
+            Spacer(modifier = Modifier.height(spacing.spaceSmall))
+            BookMeetingRoomDropDown(
+                isDropDownExpanded = isDropDownExpanded,
+                items = organizationType,
+                onSelectedItemChange = {
+                    viewModel.onSelectedOrganizationType(it)
+                },
+                onIsExpandedStateChange = { isDropDownExpanded = it },
+                selectedItem = selectedItem,
+                focusManager = focusManager,
+                R.string.type_of_organization,
+            ) { isDropDownExpanded = it }
+            Spacer(Modifier.height(spacing.spaceSmall))
+            AuthenticationTextField(
+                onGo = { onGo() },
+                placeholder = stringResource(id = R.string.location),
+                value = userInput.location,
+                onValueChange = {
+                    viewModel.onNewLocation(it)
+                },
                 modifier = Modifier.fillMaxWidth(),
-                isLoading = uiState is UiState.Loading
             )
-            if (!invitedUser) {
-                Spacer(modifier = Modifier.height(spacing.spaceSmall))
-                val text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.scrim)) {
-                        append(stringResource(id = R.string.question_already_have_an_account))
-                        append(" ")
-                    }
-                    pushStringAnnotation(
-                        tag = "URL",
-                        annotation = stringResource(id = R.string.log_in)
-                    )
-                    withStyle(
-                        style = SpanStyle(
-                            color = MaterialTheme.colorScheme.inverseOnSurface,
-                        )
-                    ) {
-                        append(stringResource(id = R.string.log_in))
-                    }
-                    pop()
-                }
-                ClickableText(
-                    text = text,
-                    onClick = { offset ->
-                        val url =
-                            text.getStringAnnotations("URL", offset, offset).firstOrNull()?.item
-                        if (!url.isNullOrEmpty()) {
-                            onNavigateToLogin()
-                        }
-                    },
-                    modifier = Modifier
+        } else {
+            if (organizationName != null && typeOfOrganization != null && location != null && email != null) {
+                viewModel.submitValues(
+                    organizationName,
+                    typeOfOrganization,
+                    location,
+                    email
                 )
             }
+        }
+        Spacer(modifier = Modifier.height(spacing.spaceSmall))
+        AuthenticationTextField(
+            onGo = { onGo() },
+            placeholder = stringResource(id = R.string.password),
+            value = userInput.password,
+            onValueChange = {
+                viewModel.onNewPassword(it)
+            },
+            modifier = Modifier.fillMaxWidth(),
+            isPassword = true
+        )
+        Spacer(modifier = Modifier.height(spacing.spaceSmall))
+        AuthenticationTextField(
+            onGo = { onGo() },
+            placeholder = stringResource(id = R.string.confirm_password),
+            value = userInput.passwordConfirmation,
+            onValueChange = {
+                viewModel.onNewPasswordConfirmation(it)
+            },
+            modifier = Modifier.fillMaxWidth(),
+            isPassword = true,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Go,
+                keyboardType = KeyboardType.Password
+            )
+        )
+        Spacer(modifier = Modifier.height(spacing.spaceMedium))
+        val buttonText = if (!invitedUser) {
+            stringResource(id = R.string.sign_up)
+        } else {
+            stringResource(id = R.string.set_up)
+        }
+        DefaultButton(
+            text = buttonText,
+            onClick = { onGo() },
+            modifier = Modifier.fillMaxWidth(),
+            isLoading = uiState is UiState.Loading
+        )
+        if (!invitedUser) {
+            Spacer(modifier = Modifier.height(spacing.spaceSmall))
+            val text = buildAnnotatedString {
+                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
+                    append(stringResource(id = R.string.question_already_have_an_account))
+                    append(" ")
+                }
+                pushStringAnnotation(
+                    tag = "URL",
+                    annotation = stringResource(id = R.string.log_in)
+                )
+                withStyle(
+                    style = SpanStyle(
+                        color = MaterialTheme.colorScheme.scrim,
+                    )
+                ) {
+                    append(stringResource(id = R.string.log_in))
+                }
+                pop()
+            }
+            ClickableText(
+                text = text,
+                onClick = { offset ->
+                    val url =
+                        text.getStringAnnotations("URL", offset, offset).firstOrNull()?.item
+                    if (!url.isNullOrEmpty()) {
+                        onNavigateToLogin()
+                    }
+                },
+                modifier = Modifier
+            )
         }
     }
 }

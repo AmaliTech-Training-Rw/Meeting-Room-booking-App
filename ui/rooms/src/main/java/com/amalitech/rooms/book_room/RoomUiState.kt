@@ -1,12 +1,9 @@
 package com.amalitech.rooms.book_room
 
-import com.amalitech.core.domain.model.Booking
+import com.amalitech.core.util.UiText
 
 data class RoomUiState(
-    val name: String = "",
-    val description: String = "",
-    val features: List<String> = emptyList(),
-    val bookings: List<Booking> = emptyList(),
-    val canNavigate: Boolean = false,
-    val imgUrl: String = ""
+    val bookRoomUi: BookRoomUi = BookRoomUi(),
+    val error: UiText? = null,
+    val isLoading: Boolean = false
 )

@@ -8,16 +8,15 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
@@ -48,8 +47,9 @@ fun RoomDescription(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxHeight()
-                .aspectRatio(1f)
-                .clip(RoundedCornerShape(spacing.spaceMedium))
+                .aspectRatio(1f),
+            error = painterResource(id = com.amalitech.core_ui.R.drawable.room_small),
+            placeholder = painterResource(id = R.drawable.baseline_refresh_24)
         )
         Spacer(modifier = Modifier.width(spacing.spaceMedium))
         Column(
@@ -75,7 +75,7 @@ fun RoomDescription(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = stringResource(id = R.string.up_to_people, room.numberOfPeople),
+                        text = stringResource(id = com.amalitech.core_ui.R.string.up_to_people, room.numberOfPeople),
                         style = MaterialTheme.typography.bodyMedium,
                         overflow = TextOverflow.Ellipsis
                     )

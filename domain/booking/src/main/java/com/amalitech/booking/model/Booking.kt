@@ -10,5 +10,7 @@ data class Booking(
     val startTime: LocalTime,
     val endTime: LocalTime,
     val imgUrl: String,
-    val bookedBy: String = ""
+    val bookedBy: String = "",
+    val attendees: List<String> = listOf(),
+    val note: String = ""
 )

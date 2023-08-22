@@ -10,13 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.amalitech.admin.R
@@ -37,26 +36,25 @@ fun DashboardBarGraph(
     backgroundColor: Int = MaterialTheme.colorScheme.background.toArgb(),
     barColor: Int = MaterialTheme.colorScheme.primary.toArgb(),
     selectedColor: Int = MaterialTheme.colorScheme.secondary.toArgb(),
+    descriptionColor: Int = MaterialTheme.colorScheme.onBackground.toArgb(),
     maxNumberOnScreen: Float = MAX_NUMBER_OF_BAR_ON_THE_SCREEN,
     axisPosition: AxisPosition = AxisPosition.Bottom,
     animateXDuration: Int = 3000,
     animateYDuration: Int = 3000,
     setDrawValue: Boolean = true,
-    titleTextStyle: TextStyle = MaterialTheme.typography.titleMedium
+    titleTextStyle: TextStyle = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
 ) {
     val spacing = LocalSpacing.current
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(2.dp)
-            .shadow(2.dp)
+            .padding(1.dp)
+            .shadow(1.dp)
             .padding(spacing.spaceMedium)
     ) {
         Text(
             stringResource(id = com.amalitech.core_ui.R.string.rooms_against_booked_time),
             style = titleTextStyle,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.align(CenterHorizontally),
         )
         Spacer(Modifier.height(spacing.spaceMedium))
         AndroidView(
@@ -66,18 +64,23 @@ fun DashboardBarGraph(
                 val data = generateBarData(
                     barColor = barColor,
                     items = items.toMutableList(),
-                    selectedColor = selectedColor
+                    selectedColor = selectedColor,
+                    contentColor = descriptionColor
                 )
 
                 chart.data = data
                 chart.setBackgroundColor(backgroundColor)
                 chart.animateXY(animateXDuration, animateYDuration)
+                chart.setDescriptionColor(descriptionColor)
                 chart.setVisibleXRangeMaximum(maxNumberOnScreen)
                 chart.xAxis.position = when (axisPosition) {
                     AxisPosition.Bottom -> XAxis.XAxisPosition.BOTTOM
                     AxisPosition.Top -> XAxis.XAxisPosition.TOP
                 }
                 chart.xAxis.setLabelsToSkip(0)
+                chart.xAxis.textColor = descriptionColor
+                chart.axisLeft.textColor = descriptionColor
+                chart.axisRight.textColor = descriptionColor
                 chart.setDrawValueAboveBar(setDrawValue)
                 chart.invalidate()
 
@@ -90,7 +93,8 @@ fun DashboardBarGraph(
 fun generateBarData(
     barColor: Int,
     items: MutableList<RoomsBookedTime>,
-    selectedColor: Int
+    selectedColor: Int,
+    contentColor: Int
 ): BarData {
     val xValues = ArrayList<String>()
     val barEntries = ArrayList<BarEntry>()
@@ -102,7 +106,9 @@ fun generateBarData(
 
     val barDataSet = BarDataSet(barEntries, "")
     barDataSet.color = barColor
+    barDataSet.valueTextColor = contentColor
     barDataSet.highLightColor = selectedColor
+    barDataSet.barShadowColor = contentColor
 
     return BarData(xValues, barDataSet)
 }

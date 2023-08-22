@@ -5,9 +5,12 @@ import android.content.SharedPreferences
 import com.amalitech.core.data.BookMeetingRepositoryImpl
 import com.amalitech.core.data.preferences.OnboardingSharedPreferencesImpl
 import com.amalitech.core.domain.BookMeetingRepository
+import com.amalitech.core.domain.ValidatePasswordUseCase
 import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
-import org.koin.android.ext.koin.androidContext
+import com.amalitech.core.domain.use_case.CheckPasswordsMatchUseCase
+import com.amalitech.core.domain.use_case.CheckValuesNotBlankUseCase
 import com.amalitech.core.domain.use_case.ValidateEmailUseCase
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val coreModule = module {
@@ -28,5 +31,17 @@ val coreModule = module {
 
     single {
         ValidateEmailUseCase()
+    }
+
+    single {
+        CheckPasswordsMatchUseCase()
+    }
+
+    single {
+        CheckValuesNotBlankUseCase()
+    }
+
+    single {
+        ValidatePasswordUseCase()
     }
 }

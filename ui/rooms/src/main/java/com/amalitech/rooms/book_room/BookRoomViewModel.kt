@@ -6,10 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.amalitech.core.domain.model.Booking
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.BaseViewModel
-import com.amalitech.core_ui.util.UiState
 import com.amalitech.rooms.book_room.use_case.BookRoomUseCasesWrapper
 import com.amalitech.rooms.book_room.util.toBookRoomUi
 import com.amalitech.ui.rooms.R
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -21,6 +23,8 @@ class BookRoomViewModel(
 ) : BaseViewModel<RoomUiState>() {
     private val _userInput = mutableStateOf(BookRoomUserInput())
     val userInput: State<BookRoomUserInput> get() = _userInput
+    private val _uiState = MutableStateFlow(RoomUiState())
+    val uiState: StateFlow<RoomUiState> get() = _uiState.asStateFlow()
 
     private val globalStartTime = LocalTime.of(9, 0)
     private val globalEndTime = LocalTime.of(18, 0)
@@ -30,25 +34,25 @@ class BookRoomViewModel(
     val slotManager: State<SlotSelectionManager> get() = _slotManager
 
     fun onShowStartTimesRequest() {
-        val room = (_uiStateFlow.value as UiState.Success).data
-        room?.let {
-            val date = _userInput.value.date
-            if (date == null) {
-                _uiStateFlow.update {
-                    UiState.Error(UiText.StringResource(R.string.error_select_date))
-                }
-            } else {
-                getAvailableStartTimes(date)
-                _slotManager.value = _slotManager.value.copy(
-                    canShowStartTimes = true
+        val date = _userInput.value.date
+        if (date == null) {
+            _uiState.update {
+                it.copy(
+                    error = UiText.StringResource(R.string.error_select_date),
+                    isLoading = false
                 )
             }
+        } else {
+            getAvailableStartTimes(date)
+            _slotManager.value = _slotManager.value.copy(
+                canShowStartTimes = true
+            )
         }
     }
 
     fun isDateAvailable(date: LocalDate): Boolean {
-        val room = (_uiStateFlow.value as UiState.Success).data
-        room?.let {
+        val room = _uiState.value.bookRoomUi
+        room.let {
             val bookingForDate = room.bookings.filter { it.date == date }
             val length = bookingForDate.size - 1
             if (bookingForDate.isEmpty())
@@ -78,47 +82,52 @@ class BookRoomViewModel(
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
-            _uiStateFlow.update {
-                UiState.Loading()
+            _uiState.update {
+                it.copy(isLoading = true)
             }
             val result = bookRoomUseCasesWrapper.getRoomUseCase(id)
 
             if (result.data != null) {
-                _uiStateFlow.update {
-                    UiState.Success(result.data!!.toBookRoomUi())
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        bookRoomUi = result.data!!.toBookRoomUi(),
+                        error = null
+                    )
                 }
             } else if (result.error != null) {
-                _uiStateFlow.update {
-                    UiState.Error(result.error)
+                _uiState.update {
+                    it.copy(error = result.error, isLoading = false)
                 }
             } else {
-                _uiStateFlow.update {
-                    UiState.Error(UiText.StringResource(com.amalitech.core_ui.R.string.generic_error))
+                _uiState.update {
+                    it.copy(
+                        error = UiText.StringResource(com.amalitech.core_ui.R.string.generic_error),
+                        isLoading = false
+                    )
                 }
             }
         }
     }
 
     private fun getAvailableStartTimes(date: LocalDate) {
-        val room = (_uiStateFlow.value as UiState.Success).data
-        room?.let {
-            val allTimes = generateAllTimes()
-            val extract = room.bookings.filter { bookingUi -> bookingUi.date == date }
-            val bookedTimes = extract.flatMap { booking ->
-                val startIdx = allTimes.indexOf(booking.startTime)
-                val endIdx = allTimes.indexOf(booking.endTime)
-                allTimes.subList(startIdx, endIdx)
-            }
-            val timeUis = allTimes.map { localTime ->
-                if (bookedTimes.any { bookedTime ->
-                        bookedTime == localTime
-                    } || localTime == globalEndTime) TimeUi(localTime, false)
-                else TimeUi(localTime, true)
-            }
-            _slotManager.value = _slotManager.value.copy(
-                availableStartTimes = timeUis
-            )
+        val room = _uiState.value.bookRoomUi
+        val allTimes = generateAllTimes()
+        val extract = room.bookings.filter { bookingUi -> bookingUi.date == date }
+        val bookedTimes = extract.flatMap { booking ->
+            val startIdx = allTimes.indexOf(booking.startTime)
+            val endIdx = allTimes.indexOf(booking.endTime)
+            allTimes.subList(startIdx, endIdx)
         }
+        val timeUis = allTimes.map { localTime ->
+            if (bookedTimes.any { bookedTime ->
+                    bookedTime == localTime
+                } || localTime == globalEndTime) TimeUi(localTime, false)
+            else TimeUi(localTime, true)
+        }
+        _slotManager.value = _slotManager.value.copy(
+            availableStartTimes = timeUis
+        )
     }
 
     private fun generateAllTimes(): List<LocalTime> {
@@ -141,46 +150,44 @@ class BookRoomViewModel(
     }
 
     fun onShowEndTimeRequest() {
-        val room = (_uiStateFlow.value as UiState.Success).data
-        room?.let {
-            val startTime = _userInput.value.startTime
-            val date = _userInput.value.date
-            if (startTime != null && date != null) {
-                getAvailableEndTimes(startTime, date)
-                _slotManager.value = _slotManager.value.copy(
-                    canShowEndTimes = true
+        val startTime = _userInput.value.startTime
+        val date = _userInput.value.date
+        if (startTime != null && date != null) {
+            getAvailableEndTimes(startTime, date)
+            _slotManager.value = _slotManager.value.copy(
+                canShowEndTimes = true
+            )
+        } else {
+            _uiState.update {
+                it.copy(
+                    error = UiText.StringResource(R.string.error_select_start_time),
+                    isLoading = false
                 )
-            } else {
-                _uiStateFlow.update {
-                    UiState.Error(UiText.StringResource(R.string.error_select_start_time))
-                }
             }
         }
     }
 
     private fun getAvailableEndTimes(meetingStartTime: LocalTime, date: LocalDate) {
-        val room = (_uiStateFlow.value as UiState.Success).data
-        room?.let {
-            val availableEndTimes: MutableList<LocalTime> = mutableListOf()
-            val firstNextMeeting = room.bookings.filter { bookingUi -> bookingUi.date == date }
-                .sortedBy { it.startTime.toSecondOfDay() }
-                .firstOrNull { meetingStartTime.isBefore(it.startTime) }?.startTime
-            var startTime = meetingStartTime
+        val room = _uiState.value.bookRoomUi
+        val availableEndTimes: MutableList<LocalTime> = mutableListOf()
+        val firstNextMeeting = room.bookings.filter { bookingUi -> bookingUi.date == date }
+            .sortedBy { it.startTime.toSecondOfDay() }
+            .firstOrNull { meetingStartTime.isBefore(it.startTime) }?.startTime
+        var startTime = meetingStartTime
 
-            while (startTime.isBefore(firstNextMeeting ?: globalEndTime)) {
-                startTime = startTime.plusMinutes(globalInterval.toMinutes())
-                availableEndTimes.add(startTime)
-            }
-            val timeUis = generateAllTimes().map { localTime ->
-                if (availableEndTimes.any { availableEndTime ->
-                        availableEndTime == localTime
-                    }) TimeUi(localTime, true)
-                else TimeUi(localTime, false)
-            }
-            _slotManager.value = _slotManager.value.copy(
-                availableEndTimes = timeUis
-            )
+        while (startTime.isBefore(firstNextMeeting ?: globalEndTime)) {
+            startTime = startTime.plusMinutes(globalInterval.toMinutes())
+            availableEndTimes.add(startTime)
         }
+        val timeUis = generateAllTimes().map { localTime ->
+            if (availableEndTimes.any { availableEndTime ->
+                    availableEndTime == localTime
+                }) TimeUi(localTime, true)
+            else TimeUi(localTime, false)
+        }
+        _slotManager.value = _slotManager.value.copy(
+            availableEndTimes = timeUis
+        )
     }
 
     fun onStopShowingEndTime() {
@@ -234,19 +241,19 @@ class BookRoomViewModel(
             return
         viewModelScope.launch {
             var error: UiText?
-            _uiStateFlow.update {
-                UiState.Loading()
+            _uiState.update {
+                it.copy(isLoading = true)
             }
             for (attendee in _userInput.value.attendees) {
                 error = bookRoomUseCasesWrapper.validateEmailUseCase(attendee)
                 if (error != null) {
-                    _uiStateFlow.update {
-                        UiState.Error(error)
+                    _uiState.update {
+                        it.copy(error = error, isLoading = false)
                     }
                     break
                 }
             }
-            if (_uiStateFlow.value !is UiState.Error) {
+            if (_uiState.value.error == null) {
                 val isStartTimeValid = _userInput.value.startTime != null
                 val isEndTimeValid = _userInput.value.endTime != null
                 val isDateValid = _userInput.value.date != null
@@ -298,12 +305,13 @@ class BookRoomViewModel(
                 )
                 val result = bookRoomUseCasesWrapper.bookRoomUseCase(booking)
                 if (result != null) {
-                    _uiStateFlow.update {
-                        UiState.Error(result)
+                    _uiState.update {
+                        it.copy(error = result, isLoading = false)
                     }
                 } else {
-                    _uiStateFlow.update {
-                        UiState.Success(RoomUiState(canNavigate = true))
+                    _userInput.value = BookRoomUserInput()
+                    _uiState.update {
+                        it.copy(bookRoomUi = BookRoomUi(canNavigate = true), isLoading = false)
                     }
                 }
             }
@@ -315,8 +323,8 @@ class BookRoomViewModel(
      * @param error The error to be added
      */
     internal fun updateStateWithError(error: UiText?) {
-        _uiStateFlow.update {
-            UiState.Error(error)
+        _uiState.update {
+            it.copy(error = error, isLoading = false)
         }
     }
 
@@ -337,5 +345,11 @@ class BookRoomViewModel(
         _userInput.value = _userInput.value.copy(
             endTime = endTime
         )
+    }
+
+    fun onClearError() {
+        _uiState.update {
+            it.copy(error = null)
+        }
     }
 }

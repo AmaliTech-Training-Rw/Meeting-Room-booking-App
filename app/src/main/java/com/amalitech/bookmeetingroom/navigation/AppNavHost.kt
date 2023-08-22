@@ -1,19 +1,17 @@
 package com.amalitech.bookmeetingroom.navigation
 
 import android.content.Intent
-import androidx.compose.material3.Text
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,6 +20,8 @@ import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.amalitech.booking.BookingScreen
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
+import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.components.drawer.BookMeetingRoomDrawer
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.home.HomeScreen
@@ -37,28 +37,40 @@ import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
 import com.amalitech.rooms.book_room.BookRoomScreen
 import com.amalitech.user.profile.ProfileScreen
+import com.amalitech.user.profile.update_profile.UpdateProfileScreen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
     shouldShowOnboarding: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
+    onComposing: (AppBarState) -> Unit,
+    onFinishActivity: () -> Unit
 ) {
+    val scope = rememberCoroutineScope()
     NavHost(
         navController = navController,
         startDestination = Route.ONBOARDING_SCREENS,
         modifier = modifier
     ) {
-        onboardingGraph(navController, shouldShowOnboarding)
-        mainNavGraph(navController)
-        dashboardNavGraph(navController)
+        onboardingGraph(navController, shouldShowOnboarding, snackbarHostState, onComposing)
+        mainNavGraph(navController, snackbarHostState, onComposing, onFinishActivity, scope)
+        dashboardNavGraph(
+            navController,
+            onFinishActivity
+        )
     }
 }
 
 fun NavGraphBuilder.onboardingGraph(
     navController: NavHostController,
-    shouldShowOnboarding: Boolean
+    shouldShowOnboarding: Boolean,
+    snackbarHostState: SnackbarHostState,
+    onComposing: (AppBarState) -> Unit
 ) {
     navigation(
         startDestination =
@@ -68,7 +80,7 @@ fun NavGraphBuilder.onboardingGraph(
         route = Route.ONBOARDING_SCREENS
     ) {
         composable(Route.ONBOARDING) {
-            OnboardingScreen {
+            OnboardingScreen(onComposing = onComposing) {
                 navController.navigate(Route.LOGIN)
             }
         }
@@ -76,8 +88,9 @@ fun NavGraphBuilder.onboardingGraph(
         composable(Route.LOGIN) {
             val viewModel: LoginViewModel = it.sharedViewModel(navController = navController)
             LoginScreen(
-                onNavigateToHome = { goToAdmin ->
-                    if (goToAdmin) {
+                onComposing = onComposing,
+                onNavigateToHome = { isAdmin ->
+                    if (isAdmin) {
                         navController.navigate(Route.DASHBOARD_SCREENS) {
                             popUpTo(Route.ONBOARDING_SCREENS) {
                                 inclusive = true
@@ -91,9 +104,20 @@ fun NavGraphBuilder.onboardingGraph(
                         }
                     }
                 },
-                onNavigateToForgotPassword = { navController.navigate(Route.FORGOT_PASSWORD) },
-                onNavigateToSignUp = { navController.navigate(Route.SIGNUP) },
-                viewModel = viewModel
+                onNavigateToForgotPassword = {
+                    navController.navigate(Route.FORGOT_PASSWORD) {
+                        launchSingleTop = true
+                        popUpTo(Route.LOGIN)
+                    }
+                },
+                onNavigateToSignUp = {
+                    navController.navigate(Route.SIGNUP) {
+                        launchSingleTop = true
+                        popUpTo(Route.LOGIN)
+                    }
+                },
+                viewModel = viewModel,
+                snackBarHostState = snackbarHostState
             )
         }
 
@@ -101,9 +125,21 @@ fun NavGraphBuilder.onboardingGraph(
             val viewModel: ForgotPasswordViewModel =
                 it.sharedViewModel(navController = navController)
             ForgotPasswordScreen(
-                onNavigateToLogin = { navController.navigate(Route.LOGIN) },
-                onNavigateToReset = { navController.navigate(Route.RESET_PASSWORD) },
-                viewModel = viewModel
+                onComposing = onComposing,
+                onNavigateToLogin = {
+                    navController.navigate(Route.LOGIN) {
+                        launchSingleTop = true
+                        popUpTo(Route.LOGIN)
+                    }
+                },
+                onNavigateToReset = {
+                    navController.navigate(Route.RESET_PASSWORD) {
+                        launchSingleTop = true
+                        popUpTo(Route.LOGIN)
+                    }
+                },
+                viewModel = viewModel,
+                snackbarHostState = snackbarHostState
             )
         }
 
@@ -136,109 +172,200 @@ fun NavGraphBuilder.onboardingGraph(
             )
         ) { entry ->
             SignupScreen(
-                onNavigateToLogin = { navController.navigate(Route.LOGIN) },
-                navBackStackEntry = entry
+                onComposing = onComposing,
+                onNavigateToLogin = {
+                    navController.navigate(Route.LOGIN) {
+                        launchSingleTop = true
+                        popUpTo(Route.LOGIN)
+                    }
+                },
+                navBackStackEntry = entry,
+                snackbarHostState = snackbarHostState
             )
         }
 
         composable(Route.SPLASH) {
-            SplashScreen(onNavigate = { isUserAdmin ->
-                if (isUserAdmin) {
-                    navController.navigate(Route.DASHBOARD_SCREENS) {
-                        popUpTo(Route.SPLASH) {
-                            inclusive = true
+            SplashScreen(
+                onComposing = onComposing,
+                onNavigate = { isUserAdmin ->
+                    if (isUserAdmin) {
+                        navController.navigate(Route.DASHBOARD_SCREENS) {
+                            popUpTo(Route.SPLASH) {
+                                inclusive = true
+                            }
+                        }
+                    } else {
+                        navController.navigate(Route.HOME_SCREENS) {
+                            popUpTo(Route.SPLASH) {
+                                inclusive = true
+                            }
                         }
                     }
-                } else {
-                    navController.navigate(Route.HOME_SCREENS) {
-                        popUpTo(Route.SPLASH) {
-                            inclusive = true
-                        }
-                    }
-                }
-            })
+                })
         }
 
         composable(Route.RESET_PASSWORD) {
             val viewModel: ResetPasswordViewModel =
                 it.sharedViewModel(navController = navController)
             ResetPasswordScreen(
+                onComposing = onComposing,
+                snackbarHostState = snackbarHostState,
                 viewModel = viewModel,
-                onNavigateToLogin = { navController.navigate(Route.LOGIN) })
+                onNavigateToLogin = {
+                    navController.navigate(Route.LOGIN) {
+                        launchSingleTop = true
+                        popUpTo(Route.LOGIN)
+                    }
+                })
         }
     }
 }
 
-fun NavGraphBuilder.mainNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.mainNavGraph(
+    navController: NavHostController,
+    snackbarHostState: SnackbarHostState,
+    onComposing: (AppBarState) -> Unit,
+    onFinishActivity: () -> Unit,
+    scope: CoroutineScope
+) {
     navigation(
         startDestination = BottomNavItem.Home.route,
         route = Route.HOME_SCREENS
     ) {
         composable(BottomNavItem.Home.route) {
-            HomeScreen()
+            HomeScreen(
+                onComposing = onComposing,
+                navigateToProfileScreen = {
+                    navigateToProfileScreen(navController)
+                },
+                navigateToBookRoomScreen = {
+                    navController.navigate("${Route.BOOK_ROOM_SCREEN}/$it")
+                },
+                navigateUp = onFinishActivity
+            )
+        }
+
+        composable(
+            route = "${Route.BOOK_ROOM_SCREEN}/{roomId}",
+            arguments = listOf(navArgument("roomId") {
+                type = NavType.StringType
+            })
+        ) {
+            BookRoomScreen(
+                snackbarHostState = snackbarHostState,
+                navBackStackEntry = it,
+                onComposing = onComposing,
+                navigateBack = {
+                    navController.navigateUp()
+                    onComposing(AppBarState(hasTopBar = false))
+                }
+            ) {
+                navController.navigate(BottomNavItem.Home.route)
+            }
         }
         composable(BottomNavItem.Profile.route) {
             ProfileScreen(
-                onUpdateProfileClick = {
-                    /*TODO("Navigate to Update profile screen")*/
+                onUpdateProfileClick = { email ->
+                    navController.navigate("${Route.UPDATE_PROFILE}/$email")
                 },
-                onToggleButtonClick = { goToAdmin ->
-                    if (goToAdmin)
-                        navController.navigate(Route.DASHBOARD_SCREENS) {
-                            popUpTo(Route.HOME_SCREENS) {
-                                inclusive = true
-                            }
+                onComposing = onComposing,
+                onNavigateBack = {
+                    navController.navigate(BottomNavItem.Home.route) {
+                        popUpTo(BottomNavItem.Home.route) {
+                            inclusive = true
                         }
-                    else
-                        navController.navigate(Route.HOME_SCREENS) {
-                            popUpTo(Route.DASHBOARD_SCREENS) {
-                                inclusive = true
-                            }
-                        }
+                        launchSingleTop = true
+                    }
+                },
+                navigateToProfileScreen = {},
+                onNavigateToLogin = {
+                    navController.navigateToLogin()
+                },
+                showSnackBar = {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(it)
+                    }
                 }
-            )
-        }
-        composable(BottomNavItem.Invitations.route) {
-            BookRoomScreen(navBackStackEntry = it) {
-                
+            ) { goToAdmin ->
+                if (goToAdmin) {
+                    navController.navigate(Route.DASHBOARD_SCREENS) {
+                        popUpTo(Route.HOME_SCREENS) {
+                            inclusive = true
+                        }
+                    }
+                    onComposing(AppBarState(hasTopBar = false))
+                } else
+                    navController.navigate(Route.HOME_SCREENS) {
+                        popUpTo(Route.DASHBOARD_SCREENS) {
+                            inclusive = true
+                        }
+                    }
             }
         }
+        composable(BottomNavItem.Invitations.route) {
+            onComposing(
+                AppBarState(
+                    title = "Invitations",
+                    actions = {
+                        PainterActionButton {
+                            navigateToProfileScreen(navController)
+                        }
+                    }
+                )
+            )
+        }
         composable(BottomNavItem.Bookings.route) {
-            BookingScreen()
+            BookingScreen(
+                navigateToProfileScreen = { navigateToProfileScreen(navController) },
+                onComposing = onComposing
+            )
+        }
+        composable(
+            "${Route.UPDATE_PROFILE}/{email}",
+            arguments = listOf(navArgument("email") {
+                type = NavType.StringType
+            })
+        ) { backStackEntry ->
+            val email = backStackEntry.arguments?.getString("email") ?: ""
+            UpdateProfileScreen(
+                onComposing = onComposing,
+                email = email,
+                showSnackBar = {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(it)
+                    }
+                },
+                onNavigateBack = { navController.navigateUp() }
+            )
         }
     }
 }
 
-fun NavGraphBuilder.dashboardNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.dashboardNavGraph(
+    navController: NavHostController,
+    onFinishActivity: () -> Unit
+) {
     navigation(
         startDestination = Route.ADMIN_DASHBOARD,
         route = Route.DASHBOARD_SCREENS
     ) {
         composable(Route.ADMIN_DASHBOARD) {
             val appState = rememberBookMeetingRoomAppState()
-            var query by rememberSaveable {
-                mutableStateOf("")
-            }
-            var isSearchTextFieldVisible by rememberSaveable {
-                mutableStateOf(false)
-            }
             BookMeetingRoomDrawer(
                 appState = appState,
-                onClick = { appState.navController.navigate(it.route) },
-                content = {
-                    BookMeetingRoomApp(
-                        appState = appState,
-                        searchQuery = query,
-                        onSearchQueryChange = { query = it },
-                        onSearchClick = {},
-                        isSearchTextFieldVisible = isSearchTextFieldVisible,
-                        onSearchTextFieldVisibilityChange = { isVisible ->
-                            isSearchTextFieldVisible = isVisible
-                        },
-                        mainNavController = navController
-                    )
+                onClick = {
+                    if (appState.navController.currentDestination?.route != it.route)
+                        appState.navController.navigate(it.route) {
+                            popToDashboard()
+                        }
                 }
-            )
+            ) {
+                BookMeetingRoomApp(
+                    appState = appState,
+                    mainNavController = navController,
+                    onFinishActivity = onFinishActivity
+                )
+            }
         }
     }
 }
@@ -250,4 +377,32 @@ inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(navControll
         navController.getBackStackEntry(navGraphRoute)
     }
     return koinViewModel(viewModelStoreOwner = parentEntry)
+}
+
+private fun navigateToProfileScreen(navController: NavHostController) {
+    navController.navigate(BottomNavItem.Profile.route) {
+        popToHome()
+    }
+}
+
+private fun NavOptionsBuilder.popToHome() {
+    popUpTo(BottomNavItem.Profile.route) {
+        inclusive = true
+    }
+    launchSingleTop
+}
+
+fun NavHostController.navigateToLogin() {
+    navigate(Route.ONBOARDING_SCREENS) {
+        popUpTo(Route.ONBOARDING_SCREENS) {
+            inclusive = true
+        }
+        launchSingleTop = true
+    }
+    navigate(Route.LOGIN) {
+        popUpTo(Route.DASHBOARD_SCREENS) {
+            inclusive = true
+        }
+        launchSingleTop = true
+    }
 }

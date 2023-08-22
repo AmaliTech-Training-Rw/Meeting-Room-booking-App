@@ -8,7 +8,7 @@ interface OnboardingSharedPreferences {
 
     fun saveLoggedInUserEmail(email: String)
     fun loadLoggedInUserEmail(): String
-
+    fun clear()
     fun saveAdminUserScreen(isUsingAdminDashboard: Boolean)
     fun loadAdminUserScreen(): Boolean
 }
