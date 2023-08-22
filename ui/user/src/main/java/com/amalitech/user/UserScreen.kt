@@ -151,7 +151,9 @@ fun UserScreen(
         ModalBottomSheet(
             onDismissRequest = {
                 showBottomSheet = false
-                SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("works"))
+                scope.launch {
+                    SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("works"))
+                }
             },
             sheetState = sheetState,
             scrimColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
@@ -250,7 +252,10 @@ fun UserScreen(
                         checked = addUserState.isAdmin,
                         onCheckedChange = { checked ->
                             addUserViewModel.onIsAdminChecked(checked)
-                            SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("checked_ = $checked"))
+                            scope.launch {
+                                appState.snackbarHostState.showSnackbar("checked_ = $checked")
+                            }
+//                            SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("checked_ = $checked"))
                         },
                         modifier = Modifier
                             .padding(spacing.spaceExtraSmall),
