@@ -139,7 +139,7 @@ fun InvitesItem(
                 color = MaterialTheme.colorScheme.onBackground,
                 overflow = TextOverflow.Ellipsis
             )
-            Spacer(modifier = Modifier.height(spacing.spaceMedium))
+            Spacer(modifier = Modifier.height(spacing.spaceExtraSmall))
             Text(
                 // TODO format date and add it
                 text = stringResource(
