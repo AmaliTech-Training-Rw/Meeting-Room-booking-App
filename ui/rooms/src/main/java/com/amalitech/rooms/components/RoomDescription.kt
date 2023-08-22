@@ -98,7 +98,7 @@ fun RoomDescription(
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .weight(0.6f)
-                    .padding(start = spacing.spaceExtraSmall)
+                    .padding(start = spacing.spaceSmall)
             )
         }
     }
