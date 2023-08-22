@@ -1,7 +1,11 @@
 package com.amalitech.user.adduser
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
 import com.amalitech.ui.user.R
@@ -23,6 +27,8 @@ class AddUserViewModel(
         UserUiState()
     )
     val userUiState = _userUiState.asStateFlow()
+    private val _snackBarMessage: MutableState<UiText?> = mutableStateOf(null)
+    val snackbarMessage: State<UiText?> = _snackBarMessage
 
     fun onFirstName(name: String) {
         _userUiState.update { firstName ->
@@ -51,7 +57,7 @@ class AddUserViewModel(
     fun onLocationName(location: String) {
         _userUiState.update { loc ->
             loc.copy(
-                email = location
+                selectLocation = location
             )
         }
     }
@@ -67,22 +73,22 @@ class AddUserViewModel(
     fun invite() {
        when {
            _userUiState.value.firstName.isBlank() -> {
-               SnackbarManager.showMessage(R.string.first_name_empty)
+               _snackBarMessage.value = UiText.StringResource(R.string.first_name_empty)
                return
            }
 
            _userUiState.value.lastName.isBlank() -> {
-               SnackbarManager.showMessage(R.string.last_name_empty)
+               _snackBarMessage.value = UiText.StringResource(R.string.last_name_empty)
                return
            }
 
            _userUiState.value.email.isBlank() -> {
-               SnackbarManager.showMessage(R.string.email_empty)
+               _snackBarMessage.value = UiText.StringResource(R.string.email_empty)
                return
            }
 
            _userUiState.value.selectLocation.isBlank() -> {
-               SnackbarManager.showMessage(R.string.location_selection_empty)
+               _snackBarMessage.value = UiText.StringResource(R.string.location_selection_empty)
                return
            }
        }
@@ -98,6 +104,7 @@ class AddUserViewModel(
                 )
             )
         }
+        _snackBarMessage.value = UiText.DynamicString("User invited successfully")
     }
 
     // TODO: ideally, this method should come from a share vm
@@ -126,5 +133,9 @@ class AddUserViewModel(
             location,
             isAdmin
         )
+    }
+
+    fun clearSnackBar() {
+        _snackBarMessage.value = null
     }
 }

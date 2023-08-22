@@ -154,6 +154,15 @@ fun UserScreen(
             viewModel.clearMessage()
         }
     }
+    val snackbarMessage by addUserViewModel.snackbarMessage
+
+    LaunchedEffect(key1 = snackbarMessage) {
+        snackbarMessage?.let {
+            appState.snackbarHostState.showSnackbar(it.asString(context))
+            addUserViewModel.clearSnackBar()
+        }
+
+    }
 
     if (showBottomSheet) {
         ModalBottomSheet(
@@ -312,6 +321,7 @@ fun UserScreen(
                         textColor = MaterialTheme.colorScheme.onPrimary,
                         onClick = {
                             addUserViewModel.invite()
+                            showBottomSheet = false
                         }
                     )
                 }
