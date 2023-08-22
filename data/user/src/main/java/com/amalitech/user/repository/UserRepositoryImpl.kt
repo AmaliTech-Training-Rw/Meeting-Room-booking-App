@@ -1,11 +1,8 @@
 package com.amalitech.user.repository
 
 import com.amalitech.user.data_source.local.UserDao
-<<<<<<< HEAD
 import com.amalitech.user.models.User
-=======
 import com.amalitech.user.profile.model.Profile
->>>>>>> develop
 import com.amalitech.user.profile.model.dto.UserDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -25,7 +22,6 @@ class UserRepositoryImpl(
         dao.insertUser(user)
     }
 
-<<<<<<< HEAD
     override suspend fun getUsers(): Flow<User> = flowOf(
         User(
             "1",
@@ -66,10 +62,9 @@ class UserRepositoryImpl(
 
     override suspend fun addUser(user: User) {
         // TODO: connect to the data source
-=======
-    override suspend fun updateProfile(profile: Profile) {
-        // TODO("Save in the API and use the profile"
-        //  "url to save into the local DB, use transactions")
->>>>>>> develop
     }
+//    override suspend fun updateProfile(profile: Profile) {
+//        // TODO("Save in the API and use the profile"
+//        //  "url to save into the local DB, use transactions")
+//    }
 }
