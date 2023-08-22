@@ -41,7 +41,7 @@ class AddRoomViewModel(
     fun onRoomImages(images: List<@JvmSuppressWildcards Uri>) {
         _uiState.update { addRoomUiState ->
             addRoomUiState.copy(
-                imagesList = images
+                imagesList = (addRoomUiState.imagesList + images).toMutableList()
             )
         }
     }
@@ -51,6 +51,14 @@ class AddRoomViewModel(
         _uiState.update { addRoomUiState ->
             addRoomUiState.copy(
                 name = roomName.trim()
+            )
+        }
+    }
+
+    fun onNewRoomCapacity(value: Int) {
+        _uiState.update { addRoomUiState ->
+            addRoomUiState.copy(
+                capacity = value
             )
         }
     }

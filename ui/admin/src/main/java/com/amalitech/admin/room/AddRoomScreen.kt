@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -276,7 +278,8 @@ fun AddRoomScreen(
                     RoomCounter(
                         state.capacity,
                         viewModel::onRemoveRoomCapacity,
-                        viewModel::onAddRoomCapacity
+                        viewModel::onAddRoomCapacity,
+                        viewModel::onNewRoomCapacity
                     )
                 }
 
@@ -334,63 +337,131 @@ fun AddRoomScreen(
 fun RoomCounter(
     value: Int = 1,
     removeRoom: () -> Unit,
-    addRoom: () -> Unit
+    addRoom: () -> Unit,
+    onNewValue: (Int) -> Unit
 ) {
     val spacing = LocalSpacing.current
-    Box(
-        Modifier
-            .border(
-                BorderStroke(
-                    1.dp,
-                    MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f)
+//    Box(
+//        Modifier
+//            .border(
+//                BorderStroke(
+//                    1.dp,
+//                    MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f)
+//                ),
+//                shape = RoundedCornerShape(5.dp)
+//            )
+//            .size(460.dp, 39.dp)
+//            .padding(spacing.spaceMedium, spacing.default)
+//    ) {
+//        Icon(
+//            imageVector = Icons.Filled.Remove,
+//            contentDescription = stringResource(
+//                id = com.amalitech.core.R.string.add_room_counter
+//            ),
+//            modifier = Modifier
+//                .clickable(
+//                    onClick = {
+//                        if (value > 1) {
+//                            removeRoom()
+//                        }
+//                    }
+//                )
+//                .align(Alignment.CenterStart)
+//                .size(20.dp)
+//        )
+//
+//        Text(
+//            text = value.toString(),
+//            modifier = Modifier
+//                .align(Alignment.Center),
+//            color = MaterialTheme.colorScheme.onSurfaceVariant,
+//            textAlign = TextAlign.Start,
+//            fontWeight = FontWeight.Light,
+//            fontSize = 16.sp
+//        )
+//
+//        Icon(
+//            imageVector = Icons.Filled.Add,
+//            contentDescription = stringResource(
+//                id = com.amalitech.core.R.string.add_room_counter
+//            ),
+//            modifier = Modifier
+//                .clickable(
+//                    onClick = {
+//                        addRoom()
+//                    }
+//                )
+//                .align(Alignment.CenterEnd)
+//                .size(20.dp)
+//        )
+//    }
+    val pattern = remember { Regex("^\\d+\$") }
+    TextField(
+        value = value.toString(),
+        onValueChange = {
+            if (it.isEmpty() || it.matches(pattern)) {
+                onNewValue(it.toInt())
+            }
+        },
+        trailingIcon = {
+            Icon(
+                imageVector = Icons.Filled.Add,
+                contentDescription = stringResource(
+                    id = com.amalitech.core.R.string.add_room_counter
                 ),
-                shape = RoundedCornerShape(5.dp)
-            )
-            .size(460.dp, 39.dp)
-            .padding(spacing.spaceMedium, spacing.default)
-    ) {
-        Icon(
-            imageVector = Icons.Filled.Remove,
-            contentDescription = stringResource(
-                id = com.amalitech.core.R.string.add_room_counter
-            ),
-            modifier = Modifier
-                .clickable(
-                    onClick = {
-                        if (value > 1) {
-                            removeRoom()
+                modifier = Modifier
+                    .clickable(
+                        onClick = {
+                            addRoom()
                         }
-                    }
-                )
-                .align(Alignment.CenterStart)
-                .size(20.dp)
-        )
-
-        Text(
-            text = value.toString(),
-            modifier = Modifier
-                .align(Alignment.Center),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Start,
-            fontWeight = FontWeight.Light,
-            fontSize = 16.sp
-        )
-
-        Icon(
-            imageVector = Icons.Filled.Add,
-            contentDescription = stringResource(
-                id = com.amalitech.core.R.string.add_room_counter
-            ),
-            modifier = Modifier
-                .clickable(
-                    onClick = {
-                        addRoom()
-                    }
-                )
-                .align(Alignment.CenterEnd)
-                .size(20.dp)
-        )
-    }
+                    )
+                    .size(20.dp),
+                tint = MaterialTheme.colorScheme.onBackground
+            )
+        },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Filled.Remove,
+                contentDescription = stringResource(
+                    id = com.amalitech.core.R.string.add_room_counter
+                ),
+                modifier = Modifier
+                    .clickable(
+                        onClick = {
+                            if (value > 1) {
+                                removeRoom()
+                            }
+                        }
+                    )
+                    .size(20.dp),
+                tint = MaterialTheme.colorScheme.onBackground
+            )
+        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number,
+        ),
+        colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+            focusedContainerColor = MaterialTheme.colorScheme.background,
+            disabledContainerColor = MaterialTheme.colorScheme.background,
+            disabledIndicatorColor = Color.Transparent,
+            disabledTextColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(1.dp)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
+                shape = RoundedCornerShape(spacing.spaceExtraSmall)
+            )
+            .padding(spacing.spaceExtraSmall),
+        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center)
+    )
 }
 
 @Composable
@@ -499,6 +570,7 @@ fun RoomCounterPreview() {
     BookMeetingRoomTheme {
         RoomCounter(
             1,
+            {},
             {},
             {}
         )

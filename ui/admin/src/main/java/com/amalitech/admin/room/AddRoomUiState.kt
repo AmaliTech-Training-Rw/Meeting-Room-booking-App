@@ -7,7 +7,7 @@ data class AddRoomUiState(
     val capacity: Int = 1,
     val location: String = "",
     val locationList: List<String> = listOf(),
-    val imagesList: List<Uri> = listOf(),
+    val imagesList: MutableList<Uri> = mutableListOf(),
     val features: String = "",
     val error: Pair<Boolean, String> = Pair(false, "")
 )
