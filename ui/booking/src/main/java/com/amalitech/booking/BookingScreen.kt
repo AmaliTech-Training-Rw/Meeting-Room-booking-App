@@ -128,7 +128,7 @@ fun BookingScreen(
                         items(items = it) { item ->
                             BookingItem(
                                 item = item,
-                                modifier = Modifier.height(100.dp)
+                                modifier = Modifier.height(110.dp)
                             )
                         }
                         item {

@@ -1,8 +1,6 @@
 package com.amalitech.core_ui.bottom_navigation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BadgedBox
@@ -24,7 +22,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -57,13 +54,6 @@ fun BottomNavBar(
     NavigationBar(
         containerColor = containerColor,
         contentColor = contentColor,
-        modifier = Modifier
-            .padding(1.dp)
-            .border(
-                width = 1.dp,
-                color = contentColor.copy(alpha = 0.3f)
-            )
-            .padding(spacing.spaceExtraSmall)
     ) {
         BottomNavItem.createItems().forEach { screen ->
             if (screen.route == BottomNavItem.Invitations.route)
@@ -77,18 +67,18 @@ fun BottomNavBar(
                 icon = {
                     BadgedBox(badge = {
                         if (screen.badge.count > 0) {
-                            val count = if (screen.badge.count < 100)
+                            val count = if (screen.badge.count < 10)
                                 screen.badge.count.toString()
-                            else stringResource(id = R.string.ninety_plus)
+                            else stringResource(id = R.string.nine_plus)
                             Text(
                                 text = count,
                                 color = badgeTextColor,
                                 modifier = Modifier
-                                    .height(spacing.spaceSmall + spacing.spaceMedium)
                                     .clip(CircleShape)
                                     .background(badgeBackgroundColor)
-                                    .padding(1.dp),
-                                textAlign = TextAlign.Center
+                                    .padding(spacing.spaceExtraSmall),
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.bodySmall
                             )
                         }
                     }) {

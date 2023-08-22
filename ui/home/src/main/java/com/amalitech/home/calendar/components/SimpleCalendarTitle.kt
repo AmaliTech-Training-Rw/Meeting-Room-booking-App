@@ -93,7 +93,7 @@ private fun CalendarNavigationIcon(
                 .fillMaxHeight()
                 .aspectRatio(1f)
                 .shadow(
-                    elevation = 5.dp,
+                    elevation = 2.dp,
                     shape = RoundedCornerShape(spacing.spaceSmall)
                 )
                 .background(backgroundColor)

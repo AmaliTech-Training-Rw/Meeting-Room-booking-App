@@ -28,11 +28,12 @@ sealed class NavigationItem(var title:String, var route:String, var icon: ImageV
     object Logout : NavigationItem("Logout", "logout_route", Icons.Default.Logout)
     object BookingRequestDetail : NavigationItem("Booking detail", "booking_request_detail", Icons.Default.Details)
     object UpdateProfile : NavigationItem("Update profile", "update_profile", Icons.Default.Details)
+    object BookRoomScreen : NavigationItem("Book room", "book_room", Icons.Default.Details)
 
     companion object {
         fun createItems(): List<NavigationItem> = listOf(
             Dashboard,
-            Home,
+//            Home,
             BookingRequests,
             Users,
             Rooms,

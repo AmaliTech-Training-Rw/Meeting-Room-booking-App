@@ -4,6 +4,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -115,12 +116,17 @@ fun UpdateProfileScreen(
                     model = userInput.profileImage
                         ?: userInput.profileImageUrl,
                     contentDescription = stringResource(id = R.string.profile_image),
-                    placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
+//                    placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
                     error = painterResource(id = com.amalitech.core_ui.R.drawable.john_doe),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(CircleShape)
+                        .border(
+                            width = 1.dp,
+                            shape = CircleShape,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
                 )
                 IconButton(
                     onClick = {

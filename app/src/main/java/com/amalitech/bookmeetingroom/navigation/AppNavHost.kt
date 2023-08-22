@@ -386,10 +386,17 @@ private fun navigateToProfileScreen(navController: NavHostController) {
 }
 
 private fun NavOptionsBuilder.popToHome() {
-    popUpTo(BottomNavItem.Profile.route) {
-        inclusive = true
+//    popUpTo(BottomNavItem.Profile.route) {
+//        inclusive = true
+//    }
+//    launchSingleTop
+    popUpTo(
+        BottomNavItem.Home.route
+    ) {
+        saveState = true
     }
-    launchSingleTop
+    launchSingleTop = true
+    restoreState = true
 }
 
 fun NavHostController.navigateToLogin() {

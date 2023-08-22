@@ -21,7 +21,6 @@ import com.amalitech.admin.room.AddRoomScreen
 import com.amalitech.booking.history.BookingHistoryScreen
 import com.amalitech.booking.requests.BookingRequestScreen
 import com.amalitech.booking.requests.detail.BookingRequestDetailScreen
-import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
@@ -63,12 +62,12 @@ fun BookMeetingRoomNavHost(
                 appState = appState,
                 navigateUp = { navigateToDashboard(appState) }
             ) {
-                mainNavController.navigate("${Route.BOOK_ROOM_SCREEN}/$it")
+                appState.navController.navigate("${NavigationItem.BookRoomScreen.route}/$it")
             }
         }
 
         composable(
-            route = "${Route.BOOK_ROOM_SCREEN}/{roomId}",
+            route = "${NavigationItem.BookRoomScreen.route}/{roomId}",
             arguments = listOf(navArgument("roomId") {
                 type = NavType.StringType
             })
@@ -78,13 +77,12 @@ fun BookMeetingRoomNavHost(
                 navBackStackEntry = it,
                 onComposing = onComposing,
                 navigateBack = {
-                    mainNavController.navigateUp()
+                    appState.navController.navigateUp()
                 }
             ) {
-                mainNavController.navigate(BottomNavItem.Home.route)
+                appState.navController.navigate(NavigationItem.Home.route)
             }
         }
-
 
         composable(route = NavigationItem.BookingRequests.route) {
             BookingRequestScreen(

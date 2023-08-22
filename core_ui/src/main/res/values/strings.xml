@@ -14,7 +14,7 @@
     <string name="profile">Profile</string>
     <string name="bookings">Bookings</string>
     <string name="invitation">Invitations</string>
-    <string name="ninety_plus">99+</string>
+    <string name="nine_plus">9+</string>
     <string name="rooms_against_booked_time">Rooms against booked time</string>
     <string name="search">Search</string>
     <string name="close_search_textfield">Close search textfield</string>

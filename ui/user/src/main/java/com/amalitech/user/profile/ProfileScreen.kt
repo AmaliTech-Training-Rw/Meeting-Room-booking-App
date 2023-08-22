@@ -1,6 +1,7 @@
 package com.amalitech.user.profile
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +16,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -134,17 +139,22 @@ fun ProfileScreen(
             Column {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxWidth(0.8f)
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     AsyncImage(
                         model = user!!.profileImgUrl,
                         contentDescription = stringResource(id = R.string.profile_image),
-                        placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
+//                        placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
                         error = painterResource(id = com.amalitech.core_ui.R.drawable.john_doe),
                         modifier = Modifier
                             .width(150.dp)
                             .aspectRatio(1f)
-                            .clip(CircleShape),
+                            .clip(CircleShape)
+                            .border(
+                                width = 1.dp,
+                                shape = CircleShape,
+                                color = MaterialTheme.colorScheme.onBackground
+                            ),
                         contentScale = ContentScale.Crop
                     )
                 }
@@ -153,24 +163,65 @@ fun ProfileScreen(
                     title = stringResource(id = R.string.first_name),
                     description = user!!.firstName,
                 )
-                Spacer(Modifier.height(spacing.spaceMedium))
+                Divider(
+                    modifier = Modifier.padding(vertical = spacing.spaceMedium),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
                 ProfileDescriptionItem(
                     title = stringResource(id = R.string.last_name),
                     description = user!!.lastName
                 )
-                Spacer(Modifier.height(spacing.spaceMedium))
+                Divider(
+                    modifier = Modifier.padding(vertical = spacing.spaceMedium),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
                 ProfileDescriptionItem(
                     title = stringResource(id = R.string.email),
                     description = user!!.email
                 )
-                Spacer(Modifier.height(spacing.spaceMedium))
+                Divider(
+                    modifier = Modifier.padding(vertical = spacing.spaceMedium),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                ProfileDescriptionItem(
+                    title = stringResource(id = R.string.phone),
+                    description = "+250 733 111 111"
+                )
+                Divider(
+                    modifier = Modifier.padding(vertical = spacing.spaceMedium),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
                 ProfileDescriptionItem(
                     title = stringResource(id = R.string.title),
                     description = user!!.title
                 )
-
+                Divider(
+                    modifier = Modifier.padding(vertical = spacing.spaceMedium),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.clickable {
+                        viewModel.logout()
+                        onNavigateToLogin()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Logout,
+                        contentDescription = stringResource(R.string.logout),
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                    Spacer(modifier = Modifier.width(spacing.spaceMedium))
+                    Text(
+                        text = stringResource(id = R.string.logout),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
                 if (isAdmin) {
-                    Spacer(Modifier.height(spacing.spaceMedium))
+                    Divider(
+                        modifier = Modifier.padding(vertical = spacing.spaceMedium),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -187,35 +238,20 @@ fun ProfileScreen(
                         )
                     }
                 }
-                Spacer(Modifier.height(spacing.spaceExtraLarge))
-                Row(
-                    modifier = Modifier.fillMaxWidth(0.8f),
-                    horizontalArrangement = Arrangement.spacedBy(spacing.spaceMedium),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    DefaultButton(
-                        text = stringResource(id = R.string.update_profile),
-                        onClick = { onUpdateProfileClick(user!!.email) },
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(spacing.spaceMedium))
-                            .weight(1f)
-                            .fillMaxWidth()
-                            .padding(spacing.spaceExtraSmall)
-                    )
-                    DefaultButton(
-                        text = stringResource(id = R.string.logout),
-                        onClick = {
-                            viewModel.logout()
-                            onNavigateToLogin()
-                        },
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(spacing.spaceMedium))
-                            .weight(1f)
-                            .fillMaxWidth()
-                            .padding(spacing.spaceExtraSmall),
-                        backgroundColor = MaterialTheme.colorScheme.error
-                    )
-                }
+                Divider(
+                    modifier = Modifier.padding(
+                        top = spacing.spaceMedium,
+                        bottom = spacing.spaceExtraLarge
+                    ),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                DefaultButton(
+                    text = stringResource(id = R.string.update_profile),
+                    onClick = { onUpdateProfileClick(user!!.email) },
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(spacing.spaceMedium))
+                        .fillMaxWidth()
+                )
             }
         }
         if (isLoading) {
