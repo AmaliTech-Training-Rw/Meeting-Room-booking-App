@@ -54,6 +54,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -82,8 +83,6 @@ import com.amalitech.core_ui.theme.Dimensions
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.add_user_divider
 import com.amalitech.core_ui.util.CustomBackHandler
-import com.amalitech.core_ui.util.SnackbarManager
-import com.amalitech.core_ui.util.SnackbarMessage
 import com.amalitech.ui.user.R
 import com.amalitech.user.adduser.AddUserScreen
 import com.amalitech.user.adduser.AddUserViewModel
@@ -107,6 +106,7 @@ fun UserScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
     val addUserState by addUserViewModel.userUiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
     val title = stringResource(id = R.string.users)
     val appBarState = AppBarState(
@@ -137,6 +137,7 @@ fun UserScreen(
             }
         }
     )
+    val context = LocalContext.current
 
     CustomBackHandler(
         appState = appState,
@@ -146,14 +147,19 @@ fun UserScreen(
     LaunchedEffect(true) {
         onComposing(appBarState)
     }
+    LaunchedEffect(key1 = uiState) {
+        val message = uiState.snackbarMessage
+        if (message != null) {
+            appState.snackbarHostState.showSnackbar(message.asString(context))
+            viewModel.clearMessage()
+        }
+    }
 
     if (showBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = {
                 showBottomSheet = false
-                scope.launch {
-                    SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("works"))
-                }
+                viewModel.onAddUser()
             },
             sheetState = sheetState,
             scrimColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
@@ -252,9 +258,6 @@ fun UserScreen(
                         checked = addUserState.isAdmin,
                         onCheckedChange = { checked ->
                             addUserViewModel.onIsAdminChecked(checked)
-                            scope.launch {
-                                appState.snackbarHostState.showSnackbar("checked_ = $checked")
-                            }
 //                            SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("checked_ = $checked"))
                         },
                         modifier = Modifier

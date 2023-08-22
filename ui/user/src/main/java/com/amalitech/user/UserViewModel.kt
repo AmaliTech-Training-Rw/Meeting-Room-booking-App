@@ -2,11 +2,11 @@ package com.amalitech.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
-import com.amalitech.user.state.UserUiState
-import com.amalitech.user.usecases.GetUseCase
 import com.amalitech.user.state.UserViewState
+import com.amalitech.user.usecases.GetUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,7 +43,11 @@ class UserViewModel (
     }
 
     fun onAddUser() {
-
+        _uiState.update {
+            it.copy(
+                snackbarMessage = UiText.DynamicString("Works")
+            )
+        }
     }
 
     // TODO: ideally, this method should come from a share vm
@@ -56,4 +60,12 @@ class UserViewModel (
             },
             block = block
         )
+
+    fun clearMessage() {
+        _uiState.update {
+            it.copy(
+                snackbarMessage = null
+            )
+        }
+    }
 }
