@@ -63,126 +63,13 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.Month
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InviteScreen(
-    inviteFabOnClick: (() -> Unit) -> Unit,
     invitesViewModel: InvitesViewModel = koinViewModel()
 ) {
     val inviteState by invitesViewModel.uiState.collectAsStateWithLifecycle()
-    val addInviteUiState by invitesViewModel.addInviteUiState.collectAsStateWithLifecycle()
 
     val spacing = LocalSpacing.current
-    var showBottomSheet by remember { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
-
-    LaunchedEffect(Unit) {
-        inviteFabOnClick {
-            showBottomSheet = true
-        }
-    }
-
-    if (showBottomSheet) {
-        ModalBottomSheet(
-            onDismissRequest = {
-                showBottomSheet = false
-            },
-            sheetState = sheetState
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background),
-            ) {
-
-                Text(
-                    text = stringResource(id = R.string.add_invitation),
-                    modifier = Modifier.padding(
-                        start = spacing.spaceMedium,
-                        top = spacing.spaceMedium
-                    ),
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.W700
-                    ),
-                    textAlign = TextAlign.Start,
-                )
-                Divider(
-                    color = add_user_divider,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .width(1.dp)
-                        .padding(top = spacing.spaceExtraSmall, bottom = spacing.spaceExtraSmall)
-                )
-
-                DefaultTextField(
-                    placeholder = stringResource(com.amalitech.core.R.string.room_name),
-                    value = addInviteUiState.roomName,
-                    onValueChange = {
-                        invitesViewModel.onRoomName(it)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(spacing.spaceExtraSmall),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Go,
-                        keyboardType = KeyboardType.Text
-                    )
-                )
-
-                //
-
-                Divider(
-                    color = add_user_divider,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .width(1.dp)
-                        .padding(
-                            top = spacing.spaceExtraSmall,
-                            bottom = spacing.default
-                        )
-                )
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    horizontalArrangement = Arrangement.End,
-                ) {
-
-                    DefaultButton(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(spacing.spaceExtraSmall),
-                        text = stringResource(id = com.amalitech.core.R.string.cancel),
-                        textColor = MaterialTheme.colorScheme.onBackground,
-                        backgroundColor = MaterialTheme.colorScheme.background,
-                        onClick = {
-                            scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                if (!sheetState.isVisible) {
-                                    showBottomSheet = false
-                                }
-                            }
-                        },
-                        borderWidth = 1.dp,
-                        borderColor = Color.Black
-                    )
-
-                    DefaultButton(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(spacing.spaceExtraSmall),
-                        text = stringResource(id = com.amalitech.core.R.string.invite),
-                        textColor = MaterialTheme.colorScheme.onPrimary,
-                        onClick = {
-                            invitesViewModel.addInvite()
-                        }
-                    )
-                }
-            }
-        }
-    }
 
     LazyColumn(
         modifier = Modifier.padding(16.dp),
@@ -301,6 +188,6 @@ fun InvitesItemPreview() {
 @Composable
 fun InviteScreenPreview() {
     BookMeetingRoomTheme {
-        InviteScreen({})
+        InviteScreen()
     }
 }

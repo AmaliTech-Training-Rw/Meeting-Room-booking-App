@@ -5,7 +5,4 @@ import kotlinx.coroutines.flow.Flow
 
 interface InviteRepository {
     suspend fun getInvites(): Flow<Invite>
-
-    suspend fun addInvite(invite: Invite)
-
 }

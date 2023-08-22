@@ -27,7 +27,6 @@ fun BookMeetingRoomNavHost(
     appState: BookMeetingRoomAppState,
     mainNavController: NavHostController,
     setFabOnClick: ((() -> Unit)?) -> Unit,
-    inviteFabOnClick: ((() -> Unit)?) -> Unit,
 ) {
     NavHost(
         navController = appState.navController,
@@ -77,9 +76,7 @@ fun BookMeetingRoomNavHost(
         }
 
         composable(route = NavigationItem.Invitations.route) {
-            InviteScreen(
-                inviteFabOnClick
-            )
+            InviteScreen()
         }
     }
 }

@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
-import com.tradeoases.invite.models.Invite
-import com.tradeoases.invite.usecases.AddInviteUseCase
 import com.tradeoases.invite.usecases.GetInviteUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -15,22 +13,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class InvitesViewModel(
-    private val getInviteUseCase: GetInviteUseCase,
-    private val addInviteUseCase: AddInviteUseCase
+    private val getInviteUseCase: GetInviteUseCase
 ): ViewModel() {
-
-    private val _userUiState = MutableStateFlow(
-        InviteUiState()
-    )
-    val addInviteUiState = _userUiState.asStateFlow()
-
-    fun onRoomName(name: String) {
-        _userUiState.update { roomName ->
-            roomName.copy(
-                roomName = name
-            )
-        }
-    }
 
     private val _uiState = MutableStateFlow(
         InviteViewState()
@@ -49,12 +33,6 @@ class InvitesViewModel(
                     oldState.copy(loading = false, invite = updatedInviteSet.toList())
                 }
             }
-        }
-    }
-
-    fun addInvite() {
-        launchCatching {
-            // addInviteUseCase(invite)
         }
     }
 

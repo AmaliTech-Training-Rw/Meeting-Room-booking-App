@@ -7,6 +7,6 @@ import org.koin.dsl.module
 
 val invitePresentationModule = module {
     viewModel {
-        InvitesViewModel(get(), get())
+        InvitesViewModel(get())
     }
 }

@@ -36,7 +36,6 @@ fun BookMeetingRoomApp(
     mainNavController: NavHostController
 ) {
     val (fabOnClick, setFabOnClick) = remember { mutableStateOf<(() -> Unit)?>(null) }
-    val (inviteFabOnClick, setInviteFabOnClick) = remember { mutableStateOf<(() -> Unit)?>(null) }
 
     Scaffold(
         topBar = {
@@ -61,7 +60,6 @@ fun BookMeetingRoomApp(
                 appState,
                 mainNavController,
                 setFabOnClick,
-                setInviteFabOnClick
             )
         },
         snackbarHost = {
@@ -84,10 +82,6 @@ fun BookMeetingRoomApp(
                         when(destination.title) {
                             "Users" -> {
                                 fabOnClick?.invoke()
-                            }
-
-                            "Invitations" -> {
-                                inviteFabOnClick?.invoke()
                             }
                         }
                     },

@@ -58,8 +58,4 @@ class InviteRepositoryImpl: InviteRepository {
             ""
         )
     )
-
-    override suspend fun addInvite(invite: Invite) {
-        TODO("Not yet implemented")
-    }
 }
