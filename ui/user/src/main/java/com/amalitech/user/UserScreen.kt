@@ -55,6 +55,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -69,6 +70,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.components.NavigationButton
@@ -430,10 +432,21 @@ fun UserItem(
             .padding(spacing.spaceSmall),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(R.drawable.user),
-            contentDescription = stringResource(id = R.string.user_image),
-            modifier = Modifier.size(45.dp),
+//        Image(
+//            painter = painterResource(R.drawable.user),
+//            contentDescription = stringResource(id = R.string.user_image),
+//            modifier = Modifier.size(45.dp),
+//        )
+
+        AsyncImage(
+            model = user.profilePic,
+            contentDescription = user.username,
+            modifier = Modifier
+                .size(45.dp)
+                .clip(CircleShape),
+            error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
+            placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
+            contentScale = ContentScale.FillWidth
         )
 
         Spacer(Modifier.width(spacing.spaceExtraSmall))
