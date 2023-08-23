@@ -432,12 +432,6 @@ fun UserItem(
             .padding(spacing.spaceSmall),
         verticalAlignment = Alignment.CenterVertically
     ) {
-//        Image(
-//            painter = painterResource(R.drawable.user),
-//            contentDescription = stringResource(id = R.string.user_image),
-//            modifier = Modifier.size(45.dp),
-//        )
-
         AsyncImage(
             model = user.profilePic,
             contentDescription = user.username,
