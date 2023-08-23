@@ -32,6 +32,7 @@ sealed class NavigationItem(var title:String, var route:String, var icon: ImageV
             Home,
             BookingRequests,
             Users,
+            Invitations,
             Rooms,
             BookingHistory,
             Profile,

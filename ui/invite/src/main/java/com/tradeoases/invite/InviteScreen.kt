@@ -49,8 +49,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.amalitech.core_ui.R
+import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.components.DefaultTextField
+import com.amalitech.core_ui.components.NavigationButton
+import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.add_user_divider
@@ -68,8 +71,31 @@ fun InviteScreen(
     invitesViewModel: InvitesViewModel = koinViewModel()
 ) {
     val inviteState by invitesViewModel.uiState.collectAsStateWithLifecycle()
-
     val spacing = LocalSpacing.current
+
+    val title = stringResource(id = R.string.invitations)
+
+//    LaunchedEffect(key1 = true) {
+//        onComposing(
+//            AppBarState(
+//                title = homeTitle,
+//                navigationIcon = {
+//                    if (isUsingAdminDashboard) {
+//                        NavigationButton {
+//                            scope.launch {
+//                                appState?.drawerState?.open()
+//                            }
+//                        }
+//                    }
+//                },
+//                actions = {
+//                    PainterActionButton {
+//                        navigateToProfileScreen()
+//                    }
+//                },
+//            )
+//        )
+//    }
 
     LazyColumn(
         modifier = Modifier.padding(16.dp),

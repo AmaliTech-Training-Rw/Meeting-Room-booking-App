@@ -164,12 +164,6 @@ fun BookMeetingRoomNavHost(
             InviteScreen()
         }
 
-        composable(route = NavigationItem.Invitations.route) {
-            TestScreen(
-                "This is ${NavigationItem.Invitations.title}", innerPadding
-            )
-        }
-
         composable(route = Route.ADD_ROOM_SCREEN) {
             AddRoomScreen(onComposing = onComposing) {
                 appState.navController.navigateUp()
