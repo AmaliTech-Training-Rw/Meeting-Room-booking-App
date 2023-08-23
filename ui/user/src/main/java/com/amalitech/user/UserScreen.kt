@@ -46,6 +46,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
@@ -327,6 +328,21 @@ fun UsersList(
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LazyColumn(
+        modifier = modifier
+            .fillMaxHeight()
+    ) {
+        items(items = state.users, itemContent = { item ->
+            UserCard(
+                item,
+                spacing
+            )
+        })
+    }
+}
+
+@Composable
+fun UserCard(item: User, spacing: Dimensions) {
     var isLeftContentVisible by rememberSaveable {
         mutableStateOf(false)
     }
@@ -335,57 +351,50 @@ fun UsersList(
         mutableStateOf(false)
     }
 
-    LazyColumn(
-        modifier = modifier
-            .fillMaxHeight()
-    ) {
-        items(items = state.users, itemContent = { item ->
-            SwipeableCardSideContents(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(77.dp),
-                isLeftContentVisible = isLeftContentVisible,
-                isRightContentVisible = isRightContentVisible,
-                onSwipeEnd = { direction ->
-                    when (direction) {
-                        SwipeDirection.LEFT -> {
-                            if (isRightContentVisible)
-                                isRightContentVisible = false
-                            else
-                                isLeftContentVisible = false
-                        }
-
-                        SwipeDirection.NONE -> {
-                            isLeftContentVisible = false
-                            isRightContentVisible = false
-                        }
-
-                        SwipeDirection.RIGHT -> {
-                            if (isLeftContentVisible)
-                                isLeftContentVisible = false
-                            else
-                                isRightContentVisible = true
-                        }
-                    }
-                },
-                rightContent = {
-                    SwipeAction(
-                        backgroundColor = MaterialTheme.colorScheme.error,
-                        icon = Icons.Filled.Delete,
-                        onActionClick = viewModel::onDelete,
-                        modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
-                    )
-                },
-                leftContent = {},
-                content = {
-                    UserItem(
-                        isRightContentVisible,
-                        item
-                    )
+    SwipeableCardSideContents(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(77.dp),
+        isLeftContentVisible = isLeftContentVisible,
+        isRightContentVisible = isRightContentVisible,
+        onSwipeEnd = { direction ->
+            when (direction) {
+                SwipeDirection.LEFT -> {
+                    if (isRightContentVisible)
+                        isRightContentVisible = false
+                    else
+                        isLeftContentVisible = false
                 }
+
+                SwipeDirection.NONE -> {
+                    isLeftContentVisible = false
+                    isRightContentVisible = false
+                }
+
+                SwipeDirection.RIGHT -> {
+                    if (isLeftContentVisible)
+                        isLeftContentVisible = false
+                    else
+                        isRightContentVisible = true
+                }
+            }
+        },
+        rightContent = {
+            SwipeAction(
+                backgroundColor = MaterialTheme.colorScheme.error,
+                icon = Icons.Filled.Delete,
+                onActionClick = {},
+                modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
             )
-        })
-    }
+        },
+        leftContent = {},
+        content = {
+            UserItem(
+                isRightContentVisible,
+                item
+            )
+        }
+    )
 }
 
 @Composable
@@ -478,6 +487,7 @@ fun UserItem(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DefaultTextField(
     placeholder: String,

@@ -100,13 +100,15 @@ dependencies {
 
     implementation(project(Modules.dataOnboarding))
     implementation(project(Modules.dataUser))
+    implementation(project(Modules.dataInvite))
     implementation(project(Modules.domainOnboarding))
     implementation(project(Modules.domainUser))
+    implementation(project(Modules.domainInvite))
     implementation(project(Modules.uiOnboarding))
     implementation(project(Modules.coreUI))
     implementation(project(Modules.uiUser))
-
     implementation(project(Modules.uiRooms))
+    implementation(project(Modules.uiInvite))
     implementation(project(Modules.dataRoom))
     implementation(project(Modules.domainRooms))
    

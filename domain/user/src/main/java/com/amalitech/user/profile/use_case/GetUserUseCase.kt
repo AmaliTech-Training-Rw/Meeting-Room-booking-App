@@ -3,7 +3,7 @@ package com.amalitech.user.profile.use_case
 import com.amalitech.core.util.Response
 import com.amalitech.core.util.UiText
 import com.amalitech.user.profile.model.dto.UserDto
-import com.amalitech.user.profile.repository.UserRepository
+import com.amalitech.user.repository.UserRepository
 
 class GetUserUseCase(private val userRepository: UserRepository) {
 
