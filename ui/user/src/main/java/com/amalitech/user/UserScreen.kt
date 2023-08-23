@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -26,6 +28,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,7 +37,9 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -336,6 +342,7 @@ fun UserScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UsersList(
     modifier: Modifier,
@@ -344,13 +351,47 @@ fun UsersList(
 ) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-
-    var isLeftContentVisible by rememberSaveable {
+    var openDialog by remember {
         mutableStateOf(false)
     }
 
-    var isRightContentVisible by rememberSaveable {
-        mutableStateOf(false)
+    if (openDialog) {
+        AlertDialog(
+            onDismissRequest = { openDialog = false },
+        ) {
+            Surface(
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .wrapContentHeight(),
+                shape = RoundedCornerShape(spacing.spaceMedium),
+                tonalElevation = AlertDialogDefaults.TonalElevation,
+                color = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.onBackground
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Would you like to delete the user?"
+                    )
+                    Spacer(modifier = Modifier.height(spacing.spaceMedium))
+
+                    Row(Modifier.align(Alignment.End)) {
+                        DialogButton(onClick = {
+                            openDialog = false
+                        })
+                        Spacer(Modifier.width(spacing.spaceMedium))
+                        DialogButton(
+                            onClick = {
+                                viewModel.onDelete()
+                                openDialog = false
+                            },
+                            text = "Delete",
+                            backgroundColor = MaterialTheme.colorScheme.error,
+                            textColor = MaterialTheme.colorScheme.onError
+                        )
+                    }
+                }
+            }
+        }
     }
 
     LazyColumn(
@@ -358,6 +399,14 @@ fun UsersList(
             .fillMaxHeight()
     ) {
         items(items = state.users, itemContent = { item ->
+            var isLeftContentVisible by rememberSaveable {
+                mutableStateOf(false)
+            }
+
+            var isRightContentVisible by rememberSaveable {
+                mutableStateOf(false)
+            }
+
             SwipeableCardSideContents(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -390,7 +439,9 @@ fun UsersList(
                     SwipeAction(
                         backgroundColor = MaterialTheme.colorScheme.error,
                         icon = Icons.Filled.Delete,
-                        onActionClick = viewModel::onDelete,
+                        onActionClick = {
+                            openDialog = true
+                        },
                         modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
                     )
                 },
@@ -584,6 +635,35 @@ fun UserItemPreview() {
                 "example@gmail.com",
                 true
             )
+        )
+    }
+}
+
+
+@Composable
+fun DialogButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    text: String = stringResource(R.string.cancel),
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
+    textColor: Color = MaterialTheme.colorScheme.onBackground
+) {
+    val spacing = LocalSpacing.current
+    TextButton(
+        onClick = onClick,
+        modifier = modifier
+            .wrapContentHeight()
+            .clip(RoundedCornerShape(spacing.spaceMedium))
+            .border(
+                1.dp,
+                textColor,
+                RoundedCornerShape(spacing.spaceMedium)
+            )
+            .background(backgroundColor)
+    ) {
+        Text(
+            text = text,
+            color = textColor
         )
     }
 }

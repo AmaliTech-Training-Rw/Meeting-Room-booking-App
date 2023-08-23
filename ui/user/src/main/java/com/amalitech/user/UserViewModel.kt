@@ -39,7 +39,11 @@ class UserViewModel (
     }
 
     fun onDelete() {
-
+        _uiState.update {
+            it.copy(
+                snackbarMessage = UiText.DynamicString("User deleted successfully")
+            )
+        }
     }
 
     fun onAddUser() {

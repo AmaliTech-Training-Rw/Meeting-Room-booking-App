@@ -1,6 +1,8 @@
 package com.amalitech.admin.room
 
 import android.net.Uri
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amalitech.admin.room.usecase.AddRoom
@@ -22,6 +24,8 @@ class AddRoomViewModel(
         AddRoomUiState()
     )
     val uiState = _uiState.asStateFlow()
+    private val _canNavigate = mutableStateOf(false)
+    val canNavigate: State<Boolean> = _canNavigate
 
     private val capacity
         get() = _uiState.value.capacity
