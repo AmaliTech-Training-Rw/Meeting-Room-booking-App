@@ -17,6 +17,7 @@ class BookingRequestViewModel(
 
     private val _uiState = MutableStateFlow(BookingRequestsUiState())
     val uiState: StateFlow<BookingRequestsUiState> get() = _uiState.asStateFlow()
+    private var bookingsCopy: List<Booking> = emptyList()
 
     init {
         fetchBookings()
@@ -35,9 +36,10 @@ class BookingRequestViewModel(
             val result = useCaseWrapper.fetchBookingsUseCase()
 
             if (result.data != null) {
+                bookingsCopy = result.data ?: emptyList()
                 _uiState.update {
                     BookingRequestsUiState(
-                        bookings = result.data ?: emptyList()
+                        bookings = bookingsCopy
                     )
                 }
             } else if (result.error != null) {
@@ -79,6 +81,35 @@ class BookingRequestViewModel(
     fun clearError() {
         _uiState.update {
             it.copy(error = null)
+        }
+    }
+
+    fun onNewSearchQuery(query: String) {
+        _uiState.update {
+            it.copy(searchQuery = query)
+        }
+        onSearch()
+    }
+
+    fun onSearch() {
+        _uiState.update { state ->
+            state.copy(
+                bookings = bookingsCopy.filter { booking ->
+                    booking.roomName.contains(state.searchQuery, true) || booking.bookedBy.contains(
+                        state.searchQuery,
+                        true
+                    ) || booking.attendees.any { it.contains(state.searchQuery, true) }
+                }
+            )
+        }
+    }
+
+    fun resetList() {
+        _uiState.update {
+            it.copy(
+                bookings = bookingsCopy,
+                searchQuery = ""
+            )
         }
     }
 }

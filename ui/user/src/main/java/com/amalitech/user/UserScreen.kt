@@ -79,6 +79,7 @@ import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
+import com.amalitech.core_ui.components.SearchIcon
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.swipe_animation.SwipeAction
@@ -115,6 +116,9 @@ fun UserScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
     val title = stringResource(id = R.string.users)
+    var isSearchQueryVisible by remember {
+        mutableStateOf(false)
+    }
     val appBarState = AppBarState(
         floatingActionButton = {
             FloatingActionButton(
@@ -133,6 +137,18 @@ fun UserScreen(
         },
         title = title,
         actions = {
+            SearchIcon(
+                searchQuery = uiState.searchQuery,
+                onSearch = { viewModel.onSearch() },
+                onSearchQueryChange = viewModel::onNewSearchQuery,
+                isSearchTextFieldVisible = isSearchQueryVisible,
+                onSearchTextFieldVisibilityChanged = {
+                    isSearchQueryVisible = it
+                    if (!isSearchQueryVisible) {
+                        viewModel.resetList()
+                    }
+                }
+            )
             PainterActionButton {
                 navigateToProfileScreen()
             }

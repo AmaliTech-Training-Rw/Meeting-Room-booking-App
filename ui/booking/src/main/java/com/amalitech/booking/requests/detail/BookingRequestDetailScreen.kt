@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.amalitech.core_ui.R
@@ -101,10 +102,11 @@ fun BookingRequestDetailScreen(
                    contentDescription = room.roomName,
                    modifier = Modifier
                        .fillMaxWidth()
+                       .height(200.dp)
                        /*.clip(RoundedCornerShape(spacing.spaceSmall))*/,
                    error = painterResource(id = R.drawable.larger_room),
 //                   placeholder = painterResource(id = R.drawable.baseline_refresh_24),
-                   contentScale = ContentScale.FillWidth
+                   contentScale = ContentScale.FillBounds
                )
                Column(modifier = Modifier.padding(spacing.spaceMedium)) {
                    Text(text = room.roomName)

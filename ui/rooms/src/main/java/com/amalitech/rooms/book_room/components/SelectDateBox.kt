@@ -13,9 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.theme.LocalSpacing
+import com.amalitech.ui.rooms.R
 
 @Composable
 fun SelectDateBox(
@@ -23,7 +25,8 @@ fun SelectDateBox(
     onClick: () -> Unit,
     text: String,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
-    shape: Shape = RoundedCornerShape(LocalSpacing.current.spaceExtraSmall)
+    shape: Shape = RoundedCornerShape(LocalSpacing.current.spaceExtraSmall),
+    placeholder: String = stringResource(R.string.date)
 ) {
     val spacing = LocalSpacing.current
     Box(
@@ -41,9 +44,11 @@ fun SelectDateBox(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = text,
+            text = text.ifEmpty { placeholder },
             style = textStyle,
-            modifier = Modifier.padding(spacing.spaceExtraSmall)
+            modifier = Modifier.padding(spacing.spaceExtraSmall),
+            color = if (text.isEmpty()) MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f)
+            else MaterialTheme.colorScheme.onBackground
         )
     }
 }

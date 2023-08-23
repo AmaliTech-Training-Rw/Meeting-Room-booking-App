@@ -8,7 +8,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -47,17 +51,25 @@ fun SearchIcon(
                 )
             }
         } else {
+            val focusRequester = remember { FocusRequester() }
+
+            LaunchedEffect(Unit) {
+                focusRequester.requestFocus()
+            }
             TextField(
                 value = searchQuery,
                 onValueChange = { query ->
                     onSearchQueryChange(query)
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
                 leadingIcon = {
                     IconButton(onClick = onSearch) {
                         Icon(
                             painter = searchIcon,
-                            contentDescription = stringResource(R.string.search)
+                            contentDescription = stringResource(R.string.search),
+                            tint = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 },
@@ -65,7 +77,8 @@ fun SearchIcon(
                     IconButton(onClick = { onSearchTextFieldVisibilityChanged(false) }) {
                         Icon(
                             painter = closeIcon,
-                            contentDescription = stringResource(R.string.close_search_textfield)
+                            contentDescription = stringResource(R.string.close_search_textfield),
+                            tint = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 },

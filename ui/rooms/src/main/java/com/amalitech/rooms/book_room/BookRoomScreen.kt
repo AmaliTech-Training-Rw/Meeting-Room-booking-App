@@ -159,10 +159,11 @@ fun BookRoomScreen(
                             contentDescription = room.description,
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .height(200.dp)
                             /*.clip(RoundedCornerShape(spacing.spaceSmall))*/,
                             error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
 //                        placeholder = painterResource(id = R.drawable.baseline_refresh_24),
-                            contentScale = ContentScale.FillWidth
+                            contentScale = ContentScale.FillBounds
                         )
                     Column(modifier = Modifier.padding(spacing.spaceMedium)) {
                         Text(
@@ -336,7 +337,8 @@ fun SlotSelectionSection(
                 text = startTime,
                 modifier = Modifier
                     .height(30.dp)
-                    .weight(2f)
+                    .weight(2f),
+                placeholder = stringResource(R.string.time)
             )
         }
         Spacer(Modifier.height(spacing.spaceMedium))
@@ -363,7 +365,8 @@ fun SlotSelectionSection(
                 text = endTime,
                 modifier = Modifier
                     .height(30.dp)
-                    .weight(2f)
+                    .weight(2f),
+                placeholder = stringResource(R.string.time)
             )
         }
     }

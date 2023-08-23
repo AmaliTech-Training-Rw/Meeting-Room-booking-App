@@ -6,5 +6,6 @@ import com.amalitech.core.util.UiText
 data class BookingRequestsUiState(
     val bookings: List<Booking> = emptyList(),
     val isLoading: Boolean = false,
-    val error: UiText? = null
+    val error: UiText? = null,
+    val searchQuery: String = "",
 )

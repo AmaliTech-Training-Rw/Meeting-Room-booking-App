@@ -28,16 +28,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core.R
 import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.AuthenticationTextField
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
-import com.amalitech.core_ui.components.AuthenticationTextField
 import com.amalitech.onboarding.util.showSnackBar
 import org.koin.androidx.compose.koinViewModel
 
@@ -111,7 +112,8 @@ fun ForgotPasswordScreen(
             isPassword = false,
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Go
+                imeAction = ImeAction.Go,
+                keyboardType = KeyboardType.Email
             ),
             onGo = {
                 viewModel.onSendResetLink()
@@ -125,7 +127,8 @@ fun ForgotPasswordScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = spacing.spaceSmall),
-            enabled = baseResult !is UiState.Loading
+            enabled = baseResult !is UiState.Loading,
+            isLoading = baseResult is UiState.Loading,
         )
         val text = buildAnnotatedString {
             withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {

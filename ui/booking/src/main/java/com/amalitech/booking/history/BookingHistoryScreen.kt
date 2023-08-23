@@ -7,7 +7,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.amalitech.booking.model.Booking
@@ -15,6 +20,7 @@ import com.amalitech.booking.requests.components.BookingRequestItem
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
+import com.amalitech.core_ui.components.SearchIcon
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.CustomBackHandler
@@ -103,7 +109,10 @@ fun BookingHistoryScreen(
         "Stress Success",
         "Mind Binds"
     )
-    val bookings = (0..33).map {
+    val spacing = LocalSpacing.current
+    val title = stringResource(R.string.booking_history)
+    val scope = rememberCoroutineScope()
+    val bookingsCopy = (0..33).map {
         val startTime = LocalTime.of(Random.nextInt(0, 23), 0)
         Booking(
             id = it.toString(),
@@ -115,9 +124,15 @@ fun BookingHistoryScreen(
             bookedBy = "John Doe"
         )
     }
-    val spacing = LocalSpacing.current
-    val title = stringResource(R.string.booking_history)
-    val scope = rememberCoroutineScope()
+    var searchQuery by rememberSaveable {
+        mutableStateOf("")
+    }
+    var isSearchVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var bookings by remember {
+        mutableStateOf(bookingsCopy)
+    }
 
     CustomBackHandler(appState = appState, onComposing = onComposing) {
         navigateUp()
@@ -134,6 +149,34 @@ fun BookingHistoryScreen(
                     }
                 },
                 actions = {
+                    SearchIcon(
+                        searchQuery = searchQuery,
+                        onSearch = {
+                            search(
+                                {
+                                    bookings = it
+                                }, bookingsCopy, searchQuery
+                            )
+                        },
+                        onSearchQueryChange = { query ->
+                            searchQuery = query
+                            search(
+                                onBookingsChange = {
+                                    bookings = it
+                                },
+                                bookingsCopy = bookingsCopy,
+                                searchQuery = searchQuery
+                            )
+                        },
+                        isSearchTextFieldVisible = isSearchVisible,
+                        onSearchTextFieldVisibilityChanged = {
+                            isSearchVisible = it
+                            if (!it) {
+                                searchQuery = ""
+                                bookings = bookingsCopy
+                            }
+                        }
+                    )
                     PainterActionButton {
                         navigateToProfileScreen()
                     }
@@ -151,4 +194,19 @@ fun BookingHistoryScreen(
             BookingRequestItem(booking = booking, onClick = {})
         }
     }
+}
+
+
+private fun search(
+    onBookingsChange: (List<Booking>) -> Unit,
+    bookingsCopy: List<Booking>,
+    searchQuery: String
+) {
+    val filtered = bookingsCopy.filter { booking ->
+        booking.roomName.contains(searchQuery, true) || booking.bookedBy.contains(
+            searchQuery,
+            true
+        ) || booking.attendees.any { it.contains(searchQuery, true) }
+    }
+    onBookingsChange(filtered)
 }

@@ -170,7 +170,7 @@ fun BookMeetingRoomNavHost(
         }
 
         composable(route = Route.ADD_ROOM_SCREEN) {
-            AddRoomScreen(onComposing = onComposing) {
+            AddRoomScreen(onComposing = onComposing, appState = appState) {
                 appState.navController.navigateUp()
             }
         }

@@ -12,7 +12,10 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,6 +27,7 @@ import com.amalitech.booking.requests.components.BookingRequestCard
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
+import com.amalitech.core_ui.components.SearchIcon
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.CustomBackHandler
@@ -46,6 +50,9 @@ fun BookingRequestScreen(
     val spacing = LocalSpacing.current
     val scope = rememberCoroutineScope()
     val title = stringResource(R.string.booking_request)
+    var isSearchQueryVisible by remember {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(key1 = uiState) {
         uiState.error?.let {
@@ -69,6 +76,20 @@ fun BookingRequestScreen(
                     }
                 },
                 actions = {
+                    SearchIcon(
+                        searchQuery = uiState.searchQuery,
+                        onSearch = viewModel::onSearch,
+                        onSearchQueryChange = {
+                            viewModel.onNewSearchQuery(it)
+                        },
+                        isSearchTextFieldVisible = isSearchQueryVisible,
+                        onSearchTextFieldVisibilityChanged = {
+                            isSearchQueryVisible = it
+                            if (!isSearchQueryVisible) {
+                                viewModel.resetList()
+                            }
+                        }
+                    )
                     PainterActionButton {
                         navigateToProfileScreen()
                     }

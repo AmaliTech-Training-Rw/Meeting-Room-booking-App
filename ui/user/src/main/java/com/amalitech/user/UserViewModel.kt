@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
+import com.amalitech.user.models.User
 import com.amalitech.user.state.UserViewState
 import com.amalitech.user.usecases.GetUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -22,6 +23,7 @@ class UserViewModel (
         UserViewState()
     )
     val uiState = _uiState.asStateFlow()
+    private var usersCopy: List<User> = emptyList()
 
     init {
         subscribeToUserUpdates()
@@ -32,7 +34,8 @@ class UserViewModel (
             getUsers().collect { user ->
                 val updatedUserSet = (uiState.value.users + user).toSet() // remove dups
                 _uiState.update { oldState ->
-                    oldState.copy( loading = false, users = updatedUserSet.toList())
+                    usersCopy = updatedUserSet.toList()
+                    oldState.copy( loading = false, users = usersCopy)
                 }
             }
         }
@@ -69,6 +72,35 @@ class UserViewModel (
         _uiState.update {
             it.copy(
                 snackbarMessage = null
+            )
+        }
+    }
+
+    fun onNewSearchQuery(query: String) {
+        _uiState.update {
+            it.copy(searchQuery = query)
+        }
+        onSearch()
+    }
+
+    fun onSearch() {
+        _uiState.update { state ->
+            state.copy(
+                users = usersCopy.filter { user ->
+                    user.username.contains(state.searchQuery, true) || user.email.contains(
+                        state.searchQuery,
+                        true
+                    )
+                }
+            )
+        }
+    }
+
+    fun resetList() {
+        _uiState.update {
+            it.copy(
+                users = usersCopy,
+                searchQuery = ""
             )
         }
     }
