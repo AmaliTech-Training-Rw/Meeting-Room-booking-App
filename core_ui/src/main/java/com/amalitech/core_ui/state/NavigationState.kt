@@ -16,12 +16,10 @@ sealed class NavigationItem(var title:String, var route:String, var icon: ImageV
     object Home : NavigationItem("Home", "home_route", Icons.Default.Home)
     object BookingRequests :
         NavigationItem("Booking Requests", "my_bookings_route", Icons.Default.Bookmarks)
-
     object Users : NavigationItem("Users", "users_route", Icons.Default.People)
     object Rooms : NavigationItem("Rooms", "rooms_route", Icons.Default.Coffee)
     object BookingHistory :
         NavigationItem("Booking History", "booking_history_route", Icons.Default.History)
-
     object Profile : NavigationItem("Profile", "profile_route", Icons.Default.PersonOutline)
     object Dashboard : NavigationItem("Dashboard", "dashboard_route", Icons.Default.Dashboard)
     object Invitations : NavigationItem("invitations", "invitations_route", Icons.Default.Home)
@@ -36,6 +34,7 @@ sealed class NavigationItem(var title:String, var route:String, var icon: ImageV
 //            Home,
             BookingRequests,
             Users,
+            Invitations,
             Rooms,
             BookingHistory,
             Profile,

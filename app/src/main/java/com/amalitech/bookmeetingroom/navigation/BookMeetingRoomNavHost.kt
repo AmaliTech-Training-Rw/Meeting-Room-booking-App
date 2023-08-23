@@ -31,6 +31,7 @@ import com.amalitech.rooms.RoomListScreen
 import com.amalitech.rooms.book_room.BookRoomScreen
 import com.amalitech.user.UserScreen
 import com.amalitech.user.profile.ProfileScreen
+import com.tradeoases.invite.InviteScreen
 import com.amalitech.user.profile.ProfileViewModel
 import com.amalitech.user.profile.update_profile.UpdateProfileScreen
 import kotlinx.coroutines.CoroutineScope
@@ -158,15 +159,7 @@ fun BookMeetingRoomNavHost(
         }
 
         composable(route = NavigationItem.Invitations.route) {
-            TestScreen(
-                "This is ${NavigationItem.Invitations.title}", innerPadding
-            )
-        }
-
-        composable(route = NavigationItem.Invitations.route) {
-            TestScreen(
-                "This is ${NavigationItem.Invitations.title}", innerPadding
-            )
+            InviteScreen()
         }
 
         composable(route = Route.ADD_ROOM_SCREEN) {

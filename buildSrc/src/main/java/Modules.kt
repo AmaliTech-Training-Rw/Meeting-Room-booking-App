@@ -6,6 +6,7 @@ object Modules {
     const val dataOnboarding = ":data:onboarding"
     const val dataUser = ":data:user"
     const val dataRoom = ":data:rooms"
+    const val dataInvite = ":data:invite"
 
     const val domain = ":domain"
     const val domainOnboarding = ":domain:onboarding"
@@ -14,6 +15,7 @@ object Modules {
     const val domainRoom = ":domain:room"
     const val domainBooking = ":domain:booking"
     const val domainUser = ":domain:user"
+    const val domainInvite = ":domain:invite"
 
     const val ui = ":ui"
     const val uiOnboarding = ":ui:onboarding"
@@ -21,6 +23,7 @@ object Modules {
     const val uiHome = ":ui:home"
     const val uiBooking = ":ui:booking"
     const val uiUser = ":ui:user"
+    const val uiInvite = ":ui:invite"
 
     const val coreUI = ":core_ui"
     const val uiRooms = ":ui:rooms"

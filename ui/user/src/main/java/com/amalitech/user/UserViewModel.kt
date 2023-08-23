@@ -31,6 +31,7 @@ class UserViewModel (
 
     private fun subscribeToUserUpdates() {
         launchCatching {
+            _uiState.value = uiState.value.copy(loading = true)
             getUsers().collect { user ->
                 val updatedUserSet = (uiState.value.users + user).toSet() // remove dups
                 _uiState.update { oldState ->

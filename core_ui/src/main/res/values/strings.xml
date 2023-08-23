@@ -22,6 +22,7 @@
     <string name="calendar">Calendar</string>
     <string name="active">Active</string>
     <string name="ended">Ended</string>
+    <string name="add_invitation">New invitation</string>
     <string name="open_drawer">Open the drawer menu</string>
     <string name="navigate_back">Navigate back</string>
     <string name="open_profile_screen">Open profile screen</string>
