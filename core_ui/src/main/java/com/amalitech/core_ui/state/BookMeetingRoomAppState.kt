@@ -50,7 +50,7 @@ fun rememberBookMeetingRoomAppState(
             navController,
             coroutineScope,
             drawerState,
-            systemUiController,
+//            systemUiController,
             snackbarHostState,
             snackbarManager,
             resources
@@ -70,7 +70,7 @@ class BookMeetingRoomAppState(
     val navController: NavHostController,
     coroutineScope: CoroutineScope,
     val drawerState: DrawerState,
-    val systemUiController: SystemUiController,
+//    val systemUiController: SystemUiController,
     val snackbarHostState: SnackbarHostState,
     val snackbarManager: SnackbarManager,
     val resources: Resources
@@ -96,15 +96,15 @@ class BookMeetingRoomAppState(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val currentTopLevelDestination: NavigationItem?
+    /*val currentTopLevelDestination: NavigationItem?
         @Composable get() = when (currentDestination?.route) {
             NavigationItem.Home.route -> NavigationItem.Home
             NavigationItem.Profile.route -> NavigationItem.Profile
             NavigationItem.BookingRequests.route -> NavigationItem.BookingRequests
-            NavigationItem.Invitations.route -> NavigationItem.Invitations
+//            NavigationItem.Invitations.route -> NavigationItem.Invitations
             NavigationItem.Users.route -> NavigationItem.Users
             else -> null
-        }
+        }*/
 
 
     fun popUp() {

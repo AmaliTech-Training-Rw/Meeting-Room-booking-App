@@ -1,6 +1,8 @@
 package com.amalitech.core_ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import com.amalitech.core_ui.R
 
 
@@ -27,6 +30,7 @@ fun SearchIcon(
     onSearchQueryChange: ((query: String) -> Unit)?,
     isSearchTextFieldVisible: Boolean,
     onSearchTextFieldVisibilityChanged: ((isSearching: Boolean) -> Unit)?,
+    backIcon: Painter = painterResource(id = R.drawable.baseline_arrow_back_24),
     searchIcon: Painter = painterResource(id = R.drawable.baseline_search_24),
     closeIcon: Painter = painterResource(id = R.drawable.baseline_close_24),
     focusedIndicatorColor: Color = Color.Transparent,
@@ -65,19 +69,21 @@ fun SearchIcon(
                     .fillMaxWidth()
                     .focusRequester(focusRequester),
                 leadingIcon = {
-                    IconButton(onClick = onSearch) {
+                    IconButton(onClick = {
+                        onSearchTextFieldVisibilityChanged(false)
+                    }) {
                         Icon(
-                            painter = searchIcon,
-                            contentDescription = stringResource(R.string.search),
+                            painter = backIcon,
+                            contentDescription = stringResource(R.string.close_search_textfield),
                             tint = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 },
                 trailingIcon = {
-                    IconButton(onClick = { onSearchTextFieldVisibilityChanged(false) }) {
+                    IconButton(onClick = { onSearchQueryChange("") }) {
                         Icon(
                             painter = closeIcon,
-                            contentDescription = stringResource(R.string.close_search_textfield),
+                            contentDescription = stringResource(R.string.clear),
                             tint = MaterialTheme.colorScheme.onBackground,
                         )
                     }
@@ -92,7 +98,13 @@ fun SearchIcon(
                 ),
                 placeholder = {
                     Text(placeholder)
-                }
+                },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Search
+                ),
+                keyboardActions = KeyboardActions (
+                    onSearch = { onSearch() }
+                )
             )
         }
     }
