@@ -1,10 +1,8 @@
 package com.amalitech.user
 
 import android.view.KeyEvent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -61,8 +58,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -498,7 +495,12 @@ fun UserItem(
     val activeTextBg = if (user.isActive) {
         MaterialTheme.colorScheme.tertiaryContainer
     } else {
-        MaterialTheme.colorScheme.onSurface
+        MaterialTheme.colorScheme.onBackground
+    }
+    val activeTextColor = if (user.isActive) {
+        MaterialTheme.colorScheme.onTertiaryContainer
+    } else {
+        MaterialTheme.colorScheme.background
     }
 
     Row(
@@ -506,18 +508,19 @@ fun UserItem(
             .fillMaxSize()
             .clip(RoundedCornerShape(spacing.spaceSmall))
             .background(cardBg)
-            .padding(spacing.spaceSmall),
+            .padding(spacing.spaceMedium),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
             model = user.profilePic,
             contentDescription = user.username,
             modifier = Modifier
-                .size(45.dp)
-                .clip(CircleShape),
+//                .size(45.dp)
+                .clip(CircleShape)
+                .weight(0.5f),
             error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
             placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
-            contentScale = ContentScale.FillWidth
+            contentScale = ContentScale.Crop
         )
 
         Spacer(Modifier.width(spacing.spaceExtraSmall))
@@ -556,16 +559,17 @@ fun UserItem(
         Text(
             text = stringResource(id = activeText),
             modifier = Modifier
-                .clip(RoundedCornerShape(spacing.spaceMedium))
-                .padding(spacing.spaceExtraSmall)
-                .clickable { },
+                .clip(RoundedCornerShape(spacing.spaceExtraSmall))
+//                .padding(spacing.spaceExtraSmall)
+                .background(activeTextBg)
+                .padding(horizontal = spacing.spaceSmall, vertical = spacing.spaceExtraSmall)
+            ,
             style = TextStyle(
-                color = Color.White,
+                color = activeTextColor,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.W400,
                 textAlign = TextAlign.Center,
                 lineHeight = 14.sp,
-                background = activeTextBg
             )
         )
     }
