@@ -22,7 +22,6 @@ sealed class NavigationItem(var title:String, var route:String, var icon: ImageV
         NavigationItem("Booking History", "booking_history_route", Icons.Default.History)
     object Profile : NavigationItem("Profile", "profile_route", Icons.Default.PersonOutline)
     object Dashboard : NavigationItem("Dashboard", "dashboard_route", Icons.Default.Dashboard)
-//    object Invitations : NavigationItem("invitations", "invitations_route", Icons.Default.Home)
     object Logout : NavigationItem("Logout", "logout_route", Icons.Default.Logout)
     object BookingRequestDetail : NavigationItem("Booking detail", "booking_request_detail", Icons.Default.Details)
     object UpdateProfile : NavigationItem("Update profile", "update_profile", Icons.Default.Details)
@@ -31,10 +30,8 @@ sealed class NavigationItem(var title:String, var route:String, var icon: ImageV
     companion object {
         fun createItems(): List<NavigationItem> = listOf(
             Dashboard,
-//            Home,
             BookingRequests,
             Users,
-//            Invitations,
             Rooms,
             BookingHistory,
             Profile,

@@ -28,7 +28,6 @@ fun BookMeetingRoomApp(
     mainNavController: NavHostController,
     onFinishActivity: () -> Unit
 ) {
-//    val (fabOnClick, setFabOnClick) = remember { mutableStateOf<(() -> Unit)?>(null) }
     var appBarState by remember {
         mutableStateOf(AppBarState())
     }
@@ -63,28 +62,6 @@ fun BookMeetingRoomApp(
             )
         },
         floatingActionButton = {
-//            // Show the Floating Action Button on top level destinations (you can also go ahead and exclude some).
-//            val destination = appState.currentTopLevelDestination
-//            if (destination != null) {
-//                FloatingActionButton(
-//                    onClick = {
-//                        when(destination.title) {
-//                            "Users" -> {
-//                                fabOnClick?.invoke()
-//                            }
-//                        }
-//                    },
-//                    shape = CircleShape,
-//                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-//                    contentColor = MaterialTheme.colorScheme.onPrimary
-//                ) {
-//                    Icon(
-//                        imageVector = Icons.Rounded.Add,
-//                        contentDescription = "Add FAB",
-//                        tint = Color.White,
-//                    )
-//                }
-//            }
             appBarState.floatingActionButton?.invoke()
         }
     )

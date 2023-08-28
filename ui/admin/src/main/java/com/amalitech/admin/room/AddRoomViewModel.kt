@@ -101,7 +101,6 @@ class AddRoomViewModel(
             _uiState.value.name.isBlank() -> {
                 // TODO: this is an alternative way of handling errors, and using is error / supporting text in the ui
                 updateStateWithError(true, "Name value is empty")
-//                SnackbarManager.showMessage(com.amalitech.core.R.string.name_empty)
                 _uiState.update { state ->
                     state.copy(snackBar = UiText.StringResource(com.amalitech.core.R.string.name_empty))
                 }
@@ -109,7 +108,6 @@ class AddRoomViewModel(
             }
 
             _uiState.value.location.isBlank() -> {
-//                SnackbarManager.showMessage(com.amalitech.core.R.string.location_empty)
                 _uiState.update { state ->
                     state.copy(snackBar = UiText.StringResource(com.amalitech.core.R.string.location_empty))
                 }
@@ -117,7 +115,6 @@ class AddRoomViewModel(
             }
 
             _uiState.value.features.isBlank() -> {
-//                SnackbarManager.showMessage(com.amalitech.core.R.string.features_empty)
                 _uiState.update { state ->
                     state.copy(snackBar = UiText.StringResource(com.amalitech.core.R.string.features_empty))
                 }
@@ -128,7 +125,6 @@ class AddRoomViewModel(
                 _uiState.update { state ->
                     state.copy(snackBar = UiText.StringResource(com.amalitech.core.R.string.images_empty))
                 }
-//                SnackbarManager.showMessage(com.amalitech.core.R.string.images_empty)
                 return
             }
 

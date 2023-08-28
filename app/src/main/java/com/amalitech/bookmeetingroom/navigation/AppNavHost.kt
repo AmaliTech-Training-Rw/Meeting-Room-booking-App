@@ -380,10 +380,6 @@ private fun navigateToProfileScreen(navController: NavHostController) {
 }
 
 private fun NavOptionsBuilder.popToHome() {
-//    popUpTo(BottomNavItem.Profile.route) {
-//        inclusive = true
-//    }
-//    launchSingleTop
     popUpTo(
         BottomNavItem.Home.route
     ) {
