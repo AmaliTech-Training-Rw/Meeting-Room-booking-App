@@ -33,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +46,7 @@ import com.amalitech.core.data.model.Room
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
+import com.amalitech.core_ui.components.SearchIcon
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.CustomBackHandler
@@ -81,6 +83,10 @@ fun RoomListScreen(
         mutableStateOf(null)
     }
     val title = stringResource(id = com.amalitech.core_ui.R.string.rooms)
+    val query by viewModel.searchQuery
+    var isSearchVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(key1 = uiState) {
         when (uiState) {
@@ -107,7 +113,6 @@ fun RoomListScreen(
                     FloatingActionButton(
                         onClick = {
                             onNavigateToAddRoom()
-                            onComposing(AppBarState())
                         },
                         containerColor = MaterialTheme.colorScheme.primary,
                         contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -121,6 +126,20 @@ fun RoomListScreen(
                 },
                 title = title,
                 actions = {
+                    SearchIcon(
+                        searchQuery = query,
+                        onSearch = { viewModel.onSearch() },
+                        onSearchQueryChange = {
+                                              viewModel.onNewSearchQuery(it)
+                        },
+                        isSearchTextFieldVisible = isSearchVisible,
+                        onSearchTextFieldVisibilityChanged = {
+                            isSearchVisible = it
+                            if (!isSearchVisible) {
+                                viewModel.resetList()
+                            }
+                        }
+                    )
                     PainterActionButton {
                         navigateToProfileScreen()
                     }
@@ -151,7 +170,6 @@ fun RoomListScreen(
                             modifier = Modifier.height(150.dp),
                             onLeftContentClick = {
                                 onNavigateToAddRoom()
-                                onComposing(AppBarState())
                             },
                             onRightContentClick = {
                                 openDialog = true

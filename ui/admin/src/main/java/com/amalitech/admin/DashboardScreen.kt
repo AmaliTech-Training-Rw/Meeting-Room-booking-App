@@ -26,6 +26,9 @@ import kotlin.random.Random
 @Composable
 fun DashboardScreen(
     appState: BookMeetingRoomAppState,
+    navigateToUsersScreen: () -> Unit,
+    navigateToRoomsScreen: () -> Unit,
+    navigateToBookingsHistoryScreen: () -> Unit,
     onOpenDrawer: () -> Unit,
     onComposing: (AppBarState) -> Unit,
     navigateUp: () -> Unit,
@@ -77,7 +80,8 @@ fun DashboardScreen(
                     count = 73,
                     iconId = R.drawable.baseline_supervised_user_circle_24
                 ),
-                highlightColor = MaterialTheme.colorScheme.error
+                highlightColor = MaterialTheme.colorScheme.error,
+                onClick = navigateToUsersScreen
             )
             Spacer(Modifier.height(spacing.spaceMedium))
             DashBoardCard(
@@ -86,7 +90,8 @@ fun DashboardScreen(
                     count = 12,
                     iconId = R.drawable.baseline_coffee_24
                 ),
-                highlightColor = MaterialTheme.colorScheme.primary
+                highlightColor = MaterialTheme.colorScheme.primary,
+                onClick = navigateToRoomsScreen
             )
             Spacer(Modifier.height(spacing.spaceMedium))
             DashBoardCard(
@@ -95,7 +100,8 @@ fun DashboardScreen(
                     count = 73,
                     iconId = R.drawable.baseline_calendar_month_24
                 ),
-                highlightColor = MaterialTheme.colorScheme.tertiaryContainer
+                highlightColor = MaterialTheme.colorScheme.tertiaryContainer,
+                onClick = navigateToBookingsHistoryScreen
             )
         }
         Spacer(modifier = Modifier.height(spacing.spaceMedium))

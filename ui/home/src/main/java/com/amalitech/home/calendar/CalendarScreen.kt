@@ -58,7 +58,7 @@ fun CalendarScreen(
     bookingsContentColor: Color = MaterialTheme.colorScheme.onBackground,
     buttonBackgroundColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     bookingsContentBackgroundColor: Color = MaterialTheme.colorScheme.surface,
-    dotsContentColor: Color = MaterialTheme.colorScheme.outline
+    dotsContentColor: Color = MaterialTheme.colorScheme.primary
 ) {
     val uiState = viewModel.uiState.value
     val currentMonth = uiState.currentMonth

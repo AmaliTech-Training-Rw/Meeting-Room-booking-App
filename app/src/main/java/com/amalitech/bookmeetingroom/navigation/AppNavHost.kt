@@ -21,7 +21,6 @@ import androidx.navigation.navigation
 import com.amalitech.booking.BookingScreen
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
 import com.amalitech.core_ui.components.AppBarState
-import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.components.drawer.BookMeetingRoomDrawer
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.home.HomeScreen
@@ -38,6 +37,7 @@ import com.amalitech.onboarding.splash_screen.SplashScreen
 import com.amalitech.rooms.book_room.BookRoomScreen
 import com.amalitech.user.profile.ProfileScreen
 import com.amalitech.user.profile.update_profile.UpdateProfileScreen
+import com.tradeoases.invite.InviteScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -303,15 +303,9 @@ fun NavGraphBuilder.mainNavGraph(
             }
         }
         composable(BottomNavItem.Invitations.route) {
-            onComposing(
-                AppBarState(
-                    title = "Invitations",
-                    actions = {
-                        PainterActionButton {
-                            navigateToProfileScreen(navController)
-                        }
-                    }
-                )
+            InviteScreen(
+                navigateToProfileScreen = { navigateToProfileScreen(navController) },
+                onComposing = onComposing
             )
         }
         composable(BottomNavItem.Bookings.route) {
@@ -386,10 +380,13 @@ private fun navigateToProfileScreen(navController: NavHostController) {
 }
 
 private fun NavOptionsBuilder.popToHome() {
-    popUpTo(BottomNavItem.Profile.route) {
-        inclusive = true
+    popUpTo(
+        BottomNavItem.Home.route
+    ) {
+        saveState = true
     }
-    launchSingleTop
+    launchSingleTop = true
+    restoreState = true
 }
 
 fun NavHostController.navigateToLogin() {

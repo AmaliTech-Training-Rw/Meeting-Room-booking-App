@@ -1,11 +1,7 @@
 package com.amalitech.bookmeetingroom.navigation
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -21,7 +17,6 @@ import com.amalitech.admin.room.AddRoomScreen
 import com.amalitech.booking.history.BookingHistoryScreen
 import com.amalitech.booking.requests.BookingRequestScreen
 import com.amalitech.booking.requests.detail.BookingRequestDetailScreen
-import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
@@ -32,7 +27,6 @@ import com.amalitech.rooms.RoomListScreen
 import com.amalitech.rooms.book_room.BookRoomScreen
 import com.amalitech.user.UserScreen
 import com.amalitech.user.profile.ProfileScreen
-import com.tradeoases.invite.InviteScreen
 import com.amalitech.user.profile.ProfileViewModel
 import com.amalitech.user.profile.update_profile.UpdateProfileScreen
 import kotlinx.coroutines.CoroutineScope
@@ -64,12 +58,12 @@ fun BookMeetingRoomNavHost(
                 appState = appState,
                 navigateUp = { navigateToDashboard(appState) }
             ) {
-                mainNavController.navigate("${Route.BOOK_ROOM_SCREEN}/$it")
+                appState.navController.navigate("${NavigationItem.BookRoomScreen.route}/$it")
             }
         }
 
         composable(
-            route = "${Route.BOOK_ROOM_SCREEN}/{roomId}",
+            route = "${NavigationItem.BookRoomScreen.route}/{roomId}",
             arguments = listOf(navArgument("roomId") {
                 type = NavType.StringType
             })
@@ -79,13 +73,12 @@ fun BookMeetingRoomNavHost(
                 navBackStackEntry = it,
                 onComposing = onComposing,
                 navigateBack = {
-                    mainNavController.navigateUp()
+                    appState.navController.navigateUp()
                 }
             ) {
-                mainNavController.navigate(BottomNavItem.Home.route)
+                appState.navController.navigate(NavigationItem.Home.route)
             }
         }
-
 
         composable(route = NavigationItem.BookingRequests.route) {
             BookingRequestScreen(
@@ -160,12 +153,8 @@ fun BookMeetingRoomNavHost(
             }
         }
 
-        composable(route = NavigationItem.Invitations.route) {
-            InviteScreen()
-        }
-
         composable(route = Route.ADD_ROOM_SCREEN) {
-            AddRoomScreen(onComposing = onComposing) {
+            AddRoomScreen(onComposing = onComposing, appState = appState) {
                 appState.navController.navigateUp()
             }
         }
@@ -194,6 +183,21 @@ fun BookMeetingRoomNavHost(
                 onComposing = onComposing,
                 navigateUp = {
                     onFinishActivity()
+                },
+                navigateToBookingsHistoryScreen = {
+                    appState.navController.navigate(NavigationItem.BookingHistory.route) {
+                        popToDashboard()
+                    }
+                },
+                navigateToUsersScreen = {
+                    appState.navController.navigate(NavigationItem.Users.route) {
+                        popToDashboard()
+                    }
+                },
+                navigateToRoomsScreen = {
+                    appState.navController.navigate(NavigationItem.Rooms.route) {
+                        popToDashboard()
+                    }
                 }
             ) {
                 navigateToProfileScreen(appState)
@@ -261,23 +265,5 @@ fun NavOptionsBuilder.popToDashboard() {
 fun openDrawer(scope: CoroutineScope, appState: BookMeetingRoomAppState) {
     scope.launch {
         appState.drawerState.open()
-    }
-}
-
-@Composable
-fun TestScreen(
-    text: String,
-    innerPadding: PaddingValues,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .padding(innerPadding)
-            .fillMaxSize()
-    ) {
-        Text(
-            text = text,
-            color = MaterialTheme.colorScheme.onBackground
-        )
     }
 }

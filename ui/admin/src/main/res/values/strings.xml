@@ -3,4 +3,5 @@
     <string name="users">Users</string>
     <string name="welcome_firstname">Welcome, %s</string>
     <string name="add_room">Add room</string>
+    <string name="remove_the_image">Remove the image</string>
 </resources>

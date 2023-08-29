@@ -2,12 +2,12 @@ package com.amalitech.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
 import com.amalitech.user.models.User
-import com.amalitech.user.state.UserUiState
-import com.amalitech.user.usecases.GetUseCase
 import com.amalitech.user.state.UserViewState
+import com.amalitech.user.usecases.GetUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +23,7 @@ class UserViewModel (
         UserViewState()
     )
     val uiState = _uiState.asStateFlow()
+    private var usersCopy: List<User> = emptyList()
 
     init {
         subscribeToUserUpdates()
@@ -32,16 +33,29 @@ class UserViewModel (
         launchCatching {
             _uiState.value = uiState.value.copy(loading = true)
             getUsers().collect { user ->
-                val updatedUserSet = (uiState.value.users + user).toSet()
+                val updatedUserSet = (uiState.value.users + user).toSet() // remove dups
                 _uiState.update { oldState ->
-                    oldState.copy( loading = false, users = updatedUserSet.toList())
+                    usersCopy = updatedUserSet.toList()
+                    oldState.copy( loading = false, users = usersCopy)
                 }
             }
         }
     }
 
-    fun onAddUser() {
+    fun onDelete() {
+        _uiState.update {
+            it.copy(
+                snackbarMessage = UiText.DynamicString("User deleted successfully")
+            )
+        }
+    }
 
+    fun onAddUser() {
+        _uiState.update {
+            it.copy(
+                snackbarMessage = UiText.DynamicString("Works")
+            )
+        }
     }
 
     // TODO: ideally, this method should come from a share vm
@@ -54,4 +68,41 @@ class UserViewModel (
             },
             block = block
         )
+
+    fun clearMessage() {
+        _uiState.update {
+            it.copy(
+                snackbarMessage = null
+            )
+        }
+    }
+
+    fun onNewSearchQuery(query: String) {
+        _uiState.update {
+            it.copy(searchQuery = query)
+        }
+        onSearch()
+    }
+
+    fun onSearch() {
+        _uiState.update { state ->
+            state.copy(
+                users = usersCopy.filter { user ->
+                    user.username.contains(state.searchQuery, true) || user.email.contains(
+                        state.searchQuery,
+                        true
+                    )
+                }
+            )
+        }
+    }
+
+    fun resetList() {
+        _uiState.update {
+            it.copy(
+                users = usersCopy,
+                searchQuery = ""
+            )
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.amalitech.rooms.book_room
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -102,7 +103,7 @@ fun BookRoomScreen(
     val canShowStartTimes = slotSelectionManager.canShowStartTimes
     val availableStartTime = slotSelectionManager.availableStartTimes
     val availableEndTime = slotSelectionManager.availableEndTimes
-    var appBarState by remember{
+    var appBarState by remember {
         mutableStateOf(AppBarState())
     }
 
@@ -120,6 +121,10 @@ fun BookRoomScreen(
             }
         )
         onComposing(appBarState)
+    }
+
+    BackHandler {
+        navigateBack()
     }
 
     LaunchedEffect(key1 = uiState) {
@@ -148,16 +153,18 @@ fun BookRoomScreen(
         uiState.bookRoomUi.let { room ->
             if (!canShowEndTimes && !canShowStartTimes) {
                 Column(Modifier.verticalScroll(rememberScrollState())) {
-                    AsyncImage(
-                        model = room.imgUrl,
-                        contentDescription = room.description,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(spacing.spaceSmall)),
-                        error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
-                        placeholder = painterResource(id = R.drawable.baseline_refresh_24),
-                        contentScale = ContentScale.FillWidth
-                    )
+                    if (!uiState.isLoading)
+                        AsyncImage(
+                            model = room.imgUrl,
+                            contentDescription = room.description,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                            /*.clip(RoundedCornerShape(spacing.spaceSmall))*/,
+                            error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
+//                        placeholder = painterResource(id = R.drawable.baseline_refresh_24),
+                            contentScale = ContentScale.FillBounds
+                        )
                     Column(modifier = Modifier.padding(spacing.spaceMedium)) {
                         Text(
                             text = stringResource(
@@ -175,38 +182,42 @@ fun BookRoomScreen(
                         ) {
                             viewModel.onShowEndTimeRequest()
                         }
-                        Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
+                        Divider(
+                            modifier = Modifier.padding(vertical = spacing.spaceMedium),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
                         FeatureSection(
                             roomUiState = room
                         )
-                        Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
+                        Divider(
+                            modifier = Modifier.padding(vertical = spacing.spaceMedium),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
                         AttendeesSection(
                             viewModel = viewModel,
                             userInput = userInput
                         )
-                        Divider(modifier = Modifier.padding(vertical = spacing.spaceMedium))
+                        Divider(
+                            modifier = Modifier.padding(vertical = spacing.spaceMedium),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
                         NoteSection(
                             viewModel = viewModel,
                             userInput = userInput
                         )
                         Spacer(Modifier.height(spacing.spaceMedium))
                         CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-                            Box(Modifier
-                                .fillMaxWidth()) {
-                                Button(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = spacing.spaceExtraLarge)
-                                        .clip(RoundedCornerShape(spacing.spaceSmall))
-                                        .background(MaterialTheme.colorScheme.primary)
-                                        .align(Alignment.Center),
-                                    onClick = { viewModel.onBook(roomId ?: "") },
-                                ) {
-                                    Text(
-                                        text = stringResource(id = R.string.book),
-                                        color = MaterialTheme.colorScheme.onPrimary,
-                                    )
-                                }
+                            Button(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(spacing.spaceSmall))
+                                    .background(MaterialTheme.colorScheme.primary),
+                                onClick = { viewModel.onBook(roomId ?: "") },
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.book),
+                                    color = MaterialTheme.colorScheme.onPrimary,
+                                )
                             }
                         }
                     }
@@ -326,7 +337,8 @@ fun SlotSelectionSection(
                 text = startTime,
                 modifier = Modifier
                     .height(30.dp)
-                    .weight(2f)
+                    .weight(2f),
+                placeholder = stringResource(R.string.time)
             )
         }
         Spacer(Modifier.height(spacing.spaceMedium))
@@ -353,7 +365,8 @@ fun SlotSelectionSection(
                 text = endTime,
                 modifier = Modifier
                     .height(30.dp)
-                    .weight(2f)
+                    .weight(2f),
+                placeholder = stringResource(R.string.time)
             )
         }
     }
@@ -378,7 +391,7 @@ fun FeatureSection(
                 Spacer(Modifier.padding(spacing.spaceSmall))
             }
         }
-        Spacer(Modifier.height(spacing.spaceLarge))
+        Spacer(Modifier.height(spacing.spaceMedium))
     }
 }
 

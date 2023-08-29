@@ -1,6 +1,7 @@
 package com.amalitech.user.repository
 
 import com.amalitech.user.models.User
+import com.amalitech.user.profile.model.Profile
 import com.amalitech.user.profile.model.dto.UserDto
 import kotlinx.coroutines.flow.Flow
 
@@ -14,4 +15,6 @@ interface UserRepository {
     suspend fun getUsers(): Flow<User>
 
     suspend fun addUser(user: User)
+
+    suspend fun updateProfile(profile: Profile)
 }

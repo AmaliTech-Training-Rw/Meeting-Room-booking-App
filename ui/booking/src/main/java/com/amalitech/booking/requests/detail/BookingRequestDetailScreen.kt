@@ -1,5 +1,6 @@
 package com.amalitech.booking.requests.detail
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -25,7 +25,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -33,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.amalitech.core_ui.R
@@ -74,6 +74,10 @@ fun BookingRequestDetailScreen(
         )
     }
 
+    BackHandler {
+        onNavigateUp()
+    }
+
     LaunchedEffect(key1 = uiState) {
         val error = uiState.error
         if (error != null) {
@@ -98,10 +102,11 @@ fun BookingRequestDetailScreen(
                    contentDescription = room.roomName,
                    modifier = Modifier
                        .fillMaxWidth()
-                       .clip(RoundedCornerShape(spacing.spaceSmall)),
+                       .height(200.dp)
+                       /*.clip(RoundedCornerShape(spacing.spaceSmall))*/,
                    error = painterResource(id = R.drawable.larger_room),
-                   placeholder = painterResource(id = R.drawable.baseline_refresh_24),
-                   contentScale = ContentScale.FillWidth
+//                   placeholder = painterResource(id = R.drawable.baseline_refresh_24),
+                   contentScale = ContentScale.FillBounds
                )
                Column(modifier = Modifier.padding(spacing.spaceMedium)) {
                    Text(text = room.roomName)

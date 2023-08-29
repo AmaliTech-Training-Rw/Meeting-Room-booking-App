@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amalitech.admin.room.usecase.AddRoom
 import com.amalitech.admin.room.usecase.GetLocation
+import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -41,7 +42,7 @@ class AddRoomViewModel(
     fun onRoomImages(images: List<@JvmSuppressWildcards Uri>) {
         _uiState.update { addRoomUiState ->
             addRoomUiState.copy(
-                imagesList = images
+                imagesList = (addRoomUiState.imagesList + images).toMutableList()
             )
         }
     }
@@ -51,6 +52,14 @@ class AddRoomViewModel(
         _uiState.update { addRoomUiState ->
             addRoomUiState.copy(
                 name = roomName.trim()
+            )
+        }
+    }
+
+    fun onNewRoomCapacity(value: Int) {
+        _uiState.update { addRoomUiState ->
+            addRoomUiState.copy(
+                capacity = value
             )
         }
     }
@@ -92,22 +101,30 @@ class AddRoomViewModel(
             _uiState.value.name.isBlank() -> {
                 // TODO: this is an alternative way of handling errors, and using is error / supporting text in the ui
                 updateStateWithError(true, "Name value is empty")
-                SnackbarManager.showMessage(com.amalitech.core.R.string.name_empty)
+                _uiState.update { state ->
+                    state.copy(snackBar = UiText.StringResource(com.amalitech.core.R.string.name_empty))
+                }
                 return
             }
 
             _uiState.value.location.isBlank() -> {
-                SnackbarManager.showMessage(com.amalitech.core.R.string.location_empty)
+                _uiState.update { state ->
+                    state.copy(snackBar = UiText.StringResource(com.amalitech.core.R.string.location_empty))
+                }
                 return
             }
 
             _uiState.value.features.isBlank() -> {
-                SnackbarManager.showMessage(com.amalitech.core.R.string.features_empty)
+                _uiState.update { state ->
+                    state.copy(snackBar = UiText.StringResource(com.amalitech.core.R.string.features_empty))
+                }
                 return
             }
 
             _uiState.value.imagesList.isEmpty() -> {
-                SnackbarManager.showMessage(com.amalitech.core.R.string.images_empty)
+                _uiState.update { state ->
+                    state.copy(snackBar = UiText.StringResource(com.amalitech.core.R.string.images_empty))
+                }
                 return
             }
 
@@ -124,6 +141,12 @@ class AddRoomViewModel(
                     _uiState.value.imagesList
                 )
             )
+            _uiState.update { state ->
+                state.copy(
+                    snackBar = UiText.StringResource(com.amalitech.core.R.string.add_success),
+                    canNavigate = true
+                )
+            }
         }
     }
 
@@ -163,4 +186,22 @@ class AddRoomViewModel(
             },
             block = block
         )
+
+    fun onDeleteImage(uri: Uri) {
+        _uiState.update { addRoomUiState ->
+            val list = addRoomUiState.imagesList.toMutableList()
+            list.remove(uri)
+                addRoomUiState.copy(
+                imagesList = list
+            )
+        }
+    }
+
+    fun clearSnackBar() {
+        _uiState.update {
+            it.copy(
+                snackBar = null
+            )
+        }
+    }
 }

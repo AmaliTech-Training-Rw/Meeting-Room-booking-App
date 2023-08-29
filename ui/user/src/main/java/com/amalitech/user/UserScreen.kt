@@ -1,10 +1,8 @@
 package com.amalitech.user
 
 import android.view.KeyEvent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,8 +13,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -26,6 +25,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,7 +34,9 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -56,6 +59,7 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -75,6 +79,7 @@ import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
+import com.amalitech.core_ui.components.SearchIcon
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.swipe_animation.SwipeAction
@@ -85,8 +90,6 @@ import com.amalitech.core_ui.theme.Dimensions
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.add_user_divider
 import com.amalitech.core_ui.util.CustomBackHandler
-import com.amalitech.core_ui.util.SnackbarManager
-import com.amalitech.core_ui.util.SnackbarMessage
 import com.amalitech.ui.user.R
 import com.amalitech.user.adduser.AddUserScreen
 import com.amalitech.user.adduser.AddUserViewModel
@@ -110,8 +113,12 @@ fun UserScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
     val addUserState by addUserViewModel.userUiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
     val title = stringResource(id = R.string.users)
+    var isSearchQueryVisible by remember {
+        mutableStateOf(false)
+    }
     val appBarState = AppBarState(
         floatingActionButton = {
             FloatingActionButton(
@@ -130,6 +137,18 @@ fun UserScreen(
         },
         title = title,
         actions = {
+            SearchIcon(
+                searchQuery = uiState.searchQuery,
+                onSearch = { viewModel.onSearch() },
+                onSearchQueryChange = viewModel::onNewSearchQuery,
+                isSearchTextFieldVisible = isSearchQueryVisible,
+                onSearchTextFieldVisibilityChanged = {
+                    isSearchQueryVisible = it
+                    if (!isSearchQueryVisible) {
+                        viewModel.resetList()
+                    }
+                }
+            )
             PainterActionButton {
                 navigateToProfileScreen()
             }
@@ -140,6 +159,7 @@ fun UserScreen(
             }
         }
     )
+    val context = LocalContext.current
 
     CustomBackHandler(
         appState = appState,
@@ -149,12 +169,28 @@ fun UserScreen(
     LaunchedEffect(true) {
         onComposing(appBarState)
     }
+    LaunchedEffect(key1 = uiState) {
+        val message = uiState.snackbarMessage
+        if (message != null) {
+            appState.snackbarHostState.showSnackbar(message.asString(context))
+            viewModel.clearMessage()
+        }
+    }
+    val snackbarMessage by addUserViewModel.snackbarMessage
+
+    LaunchedEffect(key1 = snackbarMessage) {
+        snackbarMessage?.let {
+            appState.snackbarHostState.showSnackbar(it.asString(context))
+            addUserViewModel.clearSnackBar()
+        }
+
+    }
 
     if (showBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = {
                 showBottomSheet = false
-                SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("works"))
+                viewModel.onAddUser()
             },
             sheetState = sheetState,
             scrimColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
@@ -253,7 +289,7 @@ fun UserScreen(
                         checked = addUserState.isAdmin,
                         onCheckedChange = { checked ->
                             addUserViewModel.onIsAdminChecked(checked)
-                            SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("checked_ = $checked"))
+//                            SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("checked_ = $checked"))
                         },
                         modifier = Modifier
                             .padding(spacing.spaceExtraSmall),
@@ -307,6 +343,7 @@ fun UserScreen(
                         textColor = MaterialTheme.colorScheme.onPrimary,
                         onClick = {
                             addUserViewModel.invite()
+                            showBottomSheet = false
                         }
                     )
                 }
@@ -321,6 +358,7 @@ fun UserScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UsersList(
     modifier: Modifier,
@@ -329,74 +367,110 @@ fun UsersList(
 ) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    var openDialog by remember {
+        mutableStateOf(false)
+    }
+
+    if (openDialog) {
+        AlertDialog(
+            onDismissRequest = { openDialog = false },
+        ) {
+            Surface(
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .wrapContentHeight(),
+                shape = RoundedCornerShape(spacing.spaceMedium),
+                tonalElevation = AlertDialogDefaults.TonalElevation,
+                color = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.onBackground
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Would you like to delete the user?"
+                    )
+                    Spacer(modifier = Modifier.height(spacing.spaceMedium))
+
+                    Row(Modifier.align(Alignment.End)) {
+                        DialogButton(onClick = {
+                            openDialog = false
+                        })
+                        Spacer(Modifier.width(spacing.spaceMedium))
+                        DialogButton(
+                            onClick = {
+                                viewModel.onDelete()
+                                openDialog = false
+                            },
+                            text = "Delete",
+                            backgroundColor = MaterialTheme.colorScheme.error,
+                            textColor = MaterialTheme.colorScheme.onError
+                        )
+                    }
+                }
+            }
+        }
+    }
 
     LazyColumn(
         modifier = modifier
             .fillMaxHeight()
     ) {
         items(items = state.users, itemContent = { item ->
-            UserCard(
-                item,
-                spacing
+            var isLeftContentVisible by rememberSaveable {
+                mutableStateOf(false)
+            }
+
+            var isRightContentVisible by rememberSaveable {
+                mutableStateOf(false)
+            }
+
+            SwipeableCardSideContents(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(77.dp),
+                isLeftContentVisible = isLeftContentVisible,
+                isRightContentVisible = isRightContentVisible,
+                onSwipeEnd = { direction ->
+                    when (direction) {
+                        SwipeDirection.LEFT -> {
+                            if (isRightContentVisible)
+                                isRightContentVisible = false
+                            else
+                                isLeftContentVisible = false
+                        }
+
+                        SwipeDirection.NONE -> {
+                            isLeftContentVisible = false
+                            isRightContentVisible = false
+                        }
+
+                        SwipeDirection.RIGHT -> {
+                            if (isLeftContentVisible)
+                                isLeftContentVisible = false
+                            else
+                                isRightContentVisible = true
+                        }
+                    }
+                },
+                rightContent = {
+                    SwipeAction(
+                        backgroundColor = MaterialTheme.colorScheme.error,
+                        icon = Icons.Filled.Delete,
+                        onActionClick = {
+                            openDialog = true
+                        },
+                        modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
+                    )
+                },
+                leftContent = {},
+                content = {
+                    UserItem(
+                        isRightContentVisible,
+                        item
+                    )
+                }
             )
         })
     }
-}
-
-@Composable
-fun UserCard(item: User, spacing: Dimensions) {
-    var isLeftContentVisible by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    var isRightContentVisible by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    SwipeableCardSideContents(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(77.dp),
-        isLeftContentVisible = isLeftContentVisible,
-        isRightContentVisible = isRightContentVisible,
-        onSwipeEnd = { direction ->
-            when (direction) {
-                SwipeDirection.LEFT -> {
-                    if (isRightContentVisible)
-                        isRightContentVisible = false
-                    else
-                        isLeftContentVisible = false
-                }
-
-                SwipeDirection.NONE -> {
-                    isLeftContentVisible = false
-                    isRightContentVisible = false
-                }
-
-                SwipeDirection.RIGHT -> {
-                    if (isLeftContentVisible)
-                        isLeftContentVisible = false
-                    else
-                        isRightContentVisible = true
-                }
-            }
-        },
-        rightContent = {
-            SwipeAction(
-                backgroundColor = MaterialTheme.colorScheme.error,
-                icon = Icons.Filled.Delete,
-                onActionClick = {},
-                modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
-            )
-        },
-        leftContent = {},
-        content = {
-            UserItem(
-                isRightContentVisible,
-                item
-            )
-        }
-    )
 }
 
 @Composable
@@ -421,7 +495,12 @@ fun UserItem(
     val activeTextBg = if (user.isActive) {
         MaterialTheme.colorScheme.tertiaryContainer
     } else {
-        MaterialTheme.colorScheme.onSurface
+        MaterialTheme.colorScheme.onBackground
+    }
+    val activeTextColor = if (user.isActive) {
+        MaterialTheme.colorScheme.onTertiaryContainer
+    } else {
+        MaterialTheme.colorScheme.background
     }
 
     Row(
@@ -429,18 +508,19 @@ fun UserItem(
             .fillMaxSize()
             .clip(RoundedCornerShape(spacing.spaceSmall))
             .background(cardBg)
-            .padding(spacing.spaceSmall),
+            .padding(spacing.spaceMedium),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
             model = user.profilePic,
             contentDescription = user.username,
             modifier = Modifier
-                .size(45.dp)
-                .clip(CircleShape),
+//                .size(45.dp)
+                .clip(CircleShape)
+                .weight(0.5f),
             error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
             placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
-            contentScale = ContentScale.FillWidth
+            contentScale = ContentScale.Crop
         )
 
         Spacer(Modifier.width(spacing.spaceExtraSmall))
@@ -479,16 +559,17 @@ fun UserItem(
         Text(
             text = stringResource(id = activeText),
             modifier = Modifier
-                .clip(RoundedCornerShape(spacing.spaceMedium))
-                .padding(spacing.spaceExtraSmall)
-                .clickable { },
+                .clip(RoundedCornerShape(spacing.spaceExtraSmall))
+//                .padding(spacing.spaceExtraSmall)
+                .background(activeTextBg)
+                .padding(horizontal = spacing.spaceSmall, vertical = spacing.spaceExtraSmall)
+            ,
             style = TextStyle(
-                color = Color.White,
+                color = activeTextColor,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.W400,
                 textAlign = TextAlign.Center,
                 lineHeight = 14.sp,
-                background = activeTextBg
             )
         )
     }
@@ -583,6 +664,35 @@ fun UserItemPreview() {
                 "example@gmail.com",
                 true
             )
+        )
+    }
+}
+
+
+@Composable
+fun DialogButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    text: String = stringResource(R.string.cancel),
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
+    textColor: Color = MaterialTheme.colorScheme.onBackground
+) {
+    val spacing = LocalSpacing.current
+    TextButton(
+        onClick = onClick,
+        modifier = modifier
+            .wrapContentHeight()
+            .clip(RoundedCornerShape(spacing.spaceMedium))
+            .border(
+                1.dp,
+                textColor,
+                RoundedCornerShape(spacing.spaceMedium)
+            )
+            .background(backgroundColor)
+    ) {
+        Text(
+            text = text,
+            color = textColor
         )
     }
 }

@@ -25,4 +25,6 @@
     <string name="selected_date">Selected date %s</string>
     <string name="select_date_and_time">Select date and time</string>
     <string name="meeting_room_for_x_people">Meeting room for %d people</string>
+    <string name="date">Date</string>
+    <string name="time">time</string>
 </resources>

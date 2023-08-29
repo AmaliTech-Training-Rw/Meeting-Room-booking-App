@@ -25,7 +25,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.amalitech.core.data.model.Room
 import com.amalitech.core_ui.theme.LocalSpacing
-import com.amalitech.ui.rooms.R
 
 @Composable
 fun RoomDescription(
@@ -49,7 +48,7 @@ fun RoomDescription(
                 .fillMaxHeight()
                 .aspectRatio(1f),
             error = painterResource(id = com.amalitech.core_ui.R.drawable.room_small),
-            placeholder = painterResource(id = R.drawable.baseline_refresh_24)
+//            placeholder = painterResource(id = R.drawable.baseline_refresh_24)
         )
         Spacer(modifier = Modifier.width(spacing.spaceMedium))
         Column(
@@ -99,7 +98,7 @@ fun RoomDescription(
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .weight(0.6f)
-                    .padding(start = spacing.spaceExtraSmall)
+                    .padding(start = spacing.spaceSmall)
             )
         }
     }

@@ -1,6 +1,7 @@
 package com.amalitech.admin.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,7 +40,8 @@ fun DashBoardCard(
     labelTextStyle: TextStyle = MaterialTheme.typography.bodyLarge,
     countTextStyle: TextStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
     iconSize: Dp = LocalSpacing.current.spaceLarge,
-    cardHeight: Dp = 100.dp
+    cardHeight: Dp = 100.dp,
+    onClick: () -> Unit
 ) {
     val spacing = LocalSpacing.current
     Box(
@@ -48,7 +50,8 @@ fun DashBoardCard(
             .height(cardHeight)
             .background(backgroundColor)
             .padding(1.dp)
-            .shadow(1.dp, shape = RoundedCornerShape(2.dp)),
+            .shadow(1.dp, shape = RoundedCornerShape(2.dp))
+            .clickable { onClick() },
     ) {
         Row(
             modifier = Modifier.fillMaxWidth()

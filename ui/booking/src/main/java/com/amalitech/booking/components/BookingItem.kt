@@ -67,7 +67,7 @@ fun BookingItem(
                 .clip(shape),
             model = item.imgUrl,
             contentDescription = item.roomName,
-            placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
+//            placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
             error = painterResource(id = com.amalitech.core_ui.R.drawable.room),
             contentScale = ContentScale.Crop
         )

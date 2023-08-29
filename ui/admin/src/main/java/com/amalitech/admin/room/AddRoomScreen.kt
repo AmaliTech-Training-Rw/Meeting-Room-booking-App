@@ -17,18 +17,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,6 +42,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -50,6 +55,7 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -70,6 +76,8 @@ import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.BookMeetingRoomDropDown
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.components.NavigationButton
+import com.amalitech.core_ui.state.BookMeetingRoomAppState
+import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.add_room_icon_button_bg
@@ -77,6 +85,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AddRoomScreen(
+    appState: BookMeetingRoomAppState,
     viewModel: AddRoomViewModel = koinViewModel(),
     onComposing: (AppBarState) -> Unit,
     onNavigateBack: () -> Unit,
@@ -95,6 +104,7 @@ fun AddRoomScreen(
     val spacing = LocalSpacing.current
     val title = stringResource(id = R.string.add_room)
     val contentDescription = stringResource(id = com.amalitech.core_ui.R.string.navigate_back)
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = true) {
         onComposing(
@@ -110,6 +120,15 @@ fun AddRoomScreen(
                 }
             )
         )
+    }
+    LaunchedEffect(key1 = state) {
+        val snackbar = state.snackBar
+        if (snackbar != null) {
+            appState.snackbarHostState.showSnackbar(snackbar.asString(context))
+            viewModel.clearSnackBar()
+        }
+        if (state.canNavigate)
+            onNavigateBack()
     }
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -215,18 +234,47 @@ fun AddRoomScreen(
                 items(
                     items = state.imagesList,
                     itemContent = { uri ->
-                        Image(
-                            painter = rememberAsyncImagePainter(uri),
-                            contentScale = ContentScale.FillWidth,
-                            contentDescription = stringResource(
-                                id = com.amalitech.core.R.string.features_empty
-                            ),
+                        ConstraintLayout(
                             modifier = Modifier
-                                .size(85.dp, 66.dp)
-                                .clip(RoundedCornerShape(spacing.spaceExtraSmall))
-                                .padding(spacing.spaceExtraSmall)
-                        )
+                                .wrapContentSize()
+                        ) {
+                            val (pic, icon) = createRefs()
+
+                            Image(
+                                painter = rememberAsyncImagePainter(uri),
+                                contentScale = ContentScale.FillWidth,
+                                contentDescription = stringResource(
+                                    id = com.amalitech.core.R.string.features_empty
+                                ),
+                                modifier = Modifier
+                                    .size(85.dp, 66.dp)
+                                    .clip(RoundedCornerShape(spacing.spaceExtraSmall))
+                                    .padding(spacing.spaceExtraSmall)
+                                    .constrainAs(pic) {
+                                        top.linkTo(parent.top)
+                                        end.linkTo(parent.end)
+                                    }
+                            )
+                            IconButton(
+                                onClick = { viewModel.onDeleteImage(uri) },
+                                modifier = Modifier
+                                    .constrainAs(icon) {
+                                        top.linkTo(pic.top)
+                                        end.linkTo(pic.end)
+                                    }
+                                    .size(12.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.background)
+                            ) {
+                                Icon(
+                                    Icons.Default.Clear,
+                                    "",
+                                    tint = MaterialTheme.colorScheme.error
+                                )
+                            }
+                        }
                     })
+
             }
 
             LazyColumn(
@@ -276,7 +324,8 @@ fun AddRoomScreen(
                     RoomCounter(
                         state.capacity,
                         viewModel::onRemoveRoomCapacity,
-                        viewModel::onAddRoomCapacity
+                        viewModel::onAddRoomCapacity,
+                        viewModel::onNewRoomCapacity
                     )
                 }
 
@@ -334,63 +383,131 @@ fun AddRoomScreen(
 fun RoomCounter(
     value: Int = 1,
     removeRoom: () -> Unit,
-    addRoom: () -> Unit
+    addRoom: () -> Unit,
+    onNewValue: (Int) -> Unit
 ) {
     val spacing = LocalSpacing.current
-    Box(
-        Modifier
-            .border(
-                BorderStroke(
-                    1.dp,
-                    MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f)
+//    Box(
+//        Modifier
+//            .border(
+//                BorderStroke(
+//                    1.dp,
+//                    MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f)
+//                ),
+//                shape = RoundedCornerShape(5.dp)
+//            )
+//            .size(460.dp, 39.dp)
+//            .padding(spacing.spaceMedium, spacing.default)
+//    ) {
+//        Icon(
+//            imageVector = Icons.Filled.Remove,
+//            contentDescription = stringResource(
+//                id = com.amalitech.core.R.string.add_room_counter
+//            ),
+//            modifier = Modifier
+//                .clickable(
+//                    onClick = {
+//                        if (value > 1) {
+//                            removeRoom()
+//                        }
+//                    }
+//                )
+//                .align(Alignment.CenterStart)
+//                .size(20.dp)
+//        )
+//
+//        Text(
+//            text = value.toString(),
+//            modifier = Modifier
+//                .align(Alignment.Center),
+//            color = MaterialTheme.colorScheme.onSurfaceVariant,
+//            textAlign = TextAlign.Start,
+//            fontWeight = FontWeight.Light,
+//            fontSize = 16.sp
+//        )
+//
+//        Icon(
+//            imageVector = Icons.Filled.Add,
+//            contentDescription = stringResource(
+//                id = com.amalitech.core.R.string.add_room_counter
+//            ),
+//            modifier = Modifier
+//                .clickable(
+//                    onClick = {
+//                        addRoom()
+//                    }
+//                )
+//                .align(Alignment.CenterEnd)
+//                .size(20.dp)
+//        )
+//    }
+    val pattern = remember { Regex("^\\d+\$") }
+    TextField(
+        value = value.toString(),
+        onValueChange = {
+            if (it.isEmpty() || it.matches(pattern)) {
+                onNewValue(it.toInt())
+            }
+        },
+        trailingIcon = {
+            Icon(
+                imageVector = Icons.Filled.Add,
+                contentDescription = stringResource(
+                    id = com.amalitech.core.R.string.add_room_counter
                 ),
-                shape = RoundedCornerShape(5.dp)
-            )
-            .size(460.dp, 39.dp)
-            .padding(spacing.spaceMedium, spacing.default)
-    ) {
-        Icon(
-            imageVector = Icons.Filled.Remove,
-            contentDescription = stringResource(
-                id = com.amalitech.core.R.string.add_room_counter
-            ),
-            modifier = Modifier
-                .clickable(
-                    onClick = {
-                        if (value > 1) {
-                            removeRoom()
+                modifier = Modifier
+                    .clickable(
+                        onClick = {
+                            addRoom()
                         }
-                    }
-                )
-                .align(Alignment.CenterStart)
-                .size(20.dp)
-        )
-
-        Text(
-            text = value.toString(),
-            modifier = Modifier
-                .align(Alignment.Center),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Start,
-            fontWeight = FontWeight.Light,
-            fontSize = 16.sp
-        )
-
-        Icon(
-            imageVector = Icons.Filled.Add,
-            contentDescription = stringResource(
-                id = com.amalitech.core.R.string.add_room_counter
-            ),
-            modifier = Modifier
-                .clickable(
-                    onClick = {
-                        addRoom()
-                    }
-                )
-                .align(Alignment.CenterEnd)
-                .size(20.dp)
-        )
-    }
+                    )
+                    .size(20.dp),
+                tint = MaterialTheme.colorScheme.onBackground
+            )
+        },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Filled.Remove,
+                contentDescription = stringResource(
+                    id = com.amalitech.core.R.string.add_room_counter
+                ),
+                modifier = Modifier
+                    .clickable(
+                        onClick = {
+                            if (value > 1) {
+                                removeRoom()
+                            }
+                        }
+                    )
+                    .size(20.dp),
+                tint = MaterialTheme.colorScheme.onBackground
+            )
+        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number,
+        ),
+        colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+            focusedContainerColor = MaterialTheme.colorScheme.background,
+            disabledContainerColor = MaterialTheme.colorScheme.background,
+            disabledIndicatorColor = Color.Transparent,
+            disabledTextColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(1.dp)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
+                shape = RoundedCornerShape(spacing.spaceExtraSmall)
+            )
+            .padding(spacing.spaceExtraSmall),
+        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center)
+    )
 }
 
 @Composable
@@ -489,7 +606,7 @@ fun RoomTextFieldPreview() {
 @Composable
 fun AddRoomScreenPreview() {
     BookMeetingRoomTheme {
-        AddRoomScreen(onComposing = {}) {}
+        AddRoomScreen(onComposing = {}, appState = rememberBookMeetingRoomAppState()) {}
     }
 }
 
@@ -499,6 +616,7 @@ fun RoomCounterPreview() {
     BookMeetingRoomTheme {
         RoomCounter(
             1,
+            {},
             {},
             {}
         )

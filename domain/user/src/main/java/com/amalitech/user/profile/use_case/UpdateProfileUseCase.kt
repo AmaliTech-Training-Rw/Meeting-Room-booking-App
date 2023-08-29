@@ -3,7 +3,7 @@ package com.amalitech.user.profile.use_case
 import com.amalitech.core.R
 import com.amalitech.core.util.UiText
 import com.amalitech.user.profile.model.Profile
-import com.amalitech.user.profile.repository.UserRepository
+import com.amalitech.user.repository.UserRepository
 import kotlinx.coroutines.delay
 
 class UpdateProfileUseCase(private val userRepository: UserRepository) {

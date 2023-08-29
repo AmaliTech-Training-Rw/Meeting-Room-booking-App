@@ -38,9 +38,9 @@ sealed class BottomNavItem(
     companion object {
         fun createItems(): List<BottomNavItem> = listOf(
             Home,
-            Profile,
             Bookings,
-            Invitations
+            Invitations,
+            Profile
         )
     }
 }

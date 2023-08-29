@@ -11,6 +11,43 @@ class GetRoomUseCase {
     suspend operator fun invoke(roomId: String): Response<Room> {
         // TODO (API integration)
         delay(2000)
+        val images = listOf(
+            "https://picsum.photos/id/29/4855/2000",
+            "https://picsum.photos/id/0/4855/2000",
+            "https://picsum.photos/id/15/4855/2000",
+            "https://picsum.photos/id/26/4855/2000",
+            "https://picsum.photos/id/3/4855/2000",
+            "https://picsum.photos/id/4/4855/2000",
+            "https://picsum.photos/id/5/4855/2000",
+            "https://picsum.photos/id/6/4855/2000",
+            "https://picsum.photos/id/7/4855/2000",
+            "https://picsum.photos/id/8/4855/2000",
+            "https://picsum.photos/id/9/4855/2000",
+            "https://picsum.photos/id/10/4855/2000",
+            "https://picsum.photos/id/11/4855/2000",
+            "https://picsum.photos/id/12/4855/2000",
+            "https://picsum.photos/id/13/4855/2000",
+            "https://picsum.photos/id/1/4855/2000",
+            "https://picsum.photos/id/14/4855/2000",
+            "https://picsum.photos/id/16/4855/2000",
+            "https://picsum.photos/id/17/4855/2000",
+            "https://picsum.photos/id/10/4855/2000",
+            "https://picsum.photos/id/18/4855/2000",
+            "https://picsum.photos/id/19/4855/2000",
+            "https://picsum.photos/id/20/4855/2000",
+            "https://picsum.photos/id/22/4855/2000",
+            "https://picsum.photos/id/9/4855/2000",
+            "https://picsum.photos/id/23/4855/2000",
+            "https://picsum.photos/id/24/4855/2000",
+            "https://picsum.photos/id/25/4855/2000",
+            "https://picsum.photos/id/27/4855/2000",
+            "https://picsum.photos/id/28/4855/2000",
+            "https://picsum.photos/id/33/4855/2000",
+            "https://picsum.photos/id/30/4855/2000",
+            "https://picsum.photos/id/31/4855/2000",
+            "https://picsum.photos/id/32/4855/2000"
+        )
+
         return Response(
             data = Room(
                 name = "Room",
@@ -36,7 +73,7 @@ class GetRoomUseCase {
                         date = LocalDate.now()
                     )
                 ),
-                imgUrl = "https://drive.google.com/file/d/1A_T0KtSBWT7_8meSVXjErC54yzrnWN28/view?usp=sharing",
+                imgUrl = images.random(),
                 capacity = 10
             )
         )

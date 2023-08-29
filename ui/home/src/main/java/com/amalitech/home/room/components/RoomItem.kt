@@ -60,7 +60,7 @@ fun RoomItem(
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(spacing.spaceMedium))
                 .align(Alignment.CenterVertically),
-            placeholder = painterResource(com.amalitech.core_ui.R.drawable.baseline_refresh_24),
+//            placeholder = painterResource(com.amalitech.core_ui.R.drawable.baseline_refresh_24),
             error = painterResource(com.amalitech.core_ui.R.drawable.room_small)
         )
         Spacer(modifier = Modifier.width(spacing.spaceMedium))
