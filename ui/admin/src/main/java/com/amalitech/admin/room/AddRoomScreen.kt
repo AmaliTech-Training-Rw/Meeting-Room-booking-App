@@ -42,7 +42,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -387,66 +386,12 @@ fun RoomCounter(
     onNewValue: (Int) -> Unit
 ) {
     val spacing = LocalSpacing.current
-//    Box(
-//        Modifier
-//            .border(
-//                BorderStroke(
-//                    1.dp,
-//                    MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f)
-//                ),
-//                shape = RoundedCornerShape(5.dp)
-//            )
-//            .size(460.dp, 39.dp)
-//            .padding(spacing.spaceMedium, spacing.default)
-//    ) {
-//        Icon(
-//            imageVector = Icons.Filled.Remove,
-//            contentDescription = stringResource(
-//                id = com.amalitech.core.R.string.add_room_counter
-//            ),
-//            modifier = Modifier
-//                .clickable(
-//                    onClick = {
-//                        if (value > 1) {
-//                            removeRoom()
-//                        }
-//                    }
-//                )
-//                .align(Alignment.CenterStart)
-//                .size(20.dp)
-//        )
-//
-//        Text(
-//            text = value.toString(),
-//            modifier = Modifier
-//                .align(Alignment.Center),
-//            color = MaterialTheme.colorScheme.onSurfaceVariant,
-//            textAlign = TextAlign.Start,
-//            fontWeight = FontWeight.Light,
-//            fontSize = 16.sp
-//        )
-//
-//        Icon(
-//            imageVector = Icons.Filled.Add,
-//            contentDescription = stringResource(
-//                id = com.amalitech.core.R.string.add_room_counter
-//            ),
-//            modifier = Modifier
-//                .clickable(
-//                    onClick = {
-//                        addRoom()
-//                    }
-//                )
-//                .align(Alignment.CenterEnd)
-//                .size(20.dp)
-//        )
-//    }
-    val pattern = remember { Regex("^\\d+\$") }
     TextField(
         value = value.toString(),
         onValueChange = {
-            if (it.isEmpty() || it.matches(pattern)) {
-                onNewValue(it.toInt())
+            val inputValue = it.toIntOrNull()
+            if (inputValue != null) {
+                onNewValue(inputValue)
             }
         },
         trailingIcon = {
