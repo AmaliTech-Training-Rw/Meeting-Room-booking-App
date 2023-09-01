@@ -17,7 +17,6 @@ import com.amalitech.rooms.di.domainRoomsModule
 import com.amalitech.rooms.di.roomPresentationModule
 import com.amalitech.user.di.dataUserModule
 import com.amalitech.user.di.domainUserModule
-import com.amalitech.user.di.userModule
 import com.amalitech.user.di.userPresentationModule
 import com.amalitech.user.profile.di.presentationUserModule
 import com.tradeoases.invite.di.domainInviteModule
@@ -49,7 +48,6 @@ class BookMeetingApplication : Application() {
                 domainBookingModule,
                 presentationBookingModule,
                 userPresentationModule,
-                userModule,
                 uiHomeModule,
                 domainRoomsModule,
                 inviteModule,

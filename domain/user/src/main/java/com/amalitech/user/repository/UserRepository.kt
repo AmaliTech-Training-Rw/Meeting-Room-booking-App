@@ -16,7 +16,7 @@ interface UserRepository {
     suspend fun getRemoteUsers(): List<User>
     suspend fun getUsers(): Flow<List<User>>
     suspend fun insertUsers(users: List<User>)
-    // TODO: change this to a request model insteadof using user
+    // TODO: change this to a request model instead of using list user entity
     suspend fun inviteUser(user: User)
 
 }
