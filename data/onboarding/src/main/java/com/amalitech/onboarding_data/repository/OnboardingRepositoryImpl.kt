@@ -3,6 +3,7 @@ package com.amalitech.onboarding_data.repository
 import com.amalitech.core.data.repository.BaseRepo
 import com.amalitech.core.util.ApiResult
 import com.amalitech.core.util.UiText
+import com.amalitech.onboarding.login.model.UserProfile
 import com.amalitech.onboarding.repository.OnboardingRepository
 import com.amalitech.onboarding.signup.model.CreateOrganization
 import com.amalitech.onboarding.signup.model.LocationX
@@ -29,7 +30,14 @@ class OnboardingRepositoryImpl(
                 extractError(jsonObject)
             }
         )
-        return ApiResult(data = apiResult.data?.toCreateOrganization(), error = apiResult.error)
+        return try {
+            ApiResult(data = apiResult.data?.toCreateOrganization(), error = apiResult.error)
+        } catch (e: Exception) {
+            val localizedMessage = e.localizedMessage
+            if (localizedMessage != null)
+                ApiResult(error = UiText.DynamicString(localizedMessage))
+            else ApiResult(error = UiText.StringResource(com.amalitech.core.R.string.error_default_message))
+        }
     }
 
     override suspend fun fetchOrganizationType(): ApiResult<OrganizationType> {
@@ -41,7 +49,14 @@ class OnboardingRepositoryImpl(
                 return@safeApiCall UiText.StringResource(com.amalitech.core.R.string.error_default_message)
             }
         )
-        return ApiResult(data = apiResult.data?.toOrganizationType(), error = apiResult.error)
+        return try {
+            ApiResult(data = apiResult.data?.toOrganizationType(), error = apiResult.error)
+        } catch (e: Exception) {
+            val localizedMessage = e.localizedMessage
+            if (localizedMessage != null)
+                ApiResult(error = UiText.DynamicString(localizedMessage))
+            else ApiResult(error = UiText.StringResource(com.amalitech.core.R.string.error_default_message))
+        }
     }
 
     override suspend fun fetchLocations(): ApiResult<List<LocationX>> {
@@ -77,10 +92,32 @@ class OnboardingRepositoryImpl(
                 extractError(jsonObject)
             }
         )
-        return ApiResult(data = apiResult.data?.toCreateOrganization(), error = apiResult.error)
+        return try {
+            ApiResult(data = apiResult.data?.toCreateOrganization(), error = apiResult.error)
+        } catch (e: Exception) {
+            val localizedMessage = e.localizedMessage
+            if (localizedMessage != null)
+                ApiResult(error = UiText.DynamicString(localizedMessage))
+            else ApiResult(error = UiText.StringResource(com.amalitech.core.R.string.error_default_message))
+        }
     }
 
-    override suspend fun login(email: String, password: String): ApiResult<Boolean> {
-        TODO("Not yet implemented")
+    override suspend fun login(email: String, password: String): ApiResult<UserProfile> {
+        val apiResult = safeApiCall(
+            apiToBeCalled = {
+                api.login(email, password)
+            },
+            extractError = {
+                extractError(it)
+            }
+        )
+        return try {
+            ApiResult(data = apiResult.data?.data?.toProfileInfo(token = apiResult.data?.token?:""), error = apiResult.error)
+        } catch (e: Exception) {
+            val localizedMessage = e.localizedMessage
+            if (localizedMessage != null)
+                ApiResult(error = UiText.DynamicString(localizedMessage))
+            else ApiResult(error = UiText.StringResource(com.amalitech.core.R.string.error_default_message))
+        }
     }
 }

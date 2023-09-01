@@ -19,7 +19,7 @@ import org.koin.dsl.module
 
 val onboardingDomainModule = module {
     single {
-        LogInUseCase()
+        LogInUseCase(get())
     }
 
     single {

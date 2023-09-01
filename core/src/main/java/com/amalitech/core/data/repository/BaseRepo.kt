@@ -87,6 +87,9 @@ open class BaseRepo {
         if (jsonObject.has("error")) {
             return UiText.DynamicString(jsonObject.getString("error"))
         }
+        if (jsonObject.has("message")) {
+            return UiText.DynamicString(jsonObject.getString("message"))
+        }
         return null
     }
 }

@@ -2,6 +2,7 @@ package com.amalitech.onboarding_data.remote
 
 import com.amalitech.onboarding_data.remote.dto.CreateOrganizationDto
 import com.amalitech.onboarding_data.remote.dto.LocationDto
+import com.amalitech.onboarding_data.remote.dto.LoginDto
 import com.amalitech.onboarding_data.remote.dto.OrganizationTypeDto
 import retrofit2.Response
 import retrofit2.http.GET
@@ -40,5 +41,5 @@ interface OnboardingApiService {
     suspend fun login(
         @Query("email") email: String,
         @Query("password") password: String
-    )
+    ): Response<LoginDto>
 }

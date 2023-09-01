@@ -72,18 +72,17 @@ class LoginViewModel(
                     email = _uiState.value.email,
                     password = _uiState.value.password
                 )
-                if (apiResult != null) {
+                val data = apiResult.data
+                if (apiResult.error != null) {
                     _uiStateFlow.update {
                         UiState.Error(
-                            error = apiResult
+                            error = apiResult.error
                         )
                     }
-                } else {
-                    val isAdmin = loginUseCasesWrapper.isUserAdminUseCase()
-                    val profileInfo =
-                        loginUseCasesWrapper.loadProfileInformationUseCase(_uiState.value.email)
+                } else if (data != null){
+                    val isAdmin = data.isAdmin != 0
 
-                    profileInfo.data?.let {
+                    data.let {
                         userProfileUseCaseWrapper.saveUserUseCase(
                             UserDto(
                                 uid = 0,
@@ -98,6 +97,7 @@ class LoginViewModel(
                     sharedPreferences.saveShouldShowOnboarding(false)
                     sharedPreferences.saveUserType(isAdmin)
                     sharedPreferences.saveLoggedInUserEmail(_uiState.value.email)
+                    sharedPreferences.saveToken(data.token)
                     _uiStateFlow.update {
                         UiState.Success()
                     }

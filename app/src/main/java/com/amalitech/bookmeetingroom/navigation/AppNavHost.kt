@@ -148,6 +148,11 @@ fun NavGraphBuilder.onboardingGraph(
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern =
+                        "http://api.meeting-room.amalitech-dev.net/user/invite/api/${NavArguments.token}"
+                    action = Intent.ACTION_VIEW
+                },
+                navDeepLink {
+                    uriPattern =
                         "https://api.meeting-room.amalitech-dev.net/user/invite/api/${NavArguments.token}"
                     action = Intent.ACTION_VIEW
                 }

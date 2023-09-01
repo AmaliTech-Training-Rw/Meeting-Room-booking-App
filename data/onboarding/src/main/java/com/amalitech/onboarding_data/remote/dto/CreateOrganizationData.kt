@@ -2,7 +2,7 @@ package com.amalitech.onboarding_data.remote.dto
 
 import com.squareup.moshi.Json
 
-data class Data(
+data class CreateOrganizationData(
     @field:Json(name = "created_at")
     val createdAt: String,
     val email: String,

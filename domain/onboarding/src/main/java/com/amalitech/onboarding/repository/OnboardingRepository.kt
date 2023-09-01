@@ -4,6 +4,7 @@ import com.amalitech.core.util.ApiResult
 import com.amalitech.onboarding.signup.model.CreateOrganization
 import com.amalitech.onboarding.signup.model.LocationX
 import com.amalitech.onboarding.signup.model.OrganizationType
+import com.amalitech.onboarding.login.model.UserProfile
 import com.amalitech.onboarding.signup.model.User
 
 interface OnboardingRepository {
@@ -17,5 +18,5 @@ interface OnboardingRepository {
         token: String,
     ): ApiResult<CreateOrganization>
 
-    suspend fun login(email: String, password: String): ApiResult<Boolean>
+    suspend fun login(email: String, password: String): ApiResult<UserProfile>
 }

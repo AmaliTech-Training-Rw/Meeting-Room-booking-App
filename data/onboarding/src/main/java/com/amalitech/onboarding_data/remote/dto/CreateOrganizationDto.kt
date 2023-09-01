@@ -3,7 +3,7 @@ package com.amalitech.onboarding_data.remote.dto
 import com.amalitech.onboarding.signup.model.CreateOrganization
 
 data class CreateOrganizationDto(
-    val `data`: Data? = null,
+    val `data`: CreateOrganizationData? = null,
     val message: String? = null,
     val status: Boolean,
 ) {
