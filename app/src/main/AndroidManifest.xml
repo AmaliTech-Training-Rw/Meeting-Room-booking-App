@@ -28,7 +28,7 @@
             <intent-filter>
                 <data
                     android:scheme="http"
-                    android:host="www.example.com" />
+                    android:host="api.meeting-room.amalitech-dev.net" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <action android:name="android.intent.action.VIEW" />

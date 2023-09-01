@@ -1,24 +1,16 @@
 package com.amalitech.onboarding.signup.use_case
 
 import com.amalitech.core.util.ApiResult
-import kotlinx.coroutines.delay
+import com.amalitech.onboarding.repository.OnboardingRepository
+import com.amalitech.onboarding.signup.model.TypesOrganisation
 
-class FetchOrganizationsTypeUseCase {
+class FetchOrganizationsTypeUseCase(
+    private val repos: OnboardingRepository
+) {
 
 
-    suspend operator fun invoke(): ApiResult<List<String>> {
-        // TODO("FETCH LIST OF ORGANIZATION FROM THE API")
-        delay(3000)
-        return ApiResult(
-            data = listOf(
-                "Non-profit organization",
-                "Educational institution",
-                "Government agency",
-                "Healthcare provider",
-                "Technology company",
-                "Financial institution",
-                "Retail business",
-            )
-        )
+    suspend operator fun invoke(): ApiResult<List<TypesOrganisation>> {
+        val apiResult = repos.fetchOrganizationType()
+        return ApiResult(data = apiResult.data?.typesOfOrganization, error = apiResult.error)
     }
 }

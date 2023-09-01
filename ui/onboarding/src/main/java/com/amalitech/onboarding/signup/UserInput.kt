@@ -4,8 +4,9 @@ data class UserInput(
     val username: String = "",
     val organizationName: String = "",
     val email: String = "",
-    val location: String = "",
+    val location: Int = -1,
     val password: String = "",
     val passwordConfirmation: String = "",
-    val selectedOrganizationType: String = "",
+    val selectedOrganizationType: Int = -1,
+    val token: String = ""
 )

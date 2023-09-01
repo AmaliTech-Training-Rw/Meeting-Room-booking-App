@@ -22,7 +22,7 @@ class SignupViewModel(
 
 
     init {
-        fetchOrganizations()
+        fetchOrganizationsAndLocations()
     }
 
     /**
@@ -33,6 +33,17 @@ class SignupViewModel(
     fun onNewEmail(newEmail: String) {
         _userInput.value = _userInput.value.copy(
             email = newEmail.trim()
+        )
+    }
+
+    /**
+     * onNewToken - trims and adds value of token entered by the user in our state
+     *
+     * @param newToken the email address entered by the user
+     */
+    private fun onNewToken(newToken: String) {
+        _userInput.value = _userInput.value.copy(
+            token = newToken.trim()
         )
     }
 
@@ -50,11 +61,11 @@ class SignupViewModel(
     /**
      * onNewLocation - trims and adds value of location entered by the user in our state
      *
-     * @param location the location entered by the user
+     * @param locationId the location entered by the user
      */
-    fun onNewLocation(location: String) {
+    fun onLocationSelected(locationId: Int) {
         _userInput.value = _userInput.value.copy(
-            location = location.trim()
+            location = locationId
         )
     }
 
@@ -95,13 +106,13 @@ class SignupViewModel(
         )
     }
 
-    fun onSelectedOrganizationType(type: String) {
+    fun onSelectedOrganizationType(type: Int) {
         _userInput.value = _userInput.value.copy(
             selectedOrganizationType = type
         )
     }
 
-    private fun fetchOrganizations() {
+    private fun fetchOrganizationsAndLocations() {
         if (job?.isActive == true)
             return
 
@@ -109,19 +120,30 @@ class SignupViewModel(
             _uiStateFlow.update {
                 UiState.Loading()
             }
-            val result = signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
-            if (result.data != null) {
+            val resultOrganization = signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
+            val resultLocation = signupUseCasesWrapper.fetchLocationsUseCase()
+            if (resultOrganization.data != null && resultLocation.data != null) {
                 _uiStateFlow.update {
                     UiState.Success(
-                        SignupUiState(result.data!!)
+                        SignupUiState(
+                            resultOrganization.data!!,
+                            resultLocation.data!!
+                        )
                     )
                 }
-            } else if (result.error != null) {
-                _uiStateFlow.update {
-                    UiState.Error(
-                        result.error!!
-                    )
-                }
+            } else if (resultOrganization.error != null || resultLocation.error != null) {
+                if (resultOrganization.error != null)
+                    _uiStateFlow.update {
+                        UiState.Error(
+                            resultOrganization.error!!
+                        )
+                    }
+                if (resultLocation.error != null)
+                    _uiStateFlow.update {
+                        UiState.Error(
+                            resultLocation.error!!
+                        )
+                    }
             } else {
                 _uiStateFlow.update {
                     UiState.Error(
@@ -146,17 +168,26 @@ class SignupViewModel(
             }
             validateData()
             if (_uiStateFlow.value !is UiState.Error) {
-                val result = signupUseCasesWrapper.signupUseCase(
-                    user = User(
-                        _userInput.value.username,
-                        _userInput.value.organizationName,
-                        _userInput.value.email,
-                        _userInput.value.selectedOrganizationType,
-                        _userInput.value.location,
-                        _userInput.value.password,
-                        _userInput.value.passwordConfirmation,
-                    )
-                )
+                val result =
+                    if (_userInput.value.token.isNotBlank())
+                        signupUseCasesWrapper.createUserUseCase(
+                            token = _userInput.value.token,
+                            username = _userInput.value.username,
+                            password = _userInput.value.password,
+                            passwordConfirmation = _userInput.value.passwordConfirmation
+                        )
+                    else
+                        signupUseCasesWrapper.signupUseCase(
+                            user = User(
+                                _userInput.value.username,
+                                organizationName = _userInput.value.organizationName,
+                                email = _userInput.value.email,
+                                typeOfOrganization = _userInput.value.selectedOrganizationType,
+                                location = _userInput.value.location,
+                                password = _userInput.value.password,
+                                passwordConfirmation = _userInput.value.passwordConfirmation,
+                            )
+                        )
                 if (result == null) {
                     _uiStateFlow.update {
                         UiState.Success(SignupUiState(shouldNavigate = true))
@@ -176,15 +207,30 @@ class SignupViewModel(
      * it updates the viewModel state with it.
      */
     private fun validateData() {
-        val emailValidationResult = signupUseCasesWrapper.validateEmailUseCase(_userInput.value.email)
-        val passwordValidationResult = signupUseCasesWrapper.validatePasswordUseCase(_userInput.value.password)
+        if (_userInput.value.token.isNotBlank()) {
+            val passwordMatch = signupUseCasesWrapper.checkPasswordsMatchUseCase(
+                _userInput.value.password,
+                _userInput.value.passwordConfirmation
+            )
+            val emailValid = signupUseCasesWrapper.validateEmailUseCase(_userInput.value.email)
+            val passwordValid =
+                signupUseCasesWrapper.checkValuesNotBlankUseCase(_userInput.value.password)
+            when {
+                passwordMatch != null -> updateStateWithError(passwordMatch)
+                passwordValid != null -> updateStateWithError(passwordValid)
+                emailValid != null -> updateStateWithError(emailValid)
+            }
+            return
+        }
+        val passwordValidationResult =
+            signupUseCasesWrapper.validatePasswordUseCase(_userInput.value.password)
+        val emailValidationResult =
+            signupUseCasesWrapper.validateEmailUseCase(_userInput.value.email)
         val valuesNotBlankResult = signupUseCasesWrapper.checkValuesNotBlankUseCase(
             _userInput.value.email,
             _userInput.value.password,
             _userInput.value.passwordConfirmation,
-            _userInput.value.location,
             _userInput.value.username,
-            _userInput.value.selectedOrganizationType
         )
         val passwordsMatchResult = signupUseCasesWrapper.checkPasswordsMatchUseCase(
             _userInput.value.password,
@@ -196,12 +242,17 @@ class SignupViewModel(
             passwordValidationResult != null -> updateStateWithError(passwordValidationResult)
             valuesNotBlankResult != null -> updateStateWithError(valuesNotBlankResult)
             passwordsMatchResult != null -> updateStateWithError(passwordsMatchResult)
-            _userInput.value.selectedOrganizationType.isBlank() -> updateStateWithError(
+            _userInput.value.selectedOrganizationType == -1 -> updateStateWithError(
                 UiText.StringResource(R.string.error_no_organization_type_selected)
             )
 
+            _userInput.value.location == -1 -> updateStateWithError(
+                UiText.StringResource(R.string.error_no_location_selected)
+            )
+
             else -> {
-                val isEmailAvailable = signupUseCasesWrapper.isEmailAvailableUseCase(_userInput.value.email)
+                val isEmailAvailable =
+                    signupUseCasesWrapper.isEmailAvailableUseCase(_userInput.value.email)
                 val isUsernameAvailable =
                     signupUseCasesWrapper.isUsernameAvailableUseCase(_userInput.value.username)
 
@@ -229,40 +280,25 @@ class SignupViewModel(
 
     /**
      * submitValues - Submits values received by the nav back stack entry to the viewModel
-     * @param email Value of email address received by the nav back stack entry
-     * @param organizationName Value received by the nav back stack entry
-     * @param location Value received by the nav back stack entry
-     * @param typeOfOrganization Value received by the nav back stack entry
+     * @param token Value of the token received by the nav back stack entry
      */
     fun submitValues(
-        organizationName: String,
-        typeOfOrganization: String,
-        location: String,
-        email: String
+        token: String
     ) {
-        onNewLocation(location)
-        onNewEmail(email)
-        onNewOrganizationName(organizationName)
-        onSelectedOrganizationType(typeOfOrganization)
+        onNewToken(token)
     }
 
     /**
      * isInvitedUser - Checks if there are all required arguments for invited users.
      * If any of the arguments is null or blank, then it's not an invited user, because
      * the navHost can only receive all the arguments together or none of them.
-     * @param email Value of email address received by the nav back stack entry
-     * @param organizationName Value received by the nav back stack entry
-     * @param location Value received by the nav back stack entry
-     * @param typeOfOrganization Value received by the nav back stack entry
+     * @param token Value of the token received by the nav back stack entry
      * @return false if any of the params is null or blank, true otherwise
      */
     fun isInvitedUser(
-        email: String?,
-        organizationName: String?,
-        location: String?,
-        typeOfOrganization: String?
+        token: String?
     ): Boolean {
-        return !email.isNullOrBlank() && !organizationName.isNullOrBlank() && !location.isNullOrBlank() && !typeOfOrganization.isNullOrBlank()
+        return !token.isNullOrBlank()
     }
 
     /**
