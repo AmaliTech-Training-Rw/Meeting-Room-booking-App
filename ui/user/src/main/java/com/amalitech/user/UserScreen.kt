@@ -513,7 +513,7 @@ fun UserItem(
     ) {
         AsyncImage(
             model = user.profilePic,
-            contentDescription = user.username,
+            contentDescription = user.userName,
             modifier = Modifier
 //                .size(45.dp)
                 .clip(CircleShape)
@@ -530,7 +530,7 @@ fun UserItem(
                 .weight(2f)
         ) {
             Text(
-                text = user.username,
+                text = user.userName,
                 modifier = Modifier,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -658,8 +658,10 @@ fun UserItemPreview() {
         UserItem(
             true,
             User(
-                "4",
+                4,
+                "",
                 "cool",
+                "User Name",
                 "User Name",
                 "example@gmail.com",
                 true

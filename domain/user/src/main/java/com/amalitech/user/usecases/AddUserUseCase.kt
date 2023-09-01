@@ -8,5 +8,5 @@ class AddUserUseCase constructor(
 ) {
     suspend operator fun invoke(
         user: User
-    ) = userRepository.addUser(user)
+    ) = userRepository.inviteUser(user)
 }

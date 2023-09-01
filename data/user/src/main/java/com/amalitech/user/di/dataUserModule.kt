@@ -22,6 +22,6 @@ val dataUserModule = module {
     }
 
     single<UserRepository> {
-        UserRepositoryImpl(get())
+        UserRepositoryImpl(get(), get(), get(), get())
     }
 }

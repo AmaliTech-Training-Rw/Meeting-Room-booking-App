@@ -7,7 +7,8 @@ import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
 import com.amalitech.user.models.User
 import com.amalitech.user.state.UserViewState
-import com.amalitech.user.usecases.GetUseCase
+import com.amalitech.user.usecases.FetchRemoteUsersCase
+import com.amalitech.user.usecases.GetUserCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +17,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class UserViewModel (
-    private val getUsers: GetUseCase
+    private val getUsers: GetUserCase,
+    private val fetchRemoteUsersCase: FetchRemoteUsersCase
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -29,6 +31,7 @@ class UserViewModel (
         subscribeToUserUpdates()
     }
 
+    // TODO: remove view mapper ass seeing its the state that takes care of that
     private fun subscribeToUserUpdates() {
         launchCatching {
             _uiState.value = uiState.value.copy(loading = true)
@@ -40,6 +43,11 @@ class UserViewModel (
                 }
             }
         }
+    }
+
+    fun refresh() {
+        // TODO: run in view model scope
+        // fetchRemoteUsersCase
     }
 
     fun onDelete() {
@@ -88,7 +96,7 @@ class UserViewModel (
         _uiState.update { state ->
             state.copy(
                 users = usersCopy.filter { user ->
-                    user.username.contains(state.searchQuery, true) || user.email.contains(
+                    user.userName.contains(state.searchQuery, true) || user.email.contains(
                         state.searchQuery,
                         true
                     )

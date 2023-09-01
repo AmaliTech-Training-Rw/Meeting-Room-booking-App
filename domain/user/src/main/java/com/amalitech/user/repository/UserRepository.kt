@@ -12,9 +12,11 @@ interface UserRepository {
 
     suspend fun insertUser(user: UserDto)
 
-    suspend fun getUsers(): Flow<User>
-
-    suspend fun addUser(user: User)
-
     suspend fun updateProfile(profile: Profile)
+    suspend fun getRemoteUsers(): List<User>
+    suspend fun getUsers(): Flow<List<User>>
+    suspend fun insertUsers(users: List<User>)
+    // TODO: change this to a request model insteadof using user
+    suspend fun inviteUser(user: User)
+
 }

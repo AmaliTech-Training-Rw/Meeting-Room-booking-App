@@ -30,6 +30,14 @@ class AddUserViewModel(
     private val _snackBarMessage: MutableState<UiText?> = mutableStateOf(null)
     val snackbarMessage: State<UiText?> = _snackBarMessage
 
+    init {
+        fetchUsersFromDb()
+    }
+
+    private fun fetchUsersFromDb() {
+        TODO("Not yet implemented")
+    }
+
     fun onFirstName(name: String) {
         _userUiState.update { firstName ->
             firstName.copy(
@@ -94,15 +102,7 @@ class AddUserViewModel(
        }
 
         launchCatching {
-            addUserUseCase(
-                mapUserToDomain(
-                    _userUiState.value.firstName,
-                    _userUiState.value.lastName,
-                    _userUiState.value.email,
-                    _userUiState.value.selectLocation,
-                    _userUiState.value.isAdmin
-                )
-            )
+            // addUserUseCase( )
         }
         _snackBarMessage.value = UiText.DynamicString("User invited successfully")
     }
@@ -117,23 +117,6 @@ class AddUserViewModel(
             },
             block = block
         )
-
-    // TODO: crate a share mapping logic/function
-    private fun mapUserToDomain(
-        firstName: String,
-        lastName: String,
-        email: String,
-        location: String,
-        isAdmin: Boolean
-    ): User {
-        return User(
-            firstName,
-            lastName,
-            email,
-            location,
-            isAdmin
-        )
-    }
 
     fun clearSnackBar() {
         _snackBarMessage.value = null
