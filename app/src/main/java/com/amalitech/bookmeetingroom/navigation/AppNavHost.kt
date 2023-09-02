@@ -148,27 +148,20 @@ fun NavGraphBuilder.onboardingGraph(
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern =
-                        "http://www.example.com/{${NavArguments.organizationName}}/{${NavArguments.email}}/{${NavArguments.typeOfOrganization}}/{${NavArguments.location}}"
+                        "http://api.meeting-room.amalitech-dev.net/user/invite/api/${NavArguments.token}"
+                    action = Intent.ACTION_VIEW
+                },
+                navDeepLink {
+                    uriPattern =
+                        "https://api.meeting-room.amalitech-dev.net/user/invite/api/${NavArguments.token}"
                     action = Intent.ACTION_VIEW
                 }
             ),
             arguments = listOf(
-                navArgument(NavArguments.organizationName) {
+                navArgument(NavArguments.token) {
                     type = NavType.StringType
                     defaultValue = ""
                 },
-                navArgument(NavArguments.email) {
-                    type = NavType.StringType
-                    defaultValue = ""
-                },
-                navArgument(NavArguments.typeOfOrganization) {
-                    type = NavType.StringType
-                    defaultValue = ""
-                },
-                navArgument(NavArguments.location) {
-                    type = NavType.StringType
-                    defaultValue = ""
-                }
             )
         ) { entry ->
             SignupScreen(

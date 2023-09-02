@@ -2,6 +2,7 @@ package com.amalitech.onboarding.login
 
 import com.amalitech.core.R
 import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
+import com.amalitech.core.util.ApiResult
 import com.amalitech.core.util.Response
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.UiState
@@ -46,7 +47,8 @@ class LoginViewModelTest {
         coJustRun {
             userProfileUseCaseWrapper.saveUserUseCase(any())
         }
-        viewModel = LoginViewModel(sharedPreferences, userProfileUseCaseWrapper, loginUseCasesWrapper)
+        viewModel =
+            LoginViewModel(sharedPreferences, userProfileUseCaseWrapper, loginUseCasesWrapper)
     }
 
     @Test
@@ -77,9 +79,27 @@ class LoginViewModelTest {
             loginUseCasesWrapper.validatePasswordUseCase(any())
         } returns null
 
-        every {
+        justRun { sharedPreferences.saveToken(any()) }
+        coEvery {
             loginUseCasesWrapper.logInUseCase(any(), any())
-        } returns null
+        } returns ApiResult(
+            data = UserProfile(
+                email = "email",
+                firstName = "Ngomdé Cadet",
+                lastName = "Kamdaou",
+                title = "Android dev",
+                profileImgUrl = "https://via.placeholder.com/400.png",
+                createdAt = "",
+                id = 2,
+                isAdmin = 1,
+                lastLogin = "",
+                locationId = 2,
+                organisationId = 2,
+                updatedAt = "",
+                userId = 1,
+                username = ""
+            )
+        )
 
         every {
             loginUseCasesWrapper.isUserAdminUseCase()
@@ -97,7 +117,16 @@ class LoginViewModelTest {
                 firstName = "Ngomdé Cadet",
                 lastName = "Kamdaou",
                 title = "Android dev",
-                profileImgUrl = "https://via.placeholder.com/400.png"
+                profileImgUrl = "https://via.placeholder.com/400.png",
+                createdAt = "",
+                id = 2,
+                isAdmin = 1,
+                lastLogin = "",
+                locationId = 2,
+                organisationId = 2,
+                updatedAt = "",
+                userId = 1,
+                username = ""
             )
         )
         justRun { sharedPreferences.saveLoggedInUserEmail(any()) }
@@ -158,9 +187,11 @@ class LoginViewModelTest {
             loginUseCasesWrapper.validatePasswordUseCase(any())
         } returns null
 
-        every {
+        coEvery {
             loginUseCasesWrapper.logInUseCase(any(), any())
-        } returns UiText.StringResource(androidx.compose.ui.R.string.default_error_message)
+        } returns ApiResult(
+            error = UiText.StringResource(androidx.compose.ui.R.string.default_error_message)
+        )
 
 
         viewModel.onLoginClick()

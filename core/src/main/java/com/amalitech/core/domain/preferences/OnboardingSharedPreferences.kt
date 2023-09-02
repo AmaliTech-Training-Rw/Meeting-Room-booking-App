@@ -11,4 +11,6 @@ interface OnboardingSharedPreferences {
     fun clear()
     fun saveAdminUserScreen(isUsingAdminDashboard: Boolean)
     fun loadAdminUserScreen(): Boolean
+    fun saveToken(token: String)
+    fun loadToken(): String
 }
