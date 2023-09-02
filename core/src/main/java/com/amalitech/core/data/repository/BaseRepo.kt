@@ -51,7 +51,7 @@ open class BaseRepo {
         }
     }
 
-    fun handleErrors(
+    private fun handleErrors(
         errorBody: ResponseBody?,
         extractError: (JSONObject) -> UiText?
     ): UiText {
