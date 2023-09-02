@@ -11,7 +11,7 @@ import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
 import com.amalitech.ui.user.R
 import com.amalitech.user.models.User
 import com.amalitech.user.state.UserUiState
-import com.amalitech.user.usecases.AddUserUseCase
+import com.amalitech.user.usecases.InviteUserUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AddUserViewModel(
-    private val addUserUseCase: AddUserUseCase
+    private val addUserUseCase: InviteUserUseCase
 ): ViewModel() {
 
     private val _userUiState = MutableStateFlow(

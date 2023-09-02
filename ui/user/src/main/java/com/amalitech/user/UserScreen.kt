@@ -410,6 +410,21 @@ fun UsersList(
         }
     }
 
+    if (state.users.isEmpty()) {
+        Text(
+            text = "Swipe to refresh user list ...",
+            modifier = Modifier,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = TextStyle(
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W700,
+                textAlign = TextAlign.Center
+            )
+        )
+    }
+
     LazyColumn(
         modifier = modifier
             .fillMaxHeight()

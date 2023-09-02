@@ -11,11 +11,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
-
 val networkModule = module {
 
     single<OkHttpClient> {
-        val interceptor = HttpLoggingInterceptor(get())
+        val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         OkHttpClient.Builder().addInterceptor(Interceptor { chain ->
                 val ongoing: Request.Builder = chain.request().newBuilder()
@@ -32,13 +31,14 @@ val networkModule = module {
             .writeTimeout(160, TimeUnit.SECONDS).retryOnConnectionFailure(true).build()
     }
 
-
-    single<MoshiConverterFactory> {
-        MoshiConverterFactory.create()
-    }
-
     single<BookMeetingNetworkApi> {
-        Retrofit.Builder().baseUrl(BASE_URL).client(get()).addConverterFactory(get()).build()
+        Retrofit
+            .Builder()
+            .baseUrl(BASE_URL)
+            .client(get())
+            .addConverterFactory(
+                MoshiConverterFactory.create()
+            ).build()
             .create(BookMeetingNetworkApi::class.java)
     }
 }
