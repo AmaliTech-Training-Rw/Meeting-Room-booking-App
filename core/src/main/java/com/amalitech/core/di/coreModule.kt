@@ -18,6 +18,10 @@ val coreModule = module {
         BookMeetingRepositoryImpl(get())
     }
 
+    single<BookMeetingRepository> {
+        BookMeetingRepositoryImpl(get())
+    }
+
     single<SharedPreferences> {
         androidContext().getSharedPreferences("shared_pref", Context.MODE_PRIVATE)
     }
