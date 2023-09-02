@@ -28,16 +28,13 @@ data class LoginData(
 ) {
     fun toProfileInfo(token: String): UserProfile {
         return UserProfile(
-            createdAt = createdAt,
             email = email,
             firstName = firstName?:"",
             id = id,
             isAdmin = isAdmin,
-            lastLogin = lastLogin?:"",
             lastName = lastName?:"",
             locationId = locationId,
             organisationId = organisationId,
-            updatedAt = updatedAt,
             userId = userId,
             username = username,
             token = token

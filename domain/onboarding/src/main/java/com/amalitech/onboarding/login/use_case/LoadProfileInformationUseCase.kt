@@ -14,13 +14,10 @@ class LoadProfileInformationUseCase {
                 lastName = "Doe",
                 title = "Android dev",
                 profileImgUrl = "https://via.eholder.com/400.png",
-                createdAt = "",
                 id = 2,
                 isAdmin = 1,
-                lastLogin = "",
                 locationId = 2,
                 organisationId = 2,
-                updatedAt = "",
                 userId = 1,
                 username = ""
             )
