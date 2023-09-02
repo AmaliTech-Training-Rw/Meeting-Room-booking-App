@@ -658,7 +658,7 @@ fun UserItemPreview() {
         UserItem(
             true,
             User(
-                "4",
+                4,
                 "cool",
                 "User Name",
                 "example@gmail.com",

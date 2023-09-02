@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.amalitech.user.profile.model.dto.UserDto
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
@@ -17,4 +18,10 @@ interface UserDao {
 
     @Delete
     suspend fun deleteUser(userDto: UserDto)
+
+    @Query("SELECT * FROM users ORDER BY userId DESC")
+    fun getAllUsers(): Flow<List<UsersEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUsers(users: List<UsersEntity>)
 }

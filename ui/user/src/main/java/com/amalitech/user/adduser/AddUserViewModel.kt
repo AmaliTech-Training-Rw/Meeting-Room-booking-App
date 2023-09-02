@@ -127,7 +127,7 @@ class AddUserViewModel(
         isAdmin: Boolean
     ): User {
         return User(
-            firstName,
+            0,
             lastName,
             email,
             location,

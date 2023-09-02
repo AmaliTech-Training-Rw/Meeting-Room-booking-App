@@ -6,15 +6,13 @@ import com.amalitech.user.profile.model.dto.UserDto
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
+    suspend fun getRemoteUsers(): List<User>
+    suspend fun getLocalUsers(): Flow<List<User>>
+    suspend fun insertUsers(users: List<User>)
+    suspend fun inviteUser(user: User)
+
     suspend fun getUser(email: String): UserDto
-
     suspend fun deleteUser(user: UserDto)
-
     suspend fun insertUser(user: UserDto)
-
-    suspend fun getUsers(): Flow<User>
-
-    suspend fun addUser(user: User)
-
     suspend fun updateProfile(profile: Profile)
 }
