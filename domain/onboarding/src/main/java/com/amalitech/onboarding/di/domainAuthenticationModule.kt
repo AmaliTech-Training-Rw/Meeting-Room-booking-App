@@ -8,6 +8,8 @@ import com.amalitech.onboarding.login.use_case.LogInUseCase
 import com.amalitech.onboarding.login.use_case.LoginUseCasesWrapper
 import com.amalitech.onboarding.reset_password.ResetPasswordUseCase
 import com.amalitech.onboarding.reset_password.ResetPasswordUseCasesWrapper
+import com.amalitech.onboarding.signup.use_case.CreateUserUseCase
+import com.amalitech.onboarding.signup.use_case.FetchLocationsUseCase
 import com.amalitech.onboarding.signup.use_case.FetchOrganizationsTypeUseCase
 import com.amalitech.onboarding.signup.use_case.IsEmailAvailableUseCase
 import com.amalitech.onboarding.signup.use_case.IsUsernameAvailableUseCase
@@ -17,7 +19,7 @@ import org.koin.dsl.module
 
 val onboardingDomainModule = module {
     single {
-        LogInUseCase()
+        LogInUseCase(get())
     }
 
     single {
@@ -66,11 +68,11 @@ val onboardingDomainModule = module {
     }
 
     single {
-        SignupUseCase()
+        SignupUseCase(get())
     }
 
     single {
-        FetchOrganizationsTypeUseCase()
+        FetchOrganizationsTypeUseCase(get())
     }
 
     single {
@@ -82,7 +84,17 @@ val onboardingDomainModule = module {
             get(),
             get(),
             get(),
+            get(),
+            get(),
             get()
         )
+    }
+
+    single {
+        FetchLocationsUseCase(get())
+    }
+
+    single {
+        CreateUserUseCase(get())
     }
 }

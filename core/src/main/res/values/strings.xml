@@ -76,5 +76,7 @@
     <string name="cancel">Cancel</string>
     <string name="invite">Invite</string>
     <string name="room_name_empty">Room name cannot be empty</string>
+    <string name="error_check_your_internet_and_try_again_please">Check your internet and try again please</string>
+    <string name="error_no_location_selected">No location selected, please select one before signing up</string>
 
 </resources>

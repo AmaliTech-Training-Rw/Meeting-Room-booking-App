@@ -66,10 +66,25 @@ class OnboardingSharedPreferencesImpl(
         )
     }
 
+    override fun saveToken(token: String) {
+        sharedPreferences.edit().putString(
+            TOKEN,
+            token
+        ).apply()
+    }
+
+    override fun loadToken(): String {
+        return sharedPreferences.getString(
+            TOKEN,
+            ""
+        ) ?: ""
+    }
+
     companion object {
         const val SHOULD_SHOW_ON_BOARDING = "should_show_onboarding"
         const val IS_USER_ADMIN = "is_user_admin"
         const val EMAIL_ADDRESS = "email_address"
         const val ADMIN_USER_SCREEN = "admin_user_screen"
+        const val TOKEN = "token"
     }
 }

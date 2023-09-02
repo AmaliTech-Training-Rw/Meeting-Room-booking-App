@@ -35,6 +35,9 @@ class SignupViewModelTest {
         coEvery {
             signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
         } returns ApiResult(data = listOf())
+        coEvery {
+            signupUseCasesWrapper.fetchLocationsUseCase()
+        } returns ApiResult(data = listOf())
         viewModel = SignupViewModel(signupUseCasesWrapper)
     }
 
@@ -67,9 +70,9 @@ class SignupViewModelTest {
 
     @Test
     fun `ensures location is held by state`() {
-        val location = "location"
+        val location = 1
 
-        viewModel.onNewLocation(location)
+        viewModel.onLocationSelected(location)
 
         assertEquals(location, viewModel.userInput.value.location)
     }
@@ -97,7 +100,7 @@ class SignupViewModelTest {
 
     @Test
     fun `ensures selectedOrganizationTypeId is held by state`() {
-        val selectedOrganizationType = "organization1"
+        val selectedOrganizationType = 1
 
         viewModel.onSelectedOrganizationType(selectedOrganizationType)
 
@@ -106,10 +109,16 @@ class SignupViewModelTest {
 
     @Test
     fun `ensures no error is thrown when data are valid`() {
-        viewModel.onSelectedOrganizationType("organization2")
+        viewModel.onSelectedOrganizationType(2)
+        viewModel.onLocationSelected(2)
 
         every {
-            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(
+                any(),
+                any(),
+                any(),
+                any()
+            )
         } returns null
         every {
             signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
@@ -146,10 +155,16 @@ class SignupViewModelTest {
 
     @Test
     fun `ensures an error is thrown when signup failed`() {
-        viewModel.onSelectedOrganizationType("organization2")
+        viewModel.onSelectedOrganizationType(2)
+        viewModel.onLocationSelected(2)
 
         every {
-            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(
+                any(),
+                any(),
+                any(),
+                any()
+            )
         } returns null
         every {
             signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
@@ -187,10 +202,15 @@ class SignupViewModelTest {
     @Test
     fun `ensures error is thrown when email is not valid`() {
         val error = UiText.StringResource(R.string.error_email_not_valid)
-        viewModel.onSelectedOrganizationType("organization2")
+        viewModel.onSelectedOrganizationType(2)
 
         every {
-            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(
+                any(),
+                any(),
+                any(),
+                any()
+            )
         } returns null
 
         every {
@@ -229,10 +249,15 @@ class SignupViewModelTest {
     @Test
     fun `ensures error is thrown when password is not valid`() {
         val error = UiText.StringResource(R.string.error_password_is_not_valid)
-        viewModel.onSelectedOrganizationType("organization2")
+        viewModel.onSelectedOrganizationType(2)
 
         every {
-            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(
+                any(),
+                any(),
+                any(),
+                any()
+            )
         } returns null
 
         every {
@@ -271,10 +296,15 @@ class SignupViewModelTest {
     @Test
     fun `ensures error is thrown when passwords don't match`() {
         val error = UiText.StringResource(R.string.error_passwords_dont_match)
-        viewModel.onSelectedOrganizationType("organization2")
+        viewModel.onSelectedOrganizationType(2)
 
         every {
-            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(
+                any(),
+                any(),
+                any(),
+                any()
+            )
         } returns null
         every {
             signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
@@ -313,10 +343,16 @@ class SignupViewModelTest {
     fun `ensures error is thrown when email is not available`() {
         val error =
             UiText.StringResource(R.string.error_email_address_already_taken)
-        viewModel.onSelectedOrganizationType("organization2")
+        viewModel.onSelectedOrganizationType(2)
+        viewModel.onLocationSelected(2)
 
         every {
-            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(
+                any(),
+                any(),
+                any(),
+                any()
+            )
         } returns null
         every {
             signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
@@ -355,7 +391,7 @@ class SignupViewModelTest {
     fun `ensures error is thrown when at least one field is not blank`() {
         val error =
             UiText.StringResource(R.string.error_email_not_valid)
-        viewModel.onSelectedOrganizationType("organization2")
+        viewModel.onSelectedOrganizationType(2)
 
         every {
             signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
@@ -378,11 +414,16 @@ class SignupViewModelTest {
         } returns null
 
         every {
-            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(
+                any(),
+                any(),
+                any(),
+                any()
+            )
         } returns error
 
         coEvery {
-        signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
+            signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
         } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
@@ -398,10 +439,16 @@ class SignupViewModelTest {
     fun `ensures error is thrown when username is not available`() {
         val error =
             UiText.StringResource(R.string.error_username_address_already_taken)
-        viewModel.onSelectedOrganizationType("organization2")
+        viewModel.onSelectedOrganizationType(2)
+        viewModel.onLocationSelected(2)
 
         every {
-            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(
+                any(),
+                any(),
+                any(),
+                any()
+            )
         } returns null
         every {
             signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
@@ -424,7 +471,7 @@ class SignupViewModelTest {
         } returns null
 
         coEvery {
-        signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
+            signupUseCasesWrapper.fetchOrganizationsTypeUseCase()
         } returns ApiResult(data = listOf())
 
         viewModel.onSignupClick()
@@ -440,12 +487,18 @@ class SignupViewModelTest {
     fun `ensures error is thrown when no organization is selected is not available`() {
         val error =
             UiText.StringResource(R.string.error_no_organization_type_selected)
+        viewModel.onSelectedOrganizationType(-1)
         every {
             signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
         } returns null
 
         every {
-            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(
+                any(),
+                any(),
+                any(),
+                any()
+            )
         } returns null
 
         every {
@@ -480,70 +533,44 @@ class SignupViewModelTest {
 
     @Test
     fun `Ensure isInvitedUser works when all data are provided`() {
-        val organizationName = "name"
-        val email = "email@test.com"
-        val typeOfOrganization = "type"
-        val location = "location"
+        val token = "email@test.com"
 
         val response =
-            viewModel.isInvitedUser(email, organizationName, location, typeOfOrganization)
+            viewModel.isInvitedUser(token)
 
         assertEquals(true, response)
     }
 
     @Test
     fun `Ensure isInvitedUser works when not all data are provided`() {
-        val organizationName = ""
-        val email = ""
-        val typeOfOrganization = ""
-        val location = ""
+        val token = ""
 
         val response =
-            viewModel.isInvitedUser(email, organizationName, location, typeOfOrganization)
+            viewModel.isInvitedUser(token)
 
         assertEquals(false, response)
     }
 
     @Test
     fun `ensure args are validated`() {
-        val organizationName = "name"
-        val email = "email@test.com"
-        val typeOfOrganization = "type"
-        val location = "location"
+        val token = "email@test.com"
+
 
         viewModel.submitValues(
-            organizationName = organizationName,
-            email = email,
-            typeOfOrganization = typeOfOrganization,
-            location = location
+            token = token,
         )
 
         assertEquals(
-            email, viewModel.userInput.value.email
-        )
-        assertEquals(
-            organizationName, viewModel.userInput.value.organizationName
-        )
-        assertEquals(
-            typeOfOrganization, viewModel.userInput.value.selectedOrganizationType
-        )
-        assertEquals(
-            location, viewModel.userInput.value.location
+            token, viewModel.userInput.value.token
         )
     }
 
     @Test
     fun `ensure isInvitedUser returns false when any arg is blank`() {
-        val organizationName = "null"
-        val email = ""
-        val typeOfOrganization = "type"
-        val location = "location"
+        val token = ""
 
         val result = viewModel.isInvitedUser(
-            organizationName = organizationName,
-            email = email,
-            typeOfOrganization = typeOfOrganization,
-            location = location
+            token = token
         )
 
         assertEquals(false, result)
@@ -551,18 +578,9 @@ class SignupViewModelTest {
 
     @Test
     fun `ensure isInvitedUser returns false when any arg is null`() {
-        val organizationName = null
-        val email = "yes"
-        val typeOfOrganization = "type"
-        val location = "location"
-
         val result = viewModel.isInvitedUser(
-            organizationName = organizationName,
-            email = email,
-            typeOfOrganization = typeOfOrganization,
-            location = location
+            token = null
         )
-
 
         assertEquals(
             false,
@@ -572,17 +590,9 @@ class SignupViewModelTest {
 
     @Test
     fun `ensure isInvitedUser returns true when all args are valid`() {
-        val organizationName = "null"
-        val email = "yes"
-        val typeOfOrganization = "type"
-        val location = "location"
+        val token = "yes"
 
-        val result = viewModel.isInvitedUser(
-            organizationName = organizationName,
-            email = email,
-            typeOfOrganization = typeOfOrganization,
-            location = location
-        )
+        val result = viewModel.isInvitedUser(token)
 
 
         assertEquals(
@@ -593,10 +603,15 @@ class SignupViewModelTest {
 
     @Test
     fun `ensure that the job is not null once onsignupclick is called`() = runTest {
-        viewModel.onSelectedOrganizationType("organization2")
+        viewModel.onSelectedOrganizationType(2)
 
         every {
-            signupUseCasesWrapper.checkValuesNotBlankUseCase(any(), any(), any(), any(), any(), any())
+            signupUseCasesWrapper.checkValuesNotBlankUseCase(
+                any(),
+                any(),
+                any(),
+                any()
+            )
         } returns null
         every {
             signupUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())

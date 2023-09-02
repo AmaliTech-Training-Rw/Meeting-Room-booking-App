@@ -28,7 +28,15 @@
             <intent-filter>
                 <data
                     android:scheme="http"
-                    android:host="www.example.com" />
+                    android:host="api.meeting-room.amalitech-dev.net/user/invite/api" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+            <intent-filter>
+                <data
+                    android:scheme="https"
+                    android:host="api.meeting-room.amalitech-dev.net/user/invite/api" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <action android:name="android.intent.action.VIEW" />

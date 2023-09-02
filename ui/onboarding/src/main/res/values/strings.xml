@@ -1,3 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="error_no_location_selected">No location selected, please select one before signing up</string>
 </resources>

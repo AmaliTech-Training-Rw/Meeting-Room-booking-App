@@ -13,5 +13,7 @@ data class SignupUseCasesWrapper(
     val validatePasswordUseCase: ValidatePasswordUseCase,
     val validateEmailUseCase: ValidateEmailUseCase,
     val checkPasswordsMatchUseCase: CheckPasswordsMatchUseCase,
-    val checkValuesNotBlankUseCase: CheckValuesNotBlankUseCase
+    val checkValuesNotBlankUseCase: CheckValuesNotBlankUseCase,
+    val fetchLocationsUseCase: FetchLocationsUseCase,
+    val createUserUseCase: CreateUserUseCase
 )

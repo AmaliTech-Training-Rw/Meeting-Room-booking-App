@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -46,6 +47,8 @@ import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.core_ui.components.AuthenticationTextField
+import com.amalitech.onboarding.signup.model.LocationX
+import com.amalitech.onboarding.signup.model.TypesOrganisation
 import com.amalitech.onboarding.util.showSnackBar
 import org.koin.androidx.compose.koinViewModel
 
@@ -61,24 +64,27 @@ fun SignupScreen(
 ) {
     val arguments = navBackStackEntry.arguments
     val userInput by viewModel.userInput
-    val organizationName = arguments?.getString(NavArguments.organizationName)
-    val email = arguments?.getString(NavArguments.email)
-    val typeOfOrganization = arguments?.getString(NavArguments.typeOfOrganization)
-    val location = arguments?.getString(NavArguments.location)
-    val invitedUser = viewModel.isInvitedUser(email, organizationName, location, typeOfOrganization)
+    val token = arguments?.getString(NavArguments.token)
+    val invitedUser = viewModel.isInvitedUser(token)
     val spacing = LocalSpacing.current
     val context = LocalContext.current
-    var isDropDownExpanded by rememberSaveable {
+    var isOrganizationDropDownExpanded by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var isLocationDropDownExpanded by rememberSaveable {
         mutableStateOf(false)
     }
     val focusManager: FocusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
-    val selectedItem = userInput.selectedOrganizationType
-    var organizationType: List<String> by rememberSaveable {
+    val selectedOrganization = userInput.selectedOrganizationType
+    var organizationType: List<TypesOrganisation> by remember {
         mutableStateOf(listOf())
     }
-
+    var locations: List<LocationX> by remember {
+        mutableStateOf(listOf())
+    }
+    val selectedLocation = userInput.location
     val onGo = {
         viewModel.onSignupClick()
         keyboardController?.hide()
@@ -92,6 +98,7 @@ fun SignupScreen(
                         onNavigateToLogin()
                     }
                     organizationType = it.typeOfOrganization
+                    locations = it.locations
                 }
             }
 
@@ -179,34 +186,46 @@ fun SignupScreen(
             )
             Spacer(modifier = Modifier.height(spacing.spaceSmall))
             BookMeetingRoomDropDown(
-                isDropDownExpanded = isDropDownExpanded,
-                items = organizationType,
+                isDropDownExpanded = isOrganizationDropDownExpanded,
+                items = organizationType.map { it.name },
                 onSelectedItemChange = {
-                    viewModel.onSelectedOrganizationType(it)
+                    val id = organizationType.find { type ->
+                        type.name == it
+                    }?.id ?: -1
+                    viewModel.onSelectedOrganizationType(id)
                 },
-                onIsExpandedStateChange = { isDropDownExpanded = it },
-                selectedItem = selectedItem,
+                onIsExpandedStateChange = { isOrganizationDropDownExpanded = it },
+                selectedItem = organizationType.find { selectedOrganization == it.id }?.name ?: "",
                 focusManager = focusManager,
                 R.string.type_of_organization,
-            ) { isDropDownExpanded = it }
+            ) { isOrganizationDropDownExpanded = it }
             Spacer(Modifier.height(spacing.spaceSmall))
-            AuthenticationTextField(
+            BookMeetingRoomDropDown(
+                isDropDownExpanded = isLocationDropDownExpanded,
+                items = locations.map { it.name },
+                onSelectedItemChange = {
+                    val id = locations.find { type ->
+                        type.name == it
+                    }?.id ?: -1
+                    viewModel.onLocationSelected(id)
+                },
+                onIsExpandedStateChange = { isLocationDropDownExpanded = it },
+                selectedItem = locations.find { selectedLocation == it.id }?.name ?: "",
+                focusManager = focusManager,
+                R.string.location,
+            ) { isLocationDropDownExpanded = it }
+            /*AuthenticationTextField(
                 onGo = { onGo() },
                 placeholder = stringResource(id = R.string.location),
-                value = userInput.location,
+                value = locations.find { it.id == selectedLocation }?.name ?: "",
                 onValueChange = {
-                    viewModel.onNewLocation(it)
+                    viewModel.onLocationSelected(it)
                 },
                 modifier = Modifier.fillMaxWidth(),
-            )
+            )*/
         } else {
-            if (organizationName != null && typeOfOrganization != null && location != null && email != null) {
-                viewModel.submitValues(
-                    organizationName,
-                    typeOfOrganization,
-                    location,
-                    email
-                )
+            if (token != null) {
+                viewModel.submitValues(token)
             }
         }
         Spacer(modifier = Modifier.height(spacing.spaceSmall))
