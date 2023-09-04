@@ -2,41 +2,40 @@ package com.amalitech.onboarding_data.remote.dto
 
 import com.amalitech.onboarding.login.model.UserProfile
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class LoginData(
-    @field:Json(name = "created_at")
-    val createdAt: String,
-    val email: String,
-    @field:Json(name = "first_name")
+    @Json(name = "email")
+    val email: String?,
+    @Json(name = "first_name")
     val firstName: String?,
-    val id: Int,
-    @field:Json(name = "is_admin")
-    val isAdmin: Int,
-    @field:Json(name = "last_login")
+    val id: Int?,
+    @Json(name = "is_admin")
+    val isAdmin: Int?,
+    @Json(name = "last_login")
     val lastLogin: String?,
-    @field:Json(name = "last_name")
+    @Json(name = "last_name")
     val lastName: String?,
-    @field:Json(name = "locationId")
-    val locationId: Int,
-    @field:Json(name = "organisation_id")
-    val organisationId: Int,
-    @field:Json(name = "updated_at")
-    val updatedAt: String,
-    @field:Json(name = "userId")
-    val userId: Int,
-    val username: String
+    @Json(name = "locationId")
+    val locationId: Int?,
+    @Json(name = "organisation_id")
+    val organisationId: Int?,
+    @Json(name = "userId")
+    val userId: Int?,
+    val username: String?
 ) {
     fun toProfileInfo(token: String): UserProfile {
         return UserProfile(
-            email = email,
+            email = email?:"",
             firstName = firstName?:"",
-            id = id,
-            isAdmin = isAdmin,
+            id = id?:-1,
+            isAdmin = isAdmin?:0,
             lastName = lastName?:"",
-            locationId = locationId,
-            organisationId = organisationId,
-            userId = userId,
-            username = username,
+            locationId = locationId?:-1,
+            organisationId = organisationId?:-1,
+            userId = userId?:-1,
+            username = username?:"",
             token = token
         )
     }
