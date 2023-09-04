@@ -10,5 +10,6 @@ data class ProfileUseCaseWrapper(
     val updateProfileUseCase: UpdateProfileUseCase,
     val checkPasswordsMatchUseCase: CheckPasswordsMatchUseCase,
     val checkValuesNotBlankUseCase: CheckValuesNotBlankUseCase,
-    val validatePasswordUseCase: ValidatePasswordUseCase
+    val validatePasswordUseCase: ValidatePasswordUseCase,
+    val logoutUseCase: LogoutUseCase,
 )

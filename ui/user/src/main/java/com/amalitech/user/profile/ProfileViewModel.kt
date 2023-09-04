@@ -69,6 +69,11 @@ class ProfileViewModel(
     }
 
     fun logout() {
-        sharedPref.clear()
+        viewModelScope.launch {
+            sharedPref.clear()
+            val token = sharedPref.loadToken()
+            useCaseWrapper.logoutUseCase(token)
+
+        }
     }
 }

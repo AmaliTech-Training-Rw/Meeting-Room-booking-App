@@ -1,6 +1,9 @@
 package com.amalitech.user.repository
 
+import com.amalitech.core.data.repository.BaseRepo
+import com.amalitech.core.util.UiText
 import com.amalitech.user.data_source.local.UserDao
+import com.amalitech.user.data_source.remote.UserApiService
 import com.amalitech.user.models.User
 import com.amalitech.user.profile.model.Profile
 import com.amalitech.user.profile.model.dto.UserDto
@@ -9,7 +12,8 @@ import kotlinx.coroutines.flow.flowOf
 
 class UserRepositoryImpl(
     private val dao: UserDao,
-) : UserRepository {
+    private val api: UserApiService
+) : UserRepository, BaseRepo() {
     override suspend fun getUser(email: String): UserDto {
         return dao.getUser(email)
     }
@@ -101,6 +105,18 @@ class UserRepositoryImpl(
 
     override suspend fun updateProfile(profile: Profile) {
         //TODO("Not yet implemented")
+    }
+
+    override suspend fun logout(token: String): UiText? {
+        val response = safeApiCall(
+            apiToBeCalled = {
+                api.logout()
+            },
+            extractError = {
+                extractError(it)
+            }
+        )
+        return response.error
     }
 //    override suspend fun updateProfile(profile: Profile) {
 //        // TODO("Save in the API and use the profile"

@@ -1,5 +1,6 @@
 package com.amalitech.user.repository
 
+import com.amalitech.core.util.UiText
 import com.amalitech.user.models.User
 import com.amalitech.user.profile.model.Profile
 import com.amalitech.user.profile.model.dto.UserDto
@@ -17,4 +18,6 @@ interface UserRepository {
     suspend fun addUser(user: User)
 
     suspend fun updateProfile(profile: Profile)
+
+    suspend fun logout(token: String): UiText?
 }

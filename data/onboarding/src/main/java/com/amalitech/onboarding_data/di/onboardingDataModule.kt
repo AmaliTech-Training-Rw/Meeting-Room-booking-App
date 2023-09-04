@@ -12,16 +12,18 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 
 val onboardingDataModule = module {
-    val moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
+    single {
+        Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    }
 
     single<OnboardingApiService> {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(
                 MoshiConverterFactory
-                    .create(moshi)
+                    .create(get())
             )
             .build()
             .create()
