@@ -1,9 +1,13 @@
 package com.amalitech.user
 
+//import androidx.compose.material.pullrefresh.PullRefreshIndicator
+//import androidx.compose.material.pullrefresh.pullRefresh
+//import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import android.view.KeyEvent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -362,11 +367,17 @@ fun UserScreen(
 @Composable
 fun UsersList(
     modifier: Modifier,
-    viewModel: UserViewModel,
+    viewModel: UserViewModel, // TODO: remove vm from here... for previews to work
     spacing: Dimensions
 ) {
-
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    // var refreshing by remember { mutableStateOf(state.refreshing) }
+    // TODO: use this method to automatically refesh user list on initial app load
+//    val pullRefreshState = rememberPullRefreshState(
+//        refreshing = refreshing,
+//        onRefresh = viewModel::loadOrders
+//    )
+
     var openDialog by remember {
         mutableStateOf(false)
     }
@@ -411,18 +422,32 @@ fun UsersList(
     }
 
     if (state.users.isEmpty()) {
-        Text(
-            text = "Swipe to refresh user list ...",
-            modifier = Modifier,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = TextStyle(
-                color = MaterialTheme.colorScheme.onBackground,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.W700,
-                textAlign = TextAlign.Center
+        Box(
+            Modifier.fillMaxSize()
+        ) {
+            Text(
+                text = "Click to refresh user list ...",
+                modifier = Modifier.align(Alignment.Center),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = TextStyle(
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W700,
+                    textAlign = TextAlign.Center
+                )
             )
-        )
+            Spacer(Modifier.height(spacing.spaceMedium))
+            DefaultButton(
+                text = "Refresh",
+                onClick = { viewModel.refresh() },
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .clip(RoundedCornerShape(spacing.spaceMedium))
+                    .wrapContentSize(),
+                isLoading = state.refreshing
+            )
+        }
     }
 
     LazyColumn(

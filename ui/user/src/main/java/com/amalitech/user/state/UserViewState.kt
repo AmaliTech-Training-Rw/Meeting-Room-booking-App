@@ -5,6 +5,7 @@ import com.amalitech.user.models.User
 
 data class UserViewState(
     val loading: Boolean = true,
+    val refreshing: Boolean = false,
     val users: List<User> = emptyList(),
     val snackbarMessage: UiText? = null,
     val searchQuery: String = ""

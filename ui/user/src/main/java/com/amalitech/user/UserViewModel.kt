@@ -1,7 +1,9 @@
 package com.amalitech.user
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
@@ -18,7 +20,8 @@ import kotlinx.coroutines.launch
 
 class UserViewModel (
     private val getUsers: GetUseCase,
-    private val fetchRemoteUsersCase: FetchRemoteUsersCase
+    private val fetchRemoteUsersCase: FetchRemoteUsersCase,
+    private val sharedPreferences: OnboardingSharedPreferences,
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -28,6 +31,7 @@ class UserViewModel (
     private var usersCopy: List<User> = emptyList()
 
     init {
+        Log.d("TAG", "token : ${sharedPreferences.loadToken()} ")
         subscribeToUserUpdates()
     }
 
@@ -37,10 +41,24 @@ class UserViewModel (
             getUsers().collect { user ->
                 val updatedUserSet = (uiState.value.users + user).toSet() // remove dups
                 _uiState.update { oldState ->
+                    // check if the Db is empty, and refresh it accordingly, otherwise carry on
+                    if (updatedUserSet.isEmpty()){
+                        _uiState.value = uiState.value.copy(loading = true, refreshing = true)
+                    }
                     usersCopy = updatedUserSet.toList()
-                    oldState.copy( loading = false, users = usersCopy)
+                    oldState.copy(loading = false, refreshing = false, users = usersCopy)
                 }
             }
+        }
+    }
+
+    fun refresh() {
+        Log.d("TAG", "getRemoteUsers 2:")
+        launchCatching {
+            _uiState.value = uiState.value.copy(refreshing = true)
+            Log.d("TAG", "getRemoteUsers 3:")
+            fetchRemoteUsersCase
+            _uiState.value = uiState.value.copy(refreshing = false, users = fetchRemoteUsersCase())
         }
     }
 

@@ -1,5 +1,6 @@
 package com.amalitech.user.repository
 
+import android.util.Log
 import com.amalitech.core.network.BookMeetingNetworkApi
 import com.amalitech.user.data_source.local.UserDao
 import com.amalitech.user.data_source.local.UsersEntity
@@ -11,7 +12,6 @@ import com.amalitech.user.profile.model.dto.UserDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import retrofit2.HttpException
 
 class UserRepositoryImpl(
     private val dao: UserDao,
@@ -20,17 +20,19 @@ class UserRepositoryImpl(
     private val apiUsersMapper: ApiUsersMapper
 ) : UserRepository {
     override suspend fun getRemoteUsers(): List<User> {
-        try {
-            val remoteUsers = api.getUsers().data
-            return remoteUsers.map {
-                apiUsersMapper.mapToDomain(
-                    it
-                )
-            }
-        } catch (exception: HttpException) {
-            // throw NetworkException(exception.message ?: "Code ${exception.code()}")
-            throw exception
+        val remoteUsers = api.getUsers().list
+        Log.d("TAG", "getRemoteUsers: ${remoteUsers}")
+        return remoteUsers.map {
+            apiUsersMapper.mapToDomain(
+                it
+            )
         }
+//        try {
+//
+//        } catch (exception: HttpException) {
+//            // throw NetworkException(exception.message ?: "Code ${exception.code()}")
+//            throw exception
+//        }
     }
 
     // TODO: alternatively, uncomment this to reformat message
