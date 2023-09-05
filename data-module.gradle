@@ -22,10 +22,10 @@ android {
     }
     flavorDimensions += "version"
     productFlavors {
-        create("production") {
+        register("production") {
             dimension = "version"
         }
-        create("staging") {
+        register("staging") {
             dimension = "version"
         }
     }
@@ -47,6 +47,8 @@ dependencies {
     implementation(Retrofit.retrofit)
     implementation(Retrofit.okHttpLoggingInterceptor)
     implementation(Retrofit.moshiConverter)
+    implementation(Moshi.moshiCodegen)
+    implementation(Moshi.moshi)
     implementation(Kotlin.coreKtx)
 
     testImplementation Testing.junit4

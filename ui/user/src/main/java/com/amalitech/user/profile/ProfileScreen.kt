@@ -79,11 +79,16 @@ fun ProfileScreen(
     val isAdmin: Boolean by viewModel.isAdmin
     val isUsingAdminDashboard: Boolean by viewModel.isUsingAdminDashboard
     val title = stringResource(id = R.string.my_profile)
+    val canNavigate by viewModel.canNavigate
 
     CustomBackHandler(appState = appState, onComposing = onComposing) {
         onNavigateBack()
     }
 
+    LaunchedEffect(key1 = canNavigate) {
+        if (canNavigate)
+            onNavigateToLogin()
+    }
     LaunchedEffect(key1 = true) {
         onComposing(
             AppBarState(
@@ -184,14 +189,6 @@ fun ProfileScreen(
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 ProfileDescriptionItem(
-                    title = stringResource(id = R.string.phone),
-                    description = "+250 733 111 111"
-                )
-                Divider(
-                    modifier = Modifier.padding(vertical = spacing.spaceMedium),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                ProfileDescriptionItem(
                     title = stringResource(id = R.string.title),
                     description = user!!.title
                 )
@@ -203,7 +200,6 @@ fun ProfileScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.clickable {
                         viewModel.logout()
-                        onNavigateToLogin()
                     }
                 ) {
                     Icon(

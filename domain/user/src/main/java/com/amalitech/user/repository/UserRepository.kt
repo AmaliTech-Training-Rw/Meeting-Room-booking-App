@@ -17,4 +17,6 @@ interface UserRepository {
     suspend fun addUser(user: User)
 
     suspend fun updateProfile(profile: Profile)
+
+    suspend fun logout(token: String)
 }
