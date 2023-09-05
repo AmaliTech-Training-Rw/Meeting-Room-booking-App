@@ -4,9 +4,9 @@ import com.amalitech.onboarding.signup.model.OrganizationType
 import com.amalitech.onboarding.signup.model.TypesOrganisation
 
 data class OrganizationTypeDto(
-    val typesOrganisation: List<TypesOrganisation>
+    val typesOrganisation: List<TypesOrganisation>?
 ) {
     fun toOrganizationType(): OrganizationType {
-        return OrganizationType(typesOrganisation)
+        return OrganizationType(typesOrganisation ?: emptyList())
     }
 }

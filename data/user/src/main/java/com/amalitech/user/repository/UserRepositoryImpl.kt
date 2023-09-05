@@ -1,7 +1,6 @@
 package com.amalitech.user.repository
 
 import com.amalitech.core.data.repository.BaseRepo
-import com.amalitech.core.util.UiText
 import com.amalitech.user.data_source.local.UserDao
 import com.amalitech.user.data_source.remote.UserApiService
 import com.amalitech.user.models.User
@@ -107,8 +106,8 @@ class UserRepositoryImpl(
         //TODO("Not yet implemented")
     }
 
-    override suspend fun logout(token: String): UiText? {
-        val response = safeApiCall(
+    override suspend fun logout(token: String) {
+        safeApiCall(
             apiToBeCalled = {
                 api.logout()
             },
@@ -116,7 +115,6 @@ class UserRepositoryImpl(
                 extractError(it)
             }
         )
-        return response.error
     }
 //    override suspend fun updateProfile(profile: Profile) {
 //        // TODO("Save in the API and use the profile"

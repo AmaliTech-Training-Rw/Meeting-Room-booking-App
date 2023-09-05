@@ -33,6 +33,7 @@ val dataUserModule = module {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(get()))
+            .client(get())
             .build()
             .create()
     }

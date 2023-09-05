@@ -19,6 +19,8 @@ class ProfileViewModel(
     val isAdmin: State<Boolean> get() = _isAdmin
     private val _isUsingAdminDashboard = mutableStateOf(false)
     val isUsingAdminDashboard: State<Boolean> get() = _isUsingAdminDashboard
+    private val _canNavigate = mutableStateOf(false)
+    val canNavigate: State<Boolean> get() = _canNavigate
 
     init {
         getUser()
@@ -70,10 +72,10 @@ class ProfileViewModel(
 
     fun logout() {
         viewModelScope.launch {
-            sharedPref.clear()
             val token = sharedPref.loadToken()
             useCaseWrapper.logoutUseCase(token)
-
+            sharedPref.clear()
+            _canNavigate.value = true
         }
     }
 }
