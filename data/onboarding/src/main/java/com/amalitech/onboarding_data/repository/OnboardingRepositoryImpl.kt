@@ -10,6 +10,7 @@ import com.amalitech.onboarding.signup.model.LocationX
 import com.amalitech.onboarding.signup.model.OrganizationType
 import com.amalitech.onboarding.signup.model.User
 import com.amalitech.onboarding_data.remote.OnboardingApiService
+import com.amalitech.onboarding_data.remote.dto.toProfileInfo
 
 class OnboardingRepositoryImpl(
     private val api: OnboardingApiService
