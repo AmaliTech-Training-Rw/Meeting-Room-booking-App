@@ -1,11 +1,10 @@
-package com.amalitech.onboarding_data.remote.dto
+package com.amalitech.core.data.dto
 
-import com.amalitech.onboarding.login.model.UserProfile
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class LoginData(
+data class UserData(
     @Json(name = "email")
     val email: String?,
     @Json(name = "first_name")
@@ -24,19 +23,4 @@ data class LoginData(
     @Json(name = "userId")
     val userId: Int?,
     val username: String?
-) {
-    fun toProfileInfo(token: String): UserProfile {
-        return UserProfile(
-            email = email?:"",
-            firstName = firstName?:"",
-            id = id?:-1,
-            isAdmin = isAdmin?:0,
-            lastName = lastName?:"",
-            locationId = locationId?:-1,
-            organisationId = organisationId?:-1,
-            userId = userId?:-1,
-            username = username?:"",
-            token = token
-        )
-    }
-}
+)

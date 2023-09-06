@@ -21,7 +21,7 @@ class AuthenticationInterceptor constructor(
                 "Accept", "application/json"
             )
             .addHeader(
-                "Content-Type", "application/x-www-form-urlencoded"
+                "Content-Type", "application/json"
             )
             .build()
     }

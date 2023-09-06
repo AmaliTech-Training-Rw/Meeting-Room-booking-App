@@ -16,12 +16,16 @@ open class BaseViewModel<T> : ViewModel() {
     /**
      * onSnackBarShown - Reset snackBarValue to null
      */
-    fun onSnackBarShown() {
+    fun onSnackBarShown(
+        functionToExecute: (() -> Unit)? = null
+    ) {
         _uiStateFlow.update { state ->
             (state as UiState.Error<T>).copy(
                 error = null
             )
         }
+        if (functionToExecute != null)
+            functionToExecute()
     }
 
     internal fun setSnackBarValue(value: UiText?) {

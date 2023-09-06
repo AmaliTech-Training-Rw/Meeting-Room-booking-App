@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -206,9 +207,11 @@ fun BookMeetingRoomNavHost(
 
         composable(route = NavigationItem.Logout.route) {
             val profileViewModel: ProfileViewModel = koinViewModel()
+            val canNavigate by profileViewModel.canNavigate
             profileViewModel.logout()
-            LaunchedEffect(key1 = true) {
-                mainNavController.navigateToLogin()
+            LaunchedEffect(key1 = canNavigate) {
+                if (canNavigate)
+                    mainNavController.navigateToLogin()
             }
         }
 

@@ -25,7 +25,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -70,9 +69,6 @@ fun RoomListScreen(
     val spacing = LocalSpacing.current
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val snackbarHostState = remember {
-        SnackbarHostState()
-    }
     var openDialog by remember {
         mutableStateOf(false)
     }
@@ -91,9 +87,12 @@ fun RoomListScreen(
     LaunchedEffect(key1 = uiState) {
         when (uiState) {
             is UiState.Error -> (uiState as UiState.Error<List<Room>>).error?.let {
-                snackbarHostState.showSnackbar(
+                appState.snackbarHostState.showSnackbar(
                     it.asString(context)
                 )
+                viewModel.onSnackBarShown {
+                    viewModel.fetchRooms()
+                }
             }
 
             is UiState.Success -> rooms = (uiState as UiState.Success).data
@@ -176,6 +175,11 @@ fun RoomListScreen(
                                 selectedRoom = room
                             }
                         )
+                    }
+                }
+                if (rooms.isNullOrEmpty()) {
+                    item { 
+                        Text(text = stringResource(id = com.amalitech.core.R.string.no_item_found))
                     }
                 }
             }
