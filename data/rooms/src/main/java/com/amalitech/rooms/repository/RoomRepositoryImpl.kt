@@ -1,5 +1,9 @@
 package com.amalitech.rooms.repository
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.net.Uri
+import android.provider.OpenableColumns
 import com.amalitech.core.data.model.Room
 import com.amalitech.core.data.repository.BaseRepo
 import com.amalitech.core.util.ApiResult
@@ -51,10 +55,10 @@ class RoomRepositoryImpl(
         return result.error
     }
 
-    override suspend fun addRoom(room: com.amalitech.rooms.model.Room): UiText? {
+    override suspend fun addRoom(room: com.amalitech.rooms.model.Room, context: Context): UiText? {
         try {
             val image = (0 until room.imagesList.size).map {
-                val file = File(room.imagesList[it].path ?: "")
+                val file = File(getFileName(uri = room.imagesList[it], context = context))
                 val requestFile = file.asRequestBody()
                 MultipartBody.Part.createFormData(
                     name = "room_image[]",
@@ -84,5 +88,30 @@ class RoomRepositoryImpl(
         } catch (e: Exception) {
             return e.getUiText()
         }
+    }
+
+    @SuppressLint("Range", "Recycle")
+    fun getFileName(context: Context, uri: Uri): String {
+        var result: String? = null
+        val scheme = uri.scheme
+        if (scheme != null && scheme == "content") {
+            val cursor = context.contentResolver.query(uri, null, null, null, null)
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                }
+            } finally {
+                assert(cursor != null)
+                cursor!!.close()
+            }
+        }
+        if (result == null) {
+            result = uri.path
+            val cut = result!!.lastIndexOf('/')
+            if (cut != -1) {
+                result = result.substring(cut + 1)
+            }
+        }
+        return result
     }
 }
