@@ -8,4 +8,6 @@ interface RoomRepository{
     suspend fun getRooms(): ApiResult<List<Room>>
 
     suspend fun deleteRoom(room: Room): UiText?
+
+    suspend fun addRoom(room: com.amalitech.rooms.model.Room): UiText?
 }

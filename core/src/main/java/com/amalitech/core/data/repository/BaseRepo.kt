@@ -55,19 +55,19 @@ open class BaseRepo {
         errorBody: ResponseBody?,
         extractError: (JSONObject) -> UiText?
     ): UiText {
-//        try {
+        try {
             val responseBody = errorBody?.string()
             responseBody?.let {
                 val jsonObject = JSONObject(responseBody)
                 return extractError(jsonObject) ?: UiText.StringResource(R.string.error_default_message)
             }
             return UiText.StringResource(R.string.error_default_message)
-      /*  } catch (e: Exception) {
+        } catch (e: Exception) {
             e.localizedMessage?.let {
                 return UiText.DynamicString(it)
             }
             return UiText.StringResource(R.string.error_default_message)
-        }*/
+        }
     }
 
     fun extractError(jsonObject: JSONObject): UiText? {

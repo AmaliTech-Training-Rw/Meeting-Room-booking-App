@@ -1,23 +1,21 @@
-package com.amalitech.admin.room
+package com.amalitech.rooms
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amalitech.admin.room.usecase.AddRoom
-import com.amalitech.admin.room.usecase.GetLocation
+import com.amalitech.core.R
 import com.amalitech.core.util.UiText
-import com.amalitech.core_ui.util.SnackbarManager
-import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
+import com.amalitech.onboarding.signup.use_case.FetchLocationsUseCase
+import com.amalitech.rooms.model.Room
+import com.amalitech.rooms.usecase.AddRoomUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AddRoomViewModel(
-    private val getLocation: GetLocation,
-    private val addRoom: AddRoom
+    private val getLocation: FetchLocationsUseCase,
+    private val addRoom: AddRoomUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(
         AddRoomUiState()
@@ -28,18 +26,35 @@ class AddRoomViewModel(
         get() = _uiState.value.capacity
 
     init {
-        launchCatching {
-            getLocation.invoke().collect {
-                _uiState.update { addRoomUiState ->
-                    addRoomUiState.copy(
-                        locationList = it
+        fetchLocations()
+    }
+
+    private fun fetchLocations() {
+        viewModelScope.launch {
+            val resultLocation = getLocation()
+            val data = resultLocation.data
+            val error = resultLocation.error
+            if (data != null) {
+                _uiState.update {
+                    it.copy(
+                        locationList = data
+                    )
+                }
+            } else if (error != null) {
+                _uiState.update {
+                    it.copy(error = error)
+                }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        error = UiText.StringResource(R.string.error_default_message)
                     )
                 }
             }
         }
     }
 
-    fun onRoomImages(images: List<@JvmSuppressWildcards Uri>) {
+    fun onRoomImages(images: List<Uri>) {
         _uiState.update { addRoomUiState ->
             addRoomUiState.copy(
                 imagesList = (addRoomUiState.imagesList + images).toMutableList()
@@ -51,7 +66,7 @@ class AddRoomViewModel(
     fun onRoomName(roomName: String) {
         _uiState.update { addRoomUiState ->
             addRoomUiState.copy(
-                name = roomName.trim()
+                name = roomName
             )
         }
     }
@@ -83,15 +98,16 @@ class AddRoomViewModel(
     fun onFeatures(features: String) {
         _uiState.update { addRoomUiState ->
             addRoomUiState.copy(
-                features = features.trim()
+                features = features
             )
         }
     }
 
     fun onSelectedLocation(location: String) {
         _uiState.update { addRoomUiState ->
+            val id = addRoomUiState.locationList?.find { it.name == location }?.id ?: -1
             addRoomUiState.copy(
-                location = location.trim()
+                location = id
             )
         }
     }
@@ -100,60 +116,59 @@ class AddRoomViewModel(
         when {
             _uiState.value.name.isBlank() -> {
                 // TODO: this is an alternative way of handling errors, and using is error / supporting text in the ui
-                updateStateWithError(true, "Name value is empty")
                 _uiState.update { state ->
-                    state.copy(snackBar = UiText.StringResource(com.amalitech.core.R.string.name_empty))
+                    state.copy(error = UiText.StringResource(R.string.name_empty))
                 }
                 return
             }
 
-            _uiState.value.location.isBlank() -> {
+            _uiState.value.location == -1 -> {
                 _uiState.update { state ->
-                    state.copy(snackBar = UiText.StringResource(com.amalitech.core.R.string.location_empty))
+                    state.copy(error = UiText.StringResource(R.string.location_empty))
                 }
                 return
             }
 
             _uiState.value.features.isBlank() -> {
                 _uiState.update { state ->
-                    state.copy(snackBar = UiText.StringResource(com.amalitech.core.R.string.features_empty))
+                    state.copy(error = UiText.StringResource(R.string.features_empty))
                 }
                 return
             }
 
             _uiState.value.imagesList.isEmpty() -> {
                 _uiState.update { state ->
-                    state.copy(snackBar = UiText.StringResource(com.amalitech.core.R.string.images_empty))
+                    state.copy(error = UiText.StringResource(R.string.images_empty))
                 }
                 return
             }
 
-            else -> updateStateWithError(false, "")
+            else -> {}
         }
 
-        launchCatching {
-            addRoom(
+        viewModelScope.launch {
+            val result = addRoom(
                 mapRoomToDomain(
-                    _uiState.value.name,
+                    _uiState.value.name.trim(),
                     _uiState.value.location,
-                    _uiState.value.features,
+                    _uiState.value.features.trim(),
                     _uiState.value.capacity,
                     _uiState.value.imagesList
                 )
             )
-            _uiState.update { state ->
-                state.copy(
-                    snackBar = UiText.StringResource(com.amalitech.core.R.string.add_success),
-                    canNavigate = true
-                )
+            if (result != null) {
+                _uiState.update {
+                    it.copy(error = result)
+                }
             }
+
         }
     }
 
     // TODO: crate a share mapping logic/function
     private fun mapRoomToDomain(
         name: String,
-        location: String,
+        location: Int,
         features: String,
         capacity: Int,
         selectImages: List<Uri>
@@ -167,31 +182,11 @@ class AddRoomViewModel(
         )
     }
 
-    // TODO: this is an alternative, so it can just be deleted if not needed
-    private fun updateStateWithError(isError: Boolean, message: String) {
-        _uiState.update { addRoomUiState ->
-            addRoomUiState.copy(
-                error = Pair(isError, message)
-            )
-        }
-    }
-
-    // TODO: ideally, this method should come from a share vm
-    fun launchCatching(snackbar: Boolean = true, block: suspend CoroutineScope.() -> Unit) =
-        viewModelScope.launch(
-            CoroutineExceptionHandler { _, throwable ->
-                if (snackbar) {
-                    SnackbarManager.showMessage(throwable.toSnackbarMessage())
-                }
-            },
-            block = block
-        )
-
     fun onDeleteImage(uri: Uri) {
         _uiState.update { addRoomUiState ->
             val list = addRoomUiState.imagesList.toMutableList()
             list.remove(uri)
-                addRoomUiState.copy(
+            addRoomUiState.copy(
                 imagesList = list
             )
         }
@@ -200,7 +195,7 @@ class AddRoomViewModel(
     fun clearSnackBar() {
         _uiState.update {
             it.copy(
-                snackBar = null
+                error = null
             )
         }
     }
