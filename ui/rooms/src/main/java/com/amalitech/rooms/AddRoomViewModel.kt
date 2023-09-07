@@ -1,5 +1,6 @@
 package com.amalitech.rooms
 
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -112,7 +113,7 @@ class AddRoomViewModel(
         }
     }
 
-    fun onSaveRoomClick() {
+    fun onSaveRoomClick(context: Context) {
         when {
             _uiState.value.name.isBlank() -> {
                 // TODO: this is an alternative way of handling errors, and using is error / supporting text in the ui
@@ -154,7 +155,8 @@ class AddRoomViewModel(
                     _uiState.value.features.trim(),
                     _uiState.value.capacity,
                     _uiState.value.imagesList
-                )
+                ),
+                context
             )
             if (result != null) {
                 _uiState.update {

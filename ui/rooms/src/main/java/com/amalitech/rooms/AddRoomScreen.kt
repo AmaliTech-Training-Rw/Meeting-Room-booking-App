@@ -95,7 +95,7 @@ import com.amalitech.core_ui.theme.add_room_icon_button_bg
 import com.amalitech.core_ui.util.requestImagePermission
 import com.amalitech.rooms.components.DialogButton
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import org.koin.androidx.compose.koinViewModel
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -122,7 +122,7 @@ fun AddRoomScreen(
     val title = stringResource(id = R.string.add_room)
     val contentDescription = stringResource(id = com.amalitech.core_ui.R.string.navigate_back)
     val context = LocalContext.current
-    val permissionState = rememberPermissionState(Manifest.permission.READ_MEDIA_IMAGES)
+    val permissionState = rememberMultiplePermissionsState(listOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
     var shouldShowRational by rememberSaveable {
         mutableStateOf(false)
     }
@@ -269,12 +269,11 @@ fun AddRoomScreen(
                             permissionState = permissionState,
                             onShouldShowRational = {
                                 shouldShowRational = it
-                            },
-                            onOpenSettings = {
-                                shouldShowOpenSettings = it
                             }
-                        )
-                        if (!shouldShowOpenSettings && !shouldShowRational) {
+                        ) {
+                            shouldShowOpenSettings = it
+                        }
+                        if (permissionState.allPermissionsGranted) {
                             galleryLauncher.launch(
                                 PickVisualMediaRequest(
                                     mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
@@ -400,7 +399,7 @@ fun AddRoomScreen(
                             keyboardType = KeyboardType.Text
                         ),
                         onGo = {
-                            viewModel.onSaveRoomClick()
+                            viewModel.onSaveRoomClick(context)
                         },
                         hasError = state.error != null
                     )
@@ -455,7 +454,7 @@ fun AddRoomScreen(
                             keyboardType = KeyboardType.Text
                         ),
                         onGo = {
-                            viewModel.onSaveRoomClick()
+                            viewModel.onSaveRoomClick(context)
                         },
                         singleLine = false
                     )
@@ -465,7 +464,7 @@ fun AddRoomScreen(
                     DefaultButton(
                         text = stringResource(R.string.save_room),
                         onClick = {
-                            viewModel.onSaveRoomClick()
+                            viewModel.onSaveRoomClick(context)
                         },
                         modifier = Modifier.fillMaxWidth(),
                         isLoading = false // TODO: use network ui state here
