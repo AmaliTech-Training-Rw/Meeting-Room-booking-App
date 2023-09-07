@@ -9,5 +9,4 @@ dependencies {
 
     "implementation"(Kotlin.coreKtx)
     "implementation"(Lifecycle.composeLifecycle)
-    "implementation"(Compose.constraintLayout)
 }

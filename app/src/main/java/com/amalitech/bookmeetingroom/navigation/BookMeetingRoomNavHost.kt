@@ -1,5 +1,7 @@
 package com.amalitech.bookmeetingroom.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -14,7 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.amalitech.admin.DashboardScreen
-import com.amalitech.admin.room.AddRoomScreen
+import com.amalitech.rooms.AddRoomScreen
 import com.amalitech.booking.history.BookingHistoryScreen
 import com.amalitech.booking.requests.BookingRequestScreen
 import com.amalitech.booking.requests.detail.BookingRequestDetailScreen
@@ -33,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun BookMeetingRoomNavHost(
     innerPadding: PaddingValues,

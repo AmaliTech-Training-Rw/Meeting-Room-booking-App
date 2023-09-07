@@ -27,4 +27,6 @@
     <string name="meeting_room_for_x_people">Meeting room for %d people</string>
     <string name="date">Date</string>
     <string name="time">time</string>
+    <string name="permission_is_needed">Permission is needed for picking up pictures</string>
+    <string name="permission_is_needed_open_settings">Permission is needed for picking up images. Please grant it from your settings</string>
 </resources>
