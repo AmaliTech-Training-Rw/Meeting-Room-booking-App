@@ -28,7 +28,7 @@ class UserViewModel (
     private fun subscribeToUserUpdates() {
         viewModelScope.launch {
             _uiState.value = uiState.value.copy(loading = true)
-            val apiResult = getUsers()
+            val apiResult = getUsers(_uiState.value.isInviting)
             apiResult.data?.collect { user ->
                 val updatedUserSet = (uiState.value.users + user).toSet() // remove dups
                 _uiState.update { oldState ->
@@ -105,6 +105,12 @@ class UserViewModel (
             it.copy(
                 snackbarMessage = null
             )
+        }
+    }
+
+    fun isInviting(value: Boolean) {
+        _uiState.update {
+            it.copy(isInviting = value)
         }
     }
 }

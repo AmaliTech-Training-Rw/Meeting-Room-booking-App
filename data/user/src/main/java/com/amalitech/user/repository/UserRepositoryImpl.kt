@@ -29,12 +29,12 @@ class UserRepositoryImpl(
         dao.insertUser(user)
     }
 
-    override suspend fun getUsers(): ApiResult<Flow<List<User>>> {
+    override suspend fun getUsers(isInviting: Boolean): ApiResult<Flow<List<User>>> {
 
         return try {
             var result: ApiResult<UsersListDto> = ApiResult()
             val flow = flow {
-                while (true) {
+                while (!isInviting) {
                     result = safeApiCall(
                         apiToBeCalled = {
                             api.fetchAllUsers()

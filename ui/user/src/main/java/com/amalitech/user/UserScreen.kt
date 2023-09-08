@@ -187,6 +187,9 @@ fun UserScreen(
             addUserViewModel.clearSnackBar()
         }
     }
+    LaunchedEffect(key1 = addUserState) {
+        viewModel.isInviting(addUserState.isInviting)
+    }
 
     if (showBottomSheet) {
         ModalBottomSheet(
@@ -337,6 +340,7 @@ fun UserScreen(
                         textColor = MaterialTheme.colorScheme.onPrimary,
                         onClick = {
                             addUserViewModel.invite()
+                            viewModel.isInviting(true)
                             showBottomSheet = false
                         }
                     )

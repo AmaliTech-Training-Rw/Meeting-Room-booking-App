@@ -90,6 +90,9 @@ class AddUserViewModel(
                 }
             }
 
+            _userUiState.update {
+                it.copy(isInviting = true)
+            }
             val error = addUserUseCase(
                 UserToAdd(
                     _userUiState.value.firstName,
@@ -100,6 +103,9 @@ class AddUserViewModel(
             )
             error?.let { errorValue ->
                 _snackBarMessage.value = errorValue
+            }
+            _userUiState.update {
+                it.copy(isInviting = false)
             }
         }
     }

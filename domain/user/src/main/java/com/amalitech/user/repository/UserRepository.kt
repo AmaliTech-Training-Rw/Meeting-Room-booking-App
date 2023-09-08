@@ -15,7 +15,7 @@ interface UserRepository {
 
     suspend fun insertUser(user: UserDto)
 
-    suspend fun getUsers(): ApiResult<Flow<List<User>>>
+    suspend fun getUsers(isInviting: Boolean): ApiResult<Flow<List<User>>>
 
     suspend fun addUser(user: UserToAdd): UiText?
 

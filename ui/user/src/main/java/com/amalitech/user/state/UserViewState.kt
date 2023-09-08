@@ -8,7 +8,8 @@ data class UserViewState(
     val loading: Boolean = true,
     val users: List<User> = emptyList(),
     val snackbarMessage: UiText? = null,
-    val searchQuery: String = ""
+    val searchQuery: String = "",
+    val isInviting: Boolean = false
 )
 
 data class UserUiState(
@@ -19,4 +20,5 @@ data class UserUiState(
     val isAdmin: Boolean = false,
     val locations: List<LocationX> = emptyList(),
     val isLoading: Boolean = false,
+    val isInviting: Boolean = false
 )
