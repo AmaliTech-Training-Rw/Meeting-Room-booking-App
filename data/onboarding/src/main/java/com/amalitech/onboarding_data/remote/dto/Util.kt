@@ -1,6 +1,6 @@
 package com.amalitech.onboarding_data.remote.dto
 
-import com.amalitech.core.data.dto.UserData
+import com.amalitech.core.data.data_source.remote.dto.UserData
 import com.amalitech.onboarding.login.model.UserProfile
 
 fun UserData.toProfileInfo(token: String): UserProfile {

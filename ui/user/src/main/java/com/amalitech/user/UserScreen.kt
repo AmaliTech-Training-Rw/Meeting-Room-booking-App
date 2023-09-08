@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -77,6 +76,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.BookMeetingRoomDropDown
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
@@ -92,7 +92,6 @@ import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.add_user_divider
 import com.amalitech.core_ui.util.CustomBackHandler
 import com.amalitech.ui.user.R
-import com.amalitech.user.adduser.AddUserScreen
 import com.amalitech.user.adduser.AddUserViewModel
 import com.amalitech.user.models.User
 import kotlinx.coroutines.launch
@@ -120,6 +119,10 @@ fun UserScreen(
     var isSearchQueryVisible by remember {
         mutableStateOf(false)
     }
+    var isLocationDropDownExpanded by rememberSaveable {
+        mutableStateOf(false)
+    }
+    val focusManager: FocusManager = LocalFocusManager.current
     val appBarState = AppBarState(
         floatingActionButton = {
             FloatingActionButton(
@@ -171,8 +174,8 @@ fun UserScreen(
         onComposing(appBarState)
     }
     LaunchedEffect(key1 = uiState) {
-        if (uiState.snackbarMessage != null) {
-            appState.snackbarHostState.showSnackbar(uiState.snackbarMessage!!.asString(context))
+        uiState.snackbarMessage?.let {
+            appState.snackbarHostState.showSnackbar(it.asString(context))
             viewModel.clearMessage()
         }
     }
@@ -183,7 +186,6 @@ fun UserScreen(
             appState.snackbarHostState.showSnackbar(it.asString(context))
             addUserViewModel.clearSnackBar()
         }
-
     }
 
     if (showBottomSheet) {
@@ -221,7 +223,6 @@ fun UserScreen(
                         .width(1.dp)
                         .padding(top = spacing.spaceExtraSmall, bottom = spacing.spaceExtraSmall)
                 )
-
                 DefaultTextField(
                     placeholder = stringResource(com.amalitech.core.R.string.first_name),
                     value = addUserState.firstName,
@@ -236,7 +237,6 @@ fun UserScreen(
                         keyboardType = KeyboardType.Text
                     )
                 )
-
                 DefaultTextField(
                     placeholder = stringResource(com.amalitech.core.R.string.last_name),
                     value = addUserState.lastName,
@@ -251,7 +251,6 @@ fun UserScreen(
                         keyboardType = KeyboardType.Text
                     )
                 )
-
                 DefaultTextField(
                     placeholder = stringResource(com.amalitech.core.R.string.email),
                     value = addUserState.email,
@@ -266,21 +265,17 @@ fun UserScreen(
                         keyboardType = KeyboardType.Text
                     )
                 )
-
-                DefaultTextField(
-                    placeholder = stringResource(com.amalitech.core.R.string.location),
-                    value = addUserState.selectLocation,
-                    onValueChange = {
-                        addUserViewModel.onLocationName(it)
+                BookMeetingRoomDropDown(
+                    isDropDownExpanded = isLocationDropDownExpanded,
+                    items = addUserState.locations.map { it.name },
+                    onSelectedItemChange = {
+                        addUserViewModel.onSelectedLocation(it)
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(spacing.spaceExtraSmall),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Go,
-                        keyboardType = KeyboardType.Text
-                    )
-                )
+                    onIsExpandedStateChange = { isLocationDropDownExpanded = it },
+                    selectedItem = addUserState.locations.find { addUserState.selectLocation == it.id }?.name ?: "",
+                    focusManager = focusManager,
+                    com.amalitech.core.R.string.location,
+                ) { isLocationDropDownExpanded = it }
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -717,16 +712,5 @@ fun UserScreenPreview() {
             navigateToProfileScreen = {},
             navigateUp = {}
         ) {}
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AddUserScreenPreview() {
-    BookMeetingRoomTheme {
-        AddUserScreen(
-            true,
-            PaddingValues(12.dp)
-        )
     }
 }

@@ -20,7 +20,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
@@ -36,7 +35,6 @@ import com.amalitech.core.R
 import com.amalitech.core_ui.theme.LocalSpacing
 
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BookMeetingRoomDropDown(
     isDropDownExpanded: Boolean,

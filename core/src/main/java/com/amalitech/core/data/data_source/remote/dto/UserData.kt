@@ -1,4 +1,4 @@
-package com.amalitech.core.data.dto
+package com.amalitech.core.data.data_source.remote.dto
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

@@ -13,7 +13,7 @@ val userPresentationModule = module {
     }
 
     viewModel {
-        AddUserViewModel(get())
+        AddUserViewModel(get(), get())
     }
 
     single {

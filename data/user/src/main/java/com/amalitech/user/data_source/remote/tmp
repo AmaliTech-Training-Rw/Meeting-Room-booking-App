@@ -1,0 +1,8 @@
+curl --location 'https://api.meeting-room.amalitech-dev.net/api/user/invite' \
+--header 'Accept: application/json' \
+--form 'first_name="Chris"' \
+--form 'last_name="Levy"' \
+--form 'email="bumwejaychris@gmail.com"' \
+--form 'location_id="1"'
+
+
