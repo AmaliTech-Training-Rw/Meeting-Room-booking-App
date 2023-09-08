@@ -3,6 +3,7 @@ package com.amalitech.user.repository
 import com.amalitech.core.data.repository.BaseRepo
 import com.amalitech.core.util.ApiResult
 import com.amalitech.core.util.UiText
+import com.amalitech.core.util.extractError
 import com.amalitech.user.data_source.local.UserDao
 import com.amalitech.user.data_source.remote.UserApiService
 import com.amalitech.user.data_source.remote.UsersListDto
@@ -51,11 +52,7 @@ class UserRepositoryImpl(
                 error = result.error
             )
         } catch (e: Exception) {
-            val localizedMessage = e.localizedMessage
-            if (localizedMessage != null)
-                ApiResult(error = UiText.DynamicString(localizedMessage))
-            else
-                ApiResult(error = UiText.StringResource(com.amalitech.core.R.string.error_default_message))
+            return ApiResult(error = e.extractError())
         }
     }
 
