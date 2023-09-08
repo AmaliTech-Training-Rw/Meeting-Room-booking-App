@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.amalitech.core.util.UiText
 import com.amalitech.user.models.User
 import com.amalitech.user.state.UserViewState
+import com.amalitech.user.usecases.DeleteUserUseCase
 import com.amalitech.user.usecases.GetUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +16,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class UserViewModel(
-    private val getUsers: GetUseCase
+    private val getUsers: GetUseCase,
+    private val deleteUser: DeleteUserUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -53,10 +55,19 @@ class UserViewModel(
     }
 
     fun onDelete() {
-        _uiState.update {
-            it.copy(
-                snackbarMessage = UiText.DynamicString("User deleted successfully")
-            )
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(loading = true)
+            }
+            val apiResult = deleteUser(_uiState.value.selectedUserId)
+            apiResult?.let {  error ->
+                _uiState.update {
+                    it.copy(snackbarMessage = error)
+                }
+            }
+            _uiState.update {
+                it.copy(loading = false)
+            }
         }
     }
 
@@ -118,6 +129,14 @@ class UserViewModel(
     fun isInviting(value: Boolean) {
         _uiState.update {
             it.copy(isInviting = value)
+        }
+    }
+
+    fun onUserSelected(userId: String) {
+        _uiState.update {
+            it.copy(
+                selectedUserId = userId
+            )
         }
     }
 }

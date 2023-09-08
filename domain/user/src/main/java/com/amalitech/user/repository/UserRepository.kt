@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
     suspend fun getUser(email: String): UserDto
 
-    suspend fun deleteUser(user: UserDto)
+    suspend fun deleteUser(userId: String): UiText?
 
-    suspend fun insertUser(user: UserDto)
+    suspend fun saveLoggedInUser(user: UserDto)
 
     suspend fun getUsers(isInviting: Boolean): ApiResult<Flow<List<User>>>
 

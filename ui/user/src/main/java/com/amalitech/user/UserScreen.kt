@@ -444,8 +444,9 @@ fun UsersList(
                     onSwipeEnd = { direction ->
                         when (direction) {
                             SwipeDirection.LEFT -> {
-                                if (isRightContentVisible)
+                                if (isRightContentVisible){
                                     isRightContentVisible = false
+                                }
                                 else
                                     isLeftContentVisible = false
                             }
@@ -458,8 +459,10 @@ fun UsersList(
                             SwipeDirection.RIGHT -> {
                                 if (isLeftContentVisible)
                                     isLeftContentVisible = false
-                                else
+                                else {
                                     isRightContentVisible = true
+                                    viewModel.onUserSelected(item.userId)
+                                }
                             }
                         }
                     },

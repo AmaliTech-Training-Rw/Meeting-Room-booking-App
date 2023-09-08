@@ -2,8 +2,10 @@ package com.amalitech.user.data_source.remote
 
 import com.amalitech.core.data.data_source.remote.dto.ApiSuccessResponseDto
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface UserApiService {
@@ -19,5 +21,10 @@ interface UserApiService {
         @Query("last_name") lastName: String,
         @Query("email") email: String,
         @Query("location_id") locationId: Int
+    ): Response<ApiSuccessResponseDto>
+
+    @DELETE("user/delete/{id}")
+    suspend fun deleteUser(
+        @Path("id") id: Int
     ): Response<ApiSuccessResponseDto>
 }

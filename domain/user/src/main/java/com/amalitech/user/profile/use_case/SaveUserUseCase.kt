@@ -7,6 +7,6 @@ class SaveUserUseCase(
     private val userRepository: UserRepository
 ) {
     suspend operator fun invoke(userDto: UserDto) {
-        userRepository.insertUser(userDto)
+        userRepository.saveLoggedInUser(userDto)
     }
 }

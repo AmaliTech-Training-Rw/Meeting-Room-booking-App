@@ -11,7 +11,8 @@ data class UserViewState(
     val users: StateFlow<List<User>> = MutableStateFlow(emptyList()),
     val snackbarMessage: UiText? = null,
     val searchQuery: String = "",
-    val isInviting: Boolean = false
+    val isInviting: Boolean = false,
+    val selectedUserId: String = "-1"
 )
 
 data class UserUiState(

@@ -23,16 +23,28 @@ class UserRepositoryImpl(
         return dao.getUser(email)
     }
 
-    override suspend fun deleteUser(user: UserDto) {
-        dao.deleteUser(user)
+    override suspend fun deleteUser(userId: String): UiText? {
+        val apiResult = safeApiCall(
+            apiToBeCalled = {
+                api.deleteUser(userId.toIntOrNull() ?: -1)
+            },
+            extractError = {
+                extractError(it)
+            }
+        )
+        return apiResult.error
     }
 
-    override suspend fun insertUser(user: UserDto) {
-        dao.insertUser(user)
+    override suspend fun saveLoggedInUser(user: UserDto) {
+        try {
+            dao.saveLoggedInUser(user)
+
+        } catch (e: Exception) {
+            e.extractError()
+        }
     }
 
     override suspend fun getUsers(isInviting: Boolean): ApiResult<Flow<List<User>>> {
-
         return try {
             var result: ApiResult<UsersListDto> = ApiResult()
             val flow = flow {
