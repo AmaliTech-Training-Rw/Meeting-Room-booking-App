@@ -11,6 +11,7 @@ import com.amalitech.user.models.User
 import com.amalitech.user.models.UserToAdd
 import com.amalitech.user.profile.model.Profile
 import com.amalitech.user.profile.model.dto.UserDto
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -44,7 +45,11 @@ class UserRepositoryImpl(
                             extractError(it)
                         }
                     )
-                    emit(result.data?.data?.map { it.toUser() } ?: emptyList())
+                    val mapList= result.data?.data?.map { it.toUser() }
+                    mapList?.let {
+                        emit(it)
+                    }
+                    delay(5000)
                 }
             }
             ApiResult(

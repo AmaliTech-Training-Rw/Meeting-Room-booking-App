@@ -7,19 +7,22 @@ import com.amalitech.user.models.User
 import com.amalitech.user.state.UserViewState
 import com.amalitech.user.usecases.GetUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class UserViewModel (
+class UserViewModel(
     private val getUsers: GetUseCase
-): ViewModel() {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         UserViewState()
     )
     val uiState = _uiState.asStateFlow()
-    private var usersCopy: List<User> = emptyList()
+    private var usersCopy: StateFlow<List<User>> = MutableStateFlow(emptyList())
 
     init {
         subscribeToUserUpdates()
@@ -29,18 +32,20 @@ class UserViewModel (
         viewModelScope.launch {
             _uiState.value = uiState.value.copy(loading = true)
             val apiResult = getUsers(_uiState.value.isInviting)
-            apiResult.data?.collect { user ->
-                val updatedUserSet = (uiState.value.users + user).toSet() // remove dups
-                _uiState.update { oldState ->
-                    usersCopy = updatedUserSet.toList()
-                    oldState.copy(loading = false, users = usersCopy)
+
+            apiResult.data?.let { listFlow ->
+                val stateFlow = listFlow.stateIn(viewModelScope)
+                _uiState.update {
+                    usersCopy = stateFlow
+                    it.copy(
+                        users = stateFlow, loading = false
+                    )
                 }
             }
             apiResult.error?.let { error ->
                 _uiState.update {
                     it.copy(
-                        loading = false,
-                        snackbarMessage = error
+                        loading = false, snackbarMessage = error
                     )
                 }
             }
@@ -79,24 +84,26 @@ class UserViewModel (
     }
 
     fun onSearch() {
-        _uiState.update { state ->
-            state.copy(
-                users = usersCopy.filter { user ->
-                    user.username.contains(state.searchQuery, true) || user.email.contains(
-                        state.searchQuery,
-                        true
-                    )
-                }
-            )
+        viewModelScope.launch {
+            _uiState.update { state ->
+                state.copy(
+                    users = flowOf(usersCopy.value.filter { user ->
+                        user.username.contains(state.searchQuery, true) || user.email.contains(
+                            state.searchQuery, true
+                        )
+                    }).stateIn(viewModelScope)
+                )
+            }
         }
     }
 
     fun resetList() {
-        _uiState.update {
-            it.copy(
-                users = usersCopy,
-                searchQuery = ""
-            )
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    users = usersCopy, searchQuery = ""
+                )
+            }
         }
     }
 

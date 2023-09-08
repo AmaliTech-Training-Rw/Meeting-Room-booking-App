@@ -417,6 +417,7 @@ fun UsersList(
             viewModel.onSnackBarShown()
         }
     }
+    val users by state.users.collectAsStateWithLifecycle()
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -425,7 +426,7 @@ fun UsersList(
             modifier = modifier
                 .fillMaxHeight()
         ) {
-            items(items = state.users, itemContent = { item ->
+            items(items = users, itemContent = { item ->
                 var isLeftContentVisible by rememberSaveable {
                     mutableStateOf(false)
                 }
