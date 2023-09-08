@@ -51,7 +51,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
@@ -172,9 +171,8 @@ fun UserScreen(
         onComposing(appBarState)
     }
     LaunchedEffect(key1 = uiState) {
-        val message = uiState.snackbarMessage
-        if (message != null) {
-            appState.snackbarHostState.showSnackbar(message.asString(context))
+        if (uiState.snackbarMessage != null) {
+            appState.snackbarHostState.showSnackbar(uiState.snackbarMessage!!.asString(context))
             viewModel.clearMessage()
         }
     }
@@ -291,7 +289,6 @@ fun UserScreen(
                         checked = addUserState.isAdmin,
                         onCheckedChange = { checked ->
                             addUserViewModel.onIsAdminChecked(checked)
-//                            SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("checked_ = $checked"))
                         },
                         modifier = Modifier
                             .padding(spacing.spaceExtraSmall),
@@ -416,7 +413,6 @@ fun UsersList(
     }
 
     LaunchedEffect(key1 = state) {
-
         if (state.snackbarMessage != null) {
             appState.snackbarHostState.showSnackbar(state.snackbarMessage!!.asString(context))
             viewModel.onSnackBarShown()
@@ -504,7 +500,6 @@ fun UserItem(
         MaterialTheme.colorScheme.background
     }
 
-    // TODO: is inactive an attribute coming from the server? or is it triggered by a swipe gesture?
     val activeText = if (user.isActive) {
         R.string.active
     } else {
@@ -534,7 +529,6 @@ fun UserItem(
             model = user.profilePic,
             contentDescription = user.username,
             modifier = Modifier
-//                .size(45.dp)
                 .clip(CircleShape)
                 .weight(0.5f),
             error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
@@ -574,12 +568,10 @@ fun UserItem(
             )
         }
 
-        // TODO: change the text and bg color when swiped
         Text(
             text = stringResource(id = activeText),
             modifier = Modifier
                 .clip(RoundedCornerShape(spacing.spaceExtraSmall))
-//                .padding(spacing.spaceExtraSmall)
                 .background(activeTextBg)
                 .padding(horizontal = spacing.spaceSmall, vertical = spacing.spaceExtraSmall)
             ,
@@ -594,7 +586,6 @@ fun UserItem(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DefaultTextField(
     placeholder: String,

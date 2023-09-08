@@ -29,28 +29,18 @@ class UserViewModel (
         viewModelScope.launch {
             _uiState.value = uiState.value.copy(loading = true)
             val apiResult = getUsers()
-            val data = apiResult.data
-            val error = apiResult.error
-            if (data != null) {
-                data.collect { user ->
-                    val updatedUserSet = (uiState.value.users + user).toSet() // remove dups
-                    _uiState.update { oldState ->
-                        usersCopy = updatedUserSet.toList()
-                        oldState.copy(loading = false, users = usersCopy)
-                    }
+            apiResult.data?.collect { user ->
+                val updatedUserSet = (uiState.value.users + user).toSet() // remove dups
+                _uiState.update { oldState ->
+                    usersCopy = updatedUserSet.toList()
+                    oldState.copy(loading = false, users = usersCopy)
                 }
-            } else if (error != null) {
+            }
+            apiResult.error?.let { error ->
                 _uiState.update {
                     it.copy(
                         loading = false,
                         snackbarMessage = error
-                    )
-                }
-            } else {
-                _uiState.update {
-                    it.copy(
-                        loading = false,
-                        snackbarMessage = UiText.StringResource(com.amalitech.core.R.string.error_default_message)
                     )
                 }
             }
