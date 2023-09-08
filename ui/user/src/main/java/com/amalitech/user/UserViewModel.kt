@@ -3,13 +3,9 @@ package com.amalitech.user
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core.util.UiText
-import com.amalitech.core_ui.util.SnackbarManager
-import com.amalitech.core_ui.util.SnackbarMessage.Companion.toSnackbarMessage
 import com.amalitech.user.models.User
 import com.amalitech.user.state.UserViewState
 import com.amalitech.user.usecases.GetUseCase
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -30,13 +26,32 @@ class UserViewModel (
     }
 
     private fun subscribeToUserUpdates() {
-        launchCatching {
+        viewModelScope.launch {
             _uiState.value = uiState.value.copy(loading = true)
-            getUsers().collect { user ->
-                val updatedUserSet = (uiState.value.users + user).toSet() // remove dups
-                _uiState.update { oldState ->
-                    usersCopy = updatedUserSet.toList()
-                    oldState.copy( loading = false, users = usersCopy)
+            val apiResult = getUsers()
+            val data = apiResult.data
+            val error = apiResult.error
+            if (data != null) {
+                data.collect { user ->
+                    val updatedUserSet = (uiState.value.users + user).toSet() // remove dups
+                    _uiState.update { oldState ->
+                        usersCopy = updatedUserSet.toList()
+                        oldState.copy(loading = false, users = usersCopy)
+                    }
+                }
+            } else if (error != null) {
+                _uiState.update {
+                    it.copy(
+                        loading = false,
+                        snackbarMessage = error
+                    )
+                }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        loading = false,
+                        snackbarMessage = UiText.StringResource(com.amalitech.core.R.string.error_default_message)
+                    )
                 }
             }
         }
@@ -57,17 +72,6 @@ class UserViewModel (
             )
         }
     }
-
-    // TODO: ideally, this method should come from a share vm
-    fun launchCatching(snackbar: Boolean = true, block: suspend CoroutineScope.() -> Unit) =
-        viewModelScope.launch(
-            CoroutineExceptionHandler { _, throwable ->
-                if (snackbar) {
-                    SnackbarManager.showMessage(throwable.toSnackbarMessage())
-                }
-            },
-            block = block
-        )
 
     fun clearMessage() {
         _uiState.update {
@@ -102,6 +106,14 @@ class UserViewModel (
             it.copy(
                 users = usersCopy,
                 searchQuery = ""
+            )
+        }
+    }
+
+    fun onSnackBarShown() {
+        _uiState.update {
+            it.copy(
+                snackbarMessage = null
             )
         }
     }

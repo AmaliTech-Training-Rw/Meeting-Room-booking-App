@@ -1,5 +1,6 @@
 package com.amalitech.user.repository
 
+import com.amalitech.core.util.ApiResult
 import com.amalitech.user.models.User
 import com.amalitech.user.profile.model.Profile
 import com.amalitech.user.profile.model.dto.UserDto
@@ -12,7 +13,7 @@ interface UserRepository {
 
     suspend fun insertUser(user: UserDto)
 
-    suspend fun getUsers(): Flow<User>
+    suspend fun getUsers(): ApiResult<Flow<List<User>>>
 
     suspend fun addUser(user: User)
 

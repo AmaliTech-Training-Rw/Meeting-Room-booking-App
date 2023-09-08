@@ -4,6 +4,7 @@ import android.view.KeyEvent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -354,7 +356,8 @@ fun UserScreen(
     UsersList(
         modifier,
         viewModel,
-        spacing
+        spacing,
+        appState
     )
 }
 
@@ -363,13 +366,15 @@ fun UserScreen(
 fun UsersList(
     modifier: Modifier,
     viewModel: UserViewModel,
-    spacing: Dimensions
+    spacing: Dimensions,
+    appState: BookMeetingRoomAppState
 ) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var openDialog by remember {
         mutableStateOf(false)
     }
+    val context = LocalContext.current
 
     if (openDialog) {
         AlertDialog(
@@ -410,66 +415,80 @@ fun UsersList(
         }
     }
 
-    LazyColumn(
-        modifier = modifier
-            .fillMaxHeight()
+    LaunchedEffect(key1 = state) {
+
+        if (state.snackbarMessage != null) {
+            appState.snackbarHostState.showSnackbar(state.snackbarMessage!!.asString(context))
+            viewModel.onSnackBarShown()
+        }
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        items(items = state.users, itemContent = { item ->
-            var isLeftContentVisible by rememberSaveable {
-                mutableStateOf(false)
-            }
-
-            var isRightContentVisible by rememberSaveable {
-                mutableStateOf(false)
-            }
-
-            SwipeableCardSideContents(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(77.dp),
-                isLeftContentVisible = isLeftContentVisible,
-                isRightContentVisible = isRightContentVisible,
-                onSwipeEnd = { direction ->
-                    when (direction) {
-                        SwipeDirection.LEFT -> {
-                            if (isRightContentVisible)
-                                isRightContentVisible = false
-                            else
-                                isLeftContentVisible = false
-                        }
-
-                        SwipeDirection.NONE -> {
-                            isLeftContentVisible = false
-                            isRightContentVisible = false
-                        }
-
-                        SwipeDirection.RIGHT -> {
-                            if (isLeftContentVisible)
-                                isLeftContentVisible = false
-                            else
-                                isRightContentVisible = true
-                        }
-                    }
-                },
-                rightContent = {
-                    SwipeAction(
-                        backgroundColor = MaterialTheme.colorScheme.error,
-                        icon = Icons.Filled.Delete,
-                        onActionClick = {
-                            openDialog = true
-                        },
-                        modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
-                    )
-                },
-                leftContent = {},
-                content = {
-                    UserItem(
-                        isRightContentVisible,
-                        item
-                    )
+        LazyColumn(
+            modifier = modifier
+                .fillMaxHeight()
+        ) {
+            items(items = state.users, itemContent = { item ->
+                var isLeftContentVisible by rememberSaveable {
+                    mutableStateOf(false)
                 }
-            )
-        })
+
+                var isRightContentVisible by rememberSaveable {
+                    mutableStateOf(false)
+                }
+
+                SwipeableCardSideContents(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(77.dp),
+                    isLeftContentVisible = isLeftContentVisible,
+                    isRightContentVisible = isRightContentVisible,
+                    onSwipeEnd = { direction ->
+                        when (direction) {
+                            SwipeDirection.LEFT -> {
+                                if (isRightContentVisible)
+                                    isRightContentVisible = false
+                                else
+                                    isLeftContentVisible = false
+                            }
+
+                            SwipeDirection.NONE -> {
+                                isLeftContentVisible = false
+                                isRightContentVisible = false
+                            }
+
+                            SwipeDirection.RIGHT -> {
+                                if (isLeftContentVisible)
+                                    isLeftContentVisible = false
+                                else
+                                    isRightContentVisible = true
+                            }
+                        }
+                    },
+                    rightContent = {
+                        SwipeAction(
+                            backgroundColor = MaterialTheme.colorScheme.error,
+                            icon = Icons.Filled.Delete,
+                            onActionClick = {
+                                openDialog = true
+                            },
+                            modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
+                        )
+                    },
+                    leftContent = {},
+                    content = {
+                        UserItem(
+                            isRightContentVisible,
+                            item
+                        )
+                    }
+                )
+            })
+        }
+        if (state.loading)
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
     }
 }
 

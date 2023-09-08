@@ -66,8 +66,7 @@ class LoginViewModel(
                 UiState.Loading()
             }
             val emailValidation = loginUseCasesWrapper.validateEmailUseCase(_uiState.value.email)
-            val passwordValidation = loginUseCasesWrapper.validatePasswordUseCase(_uiState.value.password)
-            if (emailValidation == null && passwordValidation == null) {
+            if (emailValidation == null) {
                 val apiResult = loginUseCasesWrapper.logInUseCase(
                     email = _uiState.value.email,
                     password = _uiState.value.password
@@ -102,16 +101,10 @@ class LoginViewModel(
                         UiState.Success()
                     }
                 }
-            } else if (emailValidation != null) {
-                _uiStateFlow.update {
-                    UiState.Error(
-                        error = emailValidation
-                    )
-                }
             } else {
                 _uiStateFlow.update {
                     UiState.Error(
-                        error = passwordValidation
+                        error = emailValidation
                     )
                 }
             }
