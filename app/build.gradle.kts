@@ -122,6 +122,7 @@ dependencies {
     implementation(project(Modules.domainHome))
     implementation(project(Modules.domainBooking))
     implementation(project(Modules.uiBooking))
+    implementation(project(Modules.dataBooking))
 
     implementation(AndroidX.coreKtx)
 
