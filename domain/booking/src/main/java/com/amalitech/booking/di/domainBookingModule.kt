@@ -18,11 +18,11 @@ val domainBookingModule = module {
     }
 
     single {
-        FetchBookingsUseCase()
+        FetchBookingsUseCase(get())
     }
 
     single {
-        UpdateBookingStatusUseCase()
+        UpdateBookingStatusUseCase(get())
     }
 
     single {

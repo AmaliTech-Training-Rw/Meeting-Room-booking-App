@@ -1,14 +1,15 @@
 package com.amalitech.booking.request.use_case
 
 import com.amalitech.booking.model.Booking
+import com.amalitech.booking.repository.BookingRepository
 import com.amalitech.core.util.UiText
-import kotlinx.coroutines.delay
 
-class UpdateBookingStatusUseCase {
+class UpdateBookingStatusUseCase(
+    private val repository: BookingRepository
+) {
     suspend operator fun invoke(isApproved: Boolean, booking: Booking): UiText? {
-        delay(200)
         if (isApproved)
-            return null
-        return UiText.DynamicString("Cannot decline booking")
+            return repository.approveBooking(booking.id)
+        return repository.declineBooking(booking.id)
     }
 }
