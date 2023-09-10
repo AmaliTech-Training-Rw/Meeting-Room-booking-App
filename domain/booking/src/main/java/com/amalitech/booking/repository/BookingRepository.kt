@@ -10,4 +10,6 @@ interface BookingRepository {
     suspend fun approveBooking(id: String): UiText?
 
     suspend fun declineBooking(id: String): UiText?
+
+    suspend fun fetchBookingHistory(): ApiResult<List<Booking>>
 }
