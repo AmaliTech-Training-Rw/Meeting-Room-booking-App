@@ -1,6 +1,7 @@
 package com.amalitech.booking.di
 
 import com.amalitech.booking.BookingViewModel
+import com.amalitech.booking.history.BookingHistoryViewModel
 import com.amalitech.booking.requests.BookingRequestViewModel
 import com.amalitech.booking.requests.detail.BookingRequestDetailViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -17,5 +18,9 @@ val presentationBookingModule = module {
 
     viewModel {
         BookingRequestDetailViewModel(get())
+    }
+
+    viewModel {
+        BookingHistoryViewModel(get())
     }
 }
