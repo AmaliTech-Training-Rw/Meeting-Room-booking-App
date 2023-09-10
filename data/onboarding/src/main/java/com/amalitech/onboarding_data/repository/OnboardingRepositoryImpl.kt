@@ -6,7 +6,6 @@ import com.amalitech.core.util.UiText
 import com.amalitech.onboarding.login.model.UserProfile
 import com.amalitech.onboarding.repository.OnboardingRepository
 import com.amalitech.onboarding.signup.model.CreateOrganization
-import com.amalitech.onboarding.signup.model.LocationX
 import com.amalitech.onboarding.signup.model.OrganizationType
 import com.amalitech.onboarding.signup.model.User
 import com.amalitech.onboarding_data.remote.OnboardingApiService
@@ -58,21 +57,6 @@ class OnboardingRepositoryImpl(
                 ApiResult(error = UiText.DynamicString(localizedMessage))
             else ApiResult(error = UiText.StringResource(com.amalitech.core.R.string.error_default_message))
         }
-    }
-
-    override suspend fun fetchLocations(): ApiResult<List<LocationX>> {
-        val apiResult = safeApiCall(
-            apiToBeCalled = {
-                api.fetchLocations()
-            },
-            extractError = {
-                return@safeApiCall UiText.StringResource(com.amalitech.core.R.string.error_default_message)
-            }
-        )
-        return ApiResult(
-            data = apiResult.data?.locations,
-            error = apiResult.error
-        )
     }
 
     override suspend fun createUser(

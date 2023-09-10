@@ -1,6 +1,6 @@
 package com.amalitech.rooms.remote
 
-import com.amalitech.core.data.dto.ApiSuccessResponseDto
+import com.amalitech.core.data.data_source.remote.dto.ApiSuccessResponseDto
 import com.amalitech.rooms.remote.dto.RoomsDto
 import retrofit2.Response
 import retrofit2.http.DELETE

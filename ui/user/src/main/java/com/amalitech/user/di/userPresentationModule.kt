@@ -9,11 +9,11 @@ import org.koin.dsl.module
 
 val userPresentationModule = module {
     viewModel {
-        UserViewModel(get())
+        UserViewModel(get(), get())
     }
 
     viewModel {
-        AddUserViewModel(get())
+        AddUserViewModel(get(), get())
     }
 
     single {

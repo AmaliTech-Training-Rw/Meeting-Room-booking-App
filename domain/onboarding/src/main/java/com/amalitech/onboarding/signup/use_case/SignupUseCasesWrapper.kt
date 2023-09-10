@@ -4,6 +4,7 @@ import com.amalitech.core.domain.use_case.ValidateEmailUseCase
 import com.amalitech.core.domain.ValidatePasswordUseCase
 import com.amalitech.core.domain.use_case.CheckPasswordsMatchUseCase
 import com.amalitech.core.domain.use_case.CheckValuesNotBlankUseCase
+import com.amalitech.core.domain.use_case.FetchLocationsUseCase
 
 data class SignupUseCasesWrapper(
     val isEmailAvailableUseCase: IsEmailAvailableUseCase,

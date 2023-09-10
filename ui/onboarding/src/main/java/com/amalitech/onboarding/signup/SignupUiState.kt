@@ -1,6 +1,6 @@
 package com.amalitech.onboarding.signup
 
-import com.amalitech.onboarding.signup.model.LocationX
+import com.amalitech.core.domain.model.LocationX
 import com.amalitech.onboarding.signup.model.TypesOrganisation
 
 data class SignupUiState(

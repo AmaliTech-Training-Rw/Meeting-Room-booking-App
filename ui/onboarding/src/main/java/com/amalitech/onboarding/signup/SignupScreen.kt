@@ -47,7 +47,7 @@ import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.core_ui.components.AuthenticationTextField
-import com.amalitech.onboarding.signup.model.LocationX
+import com.amalitech.core.domain.model.LocationX
 import com.amalitech.onboarding.signup.model.TypesOrganisation
 import com.amalitech.onboarding.util.showSnackBar
 import org.koin.androidx.compose.koinViewModel
@@ -214,15 +214,6 @@ fun SignupScreen(
                 focusManager = focusManager,
                 R.string.location,
             ) { isLocationDropDownExpanded = it }
-            /*AuthenticationTextField(
-                onGo = { onGo() },
-                placeholder = stringResource(id = R.string.location),
-                value = locations.find { it.id == selectedLocation }?.name ?: "",
-                onValueChange = {
-                    viewModel.onLocationSelected(it)
-                },
-                modifier = Modifier.fillMaxWidth(),
-            )*/
         } else {
             if (token != null) {
                 viewModel.submitValues(token)

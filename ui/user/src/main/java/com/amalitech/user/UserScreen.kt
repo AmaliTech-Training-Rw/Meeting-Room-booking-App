@@ -4,8 +4,8 @@ import android.view.KeyEvent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -49,7 +50,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
@@ -76,6 +76,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.BookMeetingRoomDropDown
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
@@ -91,7 +92,6 @@ import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.theme.add_user_divider
 import com.amalitech.core_ui.util.CustomBackHandler
 import com.amalitech.ui.user.R
-import com.amalitech.user.adduser.AddUserScreen
 import com.amalitech.user.adduser.AddUserViewModel
 import com.amalitech.user.models.User
 import kotlinx.coroutines.launch
@@ -119,6 +119,10 @@ fun UserScreen(
     var isSearchQueryVisible by remember {
         mutableStateOf(false)
     }
+    var isLocationDropDownExpanded by rememberSaveable {
+        mutableStateOf(false)
+    }
+    val focusManager: FocusManager = LocalFocusManager.current
     val appBarState = AppBarState(
         floatingActionButton = {
             FloatingActionButton(
@@ -170,9 +174,8 @@ fun UserScreen(
         onComposing(appBarState)
     }
     LaunchedEffect(key1 = uiState) {
-        val message = uiState.snackbarMessage
-        if (message != null) {
-            appState.snackbarHostState.showSnackbar(message.asString(context))
+        uiState.snackbarMessage?.let {
+            appState.snackbarHostState.showSnackbar(it.asString(context))
             viewModel.clearMessage()
         }
     }
@@ -183,7 +186,9 @@ fun UserScreen(
             appState.snackbarHostState.showSnackbar(it.asString(context))
             addUserViewModel.clearSnackBar()
         }
-
+    }
+    LaunchedEffect(key1 = addUserState) {
+        viewModel.isInviting(addUserState.isInviting)
     }
 
     if (showBottomSheet) {
@@ -221,7 +226,6 @@ fun UserScreen(
                         .width(1.dp)
                         .padding(top = spacing.spaceExtraSmall, bottom = spacing.spaceExtraSmall)
                 )
-
                 DefaultTextField(
                     placeholder = stringResource(com.amalitech.core.R.string.first_name),
                     value = addUserState.firstName,
@@ -236,7 +240,6 @@ fun UserScreen(
                         keyboardType = KeyboardType.Text
                     )
                 )
-
                 DefaultTextField(
                     placeholder = stringResource(com.amalitech.core.R.string.last_name),
                     value = addUserState.lastName,
@@ -251,7 +254,6 @@ fun UserScreen(
                         keyboardType = KeyboardType.Text
                     )
                 )
-
                 DefaultTextField(
                     placeholder = stringResource(com.amalitech.core.R.string.email),
                     value = addUserState.email,
@@ -266,21 +268,17 @@ fun UserScreen(
                         keyboardType = KeyboardType.Text
                     )
                 )
-
-                DefaultTextField(
-                    placeholder = stringResource(com.amalitech.core.R.string.location),
-                    value = addUserState.selectLocation,
-                    onValueChange = {
-                        addUserViewModel.onLocationName(it)
+                BookMeetingRoomDropDown(
+                    isDropDownExpanded = isLocationDropDownExpanded,
+                    items = addUserState.locations.map { it.name },
+                    onSelectedItemChange = {
+                        addUserViewModel.onSelectedLocation(it)
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(spacing.spaceExtraSmall),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Go,
-                        keyboardType = KeyboardType.Text
-                    )
-                )
+                    onIsExpandedStateChange = { isLocationDropDownExpanded = it },
+                    selectedItem = addUserState.locations.find { addUserState.selectLocation == it.id }?.name ?: "",
+                    focusManager = focusManager,
+                    com.amalitech.core.R.string.location,
+                ) { isLocationDropDownExpanded = it }
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -289,7 +287,6 @@ fun UserScreen(
                         checked = addUserState.isAdmin,
                         onCheckedChange = { checked ->
                             addUserViewModel.onIsAdminChecked(checked)
-//                            SnackbarManager.showMessage(SnackbarMessage.StringSnackbar("checked_ = $checked"))
                         },
                         modifier = Modifier
                             .padding(spacing.spaceExtraSmall),
@@ -343,6 +340,7 @@ fun UserScreen(
                         textColor = MaterialTheme.colorScheme.onPrimary,
                         onClick = {
                             addUserViewModel.invite()
+                            viewModel.isInviting(true)
                             showBottomSheet = false
                         }
                     )
@@ -354,7 +352,8 @@ fun UserScreen(
     UsersList(
         modifier,
         viewModel,
-        spacing
+        spacing,
+        appState
     )
 }
 
@@ -363,13 +362,15 @@ fun UserScreen(
 fun UsersList(
     modifier: Modifier,
     viewModel: UserViewModel,
-    spacing: Dimensions
+    spacing: Dimensions,
+    appState: BookMeetingRoomAppState
 ) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var openDialog by remember {
         mutableStateOf(false)
     }
+    val context = LocalContext.current
 
     if (openDialog) {
         AlertDialog(
@@ -410,66 +411,83 @@ fun UsersList(
         }
     }
 
-    LazyColumn(
-        modifier = modifier
-            .fillMaxHeight()
+    LaunchedEffect(key1 = state) {
+        if (state.snackbarMessage != null) {
+            appState.snackbarHostState.showSnackbar(state.snackbarMessage!!.asString(context))
+            viewModel.onSnackBarShown()
+        }
+    }
+    val users by state.users.collectAsStateWithLifecycle()
+
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        items(items = state.users, itemContent = { item ->
-            var isLeftContentVisible by rememberSaveable {
-                mutableStateOf(false)
-            }
-
-            var isRightContentVisible by rememberSaveable {
-                mutableStateOf(false)
-            }
-
-            SwipeableCardSideContents(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(77.dp),
-                isLeftContentVisible = isLeftContentVisible,
-                isRightContentVisible = isRightContentVisible,
-                onSwipeEnd = { direction ->
-                    when (direction) {
-                        SwipeDirection.LEFT -> {
-                            if (isRightContentVisible)
-                                isRightContentVisible = false
-                            else
-                                isLeftContentVisible = false
-                        }
-
-                        SwipeDirection.NONE -> {
-                            isLeftContentVisible = false
-                            isRightContentVisible = false
-                        }
-
-                        SwipeDirection.RIGHT -> {
-                            if (isLeftContentVisible)
-                                isLeftContentVisible = false
-                            else
-                                isRightContentVisible = true
-                        }
-                    }
-                },
-                rightContent = {
-                    SwipeAction(
-                        backgroundColor = MaterialTheme.colorScheme.error,
-                        icon = Icons.Filled.Delete,
-                        onActionClick = {
-                            openDialog = true
-                        },
-                        modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
-                    )
-                },
-                leftContent = {},
-                content = {
-                    UserItem(
-                        isRightContentVisible,
-                        item
-                    )
+        LazyColumn(
+            modifier = modifier
+                .fillMaxHeight()
+        ) {
+            items(items = users, itemContent = { item ->
+                var isLeftContentVisible by rememberSaveable {
+                    mutableStateOf(false)
                 }
-            )
-        })
+
+                var isRightContentVisible by rememberSaveable {
+                    mutableStateOf(false)
+                }
+
+                SwipeableCardSideContents(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(77.dp),
+                    isLeftContentVisible = isLeftContentVisible,
+                    isRightContentVisible = isRightContentVisible,
+                    onSwipeEnd = { direction ->
+                        when (direction) {
+                            SwipeDirection.LEFT -> {
+                                if (isRightContentVisible){
+                                    isRightContentVisible = false
+                                }
+                                else
+                                    isLeftContentVisible = false
+                            }
+
+                            SwipeDirection.NONE -> {
+                                isLeftContentVisible = false
+                                isRightContentVisible = false
+                            }
+
+                            SwipeDirection.RIGHT -> {
+                                if (isLeftContentVisible)
+                                    isLeftContentVisible = false
+                                else {
+                                    isRightContentVisible = true
+                                    viewModel.onUserSelected(item.userId)
+                                }
+                            }
+                        }
+                    },
+                    rightContent = {
+                        SwipeAction(
+                            backgroundColor = MaterialTheme.colorScheme.error,
+                            icon = Icons.Filled.Delete,
+                            onActionClick = {
+                                openDialog = true
+                            },
+                            modifier = Modifier.padding(vertical = spacing.spaceExtraSmall)
+                        )
+                    },
+                    leftContent = {},
+                    content = {
+                        UserItem(
+                            isRightContentVisible,
+                            item
+                        )
+                    }
+                )
+            })
+        }
+        if (state.loading)
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
     }
 }
 
@@ -485,7 +503,6 @@ fun UserItem(
         MaterialTheme.colorScheme.background
     }
 
-    // TODO: is inactive an attribute coming from the server? or is it triggered by a swipe gesture?
     val activeText = if (user.isActive) {
         R.string.active
     } else {
@@ -515,7 +532,6 @@ fun UserItem(
             model = user.profilePic,
             contentDescription = user.username,
             modifier = Modifier
-//                .size(45.dp)
                 .clip(CircleShape)
                 .weight(0.5f),
             error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
@@ -555,12 +571,10 @@ fun UserItem(
             )
         }
 
-        // TODO: change the text and bg color when swiped
         Text(
             text = stringResource(id = activeText),
             modifier = Modifier
                 .clip(RoundedCornerShape(spacing.spaceExtraSmall))
-//                .padding(spacing.spaceExtraSmall)
                 .background(activeTextBg)
                 .padding(horizontal = spacing.spaceSmall, vertical = spacing.spaceExtraSmall)
             ,
@@ -575,7 +589,6 @@ fun UserItem(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DefaultTextField(
     placeholder: String,
@@ -707,16 +720,5 @@ fun UserScreenPreview() {
             navigateToProfileScreen = {},
             navigateUp = {}
         ) {}
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AddUserScreenPreview() {
-    BookMeetingRoomTheme {
-        AddUserScreen(
-            true,
-            PaddingValues(12.dp)
-        )
     }
 }

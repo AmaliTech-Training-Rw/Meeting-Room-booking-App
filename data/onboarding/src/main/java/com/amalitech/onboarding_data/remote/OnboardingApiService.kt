@@ -1,7 +1,6 @@
 package com.amalitech.onboarding_data.remote
 
 import com.amalitech.onboarding_data.remote.dto.CreateOrganizationDto
-import com.amalitech.onboarding_data.remote.dto.LocationDto
 import com.amalitech.onboarding_data.remote.dto.LoginDto
 import com.amalitech.onboarding_data.remote.dto.OrganizationTypeDto
 import retrofit2.Response
@@ -25,9 +24,6 @@ interface OnboardingApiService {
 
     @GET("typesOrganisation")
     suspend fun fetchOrganizations(): Response<OrganizationTypeDto>
-
-    @GET("locations")
-    suspend fun fetchLocations(): Response<LocationDto>
 
     @POST("user/create")
     suspend fun createUser(
