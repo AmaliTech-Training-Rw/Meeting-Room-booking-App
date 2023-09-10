@@ -30,7 +30,7 @@ val domainBookingModule = module {
         BookingRequestsUseCaseWrapper(get(), get())
     }
     single {
-        GetBookingRequestDetailUseCase()
+        GetBookingRequestDetailUseCase(get())
     }
 
     single {

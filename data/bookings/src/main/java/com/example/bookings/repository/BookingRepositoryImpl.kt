@@ -1,6 +1,7 @@
 package com.example.bookings.repository
 
 import com.amalitech.booking.model.Booking
+import com.amalitech.booking.model.BookingRequestDetail
 import com.amalitech.booking.repository.BookingRepository
 import com.amalitech.core.data.repository.BaseRepo
 import com.amalitech.core.util.ApiResult
@@ -72,6 +73,27 @@ class BookingRepositoryImpl(
             )
         } catch (e: Exception) {
             ApiResult(error = e.extractError())
+        }
+    }
+
+    override suspend fun getBooking(id: String): ApiResult<BookingRequestDetail> {
+        val result = safeApiCall(
+            apiToBeCalled = {
+                api.getBooking(id.toIntOrNull() ?: -1)
+            },
+            extractError = {
+                extractError(it)
+            }
+        )
+        return try {
+            ApiResult(
+                data = result.data?.data?.toBookingRequestDetail(),
+                error = result.error
+            )
+        } catch (e: Exception) {
+            ApiResult(
+                error = e.extractError()
+            )
         }
     }
 }

@@ -2,8 +2,8 @@ package com.example.bookings.data_source.remote.dto
 
 import com.squareup.moshi.Json
 
-data class BookingHistoryRoomData(
-    val capacity: String?,
+data class BookingRoomData(
+    val capacity: Int?,
     val features: List<FeatureDto>?,
     val id: Int?,
     @Json(name = "location_id")

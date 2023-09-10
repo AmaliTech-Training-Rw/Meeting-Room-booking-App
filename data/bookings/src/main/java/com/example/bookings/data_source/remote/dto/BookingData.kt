@@ -1,10 +1,13 @@
 package com.example.bookings.data_source.remote.dto
 
 import com.amalitech.booking.model.Booking
+import com.amalitech.booking.model.BookingRequestDetail
+import com.amalitech.core.data.model.Room
 import com.squareup.moshi.Json
 
-data class BookingHistoryData(
+data class BookingData(
     val approved: Int?,
+    val attendees: List<Attendee>?,
     val declined: Int?,
     @Json(name = "end_date")
     val endDate: String?,
@@ -12,7 +15,7 @@ data class BookingHistoryData(
     val note: String?,
     @Json(name = "organisation_id")
     val organisationId: Int?,
-    val room: BookingHistoryRoomData?,
+    val room: BookingRoomData?,
     @Json(name = "room_id")
     val roomId: Int?,
     @Json(name = "start_date")
@@ -29,6 +32,20 @@ data class BookingHistoryData(
             imgUrl = room?.images?.randomOrNull()?.url ?: "",
             bookedBy = user?.email ?: "",
             note = note ?: "",
+            attendees = attendees?.map { it.email ?: "" } ?: emptyList()
+        )
+    }
+
+    fun toBookingRequestDetail(): BookingRequestDetail {
+        return BookingRequestDetail(
+            booking = toBooking(),
+            room = Room(
+                id = room?.id.toString(),
+                roomName = room?.name ?: "",
+                numberOfPeople = room?.capacity ?: 0,
+                roomFeatures = room?.features?.map { it.name } ?: emptyList(),
+                imageUrl = room?.images?.randomOrNull()?.url ?: ""
+            )
         )
     }
 }
