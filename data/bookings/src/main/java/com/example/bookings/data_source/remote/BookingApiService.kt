@@ -1,7 +1,8 @@
 package com.example.bookings.data_source.remote
 
 import com.amalitech.core.data.data_source.remote.dto.ApiSuccessResponseDto
-import com.example.bookings.data_source.remote.dto.BookingHistoryDto
+import com.example.bookings.data_source.remote.dto.BookingDto
+import com.example.bookings.data_source.remote.dto.BookingRequestDetailDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -9,7 +10,7 @@ import retrofit2.http.Path
 interface BookingApiService {
 
     @GET("bookings/requested")
-    suspend fun fetchBookingRequests(): Response<BookingHistoryDto>
+    suspend fun fetchBookingRequests(): Response<BookingDto>
 
     @GET("booking/approve/{id}")
     suspend fun approveBooking(
@@ -22,5 +23,11 @@ interface BookingApiService {
     ): Response<ApiSuccessResponseDto>
 
     @GET("bookings/history")
-    suspend fun fetchBookingHistory(): Response<BookingHistoryDto>
+    suspend fun fetchBookingHistory(): Response<BookingDto>
+
+
+    @GET("booking/find/{id}")
+    suspend fun getBooking(
+        @Path("id") id: Int
+    ): Response<BookingRequestDetailDto>
 }
