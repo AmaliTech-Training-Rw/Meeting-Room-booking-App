@@ -15,4 +15,6 @@ interface BookingRepository {
     suspend fun fetchBookingHistory(): ApiResult<List<Booking>>
 
     suspend fun getBooking(id: String): ApiResult<BookingRequestDetail>
+
+    suspend fun fetchUsersBookings(ended: Boolean): ApiResult<List<Booking>>
 }

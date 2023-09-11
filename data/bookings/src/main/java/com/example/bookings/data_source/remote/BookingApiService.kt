@@ -30,4 +30,7 @@ interface BookingApiService {
     suspend fun getBooking(
         @Path("id") id: Int
     ): Response<BookingRequestDetailDto>
+
+    @GET("bookings")
+    suspend fun fetchUsersActiveBookings(): Response<BookingDto>
 }
