@@ -96,4 +96,28 @@ class BookingRepositoryImpl(
             )
         }
     }
+
+    override suspend fun fetchUsersBookings(ended: Boolean): ApiResult<List<Booking>> {
+        if (!ended) {
+            val result = safeApiCall(
+                apiToBeCalled = {
+                    api.fetchUsersActiveBookings()
+                },
+                extractError = {
+                    extractError(it)
+                }
+            )
+
+            return try {
+                ApiResult(
+                    data = result.data?.data?.map { it.toBooking() } ?: emptyList(),
+                    error = result.error
+                )
+            } catch (e: Exception) {
+                ApiResult(error = e.extractError())
+            }
+        }
+        // TODO(add api call for ended bookings)
+        return ApiResult()
+    }
 }
