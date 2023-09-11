@@ -3,7 +3,7 @@ package com.amalitech.booking
 import com.amalitech.booking.model.Booking
 import com.amalitech.booking.use_case.BookingUseCase
 import com.amalitech.core.R
-import com.amalitech.core.util.Response
+import com.amalitech.core.util.ApiResult
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.components.Tab
 import com.amalitech.core_ui.util.UiState
@@ -38,7 +38,7 @@ class BookingViewModelTest {
         val error = UiText.StringResource(R.string.error_default_message)
         coEvery {
             useCase.getBookingsUseCase(any())
-        } returns Response(error = error)
+        } returns ApiResult(error = error)
 
         viewModel.fetchBookings()
 
@@ -69,7 +69,7 @@ class BookingViewModelTest {
         )
         coEvery {
             useCase.getBookingsUseCase(any())
-        } returns Response(data = bookings)
+        } returns ApiResult(data = bookings)
 
         viewModel.fetchBookings()
 
@@ -82,7 +82,7 @@ class BookingViewModelTest {
         val bookings = emptyList<Booking>()
         coEvery {
             useCase.getBookingsUseCase(any())
-        } returns Response(data = bookings)
+        } returns ApiResult(data = bookings)
 
         viewModel.fetchBookings()
 

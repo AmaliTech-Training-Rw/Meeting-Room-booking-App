@@ -10,13 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,15 +37,13 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun BookingScreen(
     viewModel: BookingViewModel = koinViewModel(),
+    showSnackBar: (message: String) -> Unit,
     navigateToProfileScreen: () -> Unit,
     onComposing: (AppBarState) -> Unit,
 ) {
     val spacing = LocalSpacing.current
     val selectedTab by viewModel.selectedTab
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
-    val snackbarHostState = remember {
-        SnackbarHostState()
-    }
     val context = LocalContext.current
     var bookings: List<Booking>? by rememberSaveable {
         mutableStateOf(null)
@@ -74,9 +70,7 @@ fun BookingScreen(
         when (uiState) {
             is UiState.Error -> {
                 (uiState as UiState.Error<BookingUiState>).error?.let {
-                    snackbarHostState.showSnackbar(
-                        message = it.asString(context)
-                    )
+                    showSnackBar(it.asString(context))
                     viewModel.onSnackBarShown()
                 }
                 isLoading = false

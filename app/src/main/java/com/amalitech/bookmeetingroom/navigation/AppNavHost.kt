@@ -304,7 +304,12 @@ fun NavGraphBuilder.mainNavGraph(
         composable(BottomNavItem.Bookings.route) {
             BookingScreen(
                 navigateToProfileScreen = { navigateToProfileScreen(navController) },
-                onComposing = onComposing
+                onComposing = onComposing,
+                showSnackBar = {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(it)
+                    }
+                }
             )
         }
         composable(
