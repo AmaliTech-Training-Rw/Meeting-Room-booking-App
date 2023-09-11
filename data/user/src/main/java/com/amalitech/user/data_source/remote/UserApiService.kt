@@ -20,7 +20,8 @@ interface UserApiService {
         @Query("first_name") firstName: String,
         @Query("last_name") lastName: String,
         @Query("email") email: String,
-        @Query("location_id") locationId: Int
+        @Query("location_id") locationId: Int,
+        @Query("is_admin") isAdmin: Boolean
     ): Response<ApiSuccessResponseDto>
 
     @DELETE("user/delete/{id}")
