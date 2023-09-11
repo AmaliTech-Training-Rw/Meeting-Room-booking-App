@@ -110,7 +110,7 @@ class BookingRepositoryImpl(
 
             return try {
                 ApiResult(
-                    data = result.data?.data?.map { it.toBooking() } ?: emptyList(),
+                    data = result.data?.data?.map { it.toBooking() },
                     error = result.error
                 )
             } catch (e: Exception) {
