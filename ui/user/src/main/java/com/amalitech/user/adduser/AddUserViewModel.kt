@@ -98,7 +98,8 @@ class AddUserViewModel(
                     _userUiState.value.firstName,
                     _userUiState.value.lastName,
                     _userUiState.value.email,
-                    _userUiState.value.selectLocation
+                    _userUiState.value.selectLocation,
+                    _userUiState.value.isAdmin
                 )
             )
             error?.let { errorValue ->

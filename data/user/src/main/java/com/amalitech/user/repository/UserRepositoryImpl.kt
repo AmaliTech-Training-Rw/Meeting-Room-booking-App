@@ -80,7 +80,8 @@ class UserRepositoryImpl(
                     user.firstName,
                     user.lastName,
                     user.email,
-                    user.locationId
+                    user.locationId,
+                    user.isAdmin
                 )
             },
             extractError = {
