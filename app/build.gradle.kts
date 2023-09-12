@@ -101,6 +101,7 @@ dependencies {
     implementation(project(Modules.dataOnboarding))
     implementation(project(Modules.dataUser))
     implementation(project(Modules.dataInvite))
+    implementation(project(Modules.dataHome))
     implementation(project(Modules.domainOnboarding))
     implementation(project(Modules.domainUser))
     implementation(project(Modules.domainInvite))

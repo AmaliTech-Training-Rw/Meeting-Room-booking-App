@@ -7,6 +7,7 @@ import com.amalitech.booking.di.presentationBookingModule
 import com.amalitech.bookmeetingroom.di.appModule
 import com.amalitech.core.di.coreModule
 import com.amalitech.core.di.networkModule
+import com.amalitech.home.di.dataHomeModule
 import com.amalitech.home.di.domainHomeModule
 import com.amalitech.home.di.uiHomeModule
 import com.amalitech.onboarding.di.onboardingDomainModule
@@ -56,6 +57,9 @@ class BookMeetingApplication : Application() {
                 inviteModule,
                 domainInviteModule,
                 invitePresentationModule,
+                bookingDataModule,
+                invitePresentationModule,
+                dataHomeModule,
                 bookingDataModule
             )
         }

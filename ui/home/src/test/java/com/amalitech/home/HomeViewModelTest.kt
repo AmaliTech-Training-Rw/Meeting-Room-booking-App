@@ -2,8 +2,8 @@ package com.amalitech.home
 
 import com.amalitech.core.domain.model.Booking
 import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
-import com.amalitech.core.util.Response
-import com.amalitech.home.use_case.HomeUseCase
+import com.amalitech.core.util.ApiResult
+import com.amalitech.home.use_case.HomeUseCaseWrapper
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -18,7 +18,7 @@ class HomeViewModelTest {
     private lateinit var viewModel: HomeViewModel
 
     @MockK
-    private lateinit var homeUseCase: HomeUseCase
+    private lateinit var homeUseCase: HomeUseCaseWrapper
 
     @MockK
     private lateinit var sharedPref: OnboardingSharedPreferences
@@ -30,7 +30,7 @@ class HomeViewModelTest {
     fun setUp() {
         homeUseCase = mockk()
         sharedPref = mockk()
-        coEvery { homeUseCase.fetchBookings(any()) } returns Response(generateBookings())
+        coEvery { homeUseCase.fetchBookings(any()) } returns ApiResult(generateBookings())
         every { sharedPref.isUserAdmin() } returns true
         every { sharedPref.loadAdminUserScreen() } returns true
         viewModel = HomeViewModel(homeUseCase, sharedPref)

@@ -234,7 +234,12 @@ fun NavGraphBuilder.mainNavGraph(
                 navigateToBookRoomScreen = {
                     navController.navigate("${Route.BOOK_ROOM_SCREEN}/$it")
                 },
-                navigateUp = onFinishActivity
+                navigateUp = onFinishActivity,
+                showSnackBar = {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(it)
+                    }
+                }
             )
         }
 
