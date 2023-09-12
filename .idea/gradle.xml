@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core_ui" />
             <option value="$PROJECT_DIR$/data" />
+            <option value="$PROJECT_DIR$/data/bookings" />
             <option value="$PROJECT_DIR$/data/invite" />
             <option value="$PROJECT_DIR$/data/onboarding" />
             <option value="$PROJECT_DIR$/data/rooms" />

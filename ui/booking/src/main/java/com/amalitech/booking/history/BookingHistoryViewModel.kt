@@ -1,8 +1,9 @@
-package com.amalitech.booking.requests
+package com.amalitech.booking.history
 
 import androidx.lifecycle.viewModelScope
 import com.amalitech.booking.model.Booking
-import com.amalitech.booking.request.use_case.BookingRequestsUseCaseWrapper
+import com.amalitech.booking.request.use_case.FetchBookingsUseCase
+import com.amalitech.booking.requests.BookingRequestsUiState
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,10 +12,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class BookingRequestViewModel(
-    private val useCaseWrapper: BookingRequestsUseCaseWrapper
-) : BaseViewModel<BookingRequestsUiState>() {
-
+class BookingHistoryViewModel(
+    private val useCase: FetchBookingsUseCase
+): BaseViewModel<BookingRequestsUiState>() {
     private val _uiState = MutableStateFlow(BookingRequestsUiState())
     val uiState: StateFlow<BookingRequestsUiState> get() = _uiState.asStateFlow()
     private var bookingsCopy: List<Booking> = emptyList()
@@ -33,7 +33,7 @@ class BookingRequestViewModel(
                 )
             }
 
-            val result = useCaseWrapper.fetchBookingsUseCase()
+            val result = useCase()
 
             if (result.data != null) {
                 bookingsCopy = result.data ?: emptyList()
@@ -56,30 +56,6 @@ class BookingRequestViewModel(
                         error = UiText.StringResource(com.amalitech.core.R.string.error_default_message),
                         isLoading = false
                     )
-                }
-            }
-        }
-    }
-
-    fun onApproved(booking: Booking) {
-        updateStatus(booking, true)
-    }
-
-    fun onDecline(booking: Booking) {
-        updateStatus(booking, false)
-    }
-
-    internal fun updateStatus(booking: Booking, isApproved: Boolean) {
-        viewModelScope.launch {
-            val result = useCaseWrapper.updateBookingStatusUseCase(
-                isApproved = isApproved,
-                booking = booking
-            )
-            if (result == null) {
-                fetchBookings()
-            } else {
-                _uiState.update {
-                    it.copy(error = result)
                 }
             }
         }

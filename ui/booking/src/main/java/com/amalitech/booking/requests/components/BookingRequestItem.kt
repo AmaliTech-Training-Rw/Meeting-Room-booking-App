@@ -38,7 +38,7 @@ fun BookingRequestItem(
     swiped: Boolean = false,
     swipedBackgroundColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     unSwipedBackgroundColor: Color = MaterialTheme.colorScheme.inverseOnSurface,
-    roomNameTextColor: Color = MaterialTheme.colorScheme.scrim,
+    roomNameTextColor: Color = MaterialTheme.colorScheme.onBackground,
     roomnameTextStyle: TextStyle = MaterialTheme.typography.titleMedium.copy(
         fontWeight = FontWeight.ExtraBold
     ),
@@ -68,7 +68,6 @@ fun BookingRequestItem(
                 .height(70.dp)
                 .clip(CircleShape),
             contentScale = ContentScale.Crop,
-//            placeholder = painterResource(com.amalitech.core_ui.R.drawable.baseline_refresh_24),
             error = painterResource(id = com.amalitech.core_ui.R.drawable.room)
         )
         Column(Modifier.weight(0.7f)) {

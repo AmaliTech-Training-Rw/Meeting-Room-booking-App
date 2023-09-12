@@ -28,12 +28,40 @@ class BookingRequestViewModelTest {
     @get:Rule
     val mainCoroutineDispatcher = MainDispatcherRule()
 
+    private val bookings = listOf(
+        Booking(
+            id = "id",
+            "room 1",
+            LocalDate.now(),
+            LocalTime.now(),
+            LocalTime.now().plusHours(4),
+            "https://via.placeholder.com/200.png",
+            "Ngomde Cadet Kamdaou"
+        ), Booking(
+            id = "id",
+            "room 1",
+            LocalDate.now(),
+            LocalTime.now(),
+            LocalTime.now().plusHours(4),
+            "https://via.placeholder.com/200.png",
+            "Ngomde Cadet Kamdaou"
+        ), Booking(
+            id = "id",
+            "room 1",
+            LocalDate.now(),
+            LocalTime.now(),
+            LocalTime.now().plusHours(4),
+            "https://via.placeholder.com/200.png",
+            "Ngomde Cadet Kamdaou"
+        )
+    )
+
     @Before
     fun setUp() = runTest {
         useCaseWrapper = mockk()
         coEvery {
             useCaseWrapper.fetchBookingsUseCase()
-        } returns ApiResult()
+        } returns ApiResult(data = bookings)
         viewModel = BookingRequestViewModel(useCaseWrapper)
         // Make sure the fetchBookings invocation in the init block
         // has finished fetching
@@ -42,33 +70,6 @@ class BookingRequestViewModelTest {
 
     @Test
     fun `ensure fetchBookings works when there is no errors`() = runTest {
-        val bookings = listOf(
-            Booking(
-                id = "id",
-                "room 1",
-                LocalDate.now(),
-                LocalTime.now(),
-                LocalTime.now().plusHours(4),
-                "https://via.placeholder.com/200.png",
-                "Ngomde Cadet Kamdaou"
-            ), Booking(
-                id = "id",
-                "room 1",
-                LocalDate.now(),
-                LocalTime.now(),
-                LocalTime.now().plusHours(4),
-                "https://via.placeholder.com/200.png",
-                "Ngomde Cadet Kamdaou"
-            ), Booking(
-                id = "id",
-                "room 1",
-                LocalDate.now(),
-                LocalTime.now(),
-                LocalTime.now().plusHours(4),
-                "https://via.placeholder.com/200.png",
-                "Ngomde Cadet Kamdaou"
-            )
-        )
         coEvery {
             useCaseWrapper.fetchBookingsUseCase()
         } returns ApiResult(
