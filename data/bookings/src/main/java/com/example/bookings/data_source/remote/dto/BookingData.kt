@@ -6,9 +6,7 @@ import com.amalitech.core.data.model.Room
 import com.amalitech.core.util.DateConverter
 import com.amalitech.core.data.data_source.remote.dto.Attendee
 import com.amalitech.core.data.data_source.remote.dto.BookingRoomData
-import com.amalitech.core.data.data_source.remote.dto.DateConverter
 import com.amalitech.core.data.data_source.remote.dto.UserDto
-import com.amalitech.core.data.model.Room
 import com.squareup.moshi.Json
 
 data class BookingData(
