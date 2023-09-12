@@ -3,11 +3,13 @@ package com.tradeoases.invite
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,14 +17,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,36 +51,16 @@ import java.time.Month
 
 @Composable
 fun InviteScreen(
-    invitesViewModel: InvitesViewModel = koinViewModel(),
+    viewModel: InvitesViewModel = koinViewModel(),
+    showSnackBar: (message: String) -> Unit,
     navigateToProfileScreen: () -> Unit,
     onComposing: (AppBarState) -> Unit,
 ) {
-    val inviteState by invitesViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val invites by uiState.invite.collectAsStateWithLifecycle()
     val spacing = LocalSpacing.current
-
     val title = stringResource(id = R.string.invitations)
-
-//    LaunchedEffect(key1 = true) {
-//        onComposing(
-//            AppBarState(
-//                title = homeTitle,
-//                navigationIcon = {
-//                    if (isUsingAdminDashboard) {
-//                        NavigationButton {
-//                            scope.launch {
-//                                appState?.drawerState?.open()
-//                            }
-//                        }
-//                    }
-//                },
-//                actions = {
-//                    PainterActionButton {
-//                        navigateToProfileScreen()
-//                    }
-//                },
-//            )
-//        )
-//    }
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = true) {
         onComposing(
@@ -90,25 +75,38 @@ fun InviteScreen(
         )
     }
 
+    LaunchedEffect(key1 = uiState) {
+        uiState.error?.let {
+            showSnackBar(it.asString(context))
+            viewModel.clearError()
+        }
+    }
 
-    LazyColumn(
-        modifier = Modifier.padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)
+
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        inviteState.invite.let {
-            item {
-                if (inviteState.invite.isEmpty()) {
-                    Text(
-                        text = stringResource(com.amalitech.core.R.string.no_item_found),
+        LazyColumn(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)
+        ) {
+            invites.let {
+                item {
+                    if (invites.isEmpty() && !uiState.loading) {
+                        Text(
+                            text = stringResource(com.amalitech.core.R.string.no_item_found),
+                        )
+                    }
+                }
+                items(items = it) { item ->
+                    InvitesItem(
+                        item
                     )
                 }
             }
-            items(items = it) { item ->
-                InvitesItem(
-                    item
-                )
-            }
         }
+        if (uiState.loading)
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
     }
 }
 
@@ -215,6 +213,6 @@ fun InvitesItemPreview() {
 @Composable
 fun InviteScreenPreview() {
     BookMeetingRoomTheme {
-        InviteScreen(navigateToProfileScreen = {}) {}
+        InviteScreen(navigateToProfileScreen = {}, showSnackBar = {}) {}
     }
 }

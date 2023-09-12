@@ -59,7 +59,8 @@ class BookMeetingApplication : Application() {
                 invitePresentationModule,
                 bookingDataModule,
                 invitePresentationModule,
-                dataHomeModule
+                dataHomeModule,
+                bookingDataModule
             )
         }
     }
