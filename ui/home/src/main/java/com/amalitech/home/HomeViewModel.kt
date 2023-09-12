@@ -3,6 +3,7 @@ package com.amalitech.home
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.amalitech.core.data.model.Room
 import com.amalitech.core.domain.model.Booking
 import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import com.amalitech.core.util.UiText
@@ -28,9 +29,13 @@ class HomeViewModel(
     private val _isUsingAdminDashboard =
         mutableStateOf(if (sharedPref.isUserAdmin()) sharedPref.loadAdminUserScreen() else false)
     val isUsingAdminDashboard: State<Boolean> get() = _isUsingAdminDashboard
+    private val _searchQuery = mutableStateOf("")
+    val searchQuery: State<String> = _searchQuery
+    private var roomsCopy: List<Room> = emptyList()
 
     init {
-        refreshBookingsAndRooms()
+        refreshBookings()
+        fetchRooms()
         onCurrentDayChange(CalendarDay(LocalDate.now(), position = DayPosition.MonthDate))
     }
 
@@ -43,7 +48,7 @@ class HomeViewModel(
      * to make it easier for the calendar to access them. The _uiStateFlow variable is
      * updated with these values.
      */
-    fun refreshBookingsAndRooms() {
+    fun refreshBookings() {
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
@@ -77,6 +82,22 @@ class HomeViewModel(
         }
     }
 
+    fun fetchRooms() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(loading = true)
+            val result = homeUseCase.fetchRoomsUseCase()
+            result.data?.let {
+                _uiState.value = _uiState.value.copy(rooms = it, loading = false)
+            }
+            result.error?.let {
+                _uiState.value = _uiState.value.copy(error = it, loading = false)
+            }
+        }
+    }
+
+    fun clearError() {
+        _uiState.value = _uiState.value.copy(error = null)
+    }
     internal fun toBookingsUiStateMap(data: List<Booking>) =
         data
             .map { booking: Booking ->
@@ -120,5 +141,24 @@ class HomeViewModel(
 
     fun onSelectedTabChange(tab: Tab) {
         _uiState.value = _uiState.value.copy(selectedTab = tab)
+    }
+
+    fun onNewSearchQuery(query: String) {
+        _searchQuery.value = query
+        onSearch()
+    }
+
+    fun onSearch() {
+        _uiState.value = _uiState.value.copy(
+            rooms = roomsCopy.filter {  room ->
+                room.roomName.contains(_searchQuery.value, true) ||
+                        room.roomFeatures.any { it.contains(_searchQuery.value, true) }
+                        || room.numberOfPeople.toString().contains(_searchQuery.value, true)
+            }
+        )
+    }
+
+    fun resetList() {
+        _uiState.value = _uiState.value.copy(rooms = roomsCopy)
     }
 }

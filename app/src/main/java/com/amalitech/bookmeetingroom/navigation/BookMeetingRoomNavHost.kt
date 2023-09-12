@@ -23,7 +23,6 @@ import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
 import com.amalitech.core_ui.util.SnackbarManager
 import com.amalitech.core_ui.util.SnackbarMessage
-import com.amalitech.home.HomeScreen
 import com.amalitech.rooms.RoomListScreen
 import com.amalitech.rooms.book_room.BookRoomScreen
 import com.amalitech.user.UserScreen
@@ -50,19 +49,6 @@ fun BookMeetingRoomNavHost(
         startDestination = startDestination,
         modifier = Modifier.padding(innerPadding)
     ) {
-        composable(route = NavigationItem.Home.route) {
-            HomeScreen(
-                onComposing = onComposing,
-                navigateToProfileScreen = {
-                    navigateToProfileScreen(appState)
-                },
-                appState = appState,
-                navigateUp = { navigateToDashboard(appState) }
-            ) {
-                appState.navController.navigate("${NavigationItem.BookRoomScreen.route}/$it")
-            }
-        }
-
         composable(
             route = "${NavigationItem.BookRoomScreen.route}/{roomId}",
             arguments = listOf(navArgument("roomId") {

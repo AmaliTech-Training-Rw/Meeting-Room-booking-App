@@ -1,4 +1,4 @@
-package com.amalitech.rooms.remote.dto
+package com.amalitech.core.data.data_source.remote.dto
 
 data class RoomsDto(
     val count: Int?,

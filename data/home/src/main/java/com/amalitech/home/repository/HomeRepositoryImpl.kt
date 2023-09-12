@@ -11,7 +11,22 @@ class HomeRepositoryImpl(
     private val api: HomeApiService
 ): HomeRepository, BaseRepo(){
     override suspend fun fetchRooms(): ApiResult<List<Room>> {
-        TODO("Not yet implemented")
+        val result = safeApiCall(
+            apiToBeCalled = {
+                api.getRooms()
+            },
+            extractError = {
+                extractError(it)
+            }
+        )
+        return try {
+            ApiResult(
+                data = result.data?.data?.map { it.toRoom() },
+                error = result.error
+            )
+        } catch (e: Exception) {
+            ApiResult(error = e.extractError())
+        }
     }
 
     override suspend fun fetchBookings(year: Int): ApiResult<List<Booking>> {

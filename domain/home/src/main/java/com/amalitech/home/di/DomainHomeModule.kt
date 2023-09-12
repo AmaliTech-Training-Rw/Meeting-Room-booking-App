@@ -12,7 +12,7 @@ val domainHomeModule = module {
     }
 
     single {
-        HomeUseCaseWrapper(get())
+        HomeUseCaseWrapper(get(), get())
     }
 
     single {
