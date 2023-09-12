@@ -3,6 +3,7 @@ package com.example.bookings.data_source.remote.dto
 import com.amalitech.booking.model.Booking
 import com.amalitech.booking.model.BookingRequestDetail
 import com.amalitech.core.data.model.Room
+import com.amalitech.core.util.DateConverter
 import com.squareup.moshi.Json
 
 data class BookingData(

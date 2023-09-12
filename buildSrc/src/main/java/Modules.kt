@@ -7,6 +7,7 @@ object Modules {
     const val dataUser = ":data:user"
     const val dataRoom = ":data:rooms"
     const val dataInvite = ":data:invite"
+    const val dataHome = ":data:home"
     const val dataBooking = ":data:bookings"
 
     const val domain = ":domain"

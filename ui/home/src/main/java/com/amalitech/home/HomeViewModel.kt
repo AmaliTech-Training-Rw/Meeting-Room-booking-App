@@ -12,7 +12,7 @@ import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.home.calendar.BookingUiState
 import com.amalitech.home.calendar.CalendarUiState
-import com.amalitech.home.use_case.HomeUseCase
+import com.amalitech.home.use_case.HomeUseCaseWrapper
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import kotlinx.coroutines.flow.update
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class HomeViewModel(
-    private val homeUseCase: HomeUseCase,
+    private val homeUseCase: HomeUseCaseWrapper,
     sharedPref: OnboardingSharedPreferences
 ) : BaseViewModel<CalendarUiState>() {
     private val _uiState = mutableStateOf(HomeUiState())
@@ -30,7 +30,7 @@ class HomeViewModel(
     val isUsingAdminDashboard: State<Boolean> get() = _isUsingAdminDashboard
 
     init {
-        refreshBookings()
+        refreshBookingsAndRooms()
         onCurrentDayChange(CalendarDay(LocalDate.now(), position = DayPosition.MonthDate))
     }
 
@@ -43,7 +43,7 @@ class HomeViewModel(
      * to make it easier for the calendar to access them. The _uiStateFlow variable is
      * updated with these values.
      */
-    fun refreshBookings() {
+    fun refreshBookingsAndRooms() {
         if (job?.isActive == true)
             return
         job = viewModelScope.launch {
