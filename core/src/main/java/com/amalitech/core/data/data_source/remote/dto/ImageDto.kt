@@ -1,4 +1,4 @@
-package com.example.bookings.data_source.remote.dto
+package com.amalitech.core.data.data_source.remote.dto
 
 import com.squareup.moshi.Json
 
