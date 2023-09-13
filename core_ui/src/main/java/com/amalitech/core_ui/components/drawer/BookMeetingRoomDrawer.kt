@@ -1,6 +1,5 @@
 package com.amalitech.core_ui.components.drawer
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,12 +27,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
+import coil.compose.AsyncImage
+import com.amalitech.core_ui.CoreViewModel
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.state.NavigationItem
@@ -41,6 +41,7 @@ import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun BookMeetingRoomDrawer(
@@ -114,22 +115,25 @@ fun DrawerNavigationItem(
 }
 
 @Composable
-fun DrawerHeader() {
+fun DrawerHeader(
+    viewModel: CoreViewModel = koinViewModel()
+) {
+    val url by viewModel.userProfileImgUrl
+    val name by viewModel.userFullName
     Column(
         modifier = Modifier.padding(8.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val image: Painter = painterResource(id = R.drawable.john_doe)
-        Image(
-            painter = image,
-            contentDescription = "",
+        AsyncImage(
+            model = url,
+            contentDescription = stringResource(R.string.profile_image),
             modifier = Modifier
                 .size(112.dp)
                 .clip(CircleShape)
         )
         Spacer(Modifier.height(12.dp))
-        Text("John Doe", color = MaterialTheme.colorScheme.onBackground)
+        Text(name, color = MaterialTheme.colorScheme.onBackground)
         Spacer(Modifier.height(12.dp))
         Divider(
             modifier = Modifier

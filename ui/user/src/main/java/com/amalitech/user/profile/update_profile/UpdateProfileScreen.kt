@@ -35,13 +35,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.amalitech.core_ui.CoreViewModel
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.AuthenticationTextField
 import com.amalitech.core_ui.components.DefaultButton
@@ -54,6 +54,7 @@ import org.koin.androidx.compose.koinViewModel
 fun UpdateProfileScreen(
     email: String,
     viewModel: UpdateProfileViewModel = koinViewModel(),
+    coreViewModel: CoreViewModel = koinViewModel(),
     showSnackBar: (message: String) -> Unit,
     onNavigateBack: () -> Unit,
     onComposing: (AppBarState) -> Unit,
@@ -94,6 +95,7 @@ fun UpdateProfileScreen(
             viewModel.clearError()
         }
         if (uiState.canNavigate) {
+            coreViewModel.loadUserInfos()
             onNavigateBack()
         }
     }
@@ -116,8 +118,6 @@ fun UpdateProfileScreen(
                     model = userInput.profileImage
                         ?: userInput.profileImageUrl,
                     contentDescription = stringResource(id = R.string.profile_image),
-//                    placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
-                    error = painterResource(id = com.amalitech.core_ui.R.drawable.john_doe),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize()
@@ -148,16 +148,6 @@ fun UpdateProfileScreen(
                 }
             }
 
-            Spacer(Modifier.height(spacing.spaceMedium))
-            AuthenticationTextField(
-                placeholder = stringResource(id = R.string.email),
-                value = userInput.email,
-                onValueChange = {
-                    viewModel.onNewEmail(it)
-                },
-                enabled = !uiState.isLoading,
-                modifier = Modifier.fillMaxWidth(),
-            )
             Spacer(Modifier.height(spacing.spaceMedium))
             AuthenticationTextField(
                 placeholder = stringResource(id = R.string.first_name),
@@ -230,7 +220,7 @@ fun UpdateProfileScreen(
                     imeAction = ImeAction.Go
                 ),
                 onGo = {
-                    viewModel.updateProfile()
+                    viewModel.updateProfile(context)
                 },
                 enabled = !uiState.isLoading,
                 modifier = Modifier.fillMaxWidth(),
@@ -244,7 +234,7 @@ fun UpdateProfileScreen(
             ) {
                 DefaultButton(
                     text = stringResource(R.string.save),
-                    onClick = { viewModel.updateProfile() },
+                    onClick = { viewModel.updateProfile(context) },
                     modifier = Modifier
                         .clip(RoundedCornerShape(spacing.spaceMedium))
                         .weight(1f)

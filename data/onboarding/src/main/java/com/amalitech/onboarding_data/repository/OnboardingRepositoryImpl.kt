@@ -3,13 +3,12 @@ package com.amalitech.onboarding_data.repository
 import com.amalitech.core.data.repository.BaseRepo
 import com.amalitech.core.util.ApiResult
 import com.amalitech.core.util.UiText
-import com.amalitech.onboarding.login.model.UserProfile
+import com.amalitech.core.domain.model.UserProfile
 import com.amalitech.onboarding.repository.OnboardingRepository
 import com.amalitech.onboarding.signup.model.CreateOrganization
 import com.amalitech.onboarding.signup.model.OrganizationType
 import com.amalitech.onboarding.signup.model.User
 import com.amalitech.onboarding_data.remote.OnboardingApiService
-import com.amalitech.onboarding_data.remote.dto.toProfileInfo
 
 class OnboardingRepositoryImpl(
     private val api: OnboardingApiService

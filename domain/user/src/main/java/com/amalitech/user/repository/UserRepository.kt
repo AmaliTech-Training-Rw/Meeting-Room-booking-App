@@ -1,5 +1,7 @@
 package com.amalitech.user.repository
 
+import android.content.Context
+import com.amalitech.core.domain.model.UserProfile
 import com.amalitech.core.util.ApiResult
 import com.amalitech.core.util.UiText
 import com.amalitech.user.models.User
@@ -19,7 +21,7 @@ interface UserRepository {
 
     suspend fun addUser(user: UserToAdd): UiText?
 
-    suspend fun updateProfile(profile: Profile)
+    suspend fun updateProfile(profile: Profile, context: Context): ApiResult<UserProfile>
 
     suspend fun logout(token: String)
 }

@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -110,6 +109,7 @@ fun ProfileScreen(
                 }
             )
         )
+        viewModel.getUser()
     }
     LaunchedEffect(key1 = uiState) {
         when (uiState) {
@@ -149,8 +149,6 @@ fun ProfileScreen(
                     AsyncImage(
                         model = user!!.profileImgUrl,
                         contentDescription = stringResource(id = R.string.profile_image),
-//                        placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
-                        error = painterResource(id = com.amalitech.core_ui.R.drawable.john_doe),
                         modifier = Modifier
                             .width(150.dp)
                             .aspectRatio(1f)

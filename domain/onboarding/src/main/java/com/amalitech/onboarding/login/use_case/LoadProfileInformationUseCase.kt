@@ -1,7 +1,7 @@
 package com.amalitech.onboarding.login.use_case
 
 import com.amalitech.core.util.Response
-import com.amalitech.onboarding.login.model.UserProfile
+import com.amalitech.core.domain.model.UserProfile
 import kotlinx.coroutines.delay
 
 class LoadProfileInformationUseCase {

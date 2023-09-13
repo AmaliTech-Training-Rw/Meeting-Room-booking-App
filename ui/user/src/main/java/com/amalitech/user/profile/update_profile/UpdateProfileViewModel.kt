@@ -1,10 +1,12 @@
 package com.amalitech.user.profile.update_profile
 
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.ui.user.R
+import com.amalitech.user.profile.model.dto.UserDto
 import com.amalitech.user.profile.use_case.ProfileUseCaseWrapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +38,7 @@ class UpdateProfileViewModel(
         }
     }
 
-    fun onNewEmail(email: String) {
+    private fun onNewEmail(email: String) {
         _uiState.update {
             it.copy(profileUserInput = it.profileUserInput.copy(email = email))
         }
@@ -72,7 +74,7 @@ class UpdateProfileViewModel(
         }
     }
 
-    fun updateProfile() {
+    fun updateProfile(context: Context) {
         if (job?.isActive == true)
             return
         viewModelScope.launch {
@@ -93,21 +95,31 @@ class UpdateProfileViewModel(
             }
 
             val valuesBlank = useCase.checkValuesNotBlankUseCase(
-                _uiState.value.profileUserInput.email,
                 _uiState.value.profileUserInput.firstName,
                 _uiState.value.profileUserInput.lastName,
                 _uiState.value.profileUserInput.title,
             )
             if (passwordValid == null && valuesBlank == null) {
-                val result = useCase.updateProfileUseCase(_uiState.value.profileUserInput.toProfile())
+                val result = useCase.updateProfileUseCase(_uiState.value.profileUserInput.toProfile(), context = context)
 
-                if (result == null) {
+                result.data?.let { userProfile ->
+                    useCase.saveUserUseCase(
+                        UserDto(
+                            uid = userProfile.id,
+                            firstName = userProfile.firstName,
+                            lastName = userProfile.lastName,
+                            email = userProfile.email,
+                            title = userProfile.title,
+                            profileImgUrl = userProfile.profileImgUrl
+                        )
+                    )
                     _uiState.update {
                         it.copy(isLoading = false, canNavigate = true)
                     }
-                } else {
+                }
+                result.error?.let {
                     _uiState.update {
-                        it.copy(error = result, isLoading = false)
+                        it.copy(error = result.error, isLoading = false)
                     }
                 }
             } else if (passwordValid != null) {

@@ -1,13 +1,13 @@
 package com.amalitech.user.profile.model
 
-import java.io.File
+import android.net.Uri
 
 data class Profile(
     val firstName: String,
     val lastName: String,
     val email: String,
     val title: String,
-    val profileImage: File?,
+    val profileImage: Uri? = null,
     val newPassword: String,
-    val oldPassword: String
+    val oldPassword: String,
 )
