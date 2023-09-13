@@ -9,6 +9,7 @@ import com.amalitech.core.util.UiText
 import com.amalitech.onboarding.signup.use_case.FetchLocationsUseCase
 import com.amalitech.rooms.model.Room
 import com.amalitech.rooms.usecase.AddRoomUseCase
+import com.amalitech.rooms.usecase.FindRoomUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class AddRoomViewModel(
     private val getLocation: FetchLocationsUseCase,
-    private val addRoom: AddRoomUseCase
+    private val addRoom: AddRoomUseCase,
+    private val findRoomUseCase: FindRoomUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(
         AddRoomUiState()
@@ -58,9 +60,9 @@ class AddRoomViewModel(
     fun onRoomImages(images: List<Uri>) {
         _uiState.update { addRoomUiState ->
             if (addRoomUiState.imagesList.size + images.size < 3)
-            addRoomUiState.copy(
-                imagesList = (addRoomUiState.imagesList + images).toMutableList()
-            ) else
+                addRoomUiState.copy(
+                    imagesList = (addRoomUiState.imagesList + images).toMutableList()
+                ) else
                 addRoomUiState.copy(error = UiText.StringResource(com.amalitech.ui.rooms.R.string.error_image_should_be_less_or_equal_to_three))
         }
     }
@@ -219,5 +221,23 @@ class AddRoomViewModel(
                 features = featuresCopy
             )
         }
+    }
+
+    fun findRoom(id: String) {
+        if (id.toIntOrNull() != -1 && id.toIntOrNull() != null)
+            viewModelScope.launch {
+                val result = findRoomUseCase(id)
+                result.data?.let { roomData ->
+                    onRoomName(roomData.roomName)
+                    _uiState.update {
+                        it.copy(features = roomData.roomFeatures)
+                    }
+                    onNewRoomCapacity(roomData.numberOfPeople)
+                    _uiState.update {
+                        it.copy(location = roomData.locationId)
+                    }
+                    onRoomImages(images = listOf(Uri.parse(roomData.imageUrl)))
+                }
+            }
     }
 }

@@ -98,7 +98,7 @@ fun BookingRequestDetailScreen(
            val booking = bookingRequestDetail.booking
            Column(Modifier.verticalScroll(rememberScrollState())) {
                AsyncImage(
-                   model = room.imageUrl,
+                   model = room.imageUrl.randomOrNull() ?: "",
                    contentDescription = room.roomName,
                    modifier = Modifier
                        .fillMaxWidth()
