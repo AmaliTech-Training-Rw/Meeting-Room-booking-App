@@ -20,6 +20,7 @@ import com.amalitech.user.di.domainUserModule
 import com.amalitech.user.di.userModule
 import com.amalitech.user.di.userPresentationModule
 import com.amalitech.user.profile.di.presentationUserModule
+import com.example.bookings.di.bookingDataModule
 import com.tradeoases.invite.di.domainInviteModule
 import com.tradeoases.invite.di.inviteModule
 import com.tradeoases.invite.di.invitePresentationModule
@@ -54,7 +55,8 @@ class BookMeetingApplication : Application() {
                 domainRoomsModule,
                 inviteModule,
                 domainInviteModule,
-                invitePresentationModule
+                invitePresentationModule,
+                bookingDataModule
             )
         }
     }

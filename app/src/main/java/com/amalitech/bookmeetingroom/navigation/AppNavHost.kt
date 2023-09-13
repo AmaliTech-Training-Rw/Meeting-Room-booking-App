@@ -298,13 +298,23 @@ fun NavGraphBuilder.mainNavGraph(
         composable(BottomNavItem.Invitations.route) {
             InviteScreen(
                 navigateToProfileScreen = { navigateToProfileScreen(navController) },
-                onComposing = onComposing
+                onComposing = onComposing,
+                showSnackBar = {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(it)
+                    }
+                }
             )
         }
         composable(BottomNavItem.Bookings.route) {
             BookingScreen(
                 navigateToProfileScreen = { navigateToProfileScreen(navController) },
-                onComposing = onComposing
+                onComposing = onComposing,
+                showSnackBar = {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(it)
+                    }
+                }
             )
         }
         composable(

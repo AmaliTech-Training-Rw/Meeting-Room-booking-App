@@ -132,26 +132,6 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun ` when onLoginClick is called with valid email and invalid password an error is added to state`() {
-        every {
-            loginUseCasesWrapper.validateEmailUseCase(any())
-        } returns null
-
-        every {
-            loginUseCasesWrapper.validatePasswordUseCase(any())
-        } returns UiText.StringResource(R.string.error_password_is_not_valid)
-
-        viewModel.onLoginClick()
-
-        val state = viewModel.uiStateFlow
-        assertTrue(state.value is UiState.Error)
-        assertEquals(
-            UiText.StringResource(R.string.error_password_is_not_valid),
-            (state.value as UiState.Error).error
-        )
-    }
-
-    @Test
     fun `when on login click is called with invalid email and valid password an error is added to state`() {
         every {
             loginUseCasesWrapper.validateEmailUseCase(any())

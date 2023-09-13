@@ -1,4 +1,4 @@
-package com.amalitech.onboarding.signup.model
+package com.amalitech.core.domain.model
 
 data class LocationX(
     val code: String,

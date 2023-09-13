@@ -9,7 +9,6 @@ import com.amalitech.onboarding.login.use_case.LoginUseCasesWrapper
 import com.amalitech.onboarding.reset_password.ResetPasswordUseCase
 import com.amalitech.onboarding.reset_password.ResetPasswordUseCasesWrapper
 import com.amalitech.onboarding.signup.use_case.CreateUserUseCase
-import com.amalitech.onboarding.signup.use_case.FetchLocationsUseCase
 import com.amalitech.onboarding.signup.use_case.FetchOrganizationsTypeUseCase
 import com.amalitech.onboarding.signup.use_case.IsEmailAvailableUseCase
 import com.amalitech.onboarding.signup.use_case.IsUsernameAvailableUseCase
@@ -88,10 +87,6 @@ val onboardingDomainModule = module {
             get(),
             get()
         )
-    }
-
-    single {
-        FetchLocationsUseCase(get())
     }
 
     single {

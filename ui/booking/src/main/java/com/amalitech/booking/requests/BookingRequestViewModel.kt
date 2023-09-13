@@ -28,7 +28,7 @@ class BookingRequestViewModel(
             return
         job = viewModelScope.launch {
             _uiState.update {
-                BookingRequestsUiState(
+                it.copy(
                     isLoading = true
                 )
             }
@@ -38,18 +38,25 @@ class BookingRequestViewModel(
             if (result.data != null) {
                 bookingsCopy = result.data ?: emptyList()
                 _uiState.update {
-                    BookingRequestsUiState(
-                        bookings = bookingsCopy
+                    it.copy(
+                        bookings = bookingsCopy,
+                        isLoading = false
                     )
                 }
             } else if (result.error != null) {
-                BookingRequestsUiState(
-                    error = result.error
-                )
+                _uiState.update {
+                    it.copy(
+                        error = result.error,
+                        isLoading = false
+                    )
+                }
             } else {
-                BookingRequestsUiState(
-                    error = UiText.StringResource(com.amalitech.core.R.string.error_default_message)
-                )
+                _uiState.update {
+                    it.copy(
+                        error = UiText.StringResource(com.amalitech.core.R.string.error_default_message),
+                        isLoading = false
+                    )
+                }
             }
         }
     }
