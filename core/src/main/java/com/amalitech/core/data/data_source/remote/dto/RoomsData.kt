@@ -5,7 +5,6 @@ import com.squareup.moshi.Json
 
 data class RoomsData(
     val capacity: String?,
-    val features: List<Feature>?,
     val features: List<FeatureDto>?,
     val id: Int?,
     val images: List<Image>?,
