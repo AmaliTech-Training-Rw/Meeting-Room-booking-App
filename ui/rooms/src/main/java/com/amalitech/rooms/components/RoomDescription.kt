@@ -39,7 +39,7 @@ fun RoomDescription(
 
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(room.imageUrl)
+                .data(room.imageUrl.randomOrNull() ?: "")
                 .crossfade(true)
                 .build(),
             contentDescription = room.roomName,

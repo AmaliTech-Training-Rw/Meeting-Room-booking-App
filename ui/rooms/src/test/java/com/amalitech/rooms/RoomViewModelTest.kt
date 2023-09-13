@@ -35,7 +35,7 @@ class RoomViewModelTest {
                 "Natural light",
                 "Drinks"
             ),
-            imageUrl = "https://res.cloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png"
+            imageUrl = listOf("https://res.cloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png")
         ),
         Room(
             id = "id2",
@@ -48,7 +48,7 @@ class RoomViewModelTest {
                 "Whiteboard",
                 "Snacks"
             ),
-            imageUrl = "https://res.cloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png"
+            imageUrl = listOf("https://res.cloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png")
         ),
         Room(
             id = "id3",
@@ -61,7 +61,7 @@ class RoomViewModelTest {
                 "Natural light",
                 "Drinks"
             ),
-            imageUrl = "https://res.cloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png"
+            imageUrl = listOf("https://res.cloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png")
         ),
         Room(
             id = "id4",
@@ -74,7 +74,7 @@ class RoomViewModelTest {
                 "Whiteboard",
                 "Snacks"
             ),
-            imageUrl = "https://res.cloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png"
+            imageUrl = listOf("https://res.cloudinary.com/dhw5h8j3v/image/upload/v1685995350/room_image_xfe71c.png")
         )
     )
 
