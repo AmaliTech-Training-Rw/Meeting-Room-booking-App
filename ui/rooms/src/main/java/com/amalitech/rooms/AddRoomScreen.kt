@@ -107,6 +107,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun AddRoomScreen(
     appState: BookMeetingRoomAppState,
+    roomId: String,
     viewModel: AddRoomViewModel = koinViewModel(),
     onComposing: (AppBarState) -> Unit,
     onNavigateBack: () -> Unit,
@@ -148,6 +149,7 @@ fun AddRoomScreen(
                 }
             )
         )
+        viewModel.findRoom(id = roomId)
     }
     LaunchedEffect(key1 = state) {
         val snackbar = state.error
@@ -712,7 +714,12 @@ fun RoomTextFieldPreview() {
 @Composable
 fun AddRoomScreenPreview() {
     BookMeetingRoomTheme {
-        AddRoomScreen(onComposing = {}, appState = rememberBookMeetingRoomAppState()) {}
+        AddRoomScreen(
+            appState = rememberBookMeetingRoomAppState(),
+            onComposing = {},
+            onNavigateBack = {},
+            roomId = ""
+        )
     }
 }
 

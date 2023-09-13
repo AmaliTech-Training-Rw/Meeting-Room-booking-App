@@ -143,8 +143,14 @@ fun BookMeetingRoomNavHost(
             }
         }
 
-        composable(route = Route.ADD_ROOM_SCREEN) {
-            AddRoomScreen(onComposing = onComposing, appState = appState) {
+        composable(
+            route = "${Route.ADD_ROOM_SCREEN}?id={id}",
+            arguments = listOf(navArgument("id") {
+                defaultValue = "-1"
+                type = NavType.StringType
+            })
+        ) { navEntry ->
+            AddRoomScreen(onComposing = onComposing, appState = appState, roomId = navEntry.arguments?.getString("id") ?: "-1") {
                 appState.navController.navigateUp()
             }
         }
@@ -162,7 +168,10 @@ fun BookMeetingRoomNavHost(
                 },
                 appState = appState,
                 onOpenDrawer = { openDrawer(scope, appState) },
-                navigateToProfileScreen = { navigateToProfileScreen(appState) }
+                navigateToProfileScreen = { navigateToProfileScreen(appState) },
+                onNavigateToUpdateRoom = { id ->
+                    appState.navController.navigate("${Route.ADD_ROOM_SCREEN}?id=$id")
+                }
             )
         }
 

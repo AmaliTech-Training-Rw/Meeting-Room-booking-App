@@ -5,5 +5,6 @@ data class Room(
     val roomName: String,
     val numberOfPeople: Int,
     val roomFeatures: List<String>,
-    val imageUrl: String
+    val imageUrl: String,
+    val locationId: Int = -1
 )

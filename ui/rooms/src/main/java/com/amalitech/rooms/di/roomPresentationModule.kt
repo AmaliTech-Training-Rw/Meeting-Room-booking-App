@@ -15,6 +15,6 @@ val roomPresentationModule = module {
         BookRoomViewModel(get())
     }
     viewModel {
-        AddRoomViewModel(get(), get())
+        AddRoomViewModel(get(), get(), get())
     }
 }

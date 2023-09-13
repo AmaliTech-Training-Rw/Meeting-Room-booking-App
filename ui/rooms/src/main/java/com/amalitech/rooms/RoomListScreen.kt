@@ -60,6 +60,7 @@ import org.koin.androidx.compose.koinViewModel
 fun RoomListScreen(
     appState: BookMeetingRoomAppState,
     viewModel: RoomViewModel = koinViewModel(),
+    onNavigateToUpdateRoom: (id: String) -> Unit,
     onNavigateToAddRoom: () -> Unit,
     onComposing: (AppBarState) -> Unit,
     onOpenDrawer: () -> Unit,
@@ -168,7 +169,7 @@ fun RoomListScreen(
                             room = room,
                             modifier = Modifier.height(150.dp),
                             onLeftContentClick = {
-                                onNavigateToAddRoom()
+                                onNavigateToUpdateRoom(room.id)
                             },
                             onRightContentClick = {
                                 openDialog = true

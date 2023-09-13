@@ -91,7 +91,23 @@ class RoomRepositoryImpl(
         }
     }
 
-    fun saveBitmapToFile(file: File): File {
+    override suspend fun findRoom(id: String): ApiResult<Room> {
+        val result = safeApiCall(
+            apiToBeCalled = {
+                api.findRoom(id.toIntOrNull() ?: -1)
+            },
+            extractError = {
+                extractError(it)
+            }
+        )
+        return try {
+            ApiResult(result.data?.data?.toRoom(), error = result.error)
+        } catch (e: Exception) {
+            ApiResult(error = e.getUiText())
+        }
+    }
+
+    private fun saveBitmapToFile(file: File): File {
         return try {
             // BitmapFactory options to downsize the image
             val o = BitmapFactory.Options()
@@ -147,7 +163,7 @@ class RoomRepositoryImpl(
         return destinationFilename
     }
 
-    fun createFileFromStream(ins: InputStream, destination: File?) {
+    private fun createFileFromStream(ins: InputStream, destination: File?) {
         try {
             FileOutputStream(destination).use { os ->
                 val buffer = ByteArray(4096)
