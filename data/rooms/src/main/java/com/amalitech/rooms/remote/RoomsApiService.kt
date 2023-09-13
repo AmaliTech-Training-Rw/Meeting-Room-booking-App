@@ -1,6 +1,7 @@
 package com.amalitech.rooms.remote
 
 import com.amalitech.core.data.data_source.remote.dto.ApiSuccessResponseDto
+import com.amalitech.core.data.data_source.remote.dto.FindRoomDto
 import com.amalitech.core.data.data_source.remote.dto.RoomsDto
 import okhttp3.MultipartBody
 import retrofit2.Response
