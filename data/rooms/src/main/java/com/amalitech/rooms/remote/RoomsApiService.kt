@@ -1,8 +1,7 @@
 package com.amalitech.rooms.remote
 
-import com.amalitech.core.data.dto.ApiSuccessResponseDto
-import com.amalitech.rooms.remote.dto.FindRoomDto
 import com.amalitech.core.data.data_source.remote.dto.ApiSuccessResponseDto
+import com.amalitech.rooms.remote.dto.FindRoomDto
 import com.amalitech.rooms.remote.dto.RoomsDto
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -28,6 +27,18 @@ interface RoomsApiService {
         @Query("capacity") capacity: Int,
         @Query("location_id") locationId: Int,
         @Query("features[]") features: List<String>,
+        @Part image: List<MultipartBody.Part>
+    ): Response<ApiSuccessResponseDto>
+
+    @Multipart
+    @POST("room/update/{id}")
+    suspend fun updateRoom(
+        @Path("id") id: Int,
+        @Query("name") roomName: String,
+        @Query("capacity") capacity: Int,
+        @Query("location_id") locationId: Int,
+        @Query("features[]") features: List<String>,
+        @Query("_method") method: String = "PUT",
         @Part image: List<MultipartBody.Part>
     ): Response<ApiSuccessResponseDto>
 

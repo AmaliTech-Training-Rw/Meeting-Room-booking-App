@@ -59,7 +59,11 @@ class RoomRepositoryImpl(
         return result.error
     }
 
-    override suspend fun addRoom(room: com.amalitech.rooms.model.Room, context: Context): UiText? {
+    override suspend fun addRoom(
+        room: com.amalitech.rooms.model.Room,
+        context: Context,
+        updating: Boolean
+    ): UiText? {
         try {
             val image = (0 until room.imagesList.size).map {
                 val file = getFile(context, room.imagesList[it])
@@ -71,20 +75,38 @@ class RoomRepositoryImpl(
                     filename = file.name
                 )
             }
-            val result = safeApiCall(
-                apiToBeCalled = {
-                    api.createRoom(
-                        roomName = room.name,
-                        capacity = room.capacity,
-                        locationId = room.location,
-                        features = room.features,
-                        image = image
+            val result =
+                if (updating)
+                    safeApiCall(
+                        apiToBeCalled = {
+                            api.updateRoom(
+                                roomName = room.name,
+                                capacity = room.capacity,
+                                locationId = room.location,
+                                features = room.features,
+                                image = image,
+                                id = room.id
+                            )
+                        },
+                        extractError = {
+                            extractError(it)
+                        }
                     )
-                },
-                extractError = {
-                    extractError(it)
-                }
-            )
+                else
+                    safeApiCall(
+                        apiToBeCalled = {
+                            api.createRoom(
+                                roomName = room.name,
+                                capacity = room.capacity,
+                                locationId = room.location,
+                                features = room.features,
+                                image = image
+                            )
+                        },
+                        extractError = {
+                            extractError(it)
+                        }
+                    )
             return result.error
         } catch (e: Exception) {
             return e.getUiText()
@@ -157,7 +179,6 @@ class RoomRepositoryImpl(
                 )
             }
         } catch (ex: java.lang.Exception) {
-            Log.e("Save File", ex.message!!)
             ex.printStackTrace()
         }
         return destinationFilename

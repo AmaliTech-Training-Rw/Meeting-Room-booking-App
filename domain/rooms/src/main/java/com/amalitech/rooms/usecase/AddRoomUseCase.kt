@@ -8,8 +8,12 @@ import com.amalitech.rooms.repository.RoomRepository
 class AddRoomUseCase(
     private val repos: RoomRepository
 ) {
-    suspend operator fun invoke(room: Room, context: Context): UiText? {
-        return repos.addRoom(room, context)
+    suspend operator fun invoke(
+        room: Room,
+        context: Context,
+        updating: Boolean
+    ): UiText? {
+        return repos.addRoom(room, context, updating)
     }
 }
 

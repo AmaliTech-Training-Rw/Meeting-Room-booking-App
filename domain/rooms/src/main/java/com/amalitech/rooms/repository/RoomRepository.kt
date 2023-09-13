@@ -10,7 +10,7 @@ interface RoomRepository{
 
     suspend fun deleteRoom(room: Room): UiText?
 
-    suspend fun addRoom(room: com.amalitech.rooms.model.Room, context: Context): UiText?
+    suspend fun addRoom(room: com.amalitech.rooms.model.Room, context: Context, updating: Boolean): UiText?
 
     suspend fun findRoom(id: String): ApiResult<Room>
 }

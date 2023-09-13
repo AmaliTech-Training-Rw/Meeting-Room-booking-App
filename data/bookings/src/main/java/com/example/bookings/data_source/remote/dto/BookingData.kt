@@ -48,7 +48,7 @@ data class BookingData(
                 roomName = room?.name ?: "",
                 numberOfPeople = room?.capacity ?: 0,
                 roomFeatures = room?.features?.map { it.name } ?: emptyList(),
-                imageUrl = room?.images?.randomOrNull()?.url ?: ""
+                imageUrl = room?.images?.map {it.url ?: ""} ?: emptyList()
             )
         )
     }

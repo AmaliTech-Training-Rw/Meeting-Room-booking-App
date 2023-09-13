@@ -151,6 +151,7 @@ fun RoomListScreen(
                 }
             )
         )
+        viewModel.fetchRooms()
     }
 
     Box(

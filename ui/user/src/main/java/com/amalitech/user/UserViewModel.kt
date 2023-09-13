@@ -2,7 +2,6 @@ package com.amalitech.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amalitech.core.util.UiText
 import com.amalitech.user.models.User
 import com.amalitech.user.state.UserViewState
 import com.amalitech.user.usecases.DeleteUserUseCase
@@ -68,14 +67,6 @@ class UserViewModel(
             _uiState.update {
                 it.copy(loading = false)
             }
-        }
-    }
-
-    fun onAddUser() {
-        _uiState.update {
-            it.copy(
-                snackbarMessage = UiText.DynamicString("Works")
-            )
         }
     }
 

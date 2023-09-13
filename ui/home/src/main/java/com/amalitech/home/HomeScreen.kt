@@ -139,7 +139,7 @@ fun HomeScreen(
                 "Speakers",
                 "Drinks"
             ),
-            imageUrl = images[it]
+            imageUrl = images
         )
     }
     var searchQuery by rememberSaveable {

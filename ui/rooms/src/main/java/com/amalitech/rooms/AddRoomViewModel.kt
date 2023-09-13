@@ -5,8 +5,8 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core.R
+import com.amalitech.core.domain.use_case.FetchLocationsUseCase
 import com.amalitech.core.util.UiText
-import com.amalitech.onboarding.signup.use_case.FetchLocationsUseCase
 import com.amalitech.rooms.model.Room
 import com.amalitech.rooms.usecase.AddRoomUseCase
 import com.amalitech.rooms.usecase.FindRoomUseCase
@@ -160,26 +160,32 @@ class AddRoomViewModel(
         }
 
         viewModelScope.launch {
-            val result = addRoom(
+            val result = addRoom.invoke(
                 mapRoomToDomain(
+                    _uiState.value.id,
                     _uiState.value.name.trim(),
                     _uiState.value.location,
                     _uiState.value.features,
                     _uiState.value.capacity,
                     _uiState.value.imagesList
                 ),
-                context
+                context,
+                updating = _uiState.value.updatingRoom
             )
             if (result != null) {
                 _uiState.update {
                     it.copy(error = result)
                 }
+            } else {
+                _uiState.update {
+                    it.copy(canNavigate = true)
+                }
             }
-
         }
     }
 
     private fun mapRoomToDomain(
+        id: String,
         name: String,
         location: Int,
         features: List<String>,
@@ -187,6 +193,7 @@ class AddRoomViewModel(
         selectImages: List<Uri>
     ): Room {
         return Room(
+            id.toIntOrNull() ?: -1,
             name,
             capacity,
             location,
@@ -224,20 +231,23 @@ class AddRoomViewModel(
     }
 
     fun findRoom(id: String) {
-        if (id.toIntOrNull() != -1 && id.toIntOrNull() != null)
+        if (id.toIntOrNull() != -1 && id.toIntOrNull() != null) {
+            _uiState.update {
+                it.copy(updatingRoom = true)
+            }
             viewModelScope.launch {
                 val result = findRoomUseCase(id)
                 result.data?.let { roomData ->
                     onRoomName(roomData.roomName)
                     _uiState.update {
-                        it.copy(features = roomData.roomFeatures)
+                        it.copy(features = roomData.roomFeatures, id = id)
                     }
                     onNewRoomCapacity(roomData.numberOfPeople)
                     _uiState.update {
                         it.copy(location = roomData.locationId)
                     }
-                    onRoomImages(images = listOf(Uri.parse(roomData.imageUrl)))
                 }
             }
+        }
     }
 }

@@ -1,8 +1,8 @@
 package com.amalitech.rooms
 
 import android.net.Uri
+import com.amalitech.core.domain.model.LocationX
 import com.amalitech.core.util.UiText
-import com.amalitech.onboarding.signup.model.LocationX
 
 data class AddRoomUiState(
     val name: String = "",
@@ -13,5 +13,7 @@ data class AddRoomUiState(
     val features: List<String> = listOf(),
     val error: UiText? = null,
     val canNavigate: Boolean = false,
-    val feature: String = ""
+    val feature: String = "",
+    val updatingRoom: Boolean = false,
+    val id: String = ""
 )

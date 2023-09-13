@@ -195,7 +195,6 @@ fun UserScreen(
         ModalBottomSheet(
             onDismissRequest = {
                 showBottomSheet = false
-                viewModel.onAddUser()
             },
             sheetState = sheetState,
             scrimColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
