@@ -7,5 +7,5 @@ data class Room(
     val capacity: Int,
     val location: Int,
     val imagesList: List<Uri>,
-    val features: String
+    val features: List<String>
 )

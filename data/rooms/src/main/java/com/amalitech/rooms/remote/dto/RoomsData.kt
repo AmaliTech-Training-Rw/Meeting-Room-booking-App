@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 
 data class RoomsData(
     val capacity: String?,
-    val features: String?,
+    val features: List<Feature>?,
     val id: Int?,
     val images: List<Image>?,
     @Json(name = "location_id")
@@ -21,7 +21,7 @@ data class RoomsData(
             id = (id ?: -1).toString(),
             roomName = name ?: "",
             numberOfPeople = capacity?.toInt() ?: 0,
-            roomFeatures = listOf(features ?: ""),
+            roomFeatures = features?.map { it.name } ?: emptyList(),
             imageUrl = images?.randomOrNull()?.url ?: ""
         )
     }

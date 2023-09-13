@@ -15,6 +15,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -99,7 +101,9 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import org.koin.androidx.compose.koinViewModel
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalLayoutApi::class
+)
 @Composable
 fun AddRoomScreen(
     appState: BookMeetingRoomAppState,
@@ -363,7 +367,7 @@ fun AddRoomScreen(
                             ) {
                                 Icon(
                                     Icons.Default.Clear,
-                                    "",
+                                    stringResource(com.amalitech.ui.rooms.R.string.remove_the_image),
                                     tint = MaterialTheme.colorScheme.error
                                 )
                             }
@@ -440,24 +444,82 @@ fun AddRoomScreen(
                 }
 
                 item {
-                    RoomTextField(
-                        placeholder = stringResource(R.string.add_features),
-                        value = state.features,
-                        onValueChange = {
-                            viewModel.onFeatures(it)
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(118.dp),
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Go,
-                            keyboardType = KeyboardType.Text
-                        ),
-                        onGo = {
-                            viewModel.onSaveRoomClick(context)
-                        },
-                        singleLine = false
-                    )
+                    Row {
+                        RoomTextField(
+                            placeholder = stringResource(R.string.add_features),
+                            value = state.feature,
+                            onValueChange = {
+                                viewModel.onFeatures(it)
+                            },
+                            modifier = Modifier
+                                .weight(0.8f)
+                                .fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Go,
+                                keyboardType = KeyboardType.Text
+                            ),
+                            onGo = {
+                                viewModel.onSaveRoomClick(context)
+                            },
+                            singleLine = true
+                        )
+                        IconButton(
+                            onClick = { viewModel.onAddFeature() },
+                            modifier = Modifier.weight(0.2f)
+                        ) {
+                            Icon(imageVector = Icons.Default.Add, contentDescription = stringResource(
+                                com.amalitech.ui.rooms.R.string.add_the_feature
+                            ))
+                        }
+                    }
+                    Spacer(Modifier.height(spacing.spaceMedium))
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(spacing.spaceSmall),
+                        verticalArrangement = Arrangement.spacedBy(spacing.spaceSmall)
+                    ) {
+                        state.features.forEach { featureItem ->
+                            ConstraintLayout(
+                                modifier = Modifier
+                                    .wrapContentSize()
+                            ) {
+                                val (feature, icon) = createRefs()
+
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(spacing.spaceMedium))
+                                        .border(
+                                            color = MaterialTheme.colorScheme.primary,
+                                            width = 1.dp,
+                                            shape = RoundedCornerShape(spacing.spaceMedium)
+                                        )
+                                        .padding(spacing.spaceSmall)
+                                        .constrainAs(feature) {
+                                            top.linkTo(parent.top)
+                                            end.linkTo(parent.end)
+                                        },
+                                    contentAlignment = Alignment.CenterStart
+                                ) {
+                                    Text(text = featureItem)
+                                }
+                                IconButton(
+                                    onClick = { viewModel.removeFeature(featureItem) },
+                                    modifier = Modifier
+                                        .constrainAs(icon) {
+                                            top.linkTo(feature.top)
+                                            end.linkTo(feature.end)
+                                        }
+                                        .size(12.dp)
+                                        .clip(CircleShape)
+                                ) {
+                                    Icon(
+                                        Icons.Default.Clear,
+                                        stringResource(com.amalitech.ui.rooms.R.string.remove_feature),
+                                        tint = MaterialTheme.colorScheme.error
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
 
                 item {
