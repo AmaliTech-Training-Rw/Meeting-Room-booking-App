@@ -1,5 +1,6 @@
 package com.amalitech.core.di
 
+import android.util.Log
 import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import com.amalitech.core.util.ApiParameters.AUTH_HEADER
 import com.amalitech.core.util.ApiParameters.TOKEN_TYPE
@@ -11,6 +12,7 @@ class AuthenticationInterceptor constructor(
     private val preferences: OnboardingSharedPreferences
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
+        Log.i("INTERCEPTOR", "${chain.request()}")
         return chain.proceed(chain.createAuthenticatedRequest(preferences.loadToken()))
     }
     private fun Interceptor.Chain.createAuthenticatedRequest(token: String): Request {

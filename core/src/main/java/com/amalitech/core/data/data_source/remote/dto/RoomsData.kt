@@ -22,7 +22,8 @@ data class RoomsData(
             roomName = name ?: "",
             numberOfPeople = capacity?.toInt() ?: 0,
             roomFeatures = features?.map { it.name } ?: emptyList(),
-            imageUrl = images?.randomOrNull()?.url ?: ""
+            imageUrl = images?.map { it.url ?: "" } ?: emptyList(),
+            locationId = locationId ?: -1
         )
     }
 }
