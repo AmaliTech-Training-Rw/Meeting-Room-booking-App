@@ -1,6 +1,7 @@
 package com.amalitech.rooms.remote
 
 import com.amalitech.core.data.dto.ApiSuccessResponseDto
+import com.amalitech.rooms.remote.dto.FindRoomDto
 import com.amalitech.rooms.remote.dto.RoomsDto
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -28,4 +29,7 @@ interface RoomsApiService {
         @Query("features[]") features: List<String>,
         @Part image: List<MultipartBody.Part>
     ): Response<ApiSuccessResponseDto>
+
+    @GET("room/find/{id}")
+    suspend fun findRoom(@Path("id") id: Int): Response<FindRoomDto>
 }
