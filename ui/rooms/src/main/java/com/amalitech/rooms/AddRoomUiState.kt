@@ -10,7 +10,8 @@ data class AddRoomUiState(
     val location: Int = -1,
     val locationList: List<LocationX>? = listOf(),
     val imagesList: List<Uri> = emptyList(),
-    val features: String = "",
+    val features: List<String> = listOf(),
     val error: UiText? = null,
-    val canNavigate: Boolean = false
+    val canNavigate: Boolean = false,
+    val feature: String = ""
 )

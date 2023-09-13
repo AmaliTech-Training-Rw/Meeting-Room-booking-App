@@ -1,24 +1,24 @@
 package com.amalitech.rooms.repository
 
 import android.content.Context
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.provider.MediaStore
+import android.provider.OpenableColumns
+import android.util.Log
 import com.amalitech.core.data.model.Room
 import com.amalitech.core.data.repository.BaseRepo
 import com.amalitech.core.util.ApiResult
 import com.amalitech.core.util.UiText
 import com.amalitech.core.util.getUiText
 import com.amalitech.rooms.remote.RoomsApiService
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
 
 
 class RoomRepositoryImpl(
@@ -62,30 +62,22 @@ class RoomRepositoryImpl(
     override suspend fun addRoom(room: com.amalitech.rooms.model.Room, context: Context): UiText? {
         try {
             val image = (0 until room.imagesList.size).map {
-                val file =
-                    File(getRealPathFromURI(contentURI = room.imagesList[it], context = context))
-                val newFile: File = saveBitmapToFile(file)!!
-
-                val requestFile = newFile.asRequestBody()
+                val file = getFile(context, room.imagesList[it])
+                val compressedFile = saveBitmapToFile(file)
+                val requestFile = compressedFile.asRequestBody()
                 MultipartBody.Part.createFormData(
                     name = "room_image[]",
                     body = requestFile,
                     filename = file.name
                 )
             }
-            val name = room.name.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-            val capacity =
-                room.capacity.toString().toRequestBody("multipart/form-data".toMediaTypeOrNull())
-            val locationId =
-                room.location.toString().toRequestBody("multipart/form-data".toMediaTypeOrNull())
-            val features = room.features.toRequestBody("multipart/form-data".toMediaTypeOrNull())
             val result = safeApiCall(
                 apiToBeCalled = {
                     api.createRoom(
-                        roomName = name,
-                        capacity = capacity,
-                        locationId = locationId,
-                        features = features,
+                        roomName = room.name,
+                        capacity = room.capacity,
+                        locationId = room.location,
+                        features = room.features,
                         image = image
                     )
                 },
@@ -99,24 +91,8 @@ class RoomRepositoryImpl(
         }
     }
 
-    private fun getRealPathFromURI(contentURI: Uri, context: Context): String {
-        val result: String?
-        val cursor: Cursor? =
-            context.contentResolver.query(contentURI, null, null, null, null)
-        if (cursor == null) {
-            result = contentURI.path
-        } else {
-            cursor.moveToFirst()
-            val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-            result = cursor.getString(idx)
-            cursor.close()
-        }
-        return result ?: ""
-    }
-
-    fun saveBitmapToFile(file: File): File? {
+    fun saveBitmapToFile(file: File): File {
         return try {
-
             // BitmapFactory options to downsize the image
             val o = BitmapFactory.Options()
             o.inJustDecodeBounds = true
@@ -149,7 +125,50 @@ class RoomRepositoryImpl(
             selectedBitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
             file
         } catch (e: java.lang.Exception) {
-            null
+            file
         }
+    }
+
+    @Throws(IOException::class)
+    fun getFile(context: Context, uri: Uri): File {
+        val destinationFilename =
+            File(context.filesDir.path + File.separatorChar + queryName(context, uri))
+        try {
+            context.contentResolver.openInputStream(uri).use { ins ->
+                createFileFromStream(
+                    ins!!,
+                    destinationFilename
+                )
+            }
+        } catch (ex: java.lang.Exception) {
+            Log.e("Save File", ex.message!!)
+            ex.printStackTrace()
+        }
+        return destinationFilename
+    }
+
+    fun createFileFromStream(ins: InputStream, destination: File?) {
+        try {
+            FileOutputStream(destination).use { os ->
+                val buffer = ByteArray(4096)
+                var length: Int
+                while (ins.read(buffer).also { length = it } > 0) {
+                    os.write(buffer, 0, length)
+                }
+                os.flush()
+            }
+        } catch (ex: java.lang.Exception) {
+            Log.e("Save File", ex.message!!)
+            ex.printStackTrace()
+        }
+    }
+
+    private fun queryName(context: Context, uri: Uri): String {
+        val returnCursor = context.contentResolver.query(uri, null, null, null, null)!!
+        val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        returnCursor.moveToFirst()
+        val name = returnCursor.getString(nameIndex)
+        returnCursor.close()
+        return name
     }
 }

@@ -57,9 +57,11 @@ class AddRoomViewModel(
 
     fun onRoomImages(images: List<Uri>) {
         _uiState.update { addRoomUiState ->
+            if (addRoomUiState.imagesList.size + images.size < 3)
             addRoomUiState.copy(
                 imagesList = (addRoomUiState.imagesList + images).toMutableList()
-            )
+            ) else
+                addRoomUiState.copy(error = UiText.StringResource(com.amalitech.ui.rooms.R.string.error_image_should_be_less_or_equal_to_three))
         }
     }
 
@@ -99,7 +101,16 @@ class AddRoomViewModel(
     fun onFeatures(features: String) {
         _uiState.update { addRoomUiState ->
             addRoomUiState.copy(
-                features = features
+                feature = features
+            )
+        }
+    }
+
+    fun onAddFeature() {
+        _uiState.update {
+            it.copy(
+                features = it.features + it.feature.trim(),
+                feature = ""
             )
         }
     }
@@ -116,7 +127,6 @@ class AddRoomViewModel(
     fun onSaveRoomClick(context: Context) {
         when {
             _uiState.value.name.isBlank() -> {
-                // TODO: this is an alternative way of handling errors, and using is error / supporting text in the ui
                 _uiState.update { state ->
                     state.copy(error = UiText.StringResource(R.string.name_empty))
                 }
@@ -130,7 +140,7 @@ class AddRoomViewModel(
                 return
             }
 
-            _uiState.value.features.isBlank() -> {
+            _uiState.value.features.isEmpty() -> {
                 _uiState.update { state ->
                     state.copy(error = UiText.StringResource(R.string.features_empty))
                 }
@@ -152,7 +162,7 @@ class AddRoomViewModel(
                 mapRoomToDomain(
                     _uiState.value.name.trim(),
                     _uiState.value.location,
-                    _uiState.value.features.trim(),
+                    _uiState.value.features,
                     _uiState.value.capacity,
                     _uiState.value.imagesList
                 ),
@@ -167,11 +177,10 @@ class AddRoomViewModel(
         }
     }
 
-    // TODO: crate a share mapping logic/function
     private fun mapRoomToDomain(
         name: String,
         location: Int,
-        features: String,
+        features: List<String>,
         capacity: Int,
         selectImages: List<Uri>
     ): Room {
@@ -198,6 +207,16 @@ class AddRoomViewModel(
         _uiState.update {
             it.copy(
                 error = null
+            )
+        }
+    }
+
+    fun removeFeature(featureItem: String) {
+        _uiState.update {
+            val featuresCopy = it.features.toMutableList()
+            featuresCopy.remove(featureItem)
+            it.copy(
+                features = featuresCopy
             )
         }
     }
