@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core.data.model.Room
 import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.EmptyListScreen
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.components.SearchIcon
@@ -160,29 +161,29 @@ fun RoomListScreen(
             .padding(horizontal = spacing.spaceMedium)
     ) {
         when (uiState) {
-            is UiState.Success -> LazyColumn(
-                contentPadding = PaddingValues(vertical = spacing.spaceSmall),
-                verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)
-            ) {
-                rooms?.let { rooms ->
-                    items(rooms) { room ->
-                        RoomCard(
-                            room = room,
-                            modifier = Modifier.height(150.dp),
-                            onLeftContentClick = {
-                                onNavigateToUpdateRoom(room.id)
-                            },
-                            onRightContentClick = {
-                                openDialog = true
-                                selectedRoom = room
-                            }
-                        )
+            is UiState.Success -> {
+                LazyColumn(
+                    contentPadding = PaddingValues(vertical = spacing.spaceSmall),
+                    verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)
+                ) {
+                    rooms?.let { rooms ->
+                        items(rooms) { room ->
+                            RoomCard(
+                                room = room,
+                                modifier = Modifier.height(150.dp),
+                                onLeftContentClick = {
+                                    onNavigateToUpdateRoom(room.id)
+                                },
+                                onRightContentClick = {
+                                    openDialog = true
+                                    selectedRoom = room
+                                }
+                            )
+                        }
                     }
                 }
                 if (rooms.isNullOrEmpty()) {
-                    item { 
-                        Text(text = stringResource(id = com.amalitech.core.R.string.no_item_found))
-                    }
+                    EmptyListScreen(item = stringResource(R.string.room), modifier = Modifier.fillMaxSize())
                 }
             }
 

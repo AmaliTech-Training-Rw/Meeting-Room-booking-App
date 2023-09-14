@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,6 +26,7 @@ import com.amalitech.booking.components.BookingItem
 import com.amalitech.booking.model.Booking
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.BookingAppTab
+import com.amalitech.core_ui.components.EmptyListScreen
 import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.components.Tab
 import com.amalitech.core_ui.theme.LocalSpacing
@@ -65,7 +65,7 @@ fun BookingScreen(
             )
         )
     }
-    
+
     LaunchedEffect(key1 = uiState) {
         when (uiState) {
             is UiState.Error -> {
@@ -108,12 +108,7 @@ fun BookingScreen(
                 modifier = Modifier.height(48.dp),
                 tabs = viewModel.tabs
             )
-            if (bookings?.isEmpty() == true) {
-                Text(
-                    text = stringResource(R.string.no_item_found),
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-            } else {
+            if (!bookings.isNullOrEmpty()) {
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)) {
                     bookings?.let {
                         item {
@@ -131,6 +126,8 @@ fun BookingScreen(
                     }
                 }
             }
+            if (bookings.isNullOrEmpty() && !isLoading)
+                EmptyListScreen(item = stringResource(R.string.booking))
         }
         if (isLoading)
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))

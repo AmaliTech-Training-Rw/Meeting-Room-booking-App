@@ -6,4 +6,5 @@
     <string name="rooms">Rooms</string>
     <string name="calendar">Calendar</string>
     <string name="book">Book</string>
+    <string name="room">room</string>
 </resources>

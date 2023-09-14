@@ -40,6 +40,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.EmptyListScreen
 import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
@@ -92,21 +93,14 @@ fun InviteScreen(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)
         ) {
-            invites.let {
-                item {
-                    if (invites.isEmpty() && !uiState.loading) {
-                        Text(
-                            text = stringResource(com.amalitech.core.R.string.no_item_found),
-                        )
-                    }
-                }
-                items(items = it) { item ->
-                    InvitesItem(
-                        item
-                    )
-                }
+            items(items = invites) { item ->
+                InvitesItem(
+                    item
+                )
             }
         }
+        if (invites.isEmpty() && !uiState.loading)
+            EmptyListScreen(item = stringResource(com.amalitech.ui.invite.R.string.invitations))
         if (uiState.loading)
             CircularProgressIndicator(Modifier.align(Alignment.Center))
     }
