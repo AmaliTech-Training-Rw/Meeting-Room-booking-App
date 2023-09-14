@@ -67,7 +67,7 @@ fun LoginScreen(
         keyboardController?.hide()
     }
     val baseResult by viewModel.uiStateFlow.collectAsStateWithLifecycle()
-    val isUsingAdminDashboard = viewModel.isUsingAdminDashboard
+    val isUsingAdminDashboard by viewModel.isUsingAdminDashboard
 
     LaunchedEffect(key1 = baseResult) {
         when (baseResult) {
