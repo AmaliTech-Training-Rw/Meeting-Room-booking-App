@@ -1,5 +1,6 @@
 package com.amalitech.onboarding_data.remote
 
+import com.amalitech.core.data.data_source.remote.dto.ApiSuccessResponseDto
 import com.amalitech.onboarding_data.remote.dto.CreateOrganizationDto
 import com.amalitech.onboarding_data.remote.dto.LoginDto
 import com.amalitech.onboarding_data.remote.dto.OrganizationTypeDto
@@ -39,4 +40,15 @@ interface OnboardingApiService {
         @Query("email") email: String,
         @Query("password") password: String
     ): Response<LoginDto>
+
+    @POST("password/forgot")
+    suspend fun askResetLink(@Query("email") email: String): Response<ApiSuccessResponseDto>
+
+    @POST("password/reset")
+    suspend fun resetPassword(
+        @Query("password") password: String,
+        @Query("password_confirmation") confirmPassword: String,
+        @Header("Accept") type: String,
+        @Header("Authorization") token: String
+    ): Response<ApiSuccessResponseDto>
 }

@@ -106,4 +106,40 @@ class OnboardingRepositoryImpl(
             else ApiResult(error = UiText.StringResource(com.amalitech.core.R.string.error_default_message))
         }
     }
+
+    override suspend fun resetPassword(
+        password: String,
+        passwordConfirmation: String,
+        token: String
+    ): UiText? {
+        val result = safeApiCall(
+            apiToBeCalled = {
+                api.resetPassword(
+                    password,
+                    passwordConfirmation,
+                    ": application/json",
+                    ": Bearer $token"
+                )
+            },
+            extractError = {
+                extractError(it)
+            }
+        )
+        return result.error
+    }
+
+    override suspend fun askResetLink(email: String): UiText? {
+        val result = safeApiCall(
+            apiToBeCalled = {
+                api.askResetLink(email)
+            },
+            extractError = {
+                extractError(it)
+            }
+        )
+        result.data?.message?.let {
+            return UiText.DynamicString(it)
+        }
+        return result.error
+    }
 }

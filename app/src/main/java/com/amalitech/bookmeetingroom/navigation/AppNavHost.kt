@@ -30,6 +30,7 @@ import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.login.LoginViewModel
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordViewModel
+import com.amalitech.onboarding.signup.NavArguments
 import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
 import com.amalitech.rooms.book_room.BookRoomScreen
@@ -188,9 +189,21 @@ fun NavGraphBuilder.onboardingGraph(
                 })
         }
 
-        composable(Route.RESET_PASSWORD) {
+        composable(
+            "${Route.RESET_PASSWORD}?token={token}",
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "$uriSecured/password/reset/api/{token}"
+                },
+                navDeepLink {
+                    uriPattern =
+                        "$uriUnsecured/password/reset/api/{token}"
+                }
+            )
+        ) { navBackStackEntry ->
             val viewModel: ResetPasswordViewModel =
-                it.sharedViewModel(navController = navController)
+                navBackStackEntry.sharedViewModel(navController = navController)
+            val token = navBackStackEntry.arguments?.getString(NavArguments.token) ?: ""
             ResetPasswordScreen(
                 onComposing = onComposing,
                 snackbarHostState = snackbarHostState,
@@ -200,7 +213,7 @@ fun NavGraphBuilder.onboardingGraph(
                         launchSingleTop = true
                         popUpTo(Route.LOGIN)
                     }
-                })
+                }, token = token)
         }
     }
 }

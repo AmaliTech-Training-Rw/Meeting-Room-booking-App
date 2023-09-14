@@ -1,8 +1,11 @@
 package com.amalitech.onboarding.reset_password
 
 import com.amalitech.core.util.UiText
+import com.amalitech.onboarding.repository.OnboardingRepository
 
-class ResetPasswordUseCase {
+class ResetPasswordUseCase(
+    private val repository: OnboardingRepository
+) {
 
     /**
      * Reset the user's password by making an API call
@@ -13,9 +16,7 @@ class ResetPasswordUseCase {
      * @return an instance of UiText when there is an error returned
      * by the API, otherwise, null.
      */
-    operator fun invoke(newPassword: String, newPasswordConfirmation: String): UiText? {
-        // TODO(use the api to log into the account)
-//        return UiText.DynamicString("The api is not yet available")
-        return null
+    suspend operator fun invoke(newPassword: String, newPasswordConfirmation: String, token: String): UiText? {
+        return repository.resetPassword(newPassword, newPasswordConfirmation, token)
     }
 }

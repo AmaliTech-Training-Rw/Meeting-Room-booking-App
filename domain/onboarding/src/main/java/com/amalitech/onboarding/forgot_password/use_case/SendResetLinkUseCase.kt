@@ -1,8 +1,11 @@
 package com.amalitech.onboarding.forgot_password.use_case
 
 import com.amalitech.core.util.UiText
+import com.amalitech.onboarding.repository.OnboardingRepository
 
-class SendResetLinkUseCase {
+class SendResetLinkUseCase(
+    private val repository: OnboardingRepository
+) {
 
     /**
      * Sends a reset link to the provided email address
@@ -11,8 +14,7 @@ class SendResetLinkUseCase {
      * @return an instance of UiText when there is an error returned
      * by the API, otherwise, null.
      */
-    operator fun invoke(email: String): UiText? {
-        // TODO(use the api to log into the account)
-        return UiText.DynamicString("The api is not yet available")
+    suspend operator fun invoke(email: String): UiText? {
+        return repository.askResetLink(email)
     }
 }
