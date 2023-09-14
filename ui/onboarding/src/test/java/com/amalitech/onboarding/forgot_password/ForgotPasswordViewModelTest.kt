@@ -4,6 +4,7 @@ import com.amalitech.core.util.UiText
 import com.amalitech.core.R
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.forgot_password.use_case.ForgotPasswordUseCasesWrapper
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
@@ -55,7 +56,7 @@ class ForgotPasswordViewModelTest {
             forgotPasswordUseCasesWrapper.validateEmailUseCase(any())
         } returns null
 
-        every {
+        coEvery {
             forgotPasswordUseCasesWrapper.sendResetLinkUseCase(any())
         } returns null
 
@@ -74,7 +75,7 @@ class ForgotPasswordViewModelTest {
             forgotPasswordUseCasesWrapper.validateEmailUseCase(any())
         } returns null
 
-        every {
+        coEvery {
             forgotPasswordUseCasesWrapper.sendResetLinkUseCase(any())
         } returns UiText.StringResource(androidx.compose.ui.R.string.default_error_message)
 

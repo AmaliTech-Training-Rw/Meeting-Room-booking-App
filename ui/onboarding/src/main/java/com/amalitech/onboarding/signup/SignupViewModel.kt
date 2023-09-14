@@ -212,13 +212,11 @@ class SignupViewModel(
                 _userInput.value.password,
                 _userInput.value.passwordConfirmation
             )
-            val emailValid = signupUseCasesWrapper.validateEmailUseCase(_userInput.value.email)
             val passwordValid =
-                signupUseCasesWrapper.checkValuesNotBlankUseCase(_userInput.value.password)
+                signupUseCasesWrapper.checkValuesNotBlankUseCase(_userInput.value.password, _userInput.value.username)
             when {
                 passwordMatch != null -> updateStateWithError(passwordMatch)
                 passwordValid != null -> updateStateWithError(passwordValid)
-                emailValid != null -> updateStateWithError(emailValid)
             }
             return
         }

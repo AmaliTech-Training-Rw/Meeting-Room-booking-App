@@ -43,7 +43,8 @@ fun ResetPasswordScreen(
     snackbarHostState: SnackbarHostState,
     viewModel: ResetPasswordViewModel = koinViewModel(),
     onNavigateToLogin: () -> Unit,
-    onComposing: (AppBarState) -> Unit
+    onComposing: (AppBarState) -> Unit,
+    token: String
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -72,6 +73,7 @@ fun ResetPasswordScreen(
     }
     LaunchedEffect(key1 = true) {
         onComposing(AppBarState(hasTopBar = false))
+        viewModel.onNewToken(token)
     }
 
     Column(
@@ -133,7 +135,8 @@ fun ResetPasswordScreen(
             onClick = { viewModel.onResetPassword() },
             modifier = Modifier
                 .fillMaxWidth(),
-            enabled = baseResult !is UiState.Loading
+            enabled = baseResult !is UiState.Loading,
+            isLoading = baseResult is UiState.Loading
         )
     }
 }
@@ -143,5 +146,5 @@ fun ResetPasswordScreen(
 fun Prev() {
     ResetPasswordScreen(SnackbarHostState(), onNavigateToLogin = {
 
-    }, onComposing = {})
+    }, onComposing = {}, token = "token")
 }

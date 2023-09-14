@@ -22,7 +22,7 @@ val onboardingDomainModule = module {
     }
 
     single {
-        SendResetLinkUseCase()
+        SendResetLinkUseCase(get())
     }
 
     single {
@@ -40,7 +40,7 @@ val onboardingDomainModule = module {
     }
 
     single {
-        ResetPasswordUseCase()
+        ResetPasswordUseCase(get())
     }
 
     single {

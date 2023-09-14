@@ -1,6 +1,5 @@
 package com.amalitech.bookmeetingroom.navigation
 
-import android.content.Intent
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -143,25 +142,18 @@ fun NavGraphBuilder.onboardingGraph(
             )
         }
 
+        val uriSecured = "https://api.meeting-room.amalitech-dev.net"
+        val uriUnsecured = "http://api.meeting-room.amalitech-dev.net"
         composable(
-            Route.SIGNUP,
+            "${Route.SIGNUP}?token={token}",
             deepLinks = listOf(
                 navDeepLink {
-                    uriPattern =
-                        "http://api.meeting-room.amalitech-dev.net/user/invite/api/${NavArguments.token}"
-                    action = Intent.ACTION_VIEW
+                    uriPattern = "$uriSecured/user/invite/api/{token}"
                 },
                 navDeepLink {
                     uriPattern =
-                        "https://api.meeting-room.amalitech-dev.net/user/invite/api/${NavArguments.token}"
-                    action = Intent.ACTION_VIEW
+                        "$uriUnsecured/user/invite/api/{token}"
                 }
-            ),
-            arguments = listOf(
-                navArgument(NavArguments.token) {
-                    type = NavType.StringType
-                    defaultValue = ""
-                },
             )
         ) { entry ->
             SignupScreen(
@@ -197,9 +189,21 @@ fun NavGraphBuilder.onboardingGraph(
                 })
         }
 
-        composable(Route.RESET_PASSWORD) {
+        composable(
+            "${Route.RESET_PASSWORD}?token={token}",
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "$uriSecured/password/reset/api/{token}"
+                },
+                navDeepLink {
+                    uriPattern =
+                        "$uriUnsecured/password/reset/api/{token}"
+                }
+            )
+        ) { navBackStackEntry ->
             val viewModel: ResetPasswordViewModel =
-                it.sharedViewModel(navController = navController)
+                navBackStackEntry.sharedViewModel(navController = navController)
+            val token = navBackStackEntry.arguments?.getString(NavArguments.token) ?: ""
             ResetPasswordScreen(
                 onComposing = onComposing,
                 snackbarHostState = snackbarHostState,
@@ -209,7 +213,7 @@ fun NavGraphBuilder.onboardingGraph(
                         launchSingleTop = true
                         popUpTo(Route.LOGIN)
                     }
-                })
+                }, token = token)
         }
     }
 }

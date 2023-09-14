@@ -31,6 +31,21 @@ class ResetPasswordViewModel(
         }
     }
 
+
+    /**
+     * onNewToken - adds value of token gotten from navigation
+     *
+     * @param token the token gotten from the sent link
+     */
+
+    fun onNewToken(token: String) {
+        _uiState.update { resetPasswordUiState ->
+            resetPasswordUiState.copy(
+                token = token
+            )
+        }
+    }
+
     /**
      * onNewPasswordConfirmation - trims and adds value of password confirmation entered by the user in our state
      * then checks if the two passwords match
@@ -43,17 +58,6 @@ class ResetPasswordViewModel(
             resetPasswordUiState.copy(
                 passwordConfirmation = password.trim(),
             )
-        }
-        val passwordCheck = resetPasswordUseCasesWrapper.checkPasswordsMatchUseCase(
-            _uiState.value.newPassword,
-            _uiState.value.passwordConfirmation
-        )
-        if (passwordCheck != null) {
-            _uiStateFlow.update {
-                UiState.Error(
-                    error = passwordCheck
-                )
-            }
         }
     }
 
@@ -81,8 +85,9 @@ class ResetPasswordViewModel(
 
             if (passwordsCheck == null && passwordValid == null) {
                 val apiResult = resetPasswordUseCasesWrapper.resetPasswordUseCase(
-                    _uiState.value.newPassword,
-                    _uiState.value.passwordConfirmation
+                    newPassword = _uiState.value.newPassword,
+                    newPasswordConfirmation = _uiState.value.passwordConfirmation,
+                    token = _uiState.value.token
                 )
 
                 if (apiResult != null) {

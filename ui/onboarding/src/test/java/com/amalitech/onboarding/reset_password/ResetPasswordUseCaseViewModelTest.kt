@@ -3,6 +3,7 @@ package com.amalitech.onboarding.reset_password
 import com.amalitech.core.R
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.UiState
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
@@ -67,31 +68,9 @@ class ResetPasswordUseCaseViewModelTest {
     }
 
     @Test
-    fun `when newPasswordConfirmation is called with passwords that don't match, an error is added to state`() {
-        // GIVEN - different passwords
-        val confirmationPassword = "password"
-        val password = "different"
-        every {
-            resetPasswordUseCasesWrapper.checkPasswordsMatchUseCase(any(), any())
-        } returns UiText.StringResource(R.string.error_passwords_dont_match)
-
-        // WHEN - onNewPassword and onNewPasswordConfirmation are called
-        viewModel.onNewPassword(password)
-        viewModel.onNewPasswordConfirmation(confirmationPassword)
-
-        // THEN - state holds the value an error
-        val state = viewModel.uiStateFlow
-        assertTrue(state.value is UiState.Error)
-        assertEquals(
-            UiText.StringResource(R.string.error_passwords_dont_match),
-            (state.value as UiState.Error).error
-        )
-    }
-
-    @Test
     fun `when onResetPassword is called and there is no errors, state is updated`() {
-        every {
-            resetPasswordUseCasesWrapper.resetPasswordUseCase(any(), any())
+        coEvery {
+            resetPasswordUseCasesWrapper.resetPasswordUseCase.invoke(any(), any(), any())
         } returns null
 
         every {
@@ -111,8 +90,8 @@ class ResetPasswordUseCaseViewModelTest {
     @Test
     fun `when onResetPassword is called with errors, state is updated`() {
         // GIVEN - a mock authentication use case that assume reset password fails
-        every {
-            resetPasswordUseCasesWrapper.resetPasswordUseCase(any(), any())
+        coEvery {
+            resetPasswordUseCasesWrapper.resetPasswordUseCase.invoke(any(), any(), any())
         } returns null
 
         every {
