@@ -6,7 +6,7 @@ data class CreateOrganizationData(
     val email: String?,
     val id: Int?,
     @Json(name = "is_admin")
-    val isAdmin: Int?,
+    val isAdmin: Boolean?,
     @Json(name = "location_id")
     val locationId: String?,
     @Json(name = "organisation_id")
