@@ -533,7 +533,7 @@ fun UserItem(
             modifier = Modifier
                 .clip(CircleShape)
                 .weight(0.5f),
-            error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
+//            error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
             placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
             contentScale = ContentScale.Crop
         )
