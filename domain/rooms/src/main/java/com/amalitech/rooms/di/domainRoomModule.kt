@@ -2,7 +2,6 @@ package com.amalitech.rooms.di
 
 import com.amalitech.rooms.book_room.use_case.BookRoomUseCase
 import com.amalitech.rooms.book_room.use_case.BookRoomUseCasesWrapper
-import com.amalitech.rooms.book_room.use_case.GetRoomUseCase
 import com.amalitech.rooms.usecase.AddRoomUseCase
 import com.amalitech.rooms.usecase.DeleteRoomUseCase
 import com.amalitech.rooms.usecase.FetchRoomsUseCase
@@ -25,11 +24,7 @@ val domainRoomsModule = module {
     }
 
     single {
-        GetRoomUseCase()
-    }
-
-    single {
-        BookRoomUseCase()
+        BookRoomUseCase(get())
     }
 
     single {

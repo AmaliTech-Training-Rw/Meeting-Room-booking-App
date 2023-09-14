@@ -44,4 +44,15 @@ interface RoomsApiService {
 
     @GET("room/find/{id}")
     suspend fun findRoom(@Path("id") id: Int): Response<FindRoomDto>
+
+    @POST("booking/create")
+    suspend fun bookRoom(
+        @Query("room_id") id: Int,
+        @Query("start_date") startDate: String,
+        @Query("end_date") endDate: String,
+        @Query("end_time") endTime: String,
+        @Query("start_time") startTime: String,
+        @Query("emails[]") invited: List<String>,
+        @Query("note") note: String
+    ): Response<ApiSuccessResponseDto>
 }

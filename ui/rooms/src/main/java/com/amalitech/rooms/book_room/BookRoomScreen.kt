@@ -156,14 +156,13 @@ fun BookRoomScreen(
                     if (!uiState.isLoading)
                         AsyncImage(
                             model = room.imgUrl,
-                            contentDescription = room.description,
+                            contentDescription = room.name,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(200.dp)
-                            /*.clip(RoundedCornerShape(spacing.spaceSmall))*/,
+                            ,
                             error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
-//                        placeholder = painterResource(id = R.drawable.baseline_refresh_24),
-                            contentScale = ContentScale.FillBounds
+                            contentScale = ContentScale.Crop
                         )
                     Column(modifier = Modifier.padding(spacing.spaceMedium)) {
                         Text(

@@ -2,11 +2,12 @@ package com.amalitech.rooms.book_room.use_case
 
 import com.amalitech.core.domain.model.Booking
 import com.amalitech.core.util.UiText
-import kotlinx.coroutines.delay
+import com.amalitech.rooms.repository.RoomRepository
 
-class BookRoomUseCase {
+class BookRoomUseCase(
+    private val repository: RoomRepository
+) {
     suspend operator fun invoke(booking: Booking): UiText? {
-        delay(2000)
-        return null
+        return repository.bookRoom(booking)
     }
 }

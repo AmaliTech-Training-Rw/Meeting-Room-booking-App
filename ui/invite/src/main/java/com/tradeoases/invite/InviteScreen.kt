@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -129,14 +131,14 @@ fun InvitesItem(
     ) {
         AsyncImage(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
+                .wrapContentHeight()
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(LocalSpacing.current.spaceSmall)),
             model = invite.imageUrl,
-            contentDescription = "item.roomName",
+            contentDescription = invite.roomName,
             placeholder = painterResource(id = R.drawable.baseline_refresh_24),
-            error = painterResource(id = R.drawable.baseline_broken_image_24)
+            error = painterResource(id = R.drawable.baseline_broken_image_24),
+            contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.width(spacing.spaceSmall))
         Divider(
