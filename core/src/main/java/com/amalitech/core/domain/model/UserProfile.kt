@@ -1,4 +1,4 @@
-package com.amalitech.onboarding.login.model
+package com.amalitech.core.domain.model
 
 data class UserProfile(
     val email: String,

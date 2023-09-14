@@ -1,7 +1,6 @@
 package com.amalitech.user.profile.update_profile
 
 import android.net.Uri
-import androidx.core.net.toFile
 import com.amalitech.user.profile.model.Profile
 
 data class ProfileUserInput(
@@ -21,9 +20,9 @@ data class ProfileUserInput(
             lastName = lastName,
             email = email,
             title = title,
-            profileImage = profileImage?.toFile(),
+            profileImage = profileImage,
             newPassword = newPassword,
-            oldPassword = oldPassword
+            oldPassword = oldPassword,
         )
     }
 }

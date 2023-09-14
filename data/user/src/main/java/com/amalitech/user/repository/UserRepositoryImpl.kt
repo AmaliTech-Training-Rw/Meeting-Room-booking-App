@@ -1,7 +1,10 @@
 package com.amalitech.user.repository
 
+import android.content.Context
 import com.amalitech.core.data.repository.BaseRepo
+import com.amalitech.core.domain.model.UserProfile
 import com.amalitech.core.util.ApiResult
+import com.amalitech.core.util.FileUtil
 import com.amalitech.core.util.UiText
 import com.amalitech.core.util.extractError
 import com.amalitech.user.data_source.local.UserDao
@@ -14,6 +17,9 @@ import com.amalitech.user.profile.model.dto.UserDto
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 
 class UserRepositoryImpl(
     private val dao: UserDao,
@@ -38,7 +44,6 @@ class UserRepositoryImpl(
     override suspend fun saveLoggedInUser(user: UserDto) {
         try {
             dao.saveLoggedInUser(user)
-
         } catch (e: Exception) {
             e.extractError()
         }
@@ -57,7 +62,7 @@ class UserRepositoryImpl(
                             extractError(it)
                         }
                     )
-                    val mapList= result.data?.data?.map { it.toUser() }
+                    val mapList = result.data?.data?.map { it.toUser() }
                     mapList?.let {
                         emit(it)
                     }
@@ -91,8 +96,52 @@ class UserRepositoryImpl(
         return apiResult.error
     }
 
-    override suspend fun updateProfile(profile: Profile) {
-        //TODO("Not yet implemented")
+    override suspend fun updateProfile(profile: Profile, context: Context): ApiResult<UserProfile> {
+        var imageFile: File? = null
+        profile.profileImage?.let {
+            imageFile = FileUtil.saveBitmapToFile(FileUtil.getFile(context, it))
+        }
+        var part: MultipartBody.Part? = null
+        imageFile?.let {
+            part = MultipartBody.Part.createFormData(
+                name = "image",
+                body = it.asRequestBody(),
+                filename = it.name
+            )
+        }
+        val result = safeApiCall(
+            apiToBeCalled = {
+                if (imageFile != null)
+                    api.updateProfileWithImage(
+                        firstName = profile.firstName,
+                        lastName = profile.lastName,
+                        title = profile.title,
+                        currentPassword = profile.oldPassword,
+                        password = profile.newPassword,
+                        passwordConfirmation = profile.newPassword,
+                        image = part
+                    )
+                else
+                    api.updateProfileWithoutImage(
+                        firstName = profile.firstName,
+                        lastName = profile.lastName,
+                        title = profile.title,
+                        currentPassword = profile.oldPassword,
+                        password = profile.newPassword,
+                        passwordConfirmation = profile.newPassword,
+                    )
+            }, extractError = {
+                extractError(it)
+            }
+        )
+        return try {
+            ApiResult(
+                data = result.data?.data?.toProfileInfo(),
+                error = result.error
+            )
+        } catch (e: Exception) {
+            ApiResult(error = e.extractError())
+        }
     }
 
     override suspend fun logout(token: String) {

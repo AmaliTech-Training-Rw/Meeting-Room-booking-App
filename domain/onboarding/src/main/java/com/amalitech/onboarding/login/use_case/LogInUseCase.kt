@@ -1,7 +1,7 @@
 package com.amalitech.onboarding.login.use_case
 
 import com.amalitech.core.util.ApiResult
-import com.amalitech.onboarding.login.model.UserProfile
+import com.amalitech.core.domain.model.UserProfile
 import com.amalitech.onboarding.repository.OnboardingRepository
 
 class LogInUseCase(private val repos: OnboardingRepository) {

@@ -7,7 +7,7 @@ import com.amalitech.core.util.Response
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.UiState
 import com.amalitech.onboarding.MainDispatcherRule
-import com.amalitech.onboarding.login.model.UserProfile
+import com.amalitech.core.domain.model.UserProfile
 import com.amalitech.onboarding.login.use_case.LoginUseCasesWrapper
 import com.amalitech.user.profile.use_case.ProfileUseCaseWrapper
 import io.mockk.coEvery
