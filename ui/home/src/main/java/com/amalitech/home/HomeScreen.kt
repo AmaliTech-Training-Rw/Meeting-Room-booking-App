@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.BookingAppTab
+import com.amalitech.core_ui.components.EmptyListScreen
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.components.SearchIcon
@@ -36,6 +37,7 @@ import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.CustomBackHandler
 import com.amalitech.home.calendar.CalendarScreen
 import com.amalitech.home.room.components.RoomItem
+import com.amalitech.ui.home.R
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -153,6 +155,8 @@ fun HomeScreen(
                             Spacer(modifier = Modifier.height(spacing.spaceSmall))
                         }
                     }
+                    if (items.isEmpty() && !uiState.loading)
+                        EmptyListScreen(item = stringResource(R.string.room))
                     if (uiState.loading)
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }

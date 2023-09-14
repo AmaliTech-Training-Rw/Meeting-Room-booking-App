@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.booking.requests.components.BookingRequestItem
 import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.EmptyListScreen
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.components.SearchIcon
@@ -111,5 +112,7 @@ fun BookingHistoryScreen(
         }
         if (uiState.isLoading)
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        if (bookings.isEmpty() && !uiState.isLoading)
+            EmptyListScreen(item = stringResource(R.string.booking_history_item))
     }
 }

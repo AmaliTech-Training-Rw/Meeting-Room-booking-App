@@ -16,4 +16,7 @@
     <string name="invited_people">Invited people</string>
     <string name="note">Note</string>
     <string name="booking_history">Booking History</string>
+    <string name="booking_requests">booking requests</string>
+    <string name="booking_history_item">booking history</string>
+    <string name="booking">booking</string>
 </resources>

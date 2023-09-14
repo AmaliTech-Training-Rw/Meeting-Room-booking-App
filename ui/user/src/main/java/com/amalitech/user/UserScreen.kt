@@ -78,6 +78,7 @@ import coil.compose.AsyncImage
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.BookMeetingRoomDropDown
 import com.amalitech.core_ui.components.DefaultButton
+import com.amalitech.core_ui.components.EmptyListScreen
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.components.SearchIcon
@@ -485,6 +486,8 @@ fun UsersList(
                 )
             })
         }
+        if (users.isEmpty() && !state.loading)
+            EmptyListScreen(item = stringResource(R.string.user))
         if (state.loading)
             CircularProgressIndicator(Modifier.align(Alignment.Center))
     }

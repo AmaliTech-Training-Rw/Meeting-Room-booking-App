@@ -25,6 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.booking.model.Booking
 import com.amalitech.booking.requests.components.BookingRequestCard
 import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.EmptyListScreen
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.components.SearchIcon
@@ -126,5 +127,7 @@ fun BookingRequestScreen(
                 }
             }
         }
+        if (uiState.bookings.isEmpty() && !uiState.isLoading)
+            EmptyListScreen(item = stringResource(R.string.booking_requests))
     }
 }

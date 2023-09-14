@@ -29,4 +29,6 @@
     <string name="up_to_people">up to %d people</string>
     <string name="clear">Clear</string>
     <string name="profile_image">Profile Image</string>
+    <string name="the_list_is_empty">The list is empty</string>
+    <string name="no_item_found_retry">No %s found, please try later</string>
 </resources>
