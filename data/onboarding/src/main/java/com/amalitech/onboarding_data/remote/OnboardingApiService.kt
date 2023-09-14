@@ -29,7 +29,8 @@ interface OnboardingApiService {
     suspend fun createUser(
         @Query("username") username: String,
         @Query("password") password: String,
-        @Query("confirm_password") confirmPassword: String,
+        @Query("password_confirmation") confirmPassword: String,
+        @Header("Accept") type: String,
         @Header("Authorization") token: String,
     ): Response<CreateOrganizationDto>
 

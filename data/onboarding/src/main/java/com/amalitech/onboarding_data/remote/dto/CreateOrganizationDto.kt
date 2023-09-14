@@ -5,9 +5,9 @@ import com.amalitech.onboarding.signup.model.CreateOrganization
 data class CreateOrganizationDto(
     val `data`: CreateOrganizationData? = null,
     val message: String? = null,
-    val status: Boolean,
+    val status: Boolean?,
 ) {
     fun toCreateOrganization(): CreateOrganization {
-        return CreateOrganization(status)
+        return CreateOrganization(status ?: false)
     }
 }

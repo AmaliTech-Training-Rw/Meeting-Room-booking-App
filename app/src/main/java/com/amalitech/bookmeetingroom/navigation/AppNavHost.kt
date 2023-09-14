@@ -1,6 +1,5 @@
 package com.amalitech.bookmeetingroom.navigation
 
-import android.content.Intent
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -31,7 +30,6 @@ import com.amalitech.onboarding.login.LoginScreen
 import com.amalitech.onboarding.login.LoginViewModel
 import com.amalitech.onboarding.reset_password.ResetPasswordScreen
 import com.amalitech.onboarding.reset_password.ResetPasswordViewModel
-import com.amalitech.onboarding.signup.NavArguments
 import com.amalitech.onboarding.signup.SignupScreen
 import com.amalitech.onboarding.splash_screen.SplashScreen
 import com.amalitech.rooms.book_room.BookRoomScreen
@@ -143,25 +141,18 @@ fun NavGraphBuilder.onboardingGraph(
             )
         }
 
+        val uriSecured = "https://api.meeting-room.amalitech-dev.net"
+        val uriUnsecured = "http://api.meeting-room.amalitech-dev.net"
         composable(
-            Route.SIGNUP,
+            "${Route.SIGNUP}?token={token}",
             deepLinks = listOf(
                 navDeepLink {
-                    uriPattern =
-                        "http://api.meeting-room.amalitech-dev.net/user/invite/api/${NavArguments.token}"
-                    action = Intent.ACTION_VIEW
+                    uriPattern = "$uriSecured/user/invite/api/{token}"
                 },
                 navDeepLink {
                     uriPattern =
-                        "https://api.meeting-room.amalitech-dev.net/user/invite/api/${NavArguments.token}"
-                    action = Intent.ACTION_VIEW
+                        "$uriUnsecured/user/invite/api/{token}"
                 }
-            ),
-            arguments = listOf(
-                navArgument(NavArguments.token) {
-                    type = NavType.StringType
-                    defaultValue = ""
-                },
             )
         ) { entry ->
             SignupScreen(

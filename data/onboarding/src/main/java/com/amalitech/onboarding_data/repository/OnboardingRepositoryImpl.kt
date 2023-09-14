@@ -71,7 +71,8 @@ class OnboardingRepositoryImpl(
                     username,
                     password,
                     passwordConfirmation,
-                    token
+                    ": application/json",
+                    ": Bearer $token"
                 )
             }, extractError = { jsonObject ->
                 extractError(jsonObject)
