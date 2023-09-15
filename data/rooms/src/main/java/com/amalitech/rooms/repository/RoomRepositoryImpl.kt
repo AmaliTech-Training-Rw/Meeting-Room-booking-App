@@ -12,7 +12,9 @@ import com.amalitech.core.util.extractError
 import com.amalitech.core.util.getUiText
 import com.amalitech.rooms.model.Time
 import com.amalitech.rooms.remote.RoomsApiService
+import com.amalitech.rooms.remote.dto.BookingTimeDto
 import com.amalitech.rooms.remote.dto.IntervalHour
+import com.google.gson.Gson
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.time.LocalDate
@@ -181,17 +183,20 @@ class RoomRepositoryImpl(
         intervalHour: List<Time>
     ): ApiResult<List<Time>> {
         val time = DateConverter.timeToString(startTime)
+        val gson = Gson()
+        val jsonObject = gson.toJson(
+            BookingTimeDto(intervalHour.map {
+            IntervalHour(
+                active = it.isAvailable,
+                hour = DateConverter.timeToString(it.time)
+            )
+        }))
 
         val result = safeApiCall(
             apiToBeCalled = {
                 api.getEndTimes(
                     time = time,
-                    interval = intervalHour.map {
-                        IntervalHour(
-                            active = it.isAvailable,
-                            hour = DateConverter.timeToString(it.time)
-                        )
-                    })
+                    interval = jsonObject)
             },
             extractError = {
                 extractError(it)
@@ -201,7 +206,7 @@ class RoomRepositoryImpl(
             ApiResult(
                 result.data?.intervalHours?.map {
                     Time(
-                        time = DateConverter.stringToTime(it.hour),
+                        time = DateConverter.timeStringToLocalTime(it.hour),
                         isAvailable = it.active
                     )
                 },

@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter
 
 object DateConverter {
     private val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-    private val timeFormat = DateTimeFormatter.ofPattern("HH:mm")
     private val dateStringFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     private val timeStringFormat = DateTimeFormatter.ofPattern("HH:mm:ss")
     fun stringToDate(date: String): LocalDate {
@@ -26,6 +25,6 @@ object DateConverter {
     }
 
     fun timeStringToLocalTime(time: String): LocalTime {
-        return LocalTime.parse(time, timeFormat)
+        return LocalTime.parse(time, timeStringFormat)
     }
 }
