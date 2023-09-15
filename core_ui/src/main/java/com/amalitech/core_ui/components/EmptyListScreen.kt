@@ -3,7 +3,10 @@ package com.amalitech.core_ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -14,7 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import com.amalitech.core_ui.R
+import com.amalitech.core_ui.theme.LocalSpacing
 
 @Composable
 fun EmptyListScreen(
@@ -25,6 +30,7 @@ fun EmptyListScreen(
     iconColor: Color = MaterialTheme.colorScheme.primary,
     icon: Painter = painterResource(id = R.drawable.empty_set)
 ) {
+    val spacing = LocalSpacing.current
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -35,11 +41,13 @@ fun EmptyListScreen(
         Icon(
             painter = icon,
             contentDescription = stringResource(id = R.string.the_list_is_empty),
-            tint = iconColor
+            tint = iconColor,
+            modifier = Modifier.size(spacing.spaceExtraLarge)
         )
+        Spacer(Modifier.height(spacing.spaceMedium))
         Text(
             text = stringResource(R.string.the_list_is_empty),
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
             color = textColor
         )
         Text(

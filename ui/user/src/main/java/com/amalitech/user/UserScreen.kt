@@ -387,7 +387,7 @@ fun UsersList(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Would you like to delete the user?"
+                        text = stringResource(R.string.would_you_like_to_delete_the_user)
                     )
                     Spacer(modifier = Modifier.height(spacing.spaceMedium))
 
@@ -536,7 +536,6 @@ fun UserItem(
             modifier = Modifier
                 .clip(CircleShape)
                 .weight(0.5f),
-//            error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
             placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
             contentScale = ContentScale.Crop
         )
@@ -548,7 +547,7 @@ fun UserItem(
                 .weight(2f)
         ) {
             Text(
-                text = user.username,
+                text = user.fullName,
                 modifier = Modifier,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
