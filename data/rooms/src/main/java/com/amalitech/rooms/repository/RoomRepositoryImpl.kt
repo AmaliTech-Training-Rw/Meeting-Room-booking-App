@@ -8,10 +8,20 @@ import com.amalitech.core.util.ApiResult
 import com.amalitech.core.util.DateConverter
 import com.amalitech.core.util.FileUtil
 import com.amalitech.core.util.UiText
+import com.amalitech.core.util.extractError
 import com.amalitech.core.util.getUiText
+import com.amalitech.rooms.model.Time
 import com.amalitech.rooms.remote.RoomsApiService
+import com.amalitech.rooms.remote.dto.IntervalHour
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.time.LocalDate
+import java.time.LocalTime
 
 
 class RoomRepositoryImpl(
@@ -143,6 +153,68 @@ class RoomRepositoryImpl(
             }
         )
         return result.error
+    }
+
+    override suspend fun getStartTime(roomId: String, date: LocalDate): ApiResult<List<Time>> {
+        val stringDate = DateConverter.dateToString(date)
+
+        val result = safeApiCall(
+            apiToBeCalled = {
+                api.getStartTimes(roomId.toIntOrNull() ?: -1, stringDate)
+            },
+            extractError = {
+                extractError(it)
+            }
+        )
+        return try {
+            ApiResult(
+                result.data?.intervalHours?.map {
+                    Time(
+                        time = DateConverter.timeStringToLocalTime(it.hour),
+                        isAvailable = it.active
+                    )
+                },
+                result.error
+            )
+        } catch (e: Exception) {
+            ApiResult(error = e.extractError())
+        }
+    }
+
+    override suspend fun getEndTime(
+        startTime: LocalTime,
+        intervalHour: List<Time>
+    ): ApiResult<List<Time>> {
+        val time = DateConverter.timeToString(startTime)
+
+        val result = safeApiCall(
+            apiToBeCalled = {
+                api.getEndTimes(
+                    time = time,
+                    interval = intervalHour.map {
+                        IntervalHour(
+                            active = it.isAvailable,
+                            hour = DateConverter.timeToString(it.time)
+                        )
+                    })
+            },
+            extractError = {
+                extractError(it)
+            }
+        )
+        return try {
+            ApiResult(
+                result.data?.intervalHours?.map {
+                    Time(
+                        time = DateConverter.stringToTime(it.hour),
+                        isAvailable = it.active
+                    )
+                },
+                result.error
+            )
+        } catch (e: Exception) {
+            ApiResult(error = e.extractError())
+        }
     }
 
     private fun saveBitmapToFile(file: File): File {

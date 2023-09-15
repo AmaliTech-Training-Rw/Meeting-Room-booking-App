@@ -6,5 +6,7 @@ import com.amalitech.rooms.usecase.FindRoomUseCase
 data class BookRoomUseCasesWrapper(
     val getRoomUseCase: FindRoomUseCase,
     val validateEmailUseCase: ValidateEmailUseCase,
-    val bookRoomUseCase: BookRoomUseCase
+    val bookRoomUseCase: BookRoomUseCase,
+    val getStartTimeUseCase: GetStartTimeUseCase,
+    val getEndTimeUseCase: GetEndTimeUseCase,
 )

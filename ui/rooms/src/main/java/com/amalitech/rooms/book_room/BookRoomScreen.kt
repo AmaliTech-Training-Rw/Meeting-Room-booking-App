@@ -176,7 +176,7 @@ fun BookRoomScreen(
                             viewModel = viewModel,
                             userInput = userInput,
                             onSelectStartTimeClick = {
-                                viewModel.onShowStartTimesRequest()
+                                viewModel.onShowStartTimesRequest(roomId ?: "")
                             }
                         ) {
                             viewModel.onShowEndTimeRequest()

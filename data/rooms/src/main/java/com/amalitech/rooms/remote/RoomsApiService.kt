@@ -3,6 +3,8 @@ package com.amalitech.rooms.remote
 import com.amalitech.core.data.data_source.remote.dto.ApiSuccessResponseDto
 import com.amalitech.core.data.data_source.remote.dto.FindRoomDto
 import com.amalitech.core.data.data_source.remote.dto.RoomsDto
+import com.amalitech.rooms.remote.dto.BookingTimeDto
+import com.amalitech.rooms.remote.dto.IntervalHour
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.DELETE
@@ -55,4 +57,16 @@ interface RoomsApiService {
         @Query("emails[]") invited: List<String>,
         @Query("note") note: String
     ): Response<ApiSuccessResponseDto>
+
+    @POST("hours/{id}")
+    suspend fun getStartTimes(
+        @Path("id") roomId: Int,
+        @Query("date") date: String
+    ): Response<BookingTimeDto>
+
+    @POST("/hours/endtime")
+    suspend fun getEndTimes(
+        @Query("start_time") time: String,
+        @Query("intervalHours") interval: List<IntervalHour>
+    ): Response<BookingTimeDto>
 }
