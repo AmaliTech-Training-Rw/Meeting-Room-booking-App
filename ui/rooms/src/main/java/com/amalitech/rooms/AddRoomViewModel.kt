@@ -110,10 +110,13 @@ class AddRoomViewModel(
 
     fun onAddFeature() {
         _uiState.update {
-            it.copy(
-                features = it.features + it.feature.trim(),
-                feature = ""
-            )
+            if (it.feature.length >= 3)
+                it.copy(
+                    features = it.features + it.feature.trim(),
+                    feature = ""
+                )
+            else
+                it.copy(error = UiText.StringResource(com.amalitech.ui.rooms.R.string.error_feature_length_short))
         }
     }
 

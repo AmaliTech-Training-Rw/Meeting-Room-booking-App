@@ -34,4 +34,5 @@
     <string name="remove_feature">Remove feature</string>
     <string name="error_image_should_be_less_or_equal_to_three">Error image should be less or equal to three (3)</string>
     <string name="room">room</string>
+    <string name="error_feature_length_short">The feature must be at least 3 characters</string>
 </resources>
