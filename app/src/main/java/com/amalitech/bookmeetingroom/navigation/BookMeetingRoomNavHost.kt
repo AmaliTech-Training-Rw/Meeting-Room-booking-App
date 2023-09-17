@@ -111,19 +111,19 @@ fun BookMeetingRoomNavHost(
         composable(route = NavigationItem.Profile.route) {
             ProfileScreen(
                 appState = appState,
+                showSnackBar = {
+                    scope.launch {
+                        appState.snackbarHostState.showSnackbar(it)
+                    }
+                },
+                onNavigateToLogin = {
+                    mainNavController.navigateToLogin()
+                },
                 navigateToProfileScreen = { },
                 onNavigateBack = { navigateToDashboard(appState) },
                 onComposing = onComposing,
                 onUpdateProfileClick = { email ->
                     appState.navController.navigate("${NavigationItem.UpdateProfile.route}/$email")
-                },
-                onNavigateToLogin = {
-                    mainNavController.navigateToLogin()
-                },
-                showSnackBar = {
-                    scope.launch {
-                        appState.snackbarHostState.showSnackbar(it)
-                    }
                 }
             ) { goToAdmin ->
                 if (goToAdmin)
@@ -183,8 +183,8 @@ fun BookMeetingRoomNavHost(
                 navigateUp = {
                     onFinishActivity()
                 },
-                navigateToBookingsHistoryScreen = {
-                    appState.navController.navigate(NavigationItem.BookingHistory.route) {
+                navigateToBookingsScreen = {
+                    appState.navController.navigate(NavigationItem.BookingRequests.route) {
                         popToDashboard()
                     }
                 },

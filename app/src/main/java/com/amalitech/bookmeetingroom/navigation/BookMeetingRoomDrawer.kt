@@ -1,4 +1,4 @@
-package com.amalitech.core_ui.components.drawer
+package com.amalitech.bookmeetingroom.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +21,7 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
+import com.amalitech.core.util.UserInfo
 import com.amalitech.core_ui.CoreViewModel
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
@@ -118,22 +120,21 @@ fun DrawerNavigationItem(
 fun DrawerHeader(
     viewModel: CoreViewModel = koinViewModel()
 ) {
-    val url by viewModel.userProfileImgUrl
-    val name by viewModel.userFullName
+    val userInfo by viewModel.userInfo.collectAsState(UserInfo())
     Column(
         modifier = Modifier.padding(8.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AsyncImage(
-            model = url,
+            model = userInfo.url,
             contentDescription = stringResource(R.string.profile_image),
             modifier = Modifier
                 .size(112.dp)
                 .clip(CircleShape)
         )
         Spacer(Modifier.height(12.dp))
-        Text(name, color = MaterialTheme.colorScheme.onBackground)
+        Text(userInfo.name, color = MaterialTheme.colorScheme.onBackground)
         Spacer(Modifier.height(12.dp))
         Divider(
             modifier = Modifier

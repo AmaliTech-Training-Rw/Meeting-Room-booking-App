@@ -40,7 +40,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.amalitech.core_ui.CoreViewModel
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.DefaultButton
 import com.amalitech.core_ui.components.NavigationButton
@@ -58,7 +57,6 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ProfileScreen(
     appState: BookMeetingRoomAppState? = null,
-    coreViewModel: CoreViewModel = koinViewModel(),
     viewModel: ProfileViewModel = koinViewModel(),
     showSnackBar: (message: String) -> Unit,
     onNavigateToLogin: () -> Unit,
@@ -112,7 +110,6 @@ fun ProfileScreen(
             )
         )
         viewModel.getUser()
-        coreViewModel.loadUserInfos()
     }
     LaunchedEffect(key1 = uiState) {
         when (uiState) {

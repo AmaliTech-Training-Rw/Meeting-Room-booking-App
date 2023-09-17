@@ -7,6 +7,7 @@ import com.amalitech.core.util.UiText
 import com.amalitech.user.models.User
 import com.amalitech.user.models.UserToAdd
 import com.amalitech.user.profile.model.Profile
+import com.amalitech.core.util.UserInfo
 import com.amalitech.user.profile.model.dto.UserDto
 import kotlinx.coroutines.flow.Flow
 
@@ -24,4 +25,6 @@ interface UserRepository {
     suspend fun updateProfile(profile: Profile, context: Context): ApiResult<UserProfile>
 
     suspend fun logout(token: String)
+
+    val userInfo: Flow<UserInfo>
 }

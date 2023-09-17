@@ -3,6 +3,7 @@ package com.amalitech.user.repository
 import android.content.Context
 import com.amalitech.core.data.repository.BaseRepo
 import com.amalitech.core.domain.model.UserProfile
+import com.amalitech.core.domain.preferences.OnboardingSharedPreferences
 import com.amalitech.core.util.ApiResult
 import com.amalitech.core.util.FileUtil
 import com.amalitech.core.util.UiText
@@ -13,6 +14,7 @@ import com.amalitech.user.data_source.remote.UsersListDto
 import com.amalitech.user.models.User
 import com.amalitech.user.models.UserToAdd
 import com.amalitech.user.profile.model.Profile
+import com.amalitech.core.util.UserInfo
 import com.amalitech.user.profile.model.dto.UserDto
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +25,8 @@ import java.io.File
 
 class UserRepositoryImpl(
     private val dao: UserDao,
-    private val api: UserApiService
+    private val api: UserApiService,
+    private val sharedPreferences: OnboardingSharedPreferences
 ) : UserRepository, BaseRepo() {
     override suspend fun getUser(email: String): UserDto {
         return dao.getUser(email)
@@ -153,6 +156,14 @@ class UserRepositoryImpl(
                 extractError(it)
             }
         )
+    }
+
+    override val userInfo: Flow<UserInfo> = flow {
+        while (true) {
+            val result = dao.getUser(sharedPreferences.loadLoggedInUserEmail())
+            emit(UserInfo("${result.firstName} ${result.lastName}", result.profileImgUrl))
+            delay(1000)
+        }
     }
 //    override suspend fun updateProfile(profile: Profile) {
 //        // TODO("Save in the API and use the profile"

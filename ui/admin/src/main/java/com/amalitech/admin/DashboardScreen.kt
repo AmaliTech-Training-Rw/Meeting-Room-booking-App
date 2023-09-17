@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.admin.components.DashBoardCard
 import com.amalitech.admin.components.DashboardBarGraph
+import com.amalitech.core.util.UserInfo
 import com.amalitech.core_ui.CoreViewModel
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.NavigationButton
@@ -37,7 +39,7 @@ fun DashboardScreen(
     viewModel: DashboardViewModel = koinViewModel(),
     navigateToUsersScreen: () -> Unit,
     navigateToRoomsScreen: () -> Unit,
-    navigateToBookingsHistoryScreen: () -> Unit,
+    navigateToBookingsScreen: () -> Unit,
     onOpenDrawer: () -> Unit,
     onComposing: (AppBarState) -> Unit,
     navigateUp: () -> Unit,
@@ -46,7 +48,7 @@ fun DashboardScreen(
     val spacing = LocalSpacing.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val userName by coreViewModel.userFullName
+    val userInfo by coreViewModel.userInfo.collectAsState(UserInfo())
     val title = stringResource(id = com.amalitech.core_ui.R.string.dashboard)
 
     CustomBackHandler(appState = appState, onComposing = onComposing) {
@@ -85,7 +87,7 @@ fun DashboardScreen(
             .padding(spacing.spaceMedium)
     ) {
         Column {
-            Text(text = stringResource(id = R.string.welcome_firstname, userName))
+            Text(text = stringResource(id = R.string.welcome_firstname, userInfo.name))
             Spacer(Modifier.height(spacing.spaceMedium))
             DashBoardCard(
                 DashboardCardItem(
@@ -114,7 +116,7 @@ fun DashboardScreen(
                     iconId = R.drawable.baseline_calendar_month_24
                 ),
                 highlightColor = MaterialTheme.colorScheme.tertiaryContainer,
-                onClick = navigateToBookingsHistoryScreen
+                onClick = navigateToBookingsScreen
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
             if (!uiState.loading)
