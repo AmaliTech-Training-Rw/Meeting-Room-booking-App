@@ -58,6 +58,8 @@ open class BaseRepo {
         try {
             val responseBody = errorBody?.string()
             responseBody?.let {
+                if (it.contains("html"))
+                    return UiText.StringResource(R.string.data_size_too_large_kindly_select_smaller_size_images)
                 val jsonObject = JSONObject(responseBody)
                 return extractError(jsonObject) ?: UiText.StringResource(R.string.error_default_message)
             }

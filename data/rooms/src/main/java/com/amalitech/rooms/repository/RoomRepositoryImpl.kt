@@ -99,8 +99,8 @@ class RoomRepositoryImpl(
                                 roomName = room.name,
                                 capacity = room.capacity,
                                 locationId = room.location,
-                                features = room.features,
-                                image = image
+                                image = image,
+                                *room.features.toTypedArray()
                             )
                         },
                         extractError = {

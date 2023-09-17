@@ -131,7 +131,7 @@ fun RoomListScreen(
                         searchQuery = query,
                         onSearch = { viewModel.onSearch() },
                         onSearchQueryChange = {
-                                              viewModel.onNewSearchQuery(it)
+                            viewModel.onNewSearchQuery(it)
                         },
                         isSearchTextFieldVisible = isSearchVisible,
                         onSearchTextFieldVisibilityChanged = {
@@ -167,7 +167,7 @@ fun RoomListScreen(
                     verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)
                 ) {
                     rooms?.let { rooms ->
-                        items(rooms) { room ->
+                        items(rooms, key = { it.roomName }) { room ->
                             RoomCard(
                                 room = room,
                                 modifier = Modifier.height(150.dp),
@@ -183,7 +183,10 @@ fun RoomListScreen(
                     }
                 }
                 if (rooms.isNullOrEmpty()) {
-                    EmptyListScreen(item = stringResource(R.string.room), modifier = Modifier.fillMaxSize())
+                    EmptyListScreen(
+                        item = stringResource(R.string.room),
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
 

@@ -334,14 +334,14 @@ fun NavGraphBuilder.mainNavGraph(
         ) { backStackEntry ->
             val email = backStackEntry.arguments?.getString("email") ?: ""
             UpdateProfileScreen(
-                onComposing = onComposing,
                 email = email,
                 showSnackBar = {
                     scope.launch {
                         snackbarHostState.showSnackbar(it)
                     }
                 },
-                onNavigateBack = { navController.navigateUp() }
+                onNavigateBack = { navController.navigateUp() },
+                onComposing = onComposing
             )
         }
     }

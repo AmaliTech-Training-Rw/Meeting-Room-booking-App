@@ -394,7 +394,7 @@ fun AddRoomScreen(
             ) {
                 item {
                     RoomTextField(
-                        placeholder = stringResource(R.string.add_room),
+                        placeholder = stringResource(R.string.add_name),
                         value = state.name,
                         onValueChange = {
                             viewModel.onRoomName(it)

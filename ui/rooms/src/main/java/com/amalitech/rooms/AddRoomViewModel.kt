@@ -59,7 +59,7 @@ class AddRoomViewModel(
 
     fun onRoomImages(images: List<Uri>) {
         _uiState.update { addRoomUiState ->
-            if (addRoomUiState.imagesList.size + images.size < 3)
+            if (addRoomUiState.imagesList.size + images.size <= 3)
                 addRoomUiState.copy(
                     imagesList = (addRoomUiState.imagesList + images).toMutableList()
                 ) else

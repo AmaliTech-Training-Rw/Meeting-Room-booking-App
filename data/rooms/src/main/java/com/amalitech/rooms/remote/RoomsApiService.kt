@@ -27,8 +27,8 @@ interface RoomsApiService {
         @Query("name") roomName: String,
         @Query("capacity") capacity: Int,
         @Query("location_id") locationId: Int,
-        @Query("features[]") features: List<String>,
-        @Part image: List<MultipartBody.Part>
+        @Part image: List<MultipartBody.Part>,
+        @Query("features[]") vararg features: String
     ): Response<ApiSuccessResponseDto>
 
     @Multipart

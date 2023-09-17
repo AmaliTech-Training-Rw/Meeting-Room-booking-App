@@ -13,7 +13,7 @@ import retrofit2.http.Query
 
 interface UserApiService {
     @GET("logout")
-    suspend fun logout(): Response<String>
+    suspend fun logout(): Response<ApiSuccessResponseDto>
 
     @GET("users")
     suspend fun fetchAllUsers(): Response<UsersListDto>

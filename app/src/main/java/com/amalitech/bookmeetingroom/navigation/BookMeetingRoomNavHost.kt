@@ -221,14 +221,14 @@ fun BookMeetingRoomNavHost(
         ) { backStackEntry ->
             val email = backStackEntry.arguments?.getString("email") ?: ""
             UpdateProfileScreen(
-                onComposing = onComposing,
                 email = email,
                 showSnackBar = {
                     scope.launch {
                         appState.snackbarHostState.showSnackbar(it)
                     }
                 },
-                onNavigateBack = { appState.navController.navigateUp() }
+                onNavigateBack = { appState.navController.navigateUp() },
+                onComposing = onComposing
             )
         }
 
