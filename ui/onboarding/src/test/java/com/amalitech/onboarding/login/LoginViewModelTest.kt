@@ -108,6 +108,7 @@ class LoginViewModelTest {
         justRun {
             sharedPreferences.saveShouldShowOnboarding(any())
         }
+        justRun { sharedPreferences.saveAdminUserScreen(any()) }
         coEvery { loginUseCasesWrapper.loadProfileInformationUseCase(any()) } returns Response(
             data = UserProfile(
                 email = "email",
