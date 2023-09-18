@@ -87,6 +87,7 @@ class HomeViewModel(
             _uiState.value = _uiState.value.copy(loading = true)
             val result = homeUseCase.fetchRoomsUseCase()
             result.data?.let {
+                roomsCopy = it
                 _uiState.value = _uiState.value.copy(rooms = it, loading = false)
             }
             result.error?.let {

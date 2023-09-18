@@ -3,7 +3,6 @@ package com.amalitech.rooms
 import com.amalitech.core.data.model.Room
 import com.amalitech.core.util.ApiResult
 import com.amalitech.core.util.UiText
-import com.amalitech.core_ui.util.UiState
 import com.amalitech.rooms.usecase.RoomUseCaseWrapper
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -92,8 +91,8 @@ class RoomViewModelTest {
 
         viewModel.fetchRooms()
 
-        assertEquals(true, viewModel.uiStateFlow.value is UiState.Success)
-        assertEquals(rooms, (viewModel.uiStateFlow.value as UiState.Success).data)
+        assertEquals(false, viewModel.uiState.value.loading)
+        assertEquals(rooms, viewModel.uiState.value.rooms)
     }
 
     @Test
@@ -105,8 +104,8 @@ class RoomViewModelTest {
 
         viewModel.fetchRooms()
 
-        assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(error, (viewModel.uiStateFlow.value as UiState.Error).error)
+        assertEquals(false, viewModel.uiState.value.loading)
+        assertEquals(error, viewModel.uiState.value.error)
     }
 
     @Test
@@ -118,8 +117,8 @@ class RoomViewModelTest {
 
         viewModel.deleteRoom(rooms.first())
 
-        assertEquals(true, viewModel.uiStateFlow.value is UiState.Error)
-        assertEquals(error, (viewModel.uiStateFlow.value as UiState.Error).error)
+        assertEquals(true, viewModel.uiState.value.error != null)
+        assertEquals(error, viewModel.uiState.value.error)
     }
 
 
@@ -134,7 +133,7 @@ class RoomViewModelTest {
 
         viewModel.deleteRoom(rooms.first())
 
-        assertEquals(true, viewModel.uiStateFlow.value is UiState.Success)
-        assertEquals(rooms, (viewModel.uiStateFlow.value as UiState.Success).data)
+        assertEquals(false, viewModel.uiState.value.loading)
+        assertEquals(rooms, viewModel.uiState.value.rooms)
     }
 }

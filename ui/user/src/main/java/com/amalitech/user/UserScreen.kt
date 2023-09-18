@@ -275,7 +275,8 @@ fun UserScreen(
                         addUserViewModel.onSelectedLocation(it)
                     },
                     onIsExpandedStateChange = { isLocationDropDownExpanded = it },
-                    selectedItem = addUserState.locations.find { addUserState.selectLocation == it.id }?.name ?: "",
+                    selectedItem = addUserState.locations.find { addUserState.selectLocation == it.id }?.name
+                        ?: "",
                     focusManager = focusManager,
                     com.amalitech.core.R.string.location,
                 ) { isLocationDropDownExpanded = it }
@@ -426,7 +427,7 @@ fun UsersList(
             modifier = modifier
                 .fillMaxHeight()
         ) {
-            items(items = users, itemContent = { item ->
+            items(items = users, key = { it.email }, itemContent = { item ->
                 var isLeftContentVisible by rememberSaveable {
                     mutableStateOf(false)
                 }
@@ -444,10 +445,9 @@ fun UsersList(
                     onSwipeEnd = { direction ->
                         when (direction) {
                             SwipeDirection.LEFT -> {
-                                if (isRightContentVisible){
+                                if (isRightContentVisible) {
                                     isRightContentVisible = false
-                                }
-                                else
+                                } else
                                     isLeftContentVisible = false
                             }
 
@@ -577,8 +577,7 @@ fun UserItem(
             modifier = Modifier
                 .clip(RoundedCornerShape(spacing.spaceExtraSmall))
                 .background(activeTextBg)
-                .padding(horizontal = spacing.spaceSmall, vertical = spacing.spaceExtraSmall)
-            ,
+                .padding(horizontal = spacing.spaceSmall, vertical = spacing.spaceExtraSmall),
             style = TextStyle(
                 color = activeTextColor,
                 fontSize = 12.sp,

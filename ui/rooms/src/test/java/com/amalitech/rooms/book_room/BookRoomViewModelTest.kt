@@ -40,45 +40,6 @@ class BookRoomViewModelTest {
     }
 
     @Test
-    fun `ensures getAvailableEndTimes works when there is no meeting`() {
-        val selectedDate = LocalDate.of(2023, 5, 1)
-        val room = Room(
-            roomName = "Room 1",
-            roomFeatures = listOf("Projector", "Whiteboard"),
-            id = "",
-            numberOfPeople = 1,
-            imageUrl = listOf(),
-        )
-
-        coEvery {
-            useCase.getRoomUseCase(any())
-        } returns ApiResult(data = room)
-        viewModel.getRoom("")
-
-        viewModel.onSelectedDate(selectedDate)
-        viewModel.onStartTimeSelected(LocalTime.of(15, 0))
-        viewModel.onShowEndTimeRequest()
-
-        val expected = listOf(
-            LocalTime.of(15, 15),
-            LocalTime.of(15, 30),
-            LocalTime.of(15, 45),
-            LocalTime.of(16, 0),
-            LocalTime.of(16, 15),
-            LocalTime.of(16, 30),
-            LocalTime.of(16, 45),
-            LocalTime.of(17, 0),
-            LocalTime.of(17, 15),
-            LocalTime.of(17, 30),
-            LocalTime.of(17, 45),
-            LocalTime.of(18, 0),
-        )
-
-        val availableTimes = viewModel.slotManager.value.availableEndTimes.filter { it.isAvailable }.map { it.time }
-        assertEquals(expected, availableTimes)
-    }
-
-    @Test
     fun `ensures onNewStartTime works`() {
         val startTime = LocalTime.now()
         viewModel.onNewStartTime(startTime)

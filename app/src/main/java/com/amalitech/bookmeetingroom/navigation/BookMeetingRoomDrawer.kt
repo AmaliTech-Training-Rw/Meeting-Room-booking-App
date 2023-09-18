@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -131,7 +132,8 @@ fun DrawerHeader(
             contentDescription = stringResource(R.string.profile_image),
             modifier = Modifier
                 .size(112.dp)
-                .clip(CircleShape)
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop
         )
         Spacer(Modifier.height(12.dp))
         Text(userInfo.name, color = MaterialTheme.colorScheme.onBackground)

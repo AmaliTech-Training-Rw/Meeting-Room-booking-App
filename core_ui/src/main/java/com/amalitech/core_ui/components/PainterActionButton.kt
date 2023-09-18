@@ -1,10 +1,13 @@
 package com.amalitech.core_ui.components
 
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
 import com.amalitech.core.util.UserInfo
@@ -25,6 +28,8 @@ fun PainterActionButton(
             model = userInfo.url,
             contentDescription = contentDescription,
             modifier = modifier
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop
         )
     }
 }

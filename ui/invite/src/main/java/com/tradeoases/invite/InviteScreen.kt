@@ -151,7 +151,8 @@ fun InvitesItem(
                 fontSize = 16.sp,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
             Spacer(modifier = Modifier.height(spacing.spaceExtraSmall))
             Row {
@@ -161,7 +162,8 @@ fun InvitesItem(
                     fontSize = 12.sp,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
                 Text(
                     // TODO format date and add it
@@ -169,7 +171,8 @@ fun InvitesItem(
                     fontSize = 12.sp,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
             }
             Spacer(modifier = Modifier.height(spacing.spaceSmall))
@@ -182,7 +185,8 @@ fun InvitesItem(
                 fontSize = 12.sp,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
         }
     }
