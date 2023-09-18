@@ -29,7 +29,7 @@ class UserRepositoryImpl(
     private val sharedPreferences: OnboardingSharedPreferences
 ) : UserRepository, BaseRepo() {
     override suspend fun getUser(email: String): UserDto {
-        return dao.getUser(email)
+        return dao.getUser(email) ?: UserDto(-1, "", "", "", "", "")
     }
 
     override suspend fun deleteUser(userId: String): UiText? {
@@ -161,7 +161,9 @@ class UserRepositoryImpl(
     override val userInfo: Flow<UserInfo> = flow {
         while (true) {
             val result = dao.getUser(sharedPreferences.loadLoggedInUserEmail())
-            emit(UserInfo("${result.firstName} ${result.lastName}", result.profileImgUrl))
+            result?.let {
+                emit(UserInfo("${result.firstName} ${result.lastName}", result.profileImgUrl))
+            }
             delay(1000)
         }
     }

@@ -10,7 +10,7 @@ import com.amalitech.user.profile.model.dto.UserDto
 @Dao
 interface UserDao {
     @Query("SELECT * FROM USERDTO WHERE email = :email")
-    suspend fun getUser(email: String): UserDto
+    suspend fun getUser(email: String): UserDto?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveLoggedInUser(userDto: UserDto) {
