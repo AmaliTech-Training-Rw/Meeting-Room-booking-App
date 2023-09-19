@@ -28,7 +28,8 @@ data class UsersData(
             profilePic = url ?: "",
             username = username ?: "",
             email = email ?: "",
-            isActive = active == 1
+            isActive = active == 1,
+            fullName = "$firstName $lastName"
         )
     }
 }

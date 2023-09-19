@@ -3,6 +3,7 @@ package com.amalitech.rooms.remote
 import com.amalitech.core.data.data_source.remote.dto.ApiSuccessResponseDto
 import com.amalitech.core.data.data_source.remote.dto.FindRoomDto
 import com.amalitech.core.data.data_source.remote.dto.RoomsDto
+import com.amalitech.rooms.remote.dto.BookingTimeDto
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.DELETE
@@ -26,8 +27,8 @@ interface RoomsApiService {
         @Query("name") roomName: String,
         @Query("capacity") capacity: Int,
         @Query("location_id") locationId: Int,
-        @Query("features[]") features: List<String>,
-        @Part image: List<MultipartBody.Part>
+        @Part image: List<MultipartBody.Part>,
+        @Query("features[]") vararg features: String
     ): Response<ApiSuccessResponseDto>
 
     @Multipart
@@ -44,4 +45,27 @@ interface RoomsApiService {
 
     @GET("room/find/{id}")
     suspend fun findRoom(@Path("id") id: Int): Response<FindRoomDto>
+
+    @POST("booking/create")
+    suspend fun bookRoom(
+        @Query("room_id") id: Int,
+        @Query("start_date") startDate: String,
+        @Query("end_date") endDate: String,
+        @Query("end_time") endTime: String,
+        @Query("start_time") startTime: String,
+        @Query("emails[]") invited: List<String>,
+        @Query("note") note: String
+    ): Response<ApiSuccessResponseDto>
+
+    @POST("hours/starttime/{id}")
+    suspend fun getStartTimes(
+        @Path("id") roomId: Int,
+        @Query("date") date: String
+    ): Response<BookingTimeDto>
+
+    @POST("hours/endtime")
+    suspend fun getEndTimes(
+        @Query("start_time") time: String,
+        @Query("intervalHours") interval: String
+    ): Response<BookingTimeDto>
 }

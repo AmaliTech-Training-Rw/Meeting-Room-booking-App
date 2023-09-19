@@ -78,6 +78,7 @@ import coil.compose.AsyncImage
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.BookMeetingRoomDropDown
 import com.amalitech.core_ui.components.DefaultButton
+import com.amalitech.core_ui.components.EmptyListScreen
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.components.SearchIcon
@@ -274,7 +275,8 @@ fun UserScreen(
                         addUserViewModel.onSelectedLocation(it)
                     },
                     onIsExpandedStateChange = { isLocationDropDownExpanded = it },
-                    selectedItem = addUserState.locations.find { addUserState.selectLocation == it.id }?.name ?: "",
+                    selectedItem = addUserState.locations.find { addUserState.selectLocation == it.id }?.name
+                        ?: "",
                     focusManager = focusManager,
                     com.amalitech.core.R.string.location,
                 ) { isLocationDropDownExpanded = it }
@@ -386,7 +388,7 @@ fun UsersList(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Would you like to delete the user?"
+                        text = stringResource(R.string.would_you_like_to_delete_the_user)
                     )
                     Spacer(modifier = Modifier.height(spacing.spaceMedium))
 
@@ -425,7 +427,7 @@ fun UsersList(
             modifier = modifier
                 .fillMaxHeight()
         ) {
-            items(items = users, itemContent = { item ->
+            items(items = users, key = { it.email }, itemContent = { item ->
                 var isLeftContentVisible by rememberSaveable {
                     mutableStateOf(false)
                 }
@@ -443,10 +445,9 @@ fun UsersList(
                     onSwipeEnd = { direction ->
                         when (direction) {
                             SwipeDirection.LEFT -> {
-                                if (isRightContentVisible){
+                                if (isRightContentVisible) {
                                     isRightContentVisible = false
-                                }
-                                else
+                                } else
                                     isLeftContentVisible = false
                             }
 
@@ -485,6 +486,8 @@ fun UsersList(
                 )
             })
         }
+        if (users.isEmpty() && !state.loading)
+            EmptyListScreen(item = stringResource(R.string.user))
         if (state.loading)
             CircularProgressIndicator(Modifier.align(Alignment.Center))
     }
@@ -533,7 +536,6 @@ fun UserItem(
             modifier = Modifier
                 .clip(CircleShape)
                 .weight(0.5f),
-            error = painterResource(id = com.amalitech.core_ui.R.drawable.larger_room),
             placeholder = painterResource(id = com.amalitech.core_ui.R.drawable.baseline_refresh_24),
             contentScale = ContentScale.Crop
         )
@@ -545,7 +547,7 @@ fun UserItem(
                 .weight(2f)
         ) {
             Text(
-                text = user.username,
+                text = user.fullName,
                 modifier = Modifier,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -575,8 +577,7 @@ fun UserItem(
             modifier = Modifier
                 .clip(RoundedCornerShape(spacing.spaceExtraSmall))
                 .background(activeTextBg)
-                .padding(horizontal = spacing.spaceSmall, vertical = spacing.spaceExtraSmall)
-            ,
+                .padding(horizontal = spacing.spaceSmall, vertical = spacing.spaceExtraSmall),
             style = TextStyle(
                 color = activeTextColor,
                 fontSize = 12.sp,

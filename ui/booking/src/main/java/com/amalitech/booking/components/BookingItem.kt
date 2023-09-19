@@ -83,14 +83,16 @@ fun BookingItem(
                 text = item.roomName,
                 style = nameTextStyle,
                 color = contentColor,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
             Text(
                 text = stringResource(id = R.string.booking_date, formatDate(item.date)),
                 style = descriptionTextStyle,
                 color = contentColor,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
             Spacer(modifier = Modifier.height(spacing.spaceSmall))
             Text(
@@ -101,7 +103,8 @@ fun BookingItem(
                 ),
                 style = descriptionTextStyle,
                 color = contentColor,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
         }
     }

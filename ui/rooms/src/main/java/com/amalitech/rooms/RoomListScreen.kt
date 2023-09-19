@@ -43,13 +43,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amalitech.core.data.model.Room
 import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.EmptyListScreen
 import com.amalitech.core_ui.components.NavigationButton
 import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.components.SearchIcon
 import com.amalitech.core_ui.state.BookMeetingRoomAppState
 import com.amalitech.core_ui.theme.LocalSpacing
 import com.amalitech.core_ui.util.CustomBackHandler
-import com.amalitech.core_ui.util.UiState
 import com.amalitech.rooms.components.DialogButton
 import com.amalitech.rooms.components.RoomCard
 import com.amalitech.ui.rooms.R
@@ -68,7 +68,7 @@ fun RoomListScreen(
     onNavigateBack: () -> Unit
 ) {
     val spacing = LocalSpacing.current
-    val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var openDialog by remember {
         mutableStateOf(false)
@@ -76,29 +76,19 @@ fun RoomListScreen(
     var selectedRoom: Room? by remember {
         mutableStateOf(null)
     }
-    var rooms: List<Room>? by remember {
-        mutableStateOf(null)
-    }
+    val rooms = uiState.rooms
     val title = stringResource(id = com.amalitech.core_ui.R.string.rooms)
-    val query by viewModel.searchQuery
+    val query = uiState.searchQuery
     var isSearchVisible by rememberSaveable {
         mutableStateOf(false)
     }
 
     LaunchedEffect(key1 = uiState) {
-        when (uiState) {
-            is UiState.Error -> (uiState as UiState.Error<List<Room>>).error?.let {
-                appState.snackbarHostState.showSnackbar(
-                    it.asString(context)
-                )
-                viewModel.onSnackBarShown {
-                    viewModel.fetchRooms()
-                }
-            }
-
-            is UiState.Success -> rooms = (uiState as UiState.Success).data
-
-            else -> {}
+        uiState.error?.let {
+            appState.snackbarHostState.showSnackbar(
+                it.asString(context)
+            )
+            viewModel.clearError()
         }
     }
 
@@ -130,7 +120,7 @@ fun RoomListScreen(
                         searchQuery = query,
                         onSearch = { viewModel.onSearch() },
                         onSearchQueryChange = {
-                                              viewModel.onNewSearchQuery(it)
+                            viewModel.onNewSearchQuery(it)
                         },
                         isSearchTextFieldVisible = isSearchVisible,
                         onSearchTextFieldVisibilityChanged = {
@@ -159,73 +149,70 @@ fun RoomListScreen(
             .fillMaxSize()
             .padding(horizontal = spacing.spaceMedium)
     ) {
-        when (uiState) {
-            is UiState.Success -> LazyColumn(
-                contentPadding = PaddingValues(vertical = spacing.spaceSmall),
-                verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)
-            ) {
-                rooms?.let { rooms ->
-                    items(rooms) { room ->
-                        RoomCard(
-                            room = room,
-                            modifier = Modifier.height(150.dp),
-                            onLeftContentClick = {
-                                onNavigateToUpdateRoom(room.id)
-                            },
-                            onRightContentClick = {
-                                openDialog = true
-                                selectedRoom = room
-                            }
-                        )
+        LazyColumn(
+            contentPadding = PaddingValues(vertical = spacing.spaceSmall),
+            verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)
+        ) {
+            items(rooms, key = { it.roomName }) { room ->
+                RoomCard(
+                    room = room,
+                    modifier = Modifier.height(150.dp),
+                    onLeftContentClick = {
+                        onNavigateToUpdateRoom(room.id)
+                    },
+                    onRightContentClick = {
+                        openDialog = true
+                        selectedRoom = room
                     }
-                }
-                if (rooms.isNullOrEmpty()) {
-                    item { 
-                        Text(text = stringResource(id = com.amalitech.core.R.string.no_item_found))
-                    }
-                }
+                )
             }
-
-            is UiState.Loading -> CircularProgressIndicator(Modifier.align(Alignment.Center))
-            else -> {}
         }
-        if (openDialog && selectedRoom != null) {
-            AlertDialog(
-                onDismissRequest = { openDialog = false },
-            ) {
-                Surface(
-                    modifier = Modifier
-                        .wrapContentWidth()
-                        .wrapContentHeight(),
-                    shape = RoundedCornerShape(spacing.spaceMedium),
-                    tonalElevation = AlertDialogDefaults.TonalElevation,
-                    color = MaterialTheme.colorScheme.background,
-                    contentColor = MaterialTheme.colorScheme.onBackground
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            text = stringResource(
-                                id = R.string.question_delete_room,
-                                selectedRoom!!.roomName
-                            )
-                        )
-                        Spacer(modifier = Modifier.height(spacing.spaceMedium))
+        if (rooms.isEmpty() && !uiState.loading) {
+            EmptyListScreen(
+                item = stringResource(R.string.room),
+                modifier = Modifier.fillMaxSize()
+            )
+        }
 
-                        Row(Modifier.align(Alignment.End)) {
-                            DialogButton(onClick = {
+        if (uiState.loading)
+            CircularProgressIndicator(Modifier.align(Alignment.Center))
+    }
+    if (openDialog && selectedRoom != null) {
+        AlertDialog(
+            onDismissRequest = { openDialog = false },
+        ) {
+            Surface(
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .wrapContentHeight(),
+                shape = RoundedCornerShape(spacing.spaceMedium),
+                tonalElevation = AlertDialogDefaults.TonalElevation,
+                color = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.onBackground
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = stringResource(
+                            id = R.string.question_delete_room,
+                            selectedRoom!!.roomName
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(spacing.spaceMedium))
+
+                    Row(Modifier.align(Alignment.End)) {
+                        DialogButton(onClick = {
+                            openDialog = false
+                        })
+                        Spacer(Modifier.width(spacing.spaceMedium))
+                        DialogButton(
+                            onClick = {
+                                viewModel.deleteRoom(selectedRoom!!)
                                 openDialog = false
-                            })
-                            Spacer(Modifier.width(spacing.spaceMedium))
-                            DialogButton(
-                                onClick = {
-                                    viewModel.deleteRoom(selectedRoom!!)
-                                    openDialog = false
-                                },
-                                text = stringResource(R.string.delete),
-                                backgroundColor = MaterialTheme.colorScheme.error,
-                                textColor = MaterialTheme.colorScheme.onError
-                            )
-                        }
+                            },
+                            text = stringResource(R.string.delete),
+                            backgroundColor = MaterialTheme.colorScheme.error,
+                            textColor = MaterialTheme.colorScheme.onError
+                        )
                     }
                 }
             }

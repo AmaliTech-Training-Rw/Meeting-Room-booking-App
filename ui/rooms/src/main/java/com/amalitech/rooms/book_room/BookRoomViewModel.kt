@@ -8,6 +8,7 @@ import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.BaseViewModel
 import com.amalitech.rooms.book_room.use_case.BookRoomUseCasesWrapper
 import com.amalitech.rooms.book_room.util.toBookRoomUi
+import com.amalitech.rooms.model.Time
 import com.amalitech.ui.rooms.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,27 +27,38 @@ class BookRoomViewModel(
     private val _uiState = MutableStateFlow(RoomUiState())
     val uiState: StateFlow<RoomUiState> get() = _uiState.asStateFlow()
 
-    private val globalStartTime = LocalTime.of(9, 0)
     private val globalEndTime = LocalTime.of(18, 0)
     private val globalInterval = Duration.ofMinutes(15)
 
     private val _slotManager = mutableStateOf(SlotSelectionManager())
     val slotManager: State<SlotSelectionManager> get() = _slotManager
 
-    fun onShowStartTimesRequest() {
-        val date = _userInput.value.date
-        if (date == null) {
-            _uiState.update {
-                it.copy(
-                    error = UiText.StringResource(R.string.error_select_date),
-                    isLoading = false
-                )
+    fun onShowStartTimesRequest(roomId: String) {
+        viewModelScope.launch {
+            val date = _userInput.value.date
+            if (date == null) {
+                _uiState.update {
+                    it.copy(
+                        error = UiText.StringResource(R.string.error_select_date),
+                        isLoading = false
+                    )
+                }
+            } else {
+                val result = bookRoomUseCasesWrapper.getStartTimeUseCase(roomId, date)
+                result.data?.let { times ->
+                    _slotManager.value = _slotManager.value.copy(
+                        availableStartTimes = times.map { TimeUi(it.time, it.isAvailable) }
+                    )
+                    _slotManager.value = _slotManager.value.copy(
+                        canShowStartTimes = true
+                    )
+                }
+                result.error?.let {
+                    _uiState.update { roomUiState ->
+                        roomUiState.copy(error = it)
+                    }
+                }
             }
-        } else {
-            getAvailableStartTimes(date)
-            _slotManager.value = _slotManager.value.copy(
-                canShowStartTimes = true
-            )
         }
     }
 
@@ -110,39 +122,6 @@ class BookRoomViewModel(
         }
     }
 
-    private fun getAvailableStartTimes(date: LocalDate) {
-        val room = _uiState.value.bookRoomUi
-        val allTimes = generateAllTimes()
-        val extract = room.bookings.filter { bookingUi -> bookingUi.date == date }
-        val bookedTimes = extract.flatMap { booking ->
-            val startIdx = allTimes.indexOf(booking.startTime)
-            val endIdx = allTimes.indexOf(booking.endTime)
-            allTimes.subList(startIdx, endIdx)
-        }
-        val timeUis = allTimes.map { localTime ->
-            if (bookedTimes.any { bookedTime ->
-                    bookedTime == localTime
-                } || localTime == globalEndTime) TimeUi(localTime, false)
-            else TimeUi(localTime, true)
-        }
-        _slotManager.value = _slotManager.value.copy(
-            availableStartTimes = timeUis
-        )
-    }
-
-    private fun generateAllTimes(): List<LocalTime> {
-        val allTimes = mutableListOf<LocalTime>()
-
-        var currentTime = globalStartTime
-        while (currentTime.isBefore(globalEndTime)) {
-            allTimes.add(currentTime)
-            currentTime = currentTime.plus(globalInterval)
-        }
-        allTimes.add(globalEndTime)
-
-        return allTimes
-    }
-
     fun onStopShowingStartTime() {
         _slotManager.value = _slotManager.value.copy(
             canShowStartTimes = false
@@ -150,44 +129,37 @@ class BookRoomViewModel(
     }
 
     fun onShowEndTimeRequest() {
-        val startTime = _userInput.value.startTime
-        val date = _userInput.value.date
-        if (startTime != null && date != null) {
-            getAvailableEndTimes(startTime, date)
-            _slotManager.value = _slotManager.value.copy(
-                canShowEndTimes = true
-            )
-        } else {
-            _uiState.update {
-                it.copy(
-                    error = UiText.StringResource(R.string.error_select_start_time),
-                    isLoading = false
+        viewModelScope.launch {
+            val startTime = _userInput.value.startTime
+            val date = _userInput.value.date
+            if (startTime != null && date != null) {
+                val endTime = bookRoomUseCasesWrapper.getEndTimeUseCase(
+                    startTime,
+                    _slotManager.value.availableStartTimes.map { Time(it.time, it.isAvailable) }
                 )
+                endTime.data?.let { timeList ->
+                    _slotManager.value = _slotManager.value.copy(
+                        availableEndTimes = timeList.map { TimeUi(it.time, it.isAvailable) },
+                        canShowEndTimes = true
+                    )
+                }
+                endTime.error?.let { error ->
+                    _uiState.update {
+                        it.copy(
+                            error = error,
+                            isLoading = false
+                        )
+                    }
+                }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        error = UiText.StringResource(R.string.error_select_start_time),
+                        isLoading = false
+                    )
+                }
             }
         }
-    }
-
-    private fun getAvailableEndTimes(meetingStartTime: LocalTime, date: LocalDate) {
-        val room = _uiState.value.bookRoomUi
-        val availableEndTimes: MutableList<LocalTime> = mutableListOf()
-        val firstNextMeeting = room.bookings.filter { bookingUi -> bookingUi.date == date }
-            .sortedBy { it.startTime.toSecondOfDay() }
-            .firstOrNull { meetingStartTime.isBefore(it.startTime) }?.startTime
-        var startTime = meetingStartTime
-
-        while (startTime.isBefore(firstNextMeeting ?: globalEndTime)) {
-            startTime = startTime.plusMinutes(globalInterval.toMinutes())
-            availableEndTimes.add(startTime)
-        }
-        val timeUis = generateAllTimes().map { localTime ->
-            if (availableEndTimes.any { availableEndTime ->
-                    availableEndTime == localTime
-                }) TimeUi(localTime, true)
-            else TimeUi(localTime, false)
-        }
-        _slotManager.value = _slotManager.value.copy(
-            availableEndTimes = timeUis
-        )
     }
 
     fun onStopShowingEndTime() {

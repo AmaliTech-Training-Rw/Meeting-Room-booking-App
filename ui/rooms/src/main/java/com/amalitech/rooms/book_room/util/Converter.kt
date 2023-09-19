@@ -1,18 +1,16 @@
 package com.amalitech.rooms.book_room.util
 
+import com.amalitech.core.data.model.Room
 import com.amalitech.rooms.book_room.BookRoomUi
-import com.amalitech.rooms.book_room.model.Room
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 fun Room.toBookRoomUi(): BookRoomUi {
     return BookRoomUi(
-        name,
-        description,
-        features,
-        bookings,
-        imgUrl = imgUrl,
-        capacity = capacity
+        roomName,
+        roomFeatures,
+        imgUrl = this.imageUrl.randomOrNull() ?: "",
+        capacity = numberOfPeople,
     )
 }
 

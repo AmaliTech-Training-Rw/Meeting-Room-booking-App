@@ -2,7 +2,6 @@ package com.amalitech.booking.history
 
 import androidx.lifecycle.viewModelScope
 import com.amalitech.booking.model.Booking
-import com.amalitech.booking.request.use_case.FetchBookingsUseCase
 import com.amalitech.booking.requests.BookingRequestsUiState
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.BaseViewModel
@@ -13,7 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class BookingHistoryViewModel(
-    private val useCase: FetchBookingsUseCase
+    private val useCase: FetchBookingHistoryUseCase
 ): BaseViewModel<BookingRequestsUiState>() {
     private val _uiState = MutableStateFlow(BookingRequestsUiState())
     val uiState: StateFlow<BookingRequestsUiState> get() = _uiState.asStateFlow()

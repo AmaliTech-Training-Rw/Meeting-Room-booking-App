@@ -31,7 +31,8 @@
     <string name="book_your_meeting_from_anywhere">Book your meeting from anywhere you are.</string>
     <string name="invite_attendees_to_the_booked_room">Invite attendees to the booked room meeting.</string>
     <string name="synchronize_with_google_calendar">Synchronize with google calender.</string>
-    <string name="add_room">Add Name</string>
+    <string name="add_name">Add name</string>
+    <string name="add_room">Add Room</string>
     <string name="save_room">Save Room</string>
     <string name="add_features">Add Features</string>
     <string name="add_photos">Add Photos</string>
@@ -78,5 +79,6 @@
     <string name="room_name_empty">Room name cannot be empty</string>
     <string name="error_check_your_internet_and_try_again_please">Check your internet and try again please</string>
     <string name="error_no_location_selected">No location selected, please select one before signing up</string>
+    <string name="data_size_too_large_kindly_select_smaller_size_images">Data size too large. Kindly select smaller size images</string>
 
 </resources>

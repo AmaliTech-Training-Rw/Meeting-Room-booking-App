@@ -91,7 +91,8 @@ class UpdateProfileViewModel(
                     _uiState.value.profileUserInput.newPasswordConfirmation
                 )
                 if (passwordValid == null)
-                    passwordValid = useCase.validatePasswordUseCase(_uiState.value.profileUserInput.newPassword)
+                    passwordValid =
+                        useCase.validatePasswordUseCase(_uiState.value.profileUserInput.newPassword)
             }
 
             val valuesBlank = useCase.checkValuesNotBlankUseCase(
@@ -100,7 +101,10 @@ class UpdateProfileViewModel(
                 _uiState.value.profileUserInput.title,
             )
             if (passwordValid == null && valuesBlank == null) {
-                val result = useCase.updateProfileUseCase(_uiState.value.profileUserInput.toProfile(), context = context)
+                val result = useCase.updateProfileUseCase(
+                    _uiState.value.profileUserInput.toProfile(),
+                    context = context
+                )
 
                 result.data?.let { userProfile ->
                     useCase.saveUserUseCase(

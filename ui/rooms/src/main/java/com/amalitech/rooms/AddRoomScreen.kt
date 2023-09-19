@@ -101,7 +101,8 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import org.koin.androidx.compose.koinViewModel
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class,
+@OptIn(
+    ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class,
     ExperimentalLayoutApi::class
 )
 @Composable
@@ -127,7 +128,12 @@ fun AddRoomScreen(
     val title = stringResource(id = R.string.add_room)
     val contentDescription = stringResource(id = com.amalitech.core_ui.R.string.navigate_back)
     val context = LocalContext.current
-    val permissionState = rememberMultiplePermissionsState(listOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+    val permissionState = rememberMultiplePermissionsState(
+        listOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    )
     var shouldShowRational by rememberSaveable {
         mutableStateOf(false)
     }
@@ -165,7 +171,7 @@ fun AddRoomScreen(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        if(shouldShowRational) {
+        if (shouldShowRational) {
             AlertDialog(
                 onDismissRequest = { shouldShowRational = false },
             ) {
@@ -394,7 +400,7 @@ fun AddRoomScreen(
             ) {
                 item {
                     RoomTextField(
-                        placeholder = stringResource(R.string.add_room),
+                        placeholder = stringResource(R.string.add_name),
                         value = state.name,
                         onValueChange = {
                             viewModel.onRoomName(it)
@@ -438,8 +444,8 @@ fun AddRoomScreen(
                             viewModel.onSelectedLocation(it)
                         },
                         onIsExpandedStateChange = { isDropDownExpanded = it },
-                        selectedItem = state.locationList?.find { it.id == state.location }?.name ?: ""
-                        ,
+                        selectedItem = state.locationList?.find { it.id == state.location }?.name
+                            ?: "",
                         focusManager = focusManager,
                         R.string.select_location,
                     ) { isDropDownExpanded = it }
@@ -469,9 +475,12 @@ fun AddRoomScreen(
                             onClick = { viewModel.onAddFeature() },
                             modifier = Modifier.weight(0.2f)
                         ) {
-                            Icon(imageVector = Icons.Default.Add, contentDescription = stringResource(
-                                com.amalitech.ui.rooms.R.string.add_the_feature
-                            ))
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = stringResource(
+                                    com.amalitech.ui.rooms.R.string.add_the_feature
+                                )
+                            )
                         }
                     }
                     Spacer(Modifier.height(spacing.spaceMedium))
@@ -553,7 +562,7 @@ fun RoomCounter(
         value = value.toString(),
         onValueChange = {
             if (it.isEmpty() || it.matches(pattern)) {
-                onNewValue(it.toInt())
+                onNewValue(it.toIntOrNull() ?: 0)
             }
         },
         trailingIcon = {

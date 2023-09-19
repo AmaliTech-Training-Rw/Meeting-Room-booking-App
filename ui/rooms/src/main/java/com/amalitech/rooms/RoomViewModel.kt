@@ -1,50 +1,57 @@
 package com.amalitech.rooms
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.amalitech.core.data.model.Room
 import com.amalitech.core.util.UiText
 import com.amalitech.core_ui.util.BaseViewModel
-import com.amalitech.core_ui.util.UiState
 import com.amalitech.rooms.usecase.RoomUseCaseWrapper
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class RoomViewModel(
     private val useCaseWrapper: RoomUseCaseWrapper
 ) : BaseViewModel<List<Room>>() {
+    private val _uiState = MutableStateFlow(RoomListUiState())
+    val uiState: StateFlow<RoomListUiState> = _uiState.asStateFlow()
 
     init {
         fetchRooms()
     }
 
-    private val _searchQuery = mutableStateOf("")
-    val searchQuery: State<String> = _searchQuery
-    private var roomsCopy: List<Room> = emptyList()
-
     internal fun fetchRooms() {
         if (job?.isActive == true)
             return
         viewModelScope.launch {
-            _uiStateFlow.update {
-                UiState.Loading()
+            _uiState.update {
+                it.copy(loading = true)
             }
             val response = useCaseWrapper.fetchRoomsUseCase()
             if (response.data != null) {
-                response.data?.let {
-                    roomsCopy = it
-                    _uiStateFlow.update {
-                        UiState.Success(roomsCopy)
+                response.data?.let { list ->
+                    _uiState.update {
+                        it.copy(
+                            rooms = list,
+                            roomsCopy = list,
+                            loading = false
+                        )
                     }
                 }
             } else if (response.error != null) {
-                _uiStateFlow.update {
-                    UiState.Error(response.error)
+                _uiState.update {
+                    it.copy(
+                        error = response.error,
+                        loading = false
+                    )
                 }
             } else {
-                _uiStateFlow.update {
-                    UiState.Error(UiText.StringResource(com.amalitech.core.R.string.error_default_message))
+                _uiState.update {
+                    it.copy(
+                        error = UiText.StringResource(com.amalitech.core.R.string.error_default_message),
+                        loading = false
+                    )
                 }
             }
         }
@@ -52,54 +59,53 @@ class RoomViewModel(
 
     fun deleteRoom(room: Room) {
         viewModelScope.launch {
-            when (val result = useCaseWrapper.deleteRoomUseCase(room)) {
-                is UiText -> {
-                    _uiStateFlow.update {
-                        UiState.Error(result)
-                    }
-                }
-
-                null -> {
-                    fetchRooms()
+            val result = useCaseWrapper.deleteRoomUseCase(room)
+            result?.let { error ->
+                _uiState.update {
+                    it.copy(
+                        error = error,
+                        loading = false
+                    )
                 }
             }
+            if (result == null)
+                fetchRooms()
         }
     }
 
     fun onNewSearchQuery(query: String) {
-        _searchQuery.value = query
+        _uiState.update {
+            it.copy(
+                searchQuery = query
+            )
+        }
         onSearch()
     }
 
     fun onSearch() {
-        when (_uiStateFlow.value) {
-            is UiState.Success -> {
-                _uiStateFlow.update { state ->
-                    (state as UiState.Success).copy(
-                        data = roomsCopy.filter { room ->
-                            room.roomName.contains(_searchQuery.value, true) ||
-                                    room.roomFeatures.any { it.contains(_searchQuery.value, true) }
-                                    || room.numberOfPeople.toString().contains(_searchQuery.value, true)
-                        }
-                    )
+        _uiState.update { roomListUiState ->
+            roomListUiState.copy(
+                rooms = roomListUiState.roomsCopy.filter { room ->
+                    room.roomName.contains(roomListUiState.searchQuery, true) ||
+                            room.roomFeatures.any { it.contains(roomListUiState.searchQuery, true) }
+                            || room.numberOfPeople.toString()
+                        .contains(roomListUiState.searchQuery, true)
                 }
-            }
-
-            else -> {}
+            )
         }
     }
 
     fun resetList() {
-        when (_uiStateFlow.value) {
-            is UiState.Success -> {
-                _uiStateFlow.update { state ->
-                    (state as UiState.Success).copy(
-                        data = roomsCopy
-                    )
-                }
-            }
+        _uiState.update {
+            it.copy(
+                rooms = it.roomsCopy
+            )
+        }
+    }
 
-            else -> {}
+    fun clearError() {
+        _uiState.update {
+            it.copy(error = null)
         }
     }
 }

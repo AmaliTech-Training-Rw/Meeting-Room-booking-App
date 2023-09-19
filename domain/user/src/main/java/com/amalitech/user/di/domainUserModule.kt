@@ -1,5 +1,6 @@
 package com.amalitech.user.di
 
+import com.amalitech.user.profile.use_case.GetNameAndProfileImgUseCase
 import com.amalitech.user.profile.use_case.GetUserUseCase
 import com.amalitech.user.profile.use_case.LogoutUseCase
 import com.amalitech.user.profile.use_case.ProfileUseCaseWrapper
@@ -31,5 +32,9 @@ val domainUserModule = module {
 
     single {
         ProfileUseCaseWrapper(get(), get(), get(), get(), get(), get(), get())
+    }
+
+    single {
+        GetNameAndProfileImgUseCase(get())
     }
 }

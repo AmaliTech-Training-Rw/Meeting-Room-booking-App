@@ -71,7 +71,9 @@ class ProfileViewModel(
     }
 
     fun logout() {
-        viewModelScope.launch {
+        if (job?.isActive == true)
+            return
+        job = viewModelScope.launch {
             val token = sharedPref.loadToken()
             useCaseWrapper.logoutUseCase(token)
             sharedPref.clear()

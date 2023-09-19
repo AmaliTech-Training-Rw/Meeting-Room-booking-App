@@ -6,5 +6,6 @@ data class User(
     val username: String,
     val email: String,
     val isActive: Boolean,
-    val locationId: Int = -1
+    val locationId: Int = -1,
+    val fullName: String = ""
 )

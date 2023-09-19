@@ -41,7 +41,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.amalitech.core_ui.CoreViewModel
 import com.amalitech.core_ui.components.AppBarState
 import com.amalitech.core_ui.components.AuthenticationTextField
 import com.amalitech.core_ui.components.DefaultButton
@@ -54,7 +53,6 @@ import org.koin.androidx.compose.koinViewModel
 fun UpdateProfileScreen(
     email: String,
     viewModel: UpdateProfileViewModel = koinViewModel(),
-    coreViewModel: CoreViewModel = koinViewModel(),
     showSnackBar: (message: String) -> Unit,
     onNavigateBack: () -> Unit,
     onComposing: (AppBarState) -> Unit,
@@ -95,7 +93,6 @@ fun UpdateProfileScreen(
             viewModel.clearError()
         }
         if (uiState.canNavigate) {
-            coreViewModel.loadUserInfos()
             onNavigateBack()
         }
     }

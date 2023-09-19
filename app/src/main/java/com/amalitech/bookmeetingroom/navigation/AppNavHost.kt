@@ -20,7 +20,6 @@ import androidx.navigation.navigation
 import com.amalitech.booking.BookingScreen
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
 import com.amalitech.core_ui.components.AppBarState
-import com.amalitech.core_ui.components.drawer.BookMeetingRoomDrawer
 import com.amalitech.core_ui.state.rememberBookMeetingRoomAppState
 import com.amalitech.home.HomeScreen
 import com.amalitech.onboarding.OnboardingScreen
@@ -231,20 +230,19 @@ fun NavGraphBuilder.mainNavGraph(
     ) {
         composable(BottomNavItem.Home.route) {
             HomeScreen(
-                onComposing = onComposing,
-                navigateToProfileScreen = {
-                    navigateToProfileScreen(navController)
-                },
-                navigateToBookRoomScreen = {
-                    navController.navigate("${Route.BOOK_ROOM_SCREEN}/$it")
-                },
-                navigateUp = onFinishActivity,
                 showSnackBar = {
                     scope.launch {
                         snackbarHostState.showSnackbar(it)
                     }
-                }
-            )
+                },
+                onComposing = onComposing,
+                navigateToProfileScreen = {
+                    navigateToProfileScreen(navController)
+                },
+                navigateUp = onFinishActivity
+            ) {
+                navController.navigate("${Route.BOOK_ROOM_SCREEN}/$it")
+            }
         }
 
         composable(
@@ -267,10 +265,15 @@ fun NavGraphBuilder.mainNavGraph(
         }
         composable(BottomNavItem.Profile.route) {
             ProfileScreen(
-                onUpdateProfileClick = { email ->
-                    navController.navigate("${Route.UPDATE_PROFILE}/$email")
+                showSnackBar = {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(it)
+                    }
                 },
-                onComposing = onComposing,
+                onNavigateToLogin = {
+                    navController.navigateToLogin()
+                },
+                navigateToProfileScreen = {},
                 onNavigateBack = {
                     navController.navigate(BottomNavItem.Home.route) {
                         popUpTo(BottomNavItem.Home.route) {
@@ -279,14 +282,9 @@ fun NavGraphBuilder.mainNavGraph(
                         launchSingleTop = true
                     }
                 },
-                navigateToProfileScreen = {},
-                onNavigateToLogin = {
-                    navController.navigateToLogin()
-                },
-                showSnackBar = {
-                    scope.launch {
-                        snackbarHostState.showSnackbar(it)
-                    }
+                onComposing = onComposing,
+                onUpdateProfileClick = { email ->
+                    navController.navigate("${Route.UPDATE_PROFILE}/$email")
                 }
             ) { goToAdmin ->
                 if (goToAdmin) {
@@ -334,14 +332,14 @@ fun NavGraphBuilder.mainNavGraph(
         ) { backStackEntry ->
             val email = backStackEntry.arguments?.getString("email") ?: ""
             UpdateProfileScreen(
-                onComposing = onComposing,
                 email = email,
                 showSnackBar = {
                     scope.launch {
                         snackbarHostState.showSnackbar(it)
                     }
                 },
-                onNavigateBack = { navController.navigateUp() }
+                onNavigateBack = { navController.navigateUp() },
+                onComposing = onComposing
             )
         }
     }

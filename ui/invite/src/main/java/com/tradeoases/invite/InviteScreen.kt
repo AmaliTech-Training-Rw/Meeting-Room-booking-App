@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,6 +40,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.amalitech.core_ui.R
 import com.amalitech.core_ui.components.AppBarState
+import com.amalitech.core_ui.components.EmptyListScreen
 import com.amalitech.core_ui.components.PainterActionButton
 import com.amalitech.core_ui.theme.BookMeetingRoomTheme
 import com.amalitech.core_ui.theme.LocalSpacing
@@ -90,21 +93,14 @@ fun InviteScreen(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(spacing.spaceMedium)
         ) {
-            invites.let {
-                item {
-                    if (invites.isEmpty() && !uiState.loading) {
-                        Text(
-                            text = stringResource(com.amalitech.core.R.string.no_item_found),
-                        )
-                    }
-                }
-                items(items = it) { item ->
-                    InvitesItem(
-                        item
-                    )
-                }
+            items(items = invites) { item ->
+                InvitesItem(
+                    item
+                )
             }
         }
+        if (invites.isEmpty() && !uiState.loading)
+            EmptyListScreen(item = stringResource(com.amalitech.ui.invite.R.string.invitations))
         if (uiState.loading)
             CircularProgressIndicator(Modifier.align(Alignment.Center))
     }
@@ -129,14 +125,14 @@ fun InvitesItem(
     ) {
         AsyncImage(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
+                .wrapContentHeight()
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(LocalSpacing.current.spaceSmall)),
             model = invite.imageUrl,
-            contentDescription = "item.roomName",
+            contentDescription = invite.roomName,
             placeholder = painterResource(id = R.drawable.baseline_refresh_24),
-            error = painterResource(id = R.drawable.baseline_broken_image_24)
+            error = painterResource(id = R.drawable.baseline_broken_image_24),
+            contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.width(spacing.spaceSmall))
         Divider(
@@ -155,7 +151,8 @@ fun InvitesItem(
                 fontSize = 16.sp,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
             Spacer(modifier = Modifier.height(spacing.spaceExtraSmall))
             Row {
@@ -165,7 +162,8 @@ fun InvitesItem(
                     fontSize = 12.sp,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
                 Text(
                     // TODO format date and add it
@@ -173,7 +171,8 @@ fun InvitesItem(
                     fontSize = 12.sp,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
             }
             Spacer(modifier = Modifier.height(spacing.spaceSmall))
@@ -186,7 +185,8 @@ fun InvitesItem(
                 fontSize = 12.sp,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
         }
     }

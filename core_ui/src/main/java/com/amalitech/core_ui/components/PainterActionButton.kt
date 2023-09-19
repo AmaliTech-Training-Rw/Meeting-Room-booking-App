@@ -1,11 +1,16 @@
 package com.amalitech.core_ui.components
 
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
+import com.amalitech.core.util.UserInfo
 import com.amalitech.core_ui.CoreViewModel
 import com.amalitech.core_ui.R
 import org.koin.androidx.compose.koinViewModel
@@ -17,12 +22,14 @@ fun PainterActionButton(
     contentDescription: String = stringResource(id = R.string.open_profile_screen),
     onClick: () -> Unit
 ) {
-    val url by viewModel.userProfileImgUrl
+    val userInfo by viewModel.userInfo.collectAsState(UserInfo())
     IconButton(onClick = onClick) {
         AsyncImage(
-            model = url,
+            model = userInfo.url,
             contentDescription = contentDescription,
             modifier = modifier
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop
         )
     }
 }

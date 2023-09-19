@@ -104,10 +104,22 @@ class AddUserViewModel(
             )
             error?.let { errorValue ->
                 _snackBarMessage.value = errorValue
+                _userUiState.update {
+                    it.copy(isInviting = false)
+                }
             }
-            _userUiState.update {
-                it.copy(isInviting = false)
-            }
+            if (error == null)
+                _userUiState.update {
+                    it.copy(
+                        firstName = "",
+                        lastName = "",
+                        email = "",
+                        selectLocation = -1,
+                        isAdmin = false,
+                        isLoading = false,
+                        isInviting = false
+                    )
+                }
         }
     }
 

@@ -88,6 +88,7 @@ dependencies {
     implementation(Compose.viewModelCompose)
     implementation(Compose.activityCompose)
     implementation(Lifecycle.composeLifecycle)
+    implementation(Coil.coilCompose)
 
     implementation(Accompanist.systemuiController)
 
@@ -124,6 +125,8 @@ dependencies {
     implementation(project(Modules.domainBooking))
     implementation(project(Modules.uiBooking))
     implementation(project(Modules.dataBooking))
+    implementation(project(Modules.domainDashboard))
+    implementation(project(Modules.dataDashboard))
 
     implementation(AndroidX.coreKtx)
 

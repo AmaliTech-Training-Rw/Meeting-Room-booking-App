@@ -59,7 +59,7 @@ class AddRoomViewModel(
 
     fun onRoomImages(images: List<Uri>) {
         _uiState.update { addRoomUiState ->
-            if (addRoomUiState.imagesList.size + images.size < 3)
+            if (addRoomUiState.imagesList.size + images.size <= 3)
                 addRoomUiState.copy(
                     imagesList = (addRoomUiState.imagesList + images).toMutableList()
                 ) else
@@ -110,10 +110,13 @@ class AddRoomViewModel(
 
     fun onAddFeature() {
         _uiState.update {
-            it.copy(
-                features = it.features + it.feature.trim(),
-                feature = ""
-            )
+            if (it.feature.length >= 3)
+                it.copy(
+                    features = it.features + it.feature.trim(),
+                    feature = ""
+                )
+            else
+                it.copy(error = UiText.StringResource(com.amalitech.ui.rooms.R.string.error_feature_length_short))
         }
     }
 

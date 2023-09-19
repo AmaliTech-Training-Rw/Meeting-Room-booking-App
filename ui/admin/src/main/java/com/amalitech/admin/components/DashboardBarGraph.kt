@@ -100,7 +100,10 @@ fun generateBarData(
     val barEntries = ArrayList<BarEntry>()
 
     for (index in 0 until items.size) {
-        xValues.add(items[index].roomName)
+        val name = if (items[index].roomName.length > 10)
+            items[index].roomName.substring(0, 10)
+        else items[index].roomName.substring(0, 10)
+        xValues.add(name)
         barEntries.add(BarEntry(items[index].bookedTime, index))
     }
 

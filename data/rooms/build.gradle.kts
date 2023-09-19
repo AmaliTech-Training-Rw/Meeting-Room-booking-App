@@ -15,4 +15,5 @@ dependencies {
     "ksp"(Room.roomCompiler)
     "implementation"(Room.roomKtx)
     "implementation"(Room.roomRuntime)
+    "implementation" (Gson.gson)
 }

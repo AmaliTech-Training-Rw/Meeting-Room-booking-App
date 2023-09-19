@@ -12,9 +12,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -26,7 +23,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.amalitech.core_ui.R
-import com.amalitech.core_ui.bottom_navigation.components.BottomNavBadge
 import com.amalitech.core_ui.bottom_navigation.components.BottomNavItem
 import com.amalitech.core_ui.theme.LocalSpacing
 
@@ -46,9 +42,6 @@ fun BottomNavBar(
     onClick: (screen: BottomNavItem) -> Unit
 ) {
     val context = LocalContext.current
-    val invitations by remember {
-        mutableIntStateOf(200)
-    }
     val spacing = LocalSpacing.current
 
     NavigationBar(
@@ -56,9 +49,6 @@ fun BottomNavBar(
         contentColor = contentColor,
     ) {
         BottomNavItem.createItems().forEach { screen ->
-            if (screen.route == BottomNavItem.Invitations.route)
-                screen.badge = BottomNavBadge.CountBadge(invitations)
-
             NavigationBarItem(
                 selected = currentDestination?.hierarchy?.any {
                     it.route == screen.route
